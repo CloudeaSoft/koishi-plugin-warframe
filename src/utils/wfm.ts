@@ -59,7 +59,7 @@ export const compareENOrderName = (input: string, standard: string) => {
   );
 };
 
-const compareRivenItemName = (input: string, standard: string) => {
+export const compareRivenItemName = (input: string, standard: string) => {
   if (
     !input ||
     !standard ||

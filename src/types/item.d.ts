@@ -16,7 +16,7 @@ interface Item {
   setRoot: boolean;
   setParts: string[];
   quantityInSet: number;
-  i18n: { [key: string]: ItemI18N };
+  i18n: { [key: WFMLang]: ItemI18N };
   rarity: string;
   maxRank: number;
   maxCharges: number;
@@ -32,20 +32,37 @@ interface Item {
   tradingTax: number;
 }
 
-
 interface ItemShort {
-  public id: string;
-  public slug: string;
-  public gameRef: string;
-  public tags: string[];
-  public i18n: { [key: string]: ItemI18N };
-  public maxRank: number;
-  public maxCharges: number;
-  public vaulted: boolean;
-  public ducats: number;
-  public amberStars: number;
-  public cyanStars: number;
-  public baseEndo: number;
-  public endoMultiplier: number;
-  public subtypes: string[];
+  id: string;
+  slug: string;
+  gameRef: string;
+  tags: string[];
+  i18n: { [key: WFMLang]: ItemI18N };
+  maxRank: number;
+  maxCharges: number;
+  vaulted: boolean;
+  ducats: number;
+  amberStars: number;
+  cyanStars: number;
+  baseEndo: number;
+  endoMultiplier: number;
+  subtypes: string[];
+}
+
+interface RivenItem {
+  id: string;
+  slug: string;
+  gameRef: string;
+  group?: string;
+  rivenType?: string;
+  disposition: number;
+  reqMasteryRank: number;
+  i18n?: Record<string, RivenItemI18N | null>;
+}
+
+interface RivenItemI18N {
+  name?: string;
+  wikiLink?: string;
+  icon: string;
+  thumb: string;
 }

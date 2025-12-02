@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-wfm-helper",
   "description": "WFMToolkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "contributors": [
     "CloudeaSoft <cloudeasoft@qq.com>"
   ],

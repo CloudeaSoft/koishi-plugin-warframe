@@ -1,30 +1,28 @@
 export const fetchAsyncData: <T>(
   url: string,
   method?: string
-) => Promise<T> = async <T>(
+) => Promise<T | null> = async <T>(
   url: string,
   method: string = "GET"
-): Promise<T> => {
-  return await fetch(url, {
+): Promise<T | null> => {
+  const response = await fetch(url, {
     method: method,
     headers: {
       "Content-Type": "application/json",
       Language: "zh-hans",
     },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok.");
-      }
-      return response.json();
-    })
-    .then((data: T) => {
-      return data;
-    })
-    .catch((error) => {
-      console.log("Error: " + error.message);
-      return null;
-    });
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok.");
+  }
+
+  try {
+    return await response.json();
+  } catch (error) {
+    console.log("Error: " + error.message);
+    return null;
+  }
 };
 
 export const toTimeStamp = (timeStr: string): number => {
