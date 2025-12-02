@@ -23,4 +23,7 @@ export function apply(ctx: Context) {
   });
   ctx.command("wm <itemId:text>").action(wmCommand);
   ctx.command("wmr <itemId:text>").action(wmrCommand);
+  ctx
+    .command("testimg")
+    .action(() => '<img src="https://koishi.chat/logo.png"/>');
 }
