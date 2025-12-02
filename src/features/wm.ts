@@ -163,12 +163,6 @@ const compareCNOrderName = (input: string, standard: string) => {
   const normalizedStandardNoNeu =
     normalizedStandardNoBlueprintSimplifiedPrime.replace(/头部神经光元/g, "头");
 
-  console.log(
-    normalizedInput,
-    normalizedStandard,
-    normalizedStandardNoSetSimplifiedPrime
-  );
-
   return (
     normalizedInput === normalizedStandard ||
     normalizedInput === normalizedStandardNoSet ||
