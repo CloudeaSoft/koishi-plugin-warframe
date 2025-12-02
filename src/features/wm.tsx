@@ -1,7 +1,4 @@
-import {
-  toTimeStamp,
-  fullWidthToHalfWidth,
-} from "../utils";
+import { toTimeStamp, fullWidthToHalfWidth } from "../utils";
 import {
   getWFMItemList,
   getWFMOrderList,
@@ -9,6 +6,9 @@ import {
   getWFMRivenItemList,
   getWFMRivenOrderList,
 } from "../api/wfm-api";
+import { Context } from "koishi";
+import "koishi-plugin-puppeteer";
+import Element from "@satorijs/element";
 
 let globalItemList: ItemShort[] = [];
 let globalRivenItemList: RivenItem[] = [];
@@ -39,7 +39,7 @@ export const wmOnReady = async () => {
   globalRivenAttributeList = rivenAttributeData.data;
 };
 
-export const wmCommand = async (_: never, input: string) => {
+export const wmCommand = async (input: string, ctx: Context) => {
   // const testItemId = "abating_link";
   const targetItem =
     globalItemList.find((item) =>
@@ -53,9 +53,6 @@ export const wmCommand = async (_: never, input: string) => {
   }
 
   const itemId = targetItem.slug;
-  const itemNameCN = targetItem.i18n["zh-hans"].name;
-  const itemNameEN = targetItem.i18n["en"].name;
-
   const data = await getWFMOrderList(itemId);
   if (!data) {
     return `未找到物品: ${input}`;
@@ -70,12 +67,7 @@ export const wmCommand = async (_: never, input: string) => {
     .sort((a, b) => a.platinum - b.platinum) // Price ASC
     .slice(0, 5); // Top 5
 
-  let result2 = `物品: ${itemNameCN} / ${itemNameEN} (ID: ${itemId})\n`;
-  for (const order of result) {
-    result2 += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`;
-  }
-
-  return result2;
+  return generateOrderOutput(ctx, targetItem, result);
 };
 
 export const wmrCommand = async (_: never, input: string) => {
@@ -244,4 +236,88 @@ const normalizeOrderName = (str: string) => {
   };
 
   return normalize(str);
+};
+
+const generateOrderOutput = async (
+  ctx: Context,
+  item: ItemShort,
+  data: OrderWithUser[]
+) => {
+  const itemNameCN = item.i18n["zh-hans"].name;
+  const itemNameEN = item.i18n["en"].name;
+  let result = `物品: ${itemNameCN} / ${itemNameEN} (ID: ${item.slug})\n`;
+  for (const order of data) {
+    result += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`;
+  }
+  const document: Element = (
+    <div style={"display:flex; flex-direction: column;"}>
+      <style>
+        {`
+        th {
+          align-items: center;
+          width:33%;
+          font-size: 1.8rem;
+        }
+
+        td {
+          text-align: center;
+          font-size: 1.5rem;
+        }
+
+        tr {
+          height: 3rem;
+        }
+        `}
+      </style>
+      <h1 style={'text-align: center;'}>
+        {itemNameCN} / {itemNameEN} (ID: {item.slug})
+      </h1>
+      <table style={"width:100%;"}>
+        <tr>
+          <th>玩家名</th>
+          <th>状态</th>
+          <th>价格</th>
+        </tr>
+        {data.map((order) => (
+          <tr>
+            <td>{order.user.ingameName}</td>
+            <td>{order.user.status}</td>
+            <td>{order.platinum}</td>
+          </tr>
+        ))}
+      </table>
+    </div>
+  );
+
+  const imgBase64 = await ctx.puppeteer.render(
+    getHtmlString(document.toString()),
+    async (page, next): Promise<string> => {
+      const element = await page.$("body");
+      return await element.screenshot({
+        type: "png",
+        encoding: "base64",
+      });
+    }
+  );
+
+  return <img src={`data:image/png;base64,${imgBase64}`} />;
+};
+
+const getHtmlString = (body: string, title?: string) => {
+  return `<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>${title}</title>
+    <style>
+      /* 添加一些基础样式确保内容可见 */
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      ul { list-style: none; padding: 0; }
+      li { margin: 10px 0; padding: 10px; border-bottom: 1px solid #eee; }
+    </style>
+  </head>
+  <body>
+    ${body}
+  </body>
+  </html>`;
 };

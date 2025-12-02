@@ -21,9 +21,8 @@ export function apply(ctx: Context) {
   ctx.on("ready", () => {
     wmOnReady();
   });
-  ctx.command("wm <itemId:text>").action(wmCommand);
+  ctx.command("wm <itemId:text>").action(async (_, input) => {
+    return await wmCommand(input, ctx);
+  });
   ctx.command("wmr <itemId:text>").action(wmrCommand);
-  ctx
-    .command("testimg")
-    .action(() => '<img src="https://koishi.chat/logo.png"/>');
 }
