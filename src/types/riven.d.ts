@@ -68,7 +68,7 @@ interface RivenUser {
   crossplay: boolean;
   ingame_name: string;
   slug: string;
-  status: string;
+  status: "offline" | "online" | "ingame" | string;
   id: string;
   region: string;
 }

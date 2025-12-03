@@ -1,7 +1,6 @@
 import {
   toTimeStamp,
   fullWidthToHalfWidth,
-  getHtmlImageBase64,
 } from "../utils";
 import {
   getWFMItemList,
@@ -12,6 +11,8 @@ import {
 } from "../api/wfm-api";
 import Puppeteer from "koishi-plugin-puppeteer";
 import {
+  getHtmlImageBase64,
+  getHtmlString,
   ItemOrderOutput,
   OutputImage,
   RivenOrderOutput,
@@ -114,7 +115,7 @@ export const getRivenOrders = async (
     return null;
   }
 
-  const top10 = data.payload.auctions
+  const top5 = data.payload.auctions
     .filter(
       (order) =>
         order.owner.status === "ingame" &&
@@ -125,9 +126,9 @@ export const getRivenOrders = async (
     )
     .sort((a, b) => toTimeStamp(b.updated) - toTimeStamp(a.updated)) // Update Time DESC
     .sort((a, b) => a.starting_price - b.starting_price) // Price ASC
-    .slice(0, 10); // Top 10
+    .slice(0, 5); // Top 5
 
-  return { item: targetItem, orders: top10 };
+  return { item: targetItem, orders: top5 };
 };
 
 export const generateRivenOrderOutput = async (
