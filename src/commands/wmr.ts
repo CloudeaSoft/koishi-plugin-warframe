@@ -1,8 +1,8 @@
 import { Argv } from "koishi";
-import { generateRivenOrderOutput, wmrCommandImpl } from "../services";
+import { generateRivenOrderOutput, getRivenOrders } from "../services";
 
 export const wmrCommand = async (action: Argv, input: string) => {
-  const result = await wmrCommandImpl(input);
+  const result = await getRivenOrders(input);
   if (!result) {
     return `Item not found: ${input}`;
   }
