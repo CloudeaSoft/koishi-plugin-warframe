@@ -1,12 +1,7 @@
 import { Context, Schema } from "koishi";
 
-import {
-  aboutCommand,
-  wmOnReady,
-  timeCommand,
-  wmCommand,
-  wmrCommand,
-} from "./features";
+import { aboutCommand, timeCommand, wmCommand, wmrCommand } from "./commands";
+import { onReadyHandler } from "./hooks/on-ready";
 
 export const name = "wfm-helper";
 
@@ -18,11 +13,7 @@ export function apply(ctx: Context) {
   ctx.command("about").action(aboutCommand);
   ctx.command("time <Region:text>").action(timeCommand);
 
-  ctx.on("ready", () => {
-    wmOnReady();
-  });
-  ctx.command("wm <itemId:text>").action(async (_, input) => {
-    return await wmCommand(input, ctx);
-  });
+  ctx.on("ready", onReadyHandler);
+  ctx.command("wm <itemId:text>").action(wmCommand);
   ctx.command("wmr <itemId:text>").action(wmrCommand);
 }
