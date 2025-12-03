@@ -26,7 +26,7 @@ interface RivenAttribute {
   positiveIsNegative: boolean;
   positiveOnly: boolean;
   negativeOnly: boolean;
-  unit: string;
+  unit: "percent" | "multiply" | "seconds" | string;
   i18n: {
     [key: WFMLang]: {
       name: string;
