@@ -2,6 +2,7 @@ import { Context, Schema } from "koishi";
 
 import { aboutCommand, timeCommand, wmCommand, wmrCommand } from "./commands";
 import { onReadyHandler } from "./hooks/on-ready";
+import { ArbyCommand } from "./commands/arby";
 
 export const name = "wfm-helper";
 
@@ -42,7 +43,14 @@ export function apply(ctx: Context) {
     }
     return wmCommand(a, b);
   });
+  ctx.command("Arbi").alias('仲裁').action(ArbyCommand);
+  ctx.command("Weekly").alias('周常').action(inDevelopment);
+  ctx.command("Weekly").alias('周常').action(inDevelopment);
 
   ctx.command("about").action(aboutCommand);
   ctx.command("time <Region:text>").action(timeCommand);
 }
+
+const inDevelopment = () => {
+  return "Work in progress...";
+};

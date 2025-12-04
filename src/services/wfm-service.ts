@@ -16,7 +16,7 @@ import {
   ItemOrderOutput,
   OutputImage,
   RivenOrderOutput,
-} from "../components/wm";
+} from "../components/wfm";
 
 let globalItemList: ItemShort[] = [];
 let globalRivenItemList: RivenItem[] = [];
