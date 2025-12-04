@@ -5,7 +5,7 @@ export interface ArbyShort {
 
 export interface Arby {
   value: string;
-  enemy: string;
+  faction: string;
   type: string;
   time: string;
   rewards: number;

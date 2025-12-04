@@ -18,7 +18,7 @@ export const ArbiTable = (arbi: Arby[]): Element => {
                   [<span style={"color:darkgreen;"}>{a.time}</span>]
                 </span>
                 <span style={"margin-left:10px;"}>
-                  {`${a.value}-${a.type} (${a.enemy})`.replace(/\(|\)/g, "")}
+                  {`${a.value}-${a.type} (${a.faction})`.replace(/\(|\)/g, "")}
                 </span>
                 <span style={"margin-left:10px;"}>
                   <span style={"color:darkgreen;"}>{a.rewards}</span>精华/h
