@@ -2,7 +2,7 @@
   "name": "koishi-plugin-warframe",
   "description": "WFMToolkit",
   "version": "0.0.1",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "build": "dtsc"
   },
