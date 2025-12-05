@@ -4,7 +4,7 @@ import {
   getFissures,
   getRailjackFissures,
   getSteelPathFissures,
-} from "../services";
+} from "../../services";
 
 export const fissureCommand = async (action: Argv) => {
   const result = await getFissures();

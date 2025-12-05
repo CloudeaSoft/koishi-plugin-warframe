@@ -1,5 +1,5 @@
 import { Argv } from "koishi";
-import { generateCircuitWeekOutput, getCircuitWeek } from "../services";
+import { generateCircuitWeekOutput, getCircuitWeek } from "../../services";
 
 export const circuitCommand = (action: Argv) => {
   const result = getCircuitWeek();

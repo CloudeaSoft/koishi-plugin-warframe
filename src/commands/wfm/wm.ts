@@ -1,5 +1,5 @@
 import { Argv } from "koishi";
-import { generateItemOrderOutput, getItemOrders } from "../services";
+import { generateItemOrderOutput, getItemOrders } from "../../services";
 
 export const wmCommand = async (action: Argv, input: string) => {
   const result = await getItemOrders(input);

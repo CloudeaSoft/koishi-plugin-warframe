@@ -4,11 +4,11 @@ import arbys from "../assets/arbys";
 import dict from "../assets/dict.zh.json";
 import regions from "../assets/ExportRegions.json";
 import { getHtmlImageBase64, OutputImage } from "../components/wfm";
-import { ArbiTable, CircuitTable, FissureTable } from "../components/wf";
+import { ArbitrationTable, CircuitTable, FissureTable } from "../components/wf";
 import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
 import { getWorldState } from "../api/wf-api";
 
-const arbysSchedule: ArbyShort[] = arbys
+const arbysSchedule: ArbitrationShort[] = arbys
   .split("\n")
   .map((line) => line.split(","))
   .filter((arr) => arr.length == 2)
@@ -44,7 +44,7 @@ export const regionToShort = (region: WFRegion, dict: any) => {
   };
 };
 
-export const getArbysWeek = (day: number = 3): Arby[] | string => {
+export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   if (day > 14 || day <= 0) {
     return "天数需小于等于14且大于0";
   }
@@ -81,11 +81,11 @@ export const getArbysWeek = (day: number = 3): Arby[] | string => {
     });
 };
 
-export const generateArbyWeekOutput = async (
+export const generateArbitrationsOutput = async (
   puppe: Puppeteer,
-  arby: Arby[]
+  arby: Arbitration[]
 ) => {
-  const element = ArbiTable(arby);
+  const element = ArbitrationTable(arby);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);
 };

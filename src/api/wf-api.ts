@@ -1,5 +1,5 @@
 import { fetchAsyncData } from "../utils";
-import exampleWorldState from "../assets/example-world-state.json";
+import exampleWorldState from "../assets/exampleWorldState.json";
 
 const apiBase = "https://api.warframe.com/cdn/";
 

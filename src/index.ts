@@ -1,11 +1,10 @@
 import { Context, Schema } from "koishi";
 
 import {
-  arbyCommand,
+  arbitrationCommand,
   fissureCommand,
   steelPathFissureCommand,
   aboutCommand,
-  timeCommand,
   wmCommand,
   wmrCommand,
   railjackFissureCommand,
@@ -58,7 +57,7 @@ export function apply(ctx: Context) {
     .alias("arbi")
     .alias("仲裁")
     .alias("仲裁表")
-    .action(arbyCommand);
+    .action(arbitrationCommand);
   ctx
     .command("fissure", "当前虚空裂隙")
     .alias("裂缝")
@@ -85,7 +84,6 @@ export function apply(ctx: Context) {
   ctx.command("lichi", "i系玄骸武器").action(inDevelopment);
 
   ctx.command("about", "关于").action(aboutCommand);
-  ctx.command("time <Region:text>", "当前时间").action(timeCommand);
 }
 
 const inDevelopment = () => {

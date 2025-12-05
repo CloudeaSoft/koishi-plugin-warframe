@@ -1,7 +1,7 @@
 import { Element } from "koishi";
 import { msToHumanReadable } from "../utils";
 
-export const ArbiTable = (arbi: Arby[]): Element => {
+export const ArbitrationTable = (arbi: Arbitration[]): Element => {
   return (
     <div
       style={
