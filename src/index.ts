@@ -13,7 +13,7 @@ import {
 } from "./commands";
 import { onReadyHandler } from "./hooks/on-ready";
 
-export const name = "wfm-helper";
+export const name = "warframe";
 
 export interface Config {
   developerMode: boolean;
