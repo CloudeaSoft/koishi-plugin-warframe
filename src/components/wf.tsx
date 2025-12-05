@@ -1,5 +1,5 @@
 import { Element } from "koishi";
-import { Arby } from "../types/arby";
+import { msToHumanReadable } from "../utils";
 
 export const ArbiTable = (arbi: Arby[]): Element => {
   return (
@@ -18,7 +18,10 @@ export const ArbiTable = (arbi: Arby[]): Element => {
                   [<span style={"color:darkgreen;"}>{a.time}</span>]
                 </span>
                 <span style={"margin-left:10px;"}>
-                  {`${a.value}-${a.type} (${a.faction})`.replace(/\(|\)/g, "")}
+                  {`${a.name} ${a.system}-${a.type} (${a.faction})`.replace(
+                    /\(|\)/g,
+                    ""
+                  )}
                 </span>
                 <span style={"margin-left:10px;"}>
                   <span style={"color:darkgreen;"}>{a.rewards}</span>精华/h
@@ -28,6 +31,104 @@ export const ArbiTable = (arbi: Arby[]): Element => {
           })}
         </ul>
       </div>
+    </div>
+  );
+};
+
+export const CircuitTable = (
+  incarnons: string[],
+  warframes: string[]
+): Element => {
+  return (
+    <div>
+      <header style={"text-align: center;font-size:30px;"}>
+        <h1>本周回廊奖励</h1>
+      </header>
+      <div
+        style={
+          "display:flex;flex-direction:column;align-items:center;margin-top:40px;font-size:40px;"
+        }
+      >
+        <div style={"display:flex;align-items:center;line-height:1;"}>
+          <span>灵化之源:</span>
+          <ul style={"display:flex;gap:13px;margin-left:15px;"}>
+            {incarnons.map((i) => {
+              return <li>{i}</li>;
+            })}
+          </ul>
+        </div>
+        <div
+          style={
+            "display:flex;align-items:center;line-height:1;margin-top:40px;"
+          }
+        >
+          <span>战甲:</span>
+          <ul style={"display:flex;gap:13px;margin-left:15px;"}>
+            {warframes.map((i) => {
+              return <li>{i}</li>;
+            })}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const FissureTable = (
+  fissures: Fissure[],
+  type: "fissure" | "sp-fissure" | "rj-fissure"
+): Element => {
+  const titles = {
+    fissure: "虚空裂缝",
+    "sp-fissure": "虚空裂缝 (钢铁之路)",
+    "rj-fissure": "虚空裂缝 (九重天)",
+  };
+  const colors = [
+    "#B87333",
+    "#4A6F43",
+    "#B2B2B2",
+    "#D4AF37",
+    "#8B0000",
+    "#2F9E88",
+  ];
+
+  return (
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <h1 style={"font-size: 50px;"}>{titles[type]}</h1>
+      <ul style={"font-size: 30px;margin-top:30px;"}>
+        {fissures
+          .filter((f) => f.expiry - Date.now() > 0)
+          .map((f) => {
+            let timeLeft = f.expiry - Date.now();
+            return (
+              <li style={"margin-top: 10px;"}>
+                <span style={`color:${colors[parseInt(f.modifier[5]) - 1]};`}>
+                  {f.tier}
+                </span>
+                <span style={"margin-left: 20px;"}>
+                  {f.node.name} {f.node.system}
+                </span>
+                <span style={"margin-left: 10px;"}>{f.node.type}</span>
+                <span style={"margin-left: 10px;color:purple;"}>
+                  {f.node.faction}({f.node.minLevel + 5 + (f.hard ? 100 : 0)}-
+                  {f.node.maxLevel + 5 + (f.hard ? 100 : 0)})
+                </span>
+                <span
+                  style={`margin-left: 10px;color:${
+                    timeLeft > 3600000
+                      ? "green"
+                      : timeLeft > 600000
+                      ? "blue"
+                      : "red"
+                  };`}
+                >
+                  剩余{msToHumanReadable(timeLeft)}
+                </span>
+              </li>
+            );
+          })}
+      </ul>
+      <div style="margin-top: 30px; font-size: 30px;">注: 该功能的数据有一定延迟</div>
     </div>
   );
 };

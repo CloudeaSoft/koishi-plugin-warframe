@@ -1,4 +1,4 @@
-export interface Region {
+interface WFRegion {
   name: string;
   systemIndex: number;
   systemName: string;
@@ -15,5 +15,14 @@ export interface Region {
   masteryExp: number;
   levelOverride: string;
   rewardManifests: string[];
-  nextNodes: any[]; // Assuming an array of potentially various types, using 'any[]' or '[]' for an empty array
+  nextNodes: any[];
+}
+
+interface WFRegionShort {
+  name: string;
+  system: string;
+  type: string;
+  faction: string;
+  minLevel: number;
+  maxLevel: number;
 }

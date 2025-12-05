@@ -1,7 +1,7 @@
 import { Argv } from "koishi";
 import { generateArbyWeekOutput, getArbysWeek } from "../services";
 
-export const ArbyCommand = (action: Argv, input?: number) => {
+export const arbyCommand = (action: Argv, input?: number) => {
   const result = getArbysWeek(input);
   if (!result) {
     return "内部错误";
