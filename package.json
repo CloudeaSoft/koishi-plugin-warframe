@@ -2,32 +2,41 @@
   "name": "koishi-plugin-wfm-helper",
   "description": "WFMToolkit",
   "version": "0.1.33",
-  "contributors": [
-    "CloudeaSoft <cloudeasoft@qq.com>"
-  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "atsc -b"
+  },
+  "author": "CloudeaSoft <cloudeasoft@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CloudeaSoft/wfm-helper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CloudeaSoft/wfm-helper/issues"
+  },
+  "homepage": "https://github.com/CloudeaSoft/wfm-helper",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
-    "lib",
-    "dist"
+    "lib"
   ],
-  "license": "MIT",
   "keywords": [
     "chatbot",
     "koishi",
     "plugin"
   ],
+  "koishi": {
+    "category": "gametool",
+    "description": {
+      "en": "WF Toolkit",
+      "zh": "WF Toolkit"
+    },
+    "preview": true,
+    "hidden": false
+  },
   "peerDependencies": {
     "@satorijs/element": "^3.1.8",
     "koishi": "^4.18.7",
     "koishi-plugin-puppeteer": "^3.9.0"
-  },
-  "koishi": {
-    "description": {
-      "en": "WFMToolkit",
-      "zh": "WFMToolkit"
-    },
-    "preview": true,
-    "hidden": false
   }
 }
