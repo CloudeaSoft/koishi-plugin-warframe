@@ -1,5 +1,5 @@
 {
-  "name": "koishi-plugin-wfm-helper",
+  "name": "koishi-plugin-warframe",
   "description": "WFMToolkit",
   "version": "0.1.33",
   "license": "MIT",
@@ -9,12 +9,12 @@
   "author": "CloudeaSoft <cloudeasoft@qq.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CloudeaSoft/wfm-helper.git"
+    "url": "git+https://github.com/CloudeaSoft/koishi-plugin-warframe.git"
   },
   "bugs": {
-    "url": "https://github.com/CloudeaSoft/wfm-helper/issues"
+    "url": "https://github.com/CloudeaSoft/koishi-plugin-warframe/issues"
   },
-  "homepage": "https://github.com/CloudeaSoft/wfm-helper",
+  "homepage": "https://github.com/CloudeaSoft/koishi-plugin-warframe",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
