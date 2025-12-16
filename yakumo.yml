@@ -1,0 +1,24 @@
+- id: zh5v6m
+  name: yakumo
+  config:
+    pipeline:
+      build:
+        - tsc
+        - esbuild
+        - client
+      clean:
+        - tsc --clean
+- id: a1dfww
+  name: yakumo-esbuild
+- id: mq4xbb
+  name: yakumo-tsc
+- id: m2v2yy
+  name: '@koishijs/client/lib'
+- id: weuckt
+  name: yakumo/run
+- id: cljf2u
+  name: yakumo/publish
+- id: dfwroa
+  name: yakumo/version
+- id: 703tii
+  name: yakumo/upgrade

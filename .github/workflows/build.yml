@@ -17,5 +17,7 @@ jobs:
           node-version: latest
       - name: Install
         run: yarn
-      - name: Build
+      - name: build
         run: yarn build
+      - name: Type
+        run: yarn dtsc
