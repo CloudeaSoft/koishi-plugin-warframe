@@ -12,3 +12,4 @@ updates:
     allow:
       - dependency-name: "warframe-public-export-plus"
       - dependency-name: "warframe-worldstate-data"
+      - dependency-name: "warframe-worldstate-parser"
