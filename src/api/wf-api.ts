@@ -1,9 +1,12 @@
-import { fetchAsyncData } from "../utils";
+import { fetchAsyncText } from "../utils";
 import exampleWorldState from "../assets/exampleWorldState.json";
 
 const apiBase = "https://api.warframe.com/cdn/";
 
-export const getWorldState = async (): Promise<WorldState> => {
+export const getWorldState = async (): Promise<any> => {
+  const response = await fetchAsyncText(apiBase + "worldState.php");
   // return exampleWorldState;
-  return await fetchAsyncData<WorldState>(apiBase + "worldState.php");
+  const WorldStateParser = await import('warframe-worldstate-parser');
+  const ws = await WorldStateParser.WorldState.build(response);
+  return ws;
 };

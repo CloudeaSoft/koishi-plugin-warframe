@@ -102,8 +102,8 @@ export const FissureTable = (
             let timeLeft = f.expiry - Date.now();
             return (
               <li style={"margin-top: 10px;"}>
-                <span style={`color:${colors[parseInt(f.modifier[5]) - 1]};`}>
-                  {f.tier}
+                <span style={`color:${colors[f.tierNum - 1]};`}>
+                  {`${f.tier}(T${f.tierNum})`}
                 </span>
                 <span style={"margin-left: 20px;"}>
                   {f.node.name} {f.node.system}
@@ -128,7 +128,9 @@ export const FissureTable = (
             );
           })}
       </ul>
-      <div style="margin-top: 30px; font-size: 30px;">注: 该功能的数据有一定延迟</div>
+      <div style="margin-top: 30px; font-size: 30px;">
+        注: 该功能的数据有一定延迟
+      </div>
     </div>
   );
 };

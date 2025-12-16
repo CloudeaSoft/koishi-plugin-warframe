@@ -6,6 +6,6 @@ interface Fissure {
   /** Expire time. Timestamp in miliseconds */
   expiry: number;
   node: WFRegionShort;
-  modifier: string;
   tier: string;
+  tierNum: number;
 }

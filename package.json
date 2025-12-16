@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-warframe",
   "description": "WFMToolkit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "GPL-3.0",
   "scripts": {
     "build": "dtsc"
@@ -52,5 +52,10 @@
     "koishi": "^4.18.9",
     "koishi-plugin-puppeteer": "^3.9.0",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "warframe-public-export-plus": "^0.5.96",
+    "warframe-worldstate-data": "^3.1.16",
+    "warframe-worldstate-parser": "^5.2.12"
   }
 }

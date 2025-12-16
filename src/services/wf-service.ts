@@ -1,14 +1,25 @@
 import Puppeteer from "koishi-plugin-puppeteer";
+import { WorldState } from "warframe-worldstate-parser";
+import {
+  dict_zh as i18nDict,
+  ExportRegions as regions,
+} from "warframe-public-export-plus";
+
 import arbyRewards from "../assets/arbyRewards";
 import arbys from "../assets/arbys";
-import dict from "../assets/dict.zh.json";
-import regions from "../assets/ExportRegions.json";
+import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
+
 import { getHtmlImageBase64, OutputImage } from "../components/wfm";
 import { ArbitrationTable, CircuitTable, FissureTable } from "../components/wf";
-import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
 import { getWorldState } from "../api/wf-api";
+import {
+  fissureTierName,
+  fissureTierNumToNumber,
+  getSolNodeKey,
+  regionToShort,
+} from "../utils";
 
-const arbysSchedule: ArbitrationShort[] = arbys
+const arbitrationSchedule: ArbitrationShort[] = arbys
   .split("\n")
   .map((line) => line.split(","))
   .filter((arr) => arr.length == 2)
@@ -24,25 +35,6 @@ var worldStateLastUpdatedAt: Date = null;
 var fissures: Fissure[] = [];
 var spFissures: Fissure[] = [];
 var rjFissures: Fissure[] = [];
-const fissureTierName = {
-  VoidT1: "古纪(T1)",
-  VoidT2: "前纪(T2)",
-  VoidT3: "中纪(T3)",
-  VoidT4: "后纪(T4)",
-  VoidT5: "安魂(T5)",
-  VoidT6: "全能(T6)",
-};
-
-export const regionToShort = (region: WFRegion, dict: any) => {
-  return {
-    name: dict[region.name],
-    system: dict[region.systemName],
-    type: dict[region.missionName],
-    faction: dict[region.factionName],
-    maxLevel: region.maxEnemyLevel,
-    minLevel: region.minEnemyLevel,
-  };
-};
 
 export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   if (day > 14 || day <= 0) {
@@ -52,17 +44,17 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   const currentHourTimeStamp = Math.floor(
     new Date().setMinutes(0, 0, 0) / 1000
   );
-  const currentHourIndex = arbysSchedule.findIndex(
+  const currentHourIndex = arbitrationSchedule.findIndex(
     (a) => a.time === currentHourTimeStamp
   );
-  const weekArbys = arbysSchedule.slice(
+  const weekArbys = arbitrationSchedule.slice(
     currentHourIndex,
     currentHourIndex + 24 * day
   );
   return weekArbys
     .filter((a) => arbyRewards[a.node])
     .map((a) => {
-      const obj = regionToShort(regions[a.node], dict);
+      const obj = regionToShort(regions[a.node], i18nDict);
       return {
         ...obj,
         time: new Date(a.time * 1000).toLocaleString("zh-cn", {
@@ -97,10 +89,10 @@ export const getCircuitWeek = (): {
   const EPOCH = 1734307200 * 1000;
   const week = Math.trunc((Date.now() - EPOCH) / 604800000);
   const incarnons = incarnonRewards[week % incarnonRewards.length].map(
-    (i) => dict[i]
+    (i) => i18nDict[i]
   );
   const warframes = warframeRewards[week % warframeRewards.length].map(
-    (i) => dict[i]
+    (i) => i18nDict[i]
   );
   return {
     incarnons,
@@ -120,57 +112,8 @@ export const generateCircuitWeekOutput = async (
   return OutputImage(imgBase64);
 };
 
-export const updateFissues = async () => {
-  if (
-    !worldState ||
-    !worldStateLastUpdatedAt ||
-    Date.now() - worldStateLastUpdatedAt.getTime() > 120000
-  ) {
-    worldState = await getWorldState();
-    worldStateLastUpdatedAt = new Date();
-    for (const fissure of worldState.ActiveMissions) {
-      const obj = {
-        category: fissure.Hard ? "sp-fissures" : "fissures",
-        hard: fissure.Hard,
-        activation: parseInt(fissure.Activation.$date.$numberLong),
-        expiry: parseInt(fissure.Expiry.$date.$numberLong),
-        node: regionToShort(regions[fissure.Node], dict),
-        modifier: fissure.Modifier,
-        tier: fissureTierName[fissure.Modifier],
-      };
-      if (obj.hard) {
-        spFissures.push(obj);
-      } else {
-        fissures.push(obj);
-      }
-    }
-    for (const fissure of worldState.VoidStorms) {
-      rjFissures.push({
-        category: "rj-fissures",
-        hard: false,
-        activation: parseInt(fissure.Activation.$date.$numberLong),
-        expiry: parseInt(fissure.Expiry.$date.$numberLong),
-        node: regionToShort(regions[fissure.Node], dict),
-        modifier: fissure.ActiveMissionTier,
-        tier: fissureTierName[fissure.ActiveMissionTier],
-      });
-    }
-    fissures.sort(
-      (a, b) => a.modifier.charCodeAt(5) - b.modifier.charCodeAt(5)
-    );
-    spFissures.sort(
-      (a, b) => a.modifier.charCodeAt(5) - b.modifier.charCodeAt(5)
-    );
-    rjFissures.sort(
-      (a, b) => a.modifier.charCodeAt(5) - b.modifier.charCodeAt(5)
-    );
-  }
-
-  return worldState && Date.now() - worldStateLastUpdatedAt.getTime() < 120000;
-};
-
 export const getFissures = async () => {
-  if (!(await updateFissues())) {
+  if (!(await updateWorldState())) {
     return "内部错误，获取最新信息失败";
   }
 
@@ -178,7 +121,7 @@ export const getFissures = async () => {
 };
 
 export const getSteelPathFissures = async () => {
-  if (!(await updateFissues())) {
+  if (!(await updateWorldState())) {
     return "内部错误，获取最新信息失败";
   }
 
@@ -186,7 +129,7 @@ export const getSteelPathFissures = async () => {
 };
 
 export const getRailjackFissures = async () => {
-  if (!(await updateFissues())) {
+  if (!(await updateWorldState())) {
     return "内部错误，获取最新信息失败";
   }
 
@@ -201,4 +144,45 @@ export const generateFissureOutput = async (
   const element = FissureTable(fissures, type);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);
+};
+
+const updateWorldState = async () => {
+  if (
+    !worldState ||
+    !worldStateLastUpdatedAt ||
+    Date.now() - worldStateLastUpdatedAt.getTime() > 120000
+  ) {
+    worldState = await getWorldState();
+    worldStateLastUpdatedAt = new Date();
+    for (const fissure of worldState.fissures) {
+      const nodeKey = await getSolNodeKey(fissure.nodeKey)
+      const obj = {
+        category: fissure.isStorm
+          ? "rj-fissures"
+          : fissure.isHard
+          ? "sp-fissures"
+          : "fissures",
+        hard: fissure.isHard,
+        activation: fissure.activation.getTime(),
+        expiry: fissure.expiry.getTime(),
+        node: regionToShort(regions[nodeKey], i18nDict),
+        tier: i18nDict[fissureTierName[fissure.tierNum]],
+        tierNum: fissureTierNumToNumber(fissure.tierNum),
+      };
+
+      if (fissure.isStorm) {
+        rjFissures.push(obj);
+      } else if (fissure.isHard) {
+        spFissures.push(obj);
+      } else {
+        fissures.push(obj);
+      }
+    }
+
+    fissures.sort((a, b) => a.tierNum - b.tierNum);
+    spFissures.sort((a, b) => a.tierNum - b.tierNum);
+    rjFissures.sort((a, b) => a.tierNum - b.tierNum);
+  }
+
+  return worldState && Date.now() - worldStateLastUpdatedAt.getTime() < 120000;
 };
