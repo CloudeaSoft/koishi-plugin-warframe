@@ -32,6 +32,7 @@ const arbitrationSchedule: ArbitrationShort[] = arbys
 
 var worldState: WorldState = null;
 var worldStateLastUpdatedAt: Date = null;
+var worldstateUpdating: boolean = false;
 var fissures: Fissure[] = [];
 var spFissures: Fissure[] = [];
 var rjFissures: Fissure[] = [];
@@ -147,15 +148,23 @@ export const generateFissureOutput = async (
 };
 
 const updateWorldState = async () => {
+  if (worldstateUpdating) return true;
   if (
-    !worldState ||
-    !worldStateLastUpdatedAt ||
-    Date.now() - worldStateLastUpdatedAt.getTime() > 120000
-  ) {
+    worldState &&
+    worldStateLastUpdatedAt &&
+    Date.now() - worldStateLastUpdatedAt.getTime() < 120000
+  )
+    return true;
+
+  try {
     worldState = await getWorldState();
     worldStateLastUpdatedAt = new Date();
+    worldstateUpdating = true;
+    fissures = [];
+    rjFissures = [];
+    spFissures = [];
     for (const fissure of worldState.fissures) {
-      const nodeKey = await getSolNodeKey(fissure.nodeKey)
+      const nodeKey = await getSolNodeKey(fissure.nodeKey);
       const obj = {
         category: fissure.isStorm
           ? "rj-fissures"
@@ -182,7 +191,13 @@ const updateWorldState = async () => {
     fissures.sort((a, b) => a.tierNum - b.tierNum);
     spFissures.sort((a, b) => a.tierNum - b.tierNum);
     rjFissures.sort((a, b) => a.tierNum - b.tierNum);
+  } catch {
+  } finally {
+    worldstateUpdating = false;
+    return (
+      worldState &&
+      worldStateLastUpdatedAt &&
+      Date.now() - worldStateLastUpdatedAt.getTime() < 120000
+    );
   }
-
-  return worldState && Date.now() - worldStateLastUpdatedAt.getTime() < 120000;
 };
