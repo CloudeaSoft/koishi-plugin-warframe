@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.1.0...v1.1.1) (2025-12-17)
+
+### Bug Fixes
+
+* **wfm:** move the text message into image to avoid issue of qq platform ([459d165](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/459d165bb4603b12527aa21988f9eded97b3932f))
+
 ## [1.1.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.0.0...v1.1.0) (2025-12-17)
 
 ### Features
