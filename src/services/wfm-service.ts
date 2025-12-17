@@ -281,8 +281,10 @@ const weaponPartSuffix = [
 ];
 
 const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
+  let hasBPSuffix = false;
   if (input.endsWith(bpSuffix)) {
     input = input.replace(new RegExp(`${bpSuffix}$`), "");
+    hasBPSuffix = true;
   }
 
   if (input.endsWith(setSuffix)) {
@@ -291,14 +293,18 @@ const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
 
   if (input.endsWith(bpSuffix)) {
     input = input.replace(new RegExp(`${bpSuffix}$`), "");
+    hasBPSuffix = true;
   }
 
   const suffix =
     warframePartSuffix.find((value) => input.endsWith(value)) ??
     weaponPartSuffix.find((value) => input.endsWith(value)) ??
+    (input.endsWith("头") ? "头部神经光元" : undefined) ??
+    (hasBPSuffix ? bpSuffix : undefined) ??
     "";
 
   if (suffix) {
+    input = input.endsWith("头") ? input.replace(/头$/, "") : input;
     const pure = input.replace(new RegExp(`${suffix}$`), "");
     return {
       pure,
@@ -314,7 +320,7 @@ const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
 
 const shortHandProcess = (input: string): ItemShort | undefined => {
   const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
-  if (inputNoSuffix == input) {
+  if (inputNoSuffix === input) {
     const fixSet = input + setSuffix;
     const fixSetRes = globalItemNameToIDDict[fixSet];
     if (fixSetRes) return globalItemDict[fixSetRes];
@@ -357,7 +363,7 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
   }
 };
 
-const inputToItem = (input: string): ItemShort | undefined => {
+export const inputToItem = (input: string): ItemShort | undefined => {
   // 1. Direct Compare (Normalized equivalent at least)
   const slug = globalItemNameToIDDict[normalizeOrderName(input)];
   if (slug) return globalItemDict[slug];
