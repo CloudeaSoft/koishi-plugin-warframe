@@ -128,17 +128,7 @@ export const generateItemOrderOutput = async (
 ) => {
   const element = ItemOrderOutput(item, orders);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  if (!orders.length) {
-    return OutputImage(imgBase64);
-  }
-
-  const firstOrder = orders[0];
-  const comment = `/w ${firstOrder.user.ingameName} Hi! I want to buy: "${
-    item.i18n["en"].name
-  }${
-    !item.maxRank || item.maxRank === 0 ? "" : ` (rank ${firstOrder.rank})`
-  }" for ${firstOrder.platinum} platinum. (warframe.market)`;
-  return OutputImage(imgBase64) + comment;
+  return OutputImage(imgBase64);
 };
 
 export const getRivenOrders = async (

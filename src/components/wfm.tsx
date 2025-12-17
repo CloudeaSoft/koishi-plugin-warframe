@@ -151,11 +151,11 @@ export const ItemOrderOutput = (
       </h1>
       <table style={"width:100%;"}>
         <tr>
-          <th style='width:40%;'>玩家名</th>
-          <th style='width:30%;'>状态</th>
-          <th style='width:10%;'>价格</th>
-          <th style='width:10%;'>数量</th>
-          <th style='width:10%;'>好评</th>
+          <th style="width:40%;">玩家名</th>
+          <th style="width:30%;">状态</th>
+          <th style="width:10%;">价格</th>
+          <th style="width:10%;">数量</th>
+          <th style="width:10%;">好评</th>
         </tr>
         {orders.map((order) => (
           <tr>
@@ -167,6 +167,19 @@ export const ItemOrderOutput = (
           </tr>
         ))}
       </table>
+      <div style={"text-align: center; margin-top: 30px; font-size: 25px;"}>
+        {(() => {
+          const firstOrder = orders[0];
+          const comment = `/w ${
+            firstOrder.user.ingameName
+          } Hi! I want to buy: "${item.i18n["en"].name}${
+            !item.maxRank || item.maxRank === 0
+              ? ""
+              : ` (rank ${firstOrder.rank})`
+          }" for ${firstOrder.platinum} platinum. (warframe.market)`;
+          return comment;
+        })()}
+      </div>
     </div>
   );
 };
