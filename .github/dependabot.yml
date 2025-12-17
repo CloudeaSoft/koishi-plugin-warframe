@@ -9,7 +9,17 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    allow:
-      - dependency-name: "warframe-public-export-plus"
-      - dependency-name: "warframe-worldstate-data"
-      - dependency-name: "warframe-worldstate-parser"
+    commit-message:
+      prefix: 'fix'
+      prefix-development: 'ci'
+    labels:
+      - 'dependencies'
+    open-pull-requests-limit: 10
+    pull-request-branch-name:
+      separator: '-'
+    rebase-strategy: 'auto'
+    # allow:
+    #   - dependency-name: "warframe-worldstate-data"
+    #   - dependency-name: "warframe-worldstate-parser"
+    #   - dependency-name: "warframe-public-export-plus"
+
