@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.0.0...v1.1.0) (2025-12-17)
+
+### Features
+
+* **wfm:** optimize input parsing, add shorthands and alias support ([#5](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/5)) ([c9cc43e](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/c9cc43ea697557d2d2a8b82e1d29b3210666b077))
+
 ## 1.0.0 (2025-12-16)
 
 ### Features
