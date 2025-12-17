@@ -1,3 +1,9 @@
+## [1.1.2](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.1.1...v1.1.2) (2025-12-17)
+
+### Bug Fixes
+
+* **wfm:** add more shorthand to item name parsing, and testcases ([642b7a7](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/642b7a77609e68c7beaac72058a1d64daa263680))
+
 ## [1.1.1](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.1.0...v1.1.1) (2025-12-17)
 
 ### Bug Fixes
