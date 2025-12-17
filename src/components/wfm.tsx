@@ -1,5 +1,5 @@
 import Puppeteer from "koishi-plugin-puppeteer";
-import { globalRivenAttributeList } from "../services";
+import { globalRivenAttributeDict } from "../services";
 import Element from "@satorijs/element";
 
 export const getHtmlString = (body: string, title?: string) => {
@@ -133,7 +133,6 @@ export const ItemOrderOutput = (
         {`
           th {
             align-items: center;
-            width:33%;
             font-size: 1.8rem;
           }
 
@@ -152,15 +151,19 @@ export const ItemOrderOutput = (
       </h1>
       <table style={"width:100%;"}>
         <tr>
-          <th>玩家名</th>
-          <th>状态</th>
-          <th>价格</th>
+          <th style='width:40%;'>玩家名</th>
+          <th style='width:30%;'>状态</th>
+          <th style='width:10%;'>价格</th>
+          <th style='width:10%;'>数量</th>
+          <th style='width:10%;'>好评</th>
         </tr>
         {orders.map((order) => (
           <tr>
             <td>{order.user.ingameName}</td>
             <td>{order.user.status}</td>
             <td>{order.platinum}</td>
+            <td>{order.quantity}</td>
+            <td>{order.user.reputation}</td>
           </tr>
         ))}
       </table>
@@ -334,9 +337,7 @@ const RivenAttributeComponent = (
   },
   index: number
 ): Element => {
-  const attrInfo = globalRivenAttributeList.find(
-    (e) => e.slug == attr.url_name
-  );
+  const attrInfo = globalRivenAttributeDict[attr.url_name];
   const attrName = attrInfo.i18n["zh-hans"].name;
   const attrValuePrefix = attrInfo.unit === "multiply" ? "x" : "";
   const unitSuffixMap = {

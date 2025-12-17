@@ -61,7 +61,7 @@ export const fullWidthToHalfWidth = (str: string) => {
     .replace(/\u3000/g, " "); // 全角空格（U+3000）转半角空格（U+0020）
 };
 
-export const transformListIntoDict: <T>(
+export const listToDict: <T>(
   dict: T[],
   predict: (obj: T) => string[]
 ) => { [key: string]: T } = <T>(
@@ -74,6 +74,27 @@ export const transformListIntoDict: <T>(
     for (const key of keys) {
       if (typeof key === "string" && key.length > 0) {
         result[key] = obj;
+      }
+    }
+  }
+  return result;
+};
+
+export const listToDictSpec: <TObj, TValue>(
+  dict: TObj[],
+  predict: (obj: TObj) => string[],
+  value: (obj: TObj) => TValue
+) => { [key: string]: TValue } = <TObj, TValue>(
+  dict: TObj[],
+  predict: (obj: TObj) => string[],
+  value: (obj: TObj) => TValue
+): { [key: string]: TValue } => {
+  const result = {};
+  for (const obj of dict) {
+    const keys = predict(obj);
+    for (const key of keys) {
+      if (typeof key === "string" && key.length > 0) {
+        result[key] = value(obj);
       }
     }
   }

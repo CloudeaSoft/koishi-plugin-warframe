@@ -37,7 +37,7 @@ interface ItemShort {
   slug: string;
   gameRef: string;
   tags: string[];
-  i18n: { [key: WFMLang]: ItemI18N };
+  i18n: Partial<Record<WFMLang, ItemI18N>>;
   maxRank: number;
   maxCharges: number;
   vaulted: boolean;
