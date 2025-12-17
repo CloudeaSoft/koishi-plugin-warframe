@@ -14,16 +14,16 @@ import {
   RivenOrderOutput,
 } from "../components/wfm";
 
-var globalItemList: ItemShort[] = [];
-var globalRivenItemList: RivenItem[] = [];
-var globalRivenAttributeList: RivenAttribute[] = [];
+let globalItemList: ItemShort[] = [];
+let globalRivenItemList: RivenItem[] = [];
+let globalRivenAttributeList: RivenAttribute[] = [];
 
-var globalItemDict: Record<string, ItemShort> = {};
-var globalRivenItemDict: Record<string, RivenItem> = {};
-export var globalRivenAttributeDict: Record<string, RivenAttribute> = {};
+let globalItemDict: Record<string, ItemShort> = {};
+let globalRivenItemDict: Record<string, RivenItem> = {};
+export let globalRivenAttributeDict: Record<string, RivenAttribute> = {};
 
 /** A dictonary with normalized wfm item i18n name as key and corresponding id as value. Initialized on 'ready' event. */
-var globalItemNameToIDDict: Record<string, string> = {};
+let globalItemNameToIDDict: Record<string, string> = {};
 
 export const wmOnReady = async () => {
   const data = await getWFMItemList();
@@ -62,10 +62,12 @@ export const wmOnReady = async () => {
   globalItemNameToIDDict = ((list) => {
     const result = {};
     for (const item of list) {
-      const itemCNName = item.i18n["zh-hans"].name;
-      const itemENName = item.i18n["en"].name;
-      result[normalizeOrderName(itemCNName)] = item.slug;
-      result[normalizeOrderName(itemENName)] = item.slug;
+      if (item.i18n["zh-hans"]?.name) {
+        result[normalizeOrderName(item.i18n["zh-hans"].name)] = item.slug;
+      }
+      if (item.i18n["en"]?.name) {
+        result[normalizeOrderName(item.i18n["en"].name)] = item.slug;
+      }
     }
     return result;
   })(globalItemList);
@@ -126,6 +128,10 @@ export const generateItemOrderOutput = async (
 ) => {
   const element = ItemOrderOutput(item, orders);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  if (!orders.length) {
+    return OutputImage(imgBase64);
+  }
+
   const firstOrder = orders[0];
   const comment = `/w ${firstOrder.user.ingameName} Hi! I want to buy: "${
     item.i18n["en"].name
@@ -316,7 +322,7 @@ const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   }
 };
 
-const shortHandProcess = (input: string): ItemShort | null => {
+const shortHandProcess = (input: string): ItemShort | undefined => {
   const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
   if (inputNoSuffix == input) {
     const fixSet = input + setSuffix;
@@ -361,7 +367,7 @@ const shortHandProcess = (input: string): ItemShort | null => {
   }
 };
 
-const inputToItem = (input: string): ItemShort => {
+const inputToItem = (input: string): ItemShort | undefined => {
   // 1. Direct Compare (Normalized equivalent at least)
   const slug = globalItemNameToIDDict[normalizeOrderName(input)];
   if (slug) return globalItemDict[slug];
