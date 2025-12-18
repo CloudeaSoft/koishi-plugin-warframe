@@ -3,7 +3,9 @@ import { inputToItem, setGlobalItem } from "../src/services";
 
 import testItems from "./assets/test-items.json";
 
-setGlobalItem(testItems.data);
+before(() => {
+  setGlobalItem(testItems.data);
+});
 
 it("wfm-service.inputToItem", () => {
   const inputToItemTestCases = [
@@ -11,6 +13,7 @@ it("wfm-service.inputToItem", () => {
     { a: "ashp", b: "Ash Prime 一套" },
     { a: "牛P", b: "Rhino Prime 一套" },
     { a: "膛室", b: "膛室 Prime" },
+    { a: "abc", b: undefined },
   ];
 
   inputToItemTestCases.forEach((element) => {
