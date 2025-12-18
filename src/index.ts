@@ -5,6 +5,10 @@ import * as hooks from "./hooks/on-ready";
 
 export const name = "warframe";
 
+export let testMode = false;
+
+export const setTestMode = () => (testMode = true);
+
 export interface Config {
   developerMode: boolean;
 }
@@ -19,6 +23,8 @@ export function apply(ctx: Context) {
 }
 
 const setupHooks = (ctx: Context) => {
+  if (testMode) return;
+
   ctx.on("message", (session) => {
     if (ctx.config.developerMode) {
       ctx.logger.info(`

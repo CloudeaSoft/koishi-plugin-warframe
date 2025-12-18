@@ -7,7 +7,8 @@
     "build": "yakumo build",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
-    "dtsc": "dtsc"
+    "dtsc": "dtsc",
+    "test": "mocha tests/**/*.spec.ts"
   },
   "author": "CloudeaSoft <cloudeasoft@qq.com>",
   "repository": {
@@ -50,12 +51,18 @@
   "devDependencies": {
     "@koishijs/client": "^5.30.11",
     "@koishijs/plugin-help": "^2.4.6",
+    "@koishijs/plugin-mock": "^2.6.6",
     "@satorijs/element": "^3.1.8",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^25.0.3",
+    "chai": "^6.2.1",
     "dtsc": "^3.1.0",
     "esbuild": "^0.27.1",
+    "esbuild-register": "^3.6.0",
     "koishi": "^4.18.9",
     "koishi-plugin-puppeteer": "^3.9.0",
+    "mocha": "^11.7.5",
     "typescript": "^5.9.3",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",

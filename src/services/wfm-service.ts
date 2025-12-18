@@ -43,22 +43,14 @@ export const wmOnReady = async () => {
     );
   }
 
-  // Basis
-  globalItemList = data.data;
-  globalRivenItemList = rivenData.data;
-  globalRivenAttributeList = rivenAttributeData.data;
+  setGlobalItem(data.data);
+  setGlobalRivenItem(rivenData.data);
+  setGlobalRivenAttribute(rivenAttributeData.data);
+};
 
-  // Post Transform
-
-  // Slug dictionaries
-  globalItemDict = listToDict<ItemShort>(data.data, (i) => [i.slug]);
-  globalRivenItemDict = listToDict<RivenItem>(rivenData.data, (i) => [i.slug]);
-  globalRivenAttributeDict = listToDict<RivenAttribute>(
-    rivenAttributeData.data,
-    (a) => [a.slug]
-  );
-
-  // Normalized i18n name to slug dicts
+export const setGlobalItem = (data: ItemShort[]) => {
+  globalItemList = data;
+  globalItemDict = listToDict<ItemShort>(data, (i) => [i.slug]);
   globalItemNameToIDDict = ((list) => {
     const result = {};
     for (const item of list) {
@@ -72,6 +64,18 @@ export const wmOnReady = async () => {
     return result;
   })(globalItemList);
 };
+
+export const setGlobalRivenItem = (data: RivenItem[]) => {
+  globalRivenItemList = data;
+  globalRivenItemDict = listToDict<RivenItem>(data, (i) => [i.slug]);
+};
+
+export const setGlobalRivenAttribute = (data: RivenAttribute[]) => {
+  globalRivenAttributeList = data;
+  globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [a.slug]);
+};
+
+// ================ features ===================
 
 export const getItemOrders = async (
   input: string
@@ -364,6 +368,8 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
 };
 
 export const inputToItem = (input: string): ItemShort | undefined => {
+  input = normalizeOrderName(input);
+
   // 1. Direct Compare (Normalized equivalent at least)
   const slug = globalItemNameToIDDict[normalizeOrderName(input)];
   if (slug) return globalItemDict[slug];
@@ -385,7 +391,7 @@ export const inputToItem = (input: string): ItemShort | undefined => {
     if (aliasHasEndPRes) return aliasHasEndPRes;
   }
 
-  if (inputNoSuffix.endsWith("p")) {
+  if (inputNoSuffix.match(/p$/)) {
     const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
     const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
     if (mappedAliasNoEndP) {
