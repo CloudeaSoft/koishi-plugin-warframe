@@ -9,8 +9,7 @@ import { setTestMode } from "../src/index";
 import testItems from "./assets/test-items.json";
 
 const app = new Context();
-// @ts-ignore
-app.plugin(mock);
+app.plugin(mock as any);
 app.plugin(warframe);
 
 const client = app.mock.client("123");
