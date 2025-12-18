@@ -371,7 +371,7 @@ export const inputToItem = (input: string): ItemShort | undefined => {
   input = normalizeOrderName(input);
 
   // 1. Direct Compare (Normalized equivalent at least)
-  const slug = globalItemNameToIDDict[normalizeOrderName(input)];
+  const slug = globalItemNameToIDDict[input];
   if (slug) return globalItemDict[slug];
 
   // 2. Low-level Shorthands
