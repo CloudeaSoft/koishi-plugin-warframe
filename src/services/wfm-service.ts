@@ -391,7 +391,7 @@ export const inputToItem = (input: string): ItemShort | undefined => {
     if (aliasHasEndPRes) return aliasHasEndPRes;
   }
 
-  if (inputNoSuffix.match(/p$/)) {
+  if (inputNoSuffix.endsWith("p")) {
     const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
     const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
     if (mappedAliasNoEndP) {
