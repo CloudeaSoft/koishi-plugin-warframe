@@ -72,6 +72,14 @@ const setupCommands = (ctx: Context) => {
     .alias("九重天裂隙")
     .action(commands.railjackFissureCommand);
 
+  ctx
+    .command("environment", "当前区域环境")
+    .alias("env")
+    .alias("环境")
+    .alias("地球")
+    .alias("平原")
+    .alias("金星")
+    .action(commands.environmentCommand);
   ctx.command("weekly", "周常任务").alias("周常").action(inDevelopment);
   ctx
     .command("circuit", "本周回廊战甲及灵化之源")
