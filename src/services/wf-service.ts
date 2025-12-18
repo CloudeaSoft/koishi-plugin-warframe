@@ -1,22 +1,32 @@
 import Puppeteer from "koishi-plugin-puppeteer";
 import { WorldState } from "warframe-worldstate-parser";
 import {
+  ExportMissionTypes,
   dict_zh as i18nDict,
   ExportRegions as regions,
 } from "warframe-public-export-plus";
 
+import i18nDict_ex_zh from "../assets/zh.json";
+import i18nDict_ex_en from "../assets/en.json";
 import arbyRewards from "../assets/arbyRewards";
 import arbys from "../assets/arbys";
 import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
 
 import { getHtmlImageBase64, OutputImage } from "../components/wfm";
-import { ArbitrationTable, CircuitTable, FissureTable } from "../components/wf";
+import {
+  ArbitrationTable,
+  CircuitTable,
+  FissureTable,
+  WeeklyTable,
+} from "../components/wf";
 import { getWorldState } from "../api/wf-api";
 import {
   fissureTierName,
   fissureTierNumToNumber,
+  getMissionTypeKey,
   getSolNodeKey,
   regionToShort,
+  removeSpace,
 } from "../utils";
 
 const arbitrationSchedule: ArbitrationShort[] = arbys
@@ -87,6 +97,123 @@ export const generateArbitrationsOutput = async (
   const element = ArbitrationTable(arby);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);
+};
+
+export const getWeekly = async () => {
+  if (!(await updateWorldState())) {
+    return "内部错误，获取最新信息失败";
+  }
+
+  const archon =
+    i18nDict[
+      "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
+    ];
+
+  const stringToDebuff = (
+    key: string,
+    name: string,
+    prefix: string
+  ): ArchiMedeaDebuff => {
+    const keyToName = i18nDict_ex_zh[`${prefix}${key}`];
+
+    if (!keyToName) {
+      for (const transKey in i18nDict_ex_en) {
+        if (i18nDict_ex_en[transKey] === name) {
+          return {
+            name: i18nDict_ex_zh[transKey],
+            desc: i18nDict_ex_zh[transKey + "_Desc"],
+          };
+        }
+      }
+    }
+
+    const riskDesc = i18nDict_ex_zh[`${prefix}${key}_Desc`];
+    return {
+      name: keyToName,
+      desc: riskDesc,
+    };
+  };
+
+  const deepArchim = worldState.archimedeas[0];
+  const deepArchimMissions = await Promise.all(
+    deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
+      const receivedType = await getMissionTypeKey(m.missionType);
+      const type =
+        i18nDict[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+      const diviation = stringToDebuff(
+        m.diviation.key,
+        m.diviation.name,
+        "/Lotus/Language/Conquest/MissionVariant_LabConquest_"
+      );
+      const risks = m.risks.map((r) =>
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+      );
+
+      return {
+        type,
+        diviation,
+        risks,
+      };
+    })
+  );
+  const deepArchimPersonalModifier = deepArchim.personalModifiers.map((p) =>
+    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+  );
+  const deepArchimRes: ArchiMedea = {
+    name: "深层科研",
+    missions: deepArchimMissions,
+    peronal: deepArchimPersonalModifier,
+  };
+
+  const temporalArchim = worldState.archimedeas[1];
+  const temporalArchimMissions = await Promise.all(
+    temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
+      const receivedType = await getMissionTypeKey(m.missionType);
+      const type =
+        i18nDict[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+      const diviation = stringToDebuff(
+        m.diviation.key,
+        m.diviation.name,
+        "/Lotus/Language/Conquest/MissionVariant_HexConquest_"
+      );
+      const risks = m.risks.map((r) =>
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+      );
+
+      return {
+        type,
+        diviation,
+        risks,
+      };
+    })
+  );
+  const temporalArchimPersonalModifier = temporalArchim.personalModifiers.map(
+    (p) =>
+      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+  );
+  const temporalArchimRes: ArchiMedea = {
+    name: "时光科研",
+    missions: temporalArchimMissions,
+    peronal: temporalArchimPersonalModifier,
+  };
+
+  return {
+    archonHunt: archon,
+    deepArchimedea: deepArchimRes,
+    temporalArchimedea: temporalArchimRes,
+  };
+};
+
+export const generateWeeklyOutput = async (
+  puppe: Puppeteer,
+  archon: string,
+  deepArchimedea: ArchiMedea,
+  temporalArchimedea: ArchiMedea
+) => {
+  const element = await WeeklyTable(archon, deepArchimedea, temporalArchimedea);
+  // const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  // return OutputImage(imgBase64);
+  return element;
 };
 
 export const getRegionTime = async (): Promise<string> => {

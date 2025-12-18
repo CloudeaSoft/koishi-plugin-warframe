@@ -61,6 +61,8 @@ export const fullWidthToHalfWidth = (str: string) => {
     .replace(/\u3000/g, " "); // 全角空格（U+3000）转半角空格（U+0020）
 };
 
+export const removeSpace = (text: string) => text.replace(/\s/g, "");
+
 export const listToDict: <T>(
   dict: T[],
   predict: (obj: T) => string[]

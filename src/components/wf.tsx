@@ -134,3 +134,40 @@ export const FissureTable = (
     </div>
   );
 };
+
+export const WeeklyTable = async (
+  archon: string,
+  deepArchimedea: ArchiMedea,
+  temporalArchimedea: ArchiMedea
+) => {
+  const archonRes = `执行官: ${archon}`;
+
+  const deepRes = `${deepArchimedea.name}\n${deepArchimedea.missions
+    .map((m) => {
+      let result = `${m.type}\n偏差: ${m.diviation.name}(${m.diviation.desc})`;
+      for (const risk of m.risks) {
+        result += `\n风险: ${risk.name}(${risk.desc})`;
+      }
+      return result;
+    })
+    .join("\n")}\n${deepArchimedea.peronal
+    .map((per) => {
+      return `个人变量: ${per.name}(${per.desc})`;
+    })
+    .join("\n")}`;
+
+  const tempRes = `${temporalArchimedea.name}\n${temporalArchimedea.missions
+    .map((m) => {
+      let result = `${m.type}\n偏差: ${m.diviation.name}(${m.diviation.desc})`;
+      for (const risk of m.risks) {
+        result += `\n风险: ${risk.name}(${risk.desc})`;
+      }
+      return result;
+    })
+    .join("\n")}\n${temporalArchimedea.peronal
+    .map((per) => {
+      return `个人变量: ${per.name}(${per.desc})`;
+    })
+    .join("\n")}`;
+  return `${archonRes}\n\n${deepRes}\n\n${tempRes}`;
+};
