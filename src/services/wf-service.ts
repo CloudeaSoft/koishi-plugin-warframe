@@ -88,9 +88,9 @@ export const getRelic = async (
     return "输入非法";
   }
 
-  const body = input.replace(new RegExp(`^${tier}`), "");
+  let body = input.replace(new RegExp(`^${tier}`), "");
   if (body.endsWith("遗物") || body.endsWith("Relic")) {
-    body.replace(/遗物$|Relic$/, "");
+    body = body.replace(/遗物$|Relic$/, "");
   }
 
   const tierMap = {
@@ -106,7 +106,10 @@ export const getRelic = async (
   return relics[key];
 };
 
-export const generateRelicOutput = async (puppe: Puppeteer, relic: OutputRelic) => {
+export const generateRelicOutput = async (
+  puppe: Puppeteer,
+  relic: OutputRelic
+) => {
   const element = RelicComponent(relic);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);

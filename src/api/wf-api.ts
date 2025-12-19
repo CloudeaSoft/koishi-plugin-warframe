@@ -80,12 +80,12 @@ export const getRelicsDropTable = async (
       };
     }
 
+    const itemsMap = new Map(
+      result[nameKey].items.map((item) => [item.name, item])
+    );
     for (const target of r.items) {
-      result[nameKey].items.forEach((item, index) => {
-        if (item.name === target.name) {
-          result[nameKey].items[index].rate[r.quality] = target.rate;
-        }
-      });
+      const item = itemsMap.get(target.name);
+      item.rate[r.quality] = target.rate;
     }
   });
 
