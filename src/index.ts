@@ -74,6 +74,12 @@ const setupCommands = (ctx: Context) => {
     .action(commands.railjackFissureCommand);
 
   ctx
+    .command("relic <input:text>", "查询遗物内容")
+    .alias("遗物")
+    .alias("核桃")
+    .action(commands.relicCommand);
+
+  ctx
     .command("environment", "当前各区域状态")
     .alias("env")
     .alias("平原")

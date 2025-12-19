@@ -171,3 +171,174 @@ export const WeeklyTable = async (
     .join("\n")}`;
   return `${archonRes}\n\n${deepRes}\n\n${tempRes}`;
 };
+
+export const RelicComponent = (relic: OutputRelic): Element => {
+  // 根据Intact掉落率筛选物品
+  const gold = relic.items.filter((i) => i.rate.Intact === 2);
+  const silver = relic.items.filter((i) => i.rate.Intact === 11);
+  const bronze = relic.items.filter((i) => i.rate.Intact === 25.33);
+
+  // 辅助函数：根据掉落率获取颜色
+  const getRateColor = (rate: number): string => {
+    if (rate === 2) return "#ffd700"; // 金色
+    if (rate === 11) return "#c0c0c0"; // 银色
+    if (rate === 25.33) return "#cd7f32"; // 铜色
+    return "#000000";
+  };
+
+  // 渲染奖励项目
+  const renderRewards = (items: OutputRelicReward[]) => {
+    if (items.length === 0) return null;
+
+    return items.map((item, index) => (
+      <div
+        style={`padding: 8px 12px;
+          margin: 4px 0;
+          border-radius: 4px;
+          background-color: rgba(255, 255, 255, 0.05);
+          border-left: 4px solid ${getRateColor(item.rate.Intact)};
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          line-height: 1;`}
+      >
+        <span style={`color: #000000; font-size: 14px;`}>{item.name}</span>
+        <span
+          style={`color: #a0a0a0;
+              font-size: 12px;
+              font-family: monospace;
+              display:flex;
+              gap:10px;`}
+        >
+          <span style="color: #a0a000;display:flex;line-height:1;">
+            {item.ducats}
+            <svg
+              viewBox="0 0 18 18"
+              style="
+                color: rgb(64 64 64 / 75%);
+                height: 1em;
+                width: 1em;
+                vertical-align: -.125em;
+                fill: currentcolor;"
+            >
+              <use href={`#icon-ducats`}></use>
+            </svg>
+          </span>
+          <span>{item.rate.Intact}%</span>
+        </span>
+      </div>
+    ));
+  };
+
+  return (
+    <div
+      style={`
+        border-radius: 8px;
+        padding: 16px;
+        margin: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: #000000;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 400px;
+        min-width: 320px;`}
+    >
+      {/* 遗物标题 */}
+      <div
+        style={`display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);`}
+      >
+        <h1
+          style={`font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+            color: #000000;`}
+        >
+          {`${relic.tier} ${relic.num} 遗物`}
+        </h1>
+      </div>
+
+      {/* 金奖励 */}
+      {gold.length > 0 && (
+        <div style={`margin-bottom: 12px;`}>
+          <div
+            style={`display: flex;
+              align-items: center;
+              margin-bottom: 8px;`}
+          >
+            <h3
+              style={`font-size: 14px;
+                font-weight: bold;
+                color: #ffd700;
+                margin: 0;
+                text-transform: uppercase;`}
+            >
+              稀有
+            </h3>
+          </div>
+          {renderRewards(gold)}
+        </div>
+      )}
+
+      {/* 银奖励 */}
+      {silver.length > 0 && (
+        <div style={`margin-bottom: 12px;`}>
+          <div
+            style={`display: flex;
+              align-items: center;
+              margin-bottom: 8px;`}
+          >
+            <h3
+              style={`font-size: 14px;
+                font-weight: bold;
+                color: #c0c0c0;
+                margin: 0;
+                text-transform: uppercase;`}
+            >
+              罕见
+            </h3>
+          </div>
+          {renderRewards(silver)}
+        </div>
+      )}
+
+      {/* 铜奖励 */}
+      {bronze.length > 0 && (
+        <div style={`margin-bottom: 12px;`}>
+          <div
+            style={`display: flex;
+              align-items: center;
+              margin-bottom: 8px;`}
+          >
+            <h3
+              style={`font-size: 14px;
+                font-weight: bold;
+                color: #cd7f32;
+                margin: 0;
+                text-transform: uppercase;`}
+            >
+              常见
+            </h3>
+          </div>
+          {renderRewards(bronze)}
+        </div>
+      )}
+
+      {/* 备注信息 */}
+      <div
+        style={`margin-top: 16px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          font-size: 10px;
+          color: #888888;
+          text-align: center;`}
+      >
+        掉落率基于Intact遗物品质
+      </div>
+    </div>
+  );
+};

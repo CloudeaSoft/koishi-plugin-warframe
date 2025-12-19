@@ -6,3 +6,4 @@ export * from "./wf/fissure";
 export * from "./wf/circuit";
 export * from "./wf/environment";
 export * from "./wf/weelky";
+export * from "./wf/relic";

@@ -17,9 +17,10 @@ import {
   ArbitrationTable,
   CircuitTable,
   FissureTable,
+  RelicComponent,
   WeeklyTable,
 } from "../components/wf";
-import { getWorldState } from "../api/wf-api";
+import { getRelicsDropTable, getWorldState } from "../api/wf-api";
 import {
   fissureTierName,
   fissureTierNumToNumber,
@@ -40,18 +41,76 @@ const arbitrationSchedule: ArbitrationShort[] = arbys
     };
   });
 
-var worldState: WorldState = null;
-var worldStateLastUpdatedAt: Date = null;
-var worldstateUpdating: boolean = false;
-var fissures: Fissure[] = [];
-var spFissures: Fissure[] = [];
-var rjFissures: Fissure[] = [];
+let worldState: WorldState = null;
+let worldStateLastUpdatedAt: Date = null;
+let worldstateUpdating: boolean = false;
+let fissures: Fissure[] = [];
+let spFissures: Fissure[] = [];
+let rjFissures: Fissure[] = [];
+let relics: Record<string, Relic> = null;
 
 export const wfOnReady = async () => {
   await updateWorldState();
+  // relics = await getRelics();
 };
 
 // ================ features ===================
+
+export const getRelic = async (
+  puppe: Puppeteer,
+  input: string
+): Promise<Relic | string> => {
+  if (!relics || Object.entries(relics).length === 0) {
+    relics = await getRelicsDropTable(puppe);
+
+    if (!relics || Object.entries(relics).length === 0) {
+      return "获取遗物信息失败";
+    }
+  }
+
+  input = removeSpace(input);
+  const tierList = [
+    "古纪",
+    "前纪",
+    "中纪",
+    "后纪",
+    "安魂",
+    "先锋",
+    "Lith",
+    "Meso",
+    "Neo",
+    "Axi",
+    "Requiem",
+    "Vanguard",
+  ];
+  const tier = tierList.find((t) => input.startsWith(t));
+  if (!tier) {
+    return "输入非法";
+  }
+
+  const body = input.replace(new RegExp(`^${tier}`), "");
+  if (body.endsWith("遗物") || body.endsWith("Relic")) {
+    body.replace(/遗物$|Relic$/, "");
+  }
+
+  const tierMap = {
+    古纪: "Lith",
+    前纪: "Meso",
+    中纪: "Neo",
+    后纪: "Axi",
+    安魂: "Requiem",
+    先锋: "Vanguard",
+  };
+  const mappedTier = tierMap[tier];
+  const key = mappedTier + body;
+  return relics[key];
+};
+
+export const generateRelicOutput = async (puppe: Puppeteer, relic: OutputRelic) => {
+  const element = RelicComponent(relic);
+  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  return OutputImage(imgBase64);
+};
 
 export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   if (day > 14 || day <= 0) {

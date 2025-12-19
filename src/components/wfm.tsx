@@ -105,9 +105,15 @@ export const getHtmlImageBase64 = async (
     getHtmlString(html),
     async (page, next): Promise<string> => {
       const element = await page.$("body");
+      const clip = await element.evaluate((e) => {
+        // The first element is svg
+        const { x, y, width, height } = e.children[1].getBoundingClientRect();
+        return { x, y, width, height };
+      });
       return await element.screenshot({
         type: type ?? "png",
         encoding: "base64",
+        clip
       });
     }
   );

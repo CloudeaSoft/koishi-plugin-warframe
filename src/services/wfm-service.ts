@@ -181,6 +181,39 @@ export const generateRivenOrderOutput = async (
   return OutputImage(imgBase64);
 };
 
+export const loadRelicData = (relic: Relic): OutputRelic => {
+  const relicTierMap = {
+    Lith: "古纪",
+    Meso: "前纪",
+    Neo: "中纪",
+    Axi: "后纪",
+    Requiem: "安魂",
+    Vanguard: "先锋",
+  };
+
+  relic.tier = (relicTierMap[relic.tier] as any) ?? relic.tier;
+  const loadedItems = relic.items.map((element): OutputRelicReward => {
+    const item = nameToItem(element.name);
+    if (!item) {
+      return {
+        name: element.name.replace("Blueprint", "蓝图"),
+        ducats: 0,
+        rate: element.rate,
+      };
+    }
+    return {
+      name: item.i18n["zh-hans"].name,
+      ducats: item.ducats,
+      rate: element.rate,
+    };
+  });
+
+  return {
+    ...relic,
+    items: loadedItems,
+  };
+};
+
 // ================ privates ===================
 
 const warframeAlias = {
@@ -539,4 +572,13 @@ const normalizeOrderName = (str: string) => {
   };
 
   return normalize(str);
+};
+
+const nameToItem = (name: string) => {
+  const id = globalItemNameToIDDict[normalizeOrderName(name)];
+  if (id) {
+    return globalItemDict[id];
+  }
+
+  return null;
 };
