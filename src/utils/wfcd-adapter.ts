@@ -1,6 +1,6 @@
 import { dictToKeyDict } from "./common";
 
-var solNodesEnDict = null;
+let solNodesEnDict = null;
 
 export const getSolNodeKey = async (name: string): Promise<string> => {
   const worldstateData = await import("warframe-worldstate-data");
@@ -10,6 +10,22 @@ export const getSolNodeKey = async (name: string): Promise<string> => {
     ]);
   }
   return solNodesEnDict[name];
+};
+
+let missionTypeEnDict = null;
+
+export const getMissionTypeKey = async (name: string): Promise<string> => {
+  const worldstateData = await import("warframe-worldstate-data");
+  if (!missionTypeEnDict) {
+    missionTypeEnDict = dictToKeyDict(
+      worldstateData.default.missionTypes,
+      (n) => [n.value]
+    );
+  }
+
+  if (name === "Disruption") return "MT_ARTIFACT";
+
+  return missionTypeEnDict[name];
 };
 
 export const fissureTierName = {

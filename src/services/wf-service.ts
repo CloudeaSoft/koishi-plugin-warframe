@@ -1,22 +1,33 @@
 import Puppeteer from "koishi-plugin-puppeteer";
 import { WorldState } from "warframe-worldstate-parser";
 import {
+  ExportMissionTypes,
   dict_zh as i18nDict,
   ExportRegions as regions,
 } from "warframe-public-export-plus";
 
+import i18nDict_ex_zh from "../assets/zh.json";
+import i18nDict_ex_en from "../assets/en.json";
 import arbyRewards from "../assets/arbyRewards";
 import arbys from "../assets/arbys";
 import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
 
 import { getHtmlImageBase64, OutputImage } from "../components/wfm";
-import { ArbitrationTable, CircuitTable, FissureTable } from "../components/wf";
-import { getWorldState } from "../api/wf-api";
+import {
+  ArbitrationTable,
+  CircuitTable,
+  FissureTable,
+  RelicComponent,
+  WeeklyTable,
+} from "../components/wf";
+import { getRelicsDropTable, getWorldState } from "../api/wf-api";
 import {
   fissureTierName,
   fissureTierNumToNumber,
+  getMissionTypeKey,
   getSolNodeKey,
   regionToShort,
+  removeSpace,
 } from "../utils";
 
 const arbitrationSchedule: ArbitrationShort[] = arbys
@@ -30,12 +41,79 @@ const arbitrationSchedule: ArbitrationShort[] = arbys
     };
   });
 
-var worldState: WorldState = null;
-var worldStateLastUpdatedAt: Date = null;
-var worldstateUpdating: boolean = false;
-var fissures: Fissure[] = [];
-var spFissures: Fissure[] = [];
-var rjFissures: Fissure[] = [];
+let worldState: WorldState = null;
+let worldStateLastUpdatedAt: Date = null;
+let worldstateUpdating: boolean = false;
+let fissures: Fissure[] = [];
+let spFissures: Fissure[] = [];
+let rjFissures: Fissure[] = [];
+let relics: Record<string, Relic> = null;
+
+export const wfOnReady = async () => {
+  // await updateWorldState();
+  // relics = await getRelics();
+};
+
+// ================ features ===================
+
+export const getRelic = async (
+  puppe: Puppeteer,
+  input: string
+): Promise<Relic | string> => {
+  if (!relics || Object.entries(relics).length === 0) {
+    relics = await getRelicsDropTable(puppe);
+
+    if (!relics || Object.entries(relics).length === 0) {
+      return "获取遗物信息失败";
+    }
+  }
+
+  input = removeSpace(input);
+  const tierList = [
+    "古纪",
+    "前纪",
+    "中纪",
+    "后纪",
+    "安魂",
+    "先锋",
+    "Lith",
+    "Meso",
+    "Neo",
+    "Axi",
+    "Requiem",
+    "Vanguard",
+  ];
+  const tier = tierList.find((t) => input.startsWith(t));
+  if (!tier) {
+    return "输入非法";
+  }
+
+  let body = input.replace(new RegExp(`^${tier}`), "");
+  if (body.endsWith("遗物") || body.endsWith("Relic")) {
+    body = body.replace(/遗物$|Relic$/, "");
+  }
+
+  const tierMap = {
+    古纪: "Lith",
+    前纪: "Meso",
+    中纪: "Neo",
+    后纪: "Axi",
+    安魂: "Requiem",
+    先锋: "Vanguard",
+  };
+  const mappedTier = tierMap[tier];
+  const key = mappedTier + body;
+  return relics[key];
+};
+
+export const generateRelicOutput = async (
+  puppe: Puppeteer,
+  relic: OutputRelic
+) => {
+  const element = RelicComponent(relic);
+  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  return OutputImage(imgBase64);
+};
 
 export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   if (day > 14 || day <= 0) {
@@ -81,6 +159,160 @@ export const generateArbitrationsOutput = async (
   const element = ArbitrationTable(arby);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);
+};
+
+export const getWeekly = async () => {
+  if (!(await updateWorldState())) {
+    return "内部错误，获取最新信息失败";
+  }
+
+  const archon =
+    i18nDict[
+      "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
+    ];
+
+  const stringToDebuff = (
+    key: string,
+    name: string,
+    prefix: string
+  ): ArchiMedeaDebuff => {
+    const keyToName = i18nDict_ex_zh[`${prefix}${key}`];
+
+    if (!keyToName) {
+      for (const transKey in i18nDict_ex_en) {
+        if (i18nDict_ex_en[transKey] === name) {
+          return {
+            name: i18nDict_ex_zh[transKey],
+            desc: i18nDict_ex_zh[transKey + "_Desc"],
+          };
+        }
+      }
+    }
+
+    const riskDesc = i18nDict_ex_zh[`${prefix}${key}_Desc`];
+    return {
+      name: keyToName,
+      desc: riskDesc,
+    };
+  };
+
+  const deepArchim = worldState.archimedeas[0];
+  const deepArchimMissions = await Promise.all(
+    deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
+      const receivedType = await getMissionTypeKey(m.missionType);
+      const type =
+        i18nDict[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
+      const diviation = stringToDebuff(
+        m.diviation.key,
+        m.diviation.name,
+        "/Lotus/Language/Conquest/MissionVariant_LabConquest_"
+      );
+      const risks = m.risks.map((r) =>
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+      );
+
+      return {
+        type,
+        diviation,
+        risks,
+      };
+    })
+  );
+  const deepArchimPersonalModifier = deepArchim.personalModifiers.map((p) =>
+    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+  );
+  const deepArchimRes: ArchiMedea = {
+    name: "深层科研",
+    missions: deepArchimMissions,
+    peronal: deepArchimPersonalModifier,
+  };
+
+  const temporalArchim = worldState.archimedeas[1];
+  const temporalArchimMissions = await Promise.all(
+    temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
+      const receivedType = await getMissionTypeKey(m.missionType);
+      const type =
+        i18nDict[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+      const diviation = stringToDebuff(
+        m.diviation.key,
+        m.diviation.name,
+        "/Lotus/Language/Conquest/MissionVariant_HexConquest_"
+      );
+      const risks = m.risks.map((r) =>
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+      );
+
+      return {
+        type,
+        diviation,
+        risks,
+      };
+    })
+  );
+  const temporalArchimPersonalModifier = temporalArchim.personalModifiers.map(
+    (p) =>
+      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+  );
+  const temporalArchimRes: ArchiMedea = {
+    name: "时光科研",
+    missions: temporalArchimMissions,
+    peronal: temporalArchimPersonalModifier,
+  };
+
+  return {
+    archonHunt: archon,
+    deepArchimedea: deepArchimRes,
+    temporalArchimedea: temporalArchimRes,
+  };
+};
+
+export const generateWeeklyOutput = async (
+  puppe: Puppeteer,
+  archon: string,
+  deepArchimedea: ArchiMedea,
+  temporalArchimedea: ArchiMedea
+) => {
+  const element = await WeeklyTable(archon, deepArchimedea, temporalArchimedea);
+  // const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  // return OutputImage(imgBase64);
+  return element;
+};
+
+export const getRegionTime = async (): Promise<string> => {
+  if (!(await updateWorldState())) {
+    return "内部错误，获取最新信息失败";
+  }
+
+  const cetusDay = worldState.cetusCycle.isDay ? "白天" : "黑夜";
+  const cetus = `地球/夜灵平野: ${cetusDay} ${worldState.cetusCycle.timeLeft}`;
+
+  const vallisState = worldState.vallisCycle.isWarm ? "温暖" : "寒冷";
+  const vallis = `奥布山谷: ${vallisState} ${worldState.vallisCycle.timeLeft}`;
+
+  const cambionState = worldState.cambionCycle.state
+    ? worldState.cambionCycle.state.charAt(0).toUpperCase() +
+      worldState.cambionCycle.state.slice(1)
+    : "未知";
+  const cambion = `魔胎之境: ${cambionState} ${worldState.cambionCycle.timeLeft}`;
+
+  const duviriStateTransDict = {
+    sorrow: "悲伤",
+    fear: "恐惧",
+    joy: "喜悦",
+    anger: "愤怒",
+    envy: "嫉妒",
+  };
+  const duviriState =
+    duviriStateTransDict[worldState.duviriCycle.state] ??
+    worldState.duviriCycle.state;
+  const duviri = `双衍王境: ${duviriState} ${worldState.duviriCycle.endString}`;
+
+  const zarimanFaction = worldState.zarimanCycle.isCorpus
+    ? "Corpus"
+    : "Grineer";
+  const zariman = `扎里曼号: ${zarimanFaction} ${worldState.zarimanCycle.timeLeft}`;
+
+  return `当前环境:\n${cetus}\n${vallis}\n${cambion}\n${duviri}\n${zariman}`;
 };
 
 export const getCircuitWeek = (): {

@@ -1,4 +1,5 @@
 import { Context, Schema } from "koishi";
+import {} from "@koishijs/plugin-help";
 
 import * as commands from "./commands";
 import * as hooks from "./hooks/on-ready";
@@ -72,14 +73,37 @@ const setupCommands = (ctx: Context) => {
     .alias("九重天裂隙")
     .action(commands.railjackFissureCommand);
 
-  ctx.command("weekly", "周常任务").alias("周常").action(inDevelopment);
+  ctx
+    .command("relic <input:text>", "查询遗物内容")
+    .alias("遗物")
+    .alias("核桃")
+    .action(commands.relicCommand);
+
+  ctx
+    .command("environment", "当前各区域状态")
+    .alias("env")
+    .alias("平原")
+    .alias("地球")
+    .alias("金星")
+    .alias("夜灵")
+    .alias("夜灵平野")
+    .alias("奥布山谷")
+    .action(commands.environmentCommand);
+  ctx
+    .command("weekly", "周常任务")
+    .alias("周常")
+    .alias("科研")
+    .alias("时光科研")
+    .alias("深层科研")
+    .alias("执行官")
+    .action(commands.weeklyCommand);
   ctx
     .command("circuit", "本周回廊战甲及灵化之源")
     .alias("灵化之源")
     .alias("灵化")
     .action(commands.circuitCommand);
-  ctx.command("lichc", "c系玄骸武器").action(inDevelopment);
-  ctx.command("lichi", "i系玄骸武器").action(inDevelopment);
+  ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
+  ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
 
   ctx.command("about", "关于").action(commands.aboutCommand);
 };

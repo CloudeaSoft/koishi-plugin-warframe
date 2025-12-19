@@ -1,5 +1,6 @@
-import { wmOnReady } from "../services";
+import { wfOnReady, wmOnReady } from "../services";
 
-export const onReadyHandler = () => {
-  wmOnReady();
+export const onReadyHandler = async () => {
+  await wmOnReady();
+  await wfOnReady();
 };
