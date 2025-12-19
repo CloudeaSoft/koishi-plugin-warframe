@@ -22,6 +22,9 @@ export const getMissionTypeKey = async (name: string): Promise<string> => {
       (n) => [n.value]
     );
   }
+
+  if (name === "Disruption") return "MT_ARTIFACT";
+
   return missionTypeEnDict[name];
 };
 

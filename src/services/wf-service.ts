@@ -50,7 +50,7 @@ let rjFissures: Fissure[] = [];
 let relics: Record<string, Relic> = null;
 
 export const wfOnReady = async () => {
-  await updateWorldState();
+  // await updateWorldState();
   // relics = await getRelics();
 };
 
@@ -198,7 +198,7 @@ export const getWeekly = async () => {
     deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        i18nDict[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+        i18nDict[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
       const diviation = stringToDebuff(
         m.diviation.key,
         m.diviation.name,
