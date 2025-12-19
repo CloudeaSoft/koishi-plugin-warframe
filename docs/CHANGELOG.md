@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.1.2...v1.2.0) (2025-12-19)
+
+### Features
+
+* **wf:** add 3 new commands env, weekly, and relic ([#7](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/7)) ([de4bf1a](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/de4bf1a0b20acb8b7971090afa409583f3ee1ba9))
+
 ## [1.1.2](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.1.1...v1.1.2) (2025-12-17)
 
 ### Bug Fixes
