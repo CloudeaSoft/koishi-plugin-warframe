@@ -141,12 +141,10 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
     return "请提供正确的遗物名称";
   }
 
-  input = removeSpace(input);
+  input = normalizeName(input);
   if (!input) {
     return "请提供正确的遗物名称";
   }
-
-  input = normalizeName(input);
 
   if (!relics) {
     return "遗物数据未加载完成，请稍后再试";
