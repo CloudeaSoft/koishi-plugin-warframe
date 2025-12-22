@@ -2,6 +2,8 @@ import Puppeteer from "koishi-plugin-puppeteer";
 import { WorldState } from "warframe-worldstate-parser";
 import {
   ExportMissionTypes,
+  ExportRelics,
+  ExportRewards,
   dict_zh as i18nDict,
   ExportRegions as regions,
 } from "warframe-public-export-plus";
@@ -20,10 +22,11 @@ import {
   RelicComponent,
   WeeklyTable,
 } from "../components/wf";
-import { getRelicsDropTable, getWorldState } from "../api/wf-api";
+import { getWorldState } from "../api/wf-api";
 import {
   fissureTierName,
   fissureTierNumToNumber,
+  fixRelicRewardKey,
   getMissionTypeKey,
   getSolNodeKey,
   regionToShort,
@@ -50,22 +53,14 @@ let rjFissures: Fissure[] = [];
 let relics: Record<string, Relic> = null;
 
 export const wfOnReady = async () => {
-  // await updateWorldState();
-  // relics = await getRelics();
+  loadRelics();
 };
 
 // ================ features ===================
 
-export const getRelic = async (
-  puppe: Puppeteer,
-  input: string
-): Promise<Relic | string> => {
-  if (!relics || Object.entries(relics).length === 0) {
-    relics = await getRelicsDropTable(puppe);
-
-    if (!relics || Object.entries(relics).length === 0) {
-      return "获取遗物信息失败";
-    }
+export const getRelic = async (input: string): Promise<Relic | string> => {
+  if (!relics) {
+    return "遗物数据未加载完成，请稍后再试";
   }
 
   input = removeSpace(input);
@@ -85,12 +80,12 @@ export const getRelic = async (
   ];
   const tier = tierList.find((t) => input.startsWith(t));
   if (!tier) {
-    return "输入非法";
+    return "请提供正确的遗物名称";
   }
 
-  let body = input.replace(new RegExp(`^${tier}`), "");
-  if (body.endsWith("遗物") || body.endsWith("Relic")) {
-    body = body.replace(/遗物$|Relic$/, "");
+  let category = input.replace(new RegExp(`^${tier}`), "");
+  if (category.endsWith("遗物") || category.endsWith("Relic")) {
+    category = category.replace(/遗物$|Relic$/, "");
   }
 
   const tierMap = {
@@ -101,9 +96,9 @@ export const getRelic = async (
     安魂: "Requiem",
     先锋: "Vanguard",
   };
-  const mappedTier = tierMap[tier];
-  const key = mappedTier + body;
-  return relics[key];
+  const mappedTier = tierMap[tier] ?? tier;
+  const key = mappedTier + category;
+  return relics[key] ?? "未找到对应遗物信息";
 };
 
 export const generateRelicOutput = async (
@@ -379,6 +374,8 @@ export const generateFissureOutput = async (
   return OutputImage(imgBase64);
 };
 
+// ================ internal functions ===================
+
 const updateWorldState = async () => {
   if (worldstateUpdating) return true;
   if (
@@ -432,4 +429,36 @@ const updateWorldState = async () => {
       Date.now() - worldStateLastUpdatedAt.getTime() < 120000
     );
   }
+};
+
+const loadRelics = async () => {
+  const result: Record<string, Relic> = {};
+  for (const key in ExportRelics) {
+    const exportRelic = ExportRelics[key];
+    const exportRewards = ExportRewards[exportRelic.rewardManifest];
+
+    const era = "/Lotus/Language/Relics/Era_" + exportRelic.era.toUpperCase();
+    const relicKey = exportRelic.era + exportRelic.category;
+
+    const rewards = exportRewards
+      .find(() => true)
+      .map((r) => {
+        const item = fixRelicRewardKey(r.type);
+        return {
+          name: item,
+          rarity: r.rarity as any,
+          quantity: r.itemCount,
+        };
+      });
+
+    const relic: Relic = {
+      tier: exportRelic.era,
+      tierKey: era,
+      num: exportRelic.category,
+      items: rewards,
+    };
+    result[relicKey] = relic;
+  }
+
+  relics = result;
 };

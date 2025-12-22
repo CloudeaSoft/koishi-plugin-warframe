@@ -118,3 +118,16 @@ export const dictToKeyDict: <T>(
   }
   return result;
 };
+
+export const pascalToSpaced = (str: string) => {
+  return str.replace(/([A-Z])/g, " $1").trim();
+};
+
+export const toPascalCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean)
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join("");
+};

@@ -1,5 +1,6 @@
 type RelicTier = "Lith" | "Meso" | "Neo" | "Axi" | "Requiem" | "Vanguard";
 type RelicQuality = "Intact" | "Exceptional" | "Flawless" | "Radiant";
+type RelicRewardRarity = "COMMON" | "UNCOMMON" | "RARE";
 
 interface ExternalRelic {
   tier: RelicTier;
@@ -15,16 +16,18 @@ interface ExternalRelicReward {
 
 interface Relic {
   tier: RelicTier;
+  tierKey: string;
   num: string;
   items: RelicReward[];
 }
 
 interface RelicReward {
   name: string;
-  rate: Record<RelicQuality, number>;
+  rarity: RelicRewardRarity;
+  quantity: number;
 }
 
-interface OutputRelic extends Relic {
+interface OutputRelic {
   tier: string;
   num: string;
   items: OutputRelicReward[];
@@ -32,4 +35,5 @@ interface OutputRelic extends Relic {
 
 interface OutputRelicReward extends RelicReward {
   ducats: number;
+  platinum?: number;
 }

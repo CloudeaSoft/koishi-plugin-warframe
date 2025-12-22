@@ -4,10 +4,10 @@ interface WFMResponse<TData> {
   error: any | null;
 }
 
-interface WFMResponseV1<TData> {
-  payload: Auction<TData>;
+interface WFMResponseV1<TPayload> {
+  payload: TPayload;
 }
 
-interface Auction<TData> {
-  auctions: TData[];
+interface Auction<TAuction> {
+  auctions: TAuction[];
 }
