@@ -105,7 +105,7 @@ const setupCommands = (ctx: Context) => {
   ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
   ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
 
-  ctx.command("about", "关于").action(commands.aboutCommand);
+  // ctx.command("about", "关于").action(commands.aboutCommand);
 };
 
 const inDevelopment = () => {
