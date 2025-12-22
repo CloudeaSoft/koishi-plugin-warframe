@@ -20,7 +20,6 @@ import {
   RivenOrderOutput,
 } from "../components/wfm";
 import { dict_zh } from "warframe-public-export-plus";
-import { Ducatnator } from "../types/wfm/ducats";
 import { createAsyncCache } from "../utils/cache";
 
 let globalItemList: ItemShort[] = [];
