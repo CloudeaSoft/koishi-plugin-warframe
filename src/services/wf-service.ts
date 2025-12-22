@@ -440,8 +440,7 @@ const loadRelics = () => {
     const era = "/Lotus/Language/Relics/Era_" + exportRelic.era.toUpperCase();
     const relicKey = exportRelic.era + exportRelic.category;
 
-    const rewards = exportRewards
-      .find(() => true)
+    const rewards = (exportRewards[0] ?? [])
       .map((r) => {
         const item = fixRelicRewardKey(r.type);
         return {
