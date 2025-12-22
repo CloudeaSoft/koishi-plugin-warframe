@@ -1,5 +1,11 @@
-import { toTimeStamp, fullWidthToHalfWidth, listToDict } from "../utils";
 import {
+  toTimeStamp,
+  fullWidthToHalfWidth,
+  listToDict,
+  pascalToSpaced,
+} from "../utils";
+import {
+  getWFMDucatnator,
   getWFMItemList,
   getWFMOrderList,
   getWFMRivenAttributeList,
@@ -13,6 +19,8 @@ import {
   OutputImage,
   RivenOrderOutput,
 } from "../components/wfm";
+import { dict_zh } from "warframe-public-export-plus";
+import { createAsyncCache } from "../utils/cache";
 
 let globalItemList: ItemShort[] = [];
 let globalRivenItemList: RivenItem[] = [];
@@ -23,7 +31,8 @@ let globalRivenItemDict: Record<string, RivenItem> = {};
 export let globalRivenAttributeDict: Record<string, RivenAttribute> = {};
 
 /** A dictonary with normalized wfm item i18n name as key and corresponding id as value. Initialized on 'ready' event. */
-let globalItemNameToIDDict: Record<string, string> = {};
+let globalItemNameToSlugDict: Record<string, string> = {};
+let globalItemGameRefDict: Record<string, ItemShort> = {};
 
 export const wmOnReady = async () => {
   const data = await getWFMItemList();
@@ -51,7 +60,7 @@ export const wmOnReady = async () => {
 export const setGlobalItem = (data: ItemShort[]) => {
   globalItemList = data;
   globalItemDict = listToDict<ItemShort>(data, (i) => [i.slug]);
-  globalItemNameToIDDict = ((list) => {
+  globalItemNameToSlugDict = ((list) => {
     const result = {};
     for (const item of list) {
       if (item.i18n["zh-hans"]?.name) {
@@ -63,6 +72,7 @@ export const setGlobalItem = (data: ItemShort[]) => {
     }
     return result;
   })(globalItemList);
+  globalItemGameRefDict = listToDict<ItemShort>(data, (i) => [i.gameRef]);
 };
 
 export const setGlobalRivenItem = (data: RivenItem[]) => {
@@ -181,35 +191,41 @@ export const generateRivenOrderOutput = async (
   return OutputImage(imgBase64);
 };
 
-export const loadRelicData = (relic: Relic): OutputRelic => {
-  const relicTierMap = {
-    Lith: "古纪",
-    Meso: "前纪",
-    Neo: "中纪",
-    Axi: "后纪",
-    Requiem: "安魂",
-    Vanguard: "先锋",
-  };
+export const loadRelicData = async (relic: Relic): Promise<OutputRelic> => {
+  const tier = dict_zh[relic.tierKey] ?? relic.tier;
 
-  relic.tier = (relicTierMap[relic.tier] as any) ?? relic.tier;
+  const wfmDict = await globalDucatnatorIDDict.get();
+
   const loadedItems = relic.items.map((element): OutputRelicReward => {
-    const item = nameToItem(element.name);
+    const item = globalItemGameRefDict[element.name];
     if (!item) {
+      const nameArr = element.name.split("/");
+      const name = pascalToSpaced(nameArr[nameArr.length - 1]).replace(
+        "Blueprint",
+        "蓝图"
+      );
+      const quantityPrefix =
+        element.quantity > 1 ? `${element.quantity} X ` : "";
       return {
-        name: element.name.replace("Blueprint", "蓝图"),
+        ...element,
+        name: quantityPrefix + name,
         ducats: 0,
-        rate: element.rate,
       };
     }
+
+    const platinum = wfmDict ? wfmDict[item.id]?.wa_price : undefined;
+
     return {
+      ...element,
       name: item.i18n["zh-hans"].name,
       ducats: item.ducats,
-      rate: element.rate,
+      platinum: platinum,
     };
   });
 
   return {
-    ...relic,
+    tier: tier,
+    num: relic.num,
     items: loadedItems,
   };
 };
@@ -359,7 +375,7 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
   const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
   if (inputNoSuffix === input) {
     const fixSet = input + setSuffix;
-    const fixSetRes = globalItemNameToIDDict[fixSet];
+    const fixSetRes = globalItemNameToSlugDict[fixSet];
     if (fixSetRes) return globalItemDict[fixSetRes];
 
     const fixPrime = input.endsWith(primeSuffix)
@@ -367,23 +383,23 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
       : input.endsWith("p")
       ? input.slice(0, input.length - 1) + primeSuffix
       : input + primeSuffix;
-    const fixPrimeRes = globalItemNameToIDDict[fixPrime];
+    const fixPrimeRes = globalItemNameToSlugDict[fixPrime];
     if (fixPrimeRes) return globalItemDict[fixPrimeRes];
 
     const fixPrimeSet = fixPrime + setSuffix;
-    const fixPrimeSetRes = globalItemNameToIDDict[fixPrimeSet];
+    const fixPrimeSetRes = globalItemNameToSlugDict[fixPrimeSet];
     if (fixPrimeSetRes) return globalItemDict[fixPrimeSetRes];
 
     const fixBP = input + bpSuffix;
-    const fixBPRes = globalItemNameToIDDict[fixBP];
+    const fixBPRes = globalItemNameToSlugDict[fixBP];
     if (fixBPRes) return globalItemDict[fixBPRes];
 
     const fixPrimeBP = fixPrime + bpSuffix;
-    const fixPrimeBPRes = globalItemNameToIDDict[fixPrimeBP];
+    const fixPrimeBPRes = globalItemNameToSlugDict[fixPrimeBP];
     if (fixPrimeBPRes) return globalItemDict[fixPrimeBPRes];
   } else {
     const fixBP = inputNoSuffix + suffix + bpSuffix;
-    const fixBPRes = globalItemNameToIDDict[fixBP];
+    const fixBPRes = globalItemNameToSlugDict[fixBP];
     if (fixBPRes) return globalItemDict[fixBPRes];
 
     const fixPrime = inputNoSuffix.endsWith(primeSuffix)
@@ -391,11 +407,11 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
       : inputNoSuffix.endsWith("p")
       ? inputNoSuffix.slice(0, inputNoSuffix.length - 1) + primeSuffix
       : inputNoSuffix + primeSuffix;
-    const fixPrimeRes = globalItemNameToIDDict[fixPrime + suffix];
+    const fixPrimeRes = globalItemNameToSlugDict[fixPrime + suffix];
     if (fixPrimeRes) return globalItemDict[fixPrimeRes];
 
     const fixPrimeBP = fixPrime + suffix + bpSuffix;
-    const fixPrimeBPRes = globalItemNameToIDDict[fixPrimeBP];
+    const fixPrimeBPRes = globalItemNameToSlugDict[fixPrimeBP];
     if (fixPrimeBPRes) return globalItemDict[fixPrimeBPRes];
   }
 };
@@ -404,7 +420,7 @@ export const inputToItem = (input: string): ItemShort | undefined => {
   input = normalizeOrderName(input);
 
   // 1. Direct Compare (Normalized equivalent at least)
-  const slug = globalItemNameToIDDict[input];
+  const slug = globalItemNameToSlugDict[input];
   if (slug) return globalItemDict[slug];
 
   // 2. Low-level Shorthands
@@ -574,11 +590,15 @@ const normalizeOrderName = (str: string) => {
   return normalize(str);
 };
 
-const nameToItem = (name: string) => {
-  const id = globalItemNameToIDDict[normalizeOrderName(name)];
-  if (id) {
-    return globalItemDict[id];
+const updateDucatnator = async (): Promise<
+  Record<string, Ducatnator> | undefined
+> => {
+  const data = await getWFMDucatnator();
+  if (!data || !data.payload) {
+    return undefined;
   }
 
-  return null;
+  return listToDict(data.payload.previous_hour, (d) => [d.item]);
 };
+
+const globalDucatnatorIDDict = createAsyncCache(updateDucatnator, 3600_000);

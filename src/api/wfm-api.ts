@@ -27,8 +27,8 @@ export const getWFMRivenItemList = async (): Promise<
 
 export const getWFMRivenOrderList = async (
   itemId: string
-): Promise<WFMResponseV1<RivenOrder> | null> => {
-  return await fetchAsyncData<WFMResponseV1<RivenOrder>>(
+): Promise<WFMResponseV1<Auction<RivenOrder>> | null> => {
+  return await fetchAsyncData<WFMResponseV1<Auction<RivenOrder>>>(
     `${wfmApiV1Base}auctions/search?type=riven&sort_by=price_asc&weapon_url_name=${itemId}`
   );
 };
@@ -39,4 +39,12 @@ export const getWFMRivenAttributeList = async (): Promise<WFMResponse<
   return await fetchAsyncData<WFMResponse<RivenAttribute[]>>(
     `${wfmApiV2Base}riven/attributes`
   );
+};
+
+export const getWFMDucatnator = async (): Promise<
+  WFMResponseV1<{ previous_day: Ducatnator[]; previous_hour: Ducatnator[] }>
+> => {
+  return await fetchAsyncData<
+    WFMResponseV1<{ previous_day: Ducatnator[]; previous_hour: Ducatnator[] }>
+  >(`${wfmApiV1Base}tools/ducats`);
 };

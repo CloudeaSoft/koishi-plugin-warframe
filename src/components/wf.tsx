@@ -173,20 +173,24 @@ export const WeeklyTable = async (
 };
 
 export const RelicComponent = (relic: OutputRelic): Element => {
-  // 根据Intact掉落率筛选物品
-  const gold = relic.items.filter((i) => i.rate.Intact === 2);
-  const silver = relic.items.filter((i) => i.rate.Intact === 11);
-  const bronze = relic.items.filter((i) => i.rate.Intact === 25.33);
+  const gold = relic.items.filter((i) => i.rarity === "RARE");
+  const silver = relic.items.filter((i) => i.rarity === "UNCOMMON");
+  const bronze = relic.items.filter((i) => i.rarity === "COMMON");
 
   // 辅助函数：根据掉落率获取颜色
-  const getRateColor = (rate: number): string => {
-    if (rate === 2) return "#ffd700"; // 金色
-    if (rate === 11) return "#c0c0c0"; // 银色
-    if (rate === 25.33) return "#cd7f32"; // 铜色
+  const getRateColor = (rarity: RelicRewardRarity): string => {
+    if (rarity === "RARE") return "#ffd700"; // 金色
+    if (rarity === "UNCOMMON") return "#c0c0c0"; // 银色
+    if (rarity === "COMMON") return "#cd7f32"; // 铜色
     return "#000000";
   };
 
-  // 渲染奖励项目
+  const relicRewardDropRate = {
+    RARE: "2/4/6/10",
+    UNCOMMON: "11/13/17/20",
+    COMMON: "25/23/20/17",
+  };
+
   const renderRewards = (items: OutputRelicReward[]) => {
     if (items.length === 0) return null;
 
@@ -196,7 +200,7 @@ export const RelicComponent = (relic: OutputRelic): Element => {
           margin: 4px 0;
           border-radius: 4px;
           background-color: rgba(255, 255, 255, 0.05);
-          border-left: 4px solid ${getRateColor(item.rate.Intact)};
+          border-left: 4px solid ${getRateColor(item.rarity)};
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -210,21 +214,49 @@ export const RelicComponent = (relic: OutputRelic): Element => {
               display:flex;
               gap:10px;`}
         >
-          <span style="color: #a0a000;display:flex;line-height:1;">
-            {item.ducats}
-            <svg
-              viewBox="0 0 18 18"
+          {item.platinum ? (
+            <span
               style="
+                color: #0d93b8;
+                display:flex;
+                line-height:1;"
+            >
+              {item.platinum}
+              <svg
+                viewBox="0 0 18 18"
+                style="
+                  color: rgb(64 64 64 / 75%);
+                  height: 1em;
+                  width: 1em;
+                  vertical-align: -.125em;
+                  fill: currentcolor;
+                  margin-left:2px;"
+              >
+                <use href={`#icon-platinum`}></use>
+              </svg>
+            </span>
+          ) : (
+            ""
+          )}
+          {item.ducats ? (
+            <span style="color: #a0a000;display:flex;line-height:1;">
+              {item.ducats}
+              <svg
+                viewBox="0 0 18 18"
+                style="
                 color: rgb(64 64 64 / 75%);
                 height: 1em;
                 width: 1em;
                 vertical-align: -.125em;
                 fill: currentcolor;"
-            >
-              <use href={`#icon-ducats`}></use>
-            </svg>
-          </span>
-          <span>{item.rate.Intact}%</span>
+              >
+                <use href={`#icon-ducats`}></use>
+              </svg>
+            </span>
+          ) : (
+            ""
+          )}
+          <span>{relicRewardDropRate[item.rarity]}%</span>
         </span>
       </div>
     ));
@@ -337,7 +369,7 @@ export const RelicComponent = (relic: OutputRelic): Element => {
           color: #888888;
           text-align: center;`}
       >
-        掉落率基于Intact遗物品质
+        价格数据来源于 WFM Ducanator, 约有1小时延迟
       </div>
     </div>
   );
