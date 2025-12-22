@@ -1,6 +1,6 @@
 import {
   toTimeStamp,
-  fullWidthToHalfWidth,
+  normalizeName,
   listToDict,
   pascalToSpaced,
 } from "../utils";
@@ -22,6 +22,20 @@ import {
 import { dict_zh } from "warframe-public-export-plus";
 import { createAsyncCache } from "../utils/cache";
 
+// ================ initialization ===================
+
+const globalDucatnatorIDDict = createAsyncCache(
+  async (): Promise<Record<string, Ducatnator> | undefined> => {
+    const data = await getWFMDucatnator();
+    if (!data || !data.payload) {
+      return undefined;
+    }
+
+    return listToDict(data.payload.previous_hour, (d) => [d.item]);
+  },
+  3600_000
+);
+
 let globalItemList: ItemShort[] = [];
 let globalRivenItemList: RivenItem[] = [];
 let globalRivenAttributeList: RivenAttribute[] = [];
@@ -33,204 +47,6 @@ export let globalRivenAttributeDict: Record<string, RivenAttribute> = {};
 /** A dictonary with normalized wfm item i18n name as key and corresponding id as value. Initialized on 'ready' event. */
 let globalItemNameToSlugDict: Record<string, string> = {};
 let globalItemGameRefDict: Record<string, ItemShort> = {};
-
-export const wmOnReady = async () => {
-  const data = await getWFMItemList();
-  if (!data) {
-    throw new Error("Failed to fetch items from Warframe Market API.");
-  }
-
-  const rivenData = await getWFMRivenItemList();
-  if (!rivenData) {
-    throw new Error("Failed to fetch riven items from Warframe Market API.");
-  }
-
-  const rivenAttributeData = await getWFMRivenAttributeList();
-  if (!rivenAttributeData) {
-    throw new Error(
-      "Failed to fetch riven attributes from Warframe Market API."
-    );
-  }
-
-  setGlobalItem(data.data);
-  setGlobalRivenItem(rivenData.data);
-  setGlobalRivenAttribute(rivenAttributeData.data);
-};
-
-export const setGlobalItem = (data: ItemShort[]) => {
-  globalItemList = data;
-  globalItemDict = listToDict<ItemShort>(data, (i) => [i.slug]);
-  globalItemNameToSlugDict = ((list) => {
-    const result = {};
-    for (const item of list) {
-      if (item.i18n["zh-hans"]?.name) {
-        result[normalizeOrderName(item.i18n["zh-hans"].name)] = item.slug;
-      }
-      if (item.i18n["en"]?.name) {
-        result[normalizeOrderName(item.i18n["en"].name)] = item.slug;
-      }
-    }
-    return result;
-  })(globalItemList);
-  globalItemGameRefDict = listToDict<ItemShort>(data, (i) => [i.gameRef]);
-};
-
-export const setGlobalRivenItem = (data: RivenItem[]) => {
-  globalRivenItemList = data;
-  globalRivenItemDict = listToDict<RivenItem>(data, (i) => [i.slug]);
-};
-
-export const setGlobalRivenAttribute = (data: RivenAttribute[]) => {
-  globalRivenAttributeList = data;
-  globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [a.slug]);
-};
-
-// ================ features ===================
-
-export const getItemOrders = async (
-  input: string
-): Promise<{ item: ItemShort; orders: OrderWithUser[] }> => {
-  if (!input) return null;
-  input = normalizeOrderName(input);
-
-  // 1. Process global option
-  const isFullLevel = /^满级|满级$/.test(input);
-  if (isFullLevel) {
-    if (input.match(/^满级/)) {
-      input = input.slice(2, input.length);
-    } else if (input.match(/满级$/)) {
-      input = input.slice(0, input.length - 2);
-    }
-  }
-
-  // 2. Search item
-  const targetItem = inputToItem(input);
-  if (!targetItem) {
-    return null;
-  }
-
-  // 3. Fetch orders
-  const itemId = targetItem.slug;
-  const data = await getWFMOrderList(itemId);
-  if (!data) {
-    return null;
-  }
-
-  // 4. Process result
-  const result = data.data
-    .filter(
-      (order) =>
-        order.user.status === "ingame" &&
-        order.visible &&
-        order.type === "sell" &&
-        (!isFullLevel || order.rank == targetItem.maxRank)
-    )
-    .sort((a, b) => toTimeStamp(b.updatedAt) - toTimeStamp(a.updatedAt)) // Update Time DESC
-    .sort((a, b) => a.platinum - b.platinum) // Price ASC
-    .slice(0, 5); // Top 5
-
-  return {
-    item: targetItem,
-    orders: result,
-  };
-};
-
-export const generateItemOrderOutput = async (
-  puppe: Puppeteer,
-  item: ItemShort,
-  orders: OrderWithUser[]
-) => {
-  const element = ItemOrderOutput(item, orders);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
-export const getRivenOrders = async (
-  input: string
-): Promise<{ item: RivenItem; orders: RivenOrder[] }> => {
-  const targetItem =
-    globalRivenItemList.find((item) =>
-      compareRivenItemName(input, item.i18n["zh-hans"].name)
-    ) ??
-    globalRivenItemList.find((item) =>
-      compareRivenItemName(input, item.i18n["en"].name)
-    );
-  if (!targetItem) {
-    return null;
-  }
-
-  const itemId = targetItem.slug;
-  const data = await getWFMRivenOrderList(itemId);
-  if (!data) {
-    return null;
-  }
-
-  const top5 = data.payload.auctions
-    .filter(
-      (order) =>
-        order.owner.status === "ingame" &&
-        order.visible &&
-        !order.private &&
-        !order.closed &&
-        order.is_direct_sell
-    )
-    .sort((a, b) => toTimeStamp(b.updated) - toTimeStamp(a.updated)) // Update Time DESC
-    .sort((a, b) => a.starting_price - b.starting_price) // Price ASC
-    .slice(0, 5); // Top 5
-
-  return { item: targetItem, orders: top5 };
-};
-
-export const generateRivenOrderOutput = async (
-  puppe: Puppeteer,
-  item: RivenItem,
-  orders: RivenOrder[]
-) => {
-  const element = RivenOrderOutput(item, orders);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
-export const loadRelicData = async (relic: Relic): Promise<OutputRelic> => {
-  const tier = dict_zh[relic.tierKey] ?? relic.tier;
-
-  const wfmDict = await globalDucatnatorIDDict.get();
-
-  const loadedItems = relic.items.map((element): OutputRelicReward => {
-    const item = globalItemGameRefDict[element.name];
-    if (!item) {
-      const nameArr = element.name.split("/");
-      const name = pascalToSpaced(nameArr[nameArr.length - 1]).replace(
-        "Blueprint",
-        "蓝图"
-      );
-      const quantityPrefix =
-        element.quantity > 1 ? `${element.quantity} X ` : "";
-      return {
-        ...element,
-        name: quantityPrefix + name,
-        ducats: 0,
-      };
-    }
-
-    const platinum = wfmDict ? wfmDict[item.id]?.wa_price : undefined;
-
-    return {
-      ...element,
-      name: item.i18n["zh-hans"].name,
-      ducats: item.ducats,
-      platinum: platinum,
-    };
-  });
-
-  return {
-    tier: tier,
-    num: relic.num,
-    items: loadedItems,
-  };
-};
-
-// ================ privates ===================
 
 const warframeAlias = {
   Volt: ["电", "电男", "伏特"],
@@ -333,6 +149,347 @@ const weaponPartSuffix = [
   "连接器",
 ];
 
+// ================ features ===================
+
+export const wmOnReady = async () => {
+  const data = await getWFMItemList();
+  if (!data) {
+    throw new Error("Failed to fetch items from Warframe Market API.");
+  }
+
+  const rivenData = await getWFMRivenItemList();
+  if (!rivenData) {
+    throw new Error("Failed to fetch riven items from Warframe Market API.");
+  }
+
+  const rivenAttributeData = await getWFMRivenAttributeList();
+  if (!rivenAttributeData) {
+    throw new Error(
+      "Failed to fetch riven attributes from Warframe Market API."
+    );
+  }
+
+  setGlobalItem(data.data);
+  setGlobalRivenItem(rivenData.data);
+  setGlobalRivenAttribute(rivenAttributeData.data);
+};
+
+export const setGlobalItem = (data: ItemShort[]) => {
+  globalItemList = data;
+  globalItemDict = listToDict<ItemShort>(data, (i) => [i.slug]);
+  globalItemNameToSlugDict = ((list) => {
+    const result = {};
+    for (const item of list) {
+      if (item.i18n["zh-hans"]?.name) {
+        result[normalizeName(item.i18n["zh-hans"].name)] = item.slug;
+      }
+      if (item.i18n["en"]?.name) {
+        result[normalizeName(item.i18n["en"].name)] = item.slug;
+      }
+    }
+    return result;
+  })(globalItemList);
+  globalItemGameRefDict = listToDict<ItemShort>(data, (i) => [i.gameRef]);
+};
+
+export const setGlobalRivenItem = (data: RivenItem[]) => {
+  globalRivenItemList = data;
+  globalRivenItemDict = listToDict<RivenItem>(data, (i) => [i.slug]);
+};
+
+export const setGlobalRivenAttribute = (data: RivenAttribute[]) => {
+  globalRivenAttributeList = data;
+  globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [a.slug]);
+};
+
+export const getItemOrders = async (
+  input: string
+): Promise<{ item: ItemShort; orders: OrderWithUser[] }> => {
+  if (!input) return null;
+  input = normalizeName(input);
+
+  // 1. Process global option
+  const isFullLevel = /^满级|满级$/.test(input);
+  if (isFullLevel) {
+    if (input.match(/^满级/)) {
+      input = input.slice(2, input.length);
+    } else if (input.match(/满级$/)) {
+      input = input.slice(0, input.length - 2);
+    }
+  }
+
+  // 2. Search item
+  const targetItem = stringToWFMItem(input);
+  if (!targetItem) {
+    return null;
+  }
+
+  // 3. Fetch orders
+  const itemId = targetItem.slug;
+  const data = await getWFMOrderList(itemId);
+  if (!data) {
+    return null;
+  }
+
+  // 4. Process result
+  const result = data.data
+    .filter(
+      (order) =>
+        order.user.status === "ingame" &&
+        order.visible &&
+        order.type === "sell" &&
+        (!isFullLevel || order.rank == targetItem.maxRank)
+    )
+    .sort((a, b) => toTimeStamp(b.updatedAt) - toTimeStamp(a.updatedAt)) // Update Time DESC
+    .sort((a, b) => a.platinum - b.platinum) // Price ASC
+    .slice(0, 5); // Top 5
+
+  return {
+    item: targetItem,
+    orders: result,
+  };
+};
+
+export const generateItemOrderOutput = async (
+  puppe: Puppeteer,
+  item: ItemShort,
+  orders: OrderWithUser[]
+) => {
+  const element = ItemOrderOutput(item, orders);
+  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  return OutputImage(imgBase64);
+};
+
+export const getRivenOrders = async (
+  input: string
+): Promise<{ item: RivenItem; orders: RivenOrder[] }> => {
+  const targetItem =
+    globalRivenItemList.find((item) =>
+      compareRivenItemName(input, item.i18n["zh-hans"].name)
+    ) ??
+    globalRivenItemList.find((item) =>
+      compareRivenItemName(input, item.i18n["en"].name)
+    );
+  if (!targetItem) {
+    return null;
+  }
+
+  const itemId = targetItem.slug;
+  const data = await getWFMRivenOrderList(itemId);
+  if (!data) {
+    return null;
+  }
+
+  const top5 = data.payload.auctions
+    .filter(
+      (order) =>
+        order.owner.status === "ingame" &&
+        order.visible &&
+        !order.private &&
+        !order.closed &&
+        order.is_direct_sell
+    )
+    .sort((a, b) => toTimeStamp(b.updated) - toTimeStamp(a.updated)) // Update Time DESC
+    .sort((a, b) => a.starting_price - b.starting_price) // Price ASC
+    .slice(0, 5); // Top 5
+
+  return { item: targetItem, orders: top5 };
+};
+
+export const generateRivenOrderOutput = async (
+  puppe: Puppeteer,
+  item: RivenItem,
+  orders: RivenOrder[]
+) => {
+  const element = RivenOrderOutput(item, orders);
+  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  return OutputImage(imgBase64);
+};
+
+export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
+  const tier = dict_zh[relic.tierKey] ?? relic.tier;
+
+  const wfmDict = await globalDucatnatorIDDict.get();
+
+  const loadedItems = relic.items.map((element): OutputRelicReward => {
+    const item = globalItemGameRefDict[element.name];
+    if (!item) {
+      const nameArr = element.name.split("/");
+      const name = pascalToSpaced(nameArr[nameArr.length - 1]).replace(
+        "Blueprint",
+        "蓝图"
+      );
+      const quantityPrefix =
+        element.quantity > 1 ? `${element.quantity} X ` : "";
+      return {
+        ...element,
+        name: quantityPrefix + name,
+        ducats: 0,
+      };
+    }
+
+    const platinum = wfmDict ? wfmDict[item.id]?.wa_price : undefined;
+
+    return {
+      ...element,
+      name: item.i18n["zh-hans"].name,
+      ducats: item.ducats,
+      platinum: platinum,
+    };
+  });
+
+  return {
+    tier: tier,
+    num: relic.num,
+    items: loadedItems,
+  };
+};
+
+export const stringToWFMItem = (input: string): ItemShort | undefined => {
+  input = normalizeName(input);
+
+  // 1. Direct Compare (Normalized equivalent at least)
+  const slug = globalItemNameToSlugDict[input];
+  if (slug) return globalItemDict[slug];
+
+  // 2. Low-level Shorthands
+  const normalShortHandRes = shortHandProcess(input);
+  if (normalShortHandRes) return normalShortHandRes;
+
+  // 3. High-level Alias (Warframes Only)
+  const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
+  const aliasHasEndP = inputNoSuffix.endsWith(primeSuffix)
+    ? inputNoSuffix.replace(new RegExp(`${primeSuffix}$`), "")
+    : inputNoSuffix;
+  const mappedAliasHasEndP = warframeAliasDict[aliasHasEndP];
+  if (mappedAliasHasEndP) {
+    const aliasHasEndPRes = shortHandProcess(
+      normalizeName(mappedAliasHasEndP) + primeSuffix + suffix
+    );
+    if (aliasHasEndPRes) return aliasHasEndPRes;
+  }
+
+  if (inputNoSuffix.endsWith("p")) {
+    const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
+    const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
+    if (mappedAliasNoEndP) {
+      const aliasNoEndPRes = shortHandProcess(
+        normalizeName(mappedAliasNoEndP) + primeSuffix + suffix
+      );
+      if (aliasNoEndPRes) return aliasNoEndPRes;
+    }
+  }
+
+  // 4. TODO: First char compare
+  // Not implemented
+
+  // 5. TODO: Fuzzy word match
+  // Not implemented
+
+  // 6. TODO: AI?
+
+  // Legacy code
+  const compareCNOrderName = (input: string, standard: string) => {
+    // 1. 边界校验：空值/空字符串直接返回false（避免replace报错）
+    if (
+      !input ||
+      !standard ||
+      typeof input !== "string" ||
+      typeof standard !== "string"
+    ) {
+      return false;
+    }
+
+    // 2. 标准化名称
+    const normalizedInput = normalizeName(input);
+    const normalizedStandard = normalizeName(standard);
+
+    // 3. 避免空字符串匹配
+    if (!normalizedInput || !normalizedStandard) return false;
+
+    // 4. 特殊处理
+    // 移除“一套”
+    const normalizedStandardNoSet = normalizedStandard.replace(/一套/g, "");
+    const normalizedStandardNoSetSimplifiedPrime =
+      normalizedStandardNoSet.replace(/prime/g, "p");
+    // 移除“蓝图”
+    const normalizedStandardNoBlueprint = normalizedStandard.replace(
+      /蓝图/g,
+      ""
+    );
+    const normalizedStandardNoBlueprintSimplifiedPrime =
+      normalizedStandardNoBlueprint.replace(/prime/g, "p");
+    // 替换“头部神经光源”
+    const normalizedStandardNoNeu =
+      normalizedStandardNoBlueprintSimplifiedPrime.replace(
+        /头部神经光元/g,
+        "头"
+      );
+
+    return (
+      normalizedInput === normalizedStandard ||
+      normalizedInput === normalizedStandardNoSet ||
+      normalizedInput === normalizedStandardNoSetSimplifiedPrime ||
+      normalizedInput === normalizedStandardNoBlueprintSimplifiedPrime ||
+      normalizedInput === normalizedStandardNoNeu
+    );
+  };
+
+  const compareENOrderName = (input: string, standard: string) => {
+    if (
+      !input ||
+      !standard ||
+      typeof input !== "string" ||
+      typeof standard !== "string"
+    ) {
+      return false;
+    }
+
+    const endWithSet = standard.toLowerCase().endsWith(" set");
+    const standardNoSet = endWithSet ? standard.slice(0, -4) : standard;
+    const endWithBlueprint = standard.toLocaleLowerCase().endsWith("blueprint");
+    const standardNoBlueprint = endWithBlueprint
+      ? standard.slice(0, -10)
+      : standard;
+
+    const standardSimplifiedPrime = standardNoSet.replace(/ Prime/g, "p");
+    const standardNoBlueprintSimplifiedPrime = standardNoBlueprint.replace(
+      / Prime/g,
+      "p"
+    );
+
+    const normalizedInput = normalizeName(input);
+    const normalizedStandard = normalizeName(standard);
+    if (!normalizedInput || !normalizedStandard) return false;
+
+    const normalizedStandardNoSet = normalizeName(standardNoSet);
+    const normalizedStandardSimplifiedPrime = normalizeName(
+      standardSimplifiedPrime
+    );
+    const normalizedStandardNoBlueprint = normalizeName(
+      standardNoBlueprintSimplifiedPrime
+    );
+
+    return (
+      normalizedInput === normalizedStandard ||
+      normalizedInput === normalizedStandardNoSet ||
+      normalizedInput === normalizedStandardSimplifiedPrime ||
+      normalizedInput === normalizedStandardNoBlueprint
+    );
+  };
+
+  return (
+    globalItemList.find((item) =>
+      compareCNOrderName(input, item.i18n["zh-hans"].name)
+    ) ??
+    globalItemList.find((item) =>
+      compareENOrderName(input, item.i18n["en"].name)
+    )
+  );
+};
+
+// ================ privates ===================
+
 const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   let hasBPSuffix = false;
   if (input.endsWith(bpSuffix)) {
@@ -416,149 +573,6 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
   }
 };
 
-export const inputToItem = (input: string): ItemShort | undefined => {
-  input = normalizeOrderName(input);
-
-  // 1. Direct Compare (Normalized equivalent at least)
-  const slug = globalItemNameToSlugDict[input];
-  if (slug) return globalItemDict[slug];
-
-  // 2. Low-level Shorthands
-  const normalShortHandRes = shortHandProcess(input);
-  if (normalShortHandRes) return normalShortHandRes;
-
-  // 3. High-level Alias (Warframes Only)
-  const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
-  const aliasHasEndP = inputNoSuffix.endsWith(primeSuffix)
-    ? inputNoSuffix.replace(new RegExp(`${primeSuffix}$`), "")
-    : inputNoSuffix;
-  const mappedAliasHasEndP = warframeAliasDict[aliasHasEndP];
-  if (mappedAliasHasEndP) {
-    const aliasHasEndPRes = shortHandProcess(
-      normalizeOrderName(mappedAliasHasEndP) + primeSuffix + suffix
-    );
-    if (aliasHasEndPRes) return aliasHasEndPRes;
-  }
-
-  if (inputNoSuffix.endsWith("p")) {
-    const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
-    const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
-    if (mappedAliasNoEndP) {
-      const aliasNoEndPRes = shortHandProcess(
-        normalizeOrderName(mappedAliasNoEndP) + primeSuffix + suffix
-      );
-      if (aliasNoEndPRes) return aliasNoEndPRes;
-    }
-  }
-
-  // 4. TODO: First char compare
-  // Not implemented
-
-  // 5. TODO: Fuzzy word match
-  // Not implemented
-
-  // 6. TODO: AI?
-
-  // Legacy code
-  const compareCNOrderName = (input: string, standard: string) => {
-    // 1. 边界校验：空值/空字符串直接返回false（避免replace报错）
-    if (
-      !input ||
-      !standard ||
-      typeof input !== "string" ||
-      typeof standard !== "string"
-    ) {
-      return false;
-    }
-
-    // 2. 标准化名称
-    const normalizedInput = normalizeOrderName(input);
-    const normalizedStandard = normalizeOrderName(standard);
-
-    // 3. 避免空字符串匹配
-    if (!normalizedInput || !normalizedStandard) return false;
-
-    // 4. 特殊处理
-    // 移除“一套”
-    const normalizedStandardNoSet = normalizedStandard.replace(/一套/g, "");
-    const normalizedStandardNoSetSimplifiedPrime =
-      normalizedStandardNoSet.replace(/prime/g, "p");
-    // 移除“蓝图”
-    const normalizedStandardNoBlueprint = normalizedStandard.replace(
-      /蓝图/g,
-      ""
-    );
-    const normalizedStandardNoBlueprintSimplifiedPrime =
-      normalizedStandardNoBlueprint.replace(/prime/g, "p");
-    // 替换“头部神经光源”
-    const normalizedStandardNoNeu =
-      normalizedStandardNoBlueprintSimplifiedPrime.replace(
-        /头部神经光元/g,
-        "头"
-      );
-
-    return (
-      normalizedInput === normalizedStandard ||
-      normalizedInput === normalizedStandardNoSet ||
-      normalizedInput === normalizedStandardNoSetSimplifiedPrime ||
-      normalizedInput === normalizedStandardNoBlueprintSimplifiedPrime ||
-      normalizedInput === normalizedStandardNoNeu
-    );
-  };
-
-  const compareENOrderName = (input: string, standard: string) => {
-    if (
-      !input ||
-      !standard ||
-      typeof input !== "string" ||
-      typeof standard !== "string"
-    ) {
-      return false;
-    }
-
-    const endWithSet = standard.toLowerCase().endsWith(" set");
-    const standardNoSet = endWithSet ? standard.slice(0, -4) : standard;
-    const endWithBlueprint = standard.toLocaleLowerCase().endsWith("blueprint");
-    const standardNoBlueprint = endWithBlueprint
-      ? standard.slice(0, -10)
-      : standard;
-
-    const standardSimplifiedPrime = standardNoSet.replace(/ Prime/g, "p");
-    const standardNoBlueprintSimplifiedPrime = standardNoBlueprint.replace(
-      / Prime/g,
-      "p"
-    );
-
-    const normalizedInput = normalizeOrderName(input);
-    const normalizedStandard = normalizeOrderName(standard);
-    if (!normalizedInput || !normalizedStandard) return false;
-
-    const normalizedStandardNoSet = normalizeOrderName(standardNoSet);
-    const normalizedStandardSimplifiedPrime = normalizeOrderName(
-      standardSimplifiedPrime
-    );
-    const normalizedStandardNoBlueprint = normalizeOrderName(
-      standardNoBlueprintSimplifiedPrime
-    );
-
-    return (
-      normalizedInput === normalizedStandard ||
-      normalizedInput === normalizedStandardNoSet ||
-      normalizedInput === normalizedStandardSimplifiedPrime ||
-      normalizedInput === normalizedStandardNoBlueprint
-    );
-  };
-
-  return (
-    globalItemList.find((item) =>
-      compareCNOrderName(input, item.i18n["zh-hans"].name)
-    ) ??
-    globalItemList.find((item) =>
-      compareENOrderName(input, item.i18n["en"].name)
-    )
-  );
-};
-
 const compareRivenItemName = (input: string, standard: string) => {
   if (
     !input ||
@@ -570,35 +584,10 @@ const compareRivenItemName = (input: string, standard: string) => {
   }
 
   // 2. 标准化名称
-  const normalizedInput = normalizeOrderName(input);
-  const normalizedStandard = normalizeOrderName(standard);
+  const normalizedInput = normalizeName(input);
+  const normalizedStandard = normalizeName(standard);
 
   if (!normalizedInput || !normalizedStandard) return false;
 
   return normalizedInput === normalizedStandard;
 };
-
-const normalizeOrderName = (str: string) => {
-  // 全角转半角 → 转小写 → 过滤特殊字符 → 移除所有空白
-  const normalize = (str: string) => {
-    return fullWidthToHalfWidth(str)
-      .toLowerCase() // 统一大小写
-      .replace(/[·'\-+()【】\[\]{}，。！？；：_]/g, "") // 过滤冗余符号
-      .replace(/\s+/g, ""); // 移除所有空白
-  };
-
-  return normalize(str);
-};
-
-const updateDucatnator = async (): Promise<
-  Record<string, Ducatnator> | undefined
-> => {
-  const data = await getWFMDucatnator();
-  if (!data || !data.payload) {
-    return undefined;
-  }
-
-  return listToDict(data.payload.previous_hour, (d) => [d.item]);
-};
-
-const globalDucatnatorIDDict = createAsyncCache(updateDucatnator, 3600_000);

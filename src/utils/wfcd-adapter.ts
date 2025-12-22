@@ -1,4 +1,4 @@
-import { dictToKeyDict } from "./common";
+import { dictToKeyDict } from "./";
 
 let solNodesEnDict = null;
 
