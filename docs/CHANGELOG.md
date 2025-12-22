@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.2.1...v1.2.2) (2025-12-22)
+
+### Bug Fixes
+
+* **command:** disable about command ([e01f0d7](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/e01f0d77934257d0b43213b36e25aea13f66ec4b))
+
 ## [1.2.1](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.2.0...v1.2.1) (2025-12-22)
 
 ### Bug Fixes
