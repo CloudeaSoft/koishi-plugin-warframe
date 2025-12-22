@@ -1,6 +1,6 @@
 import {
   toTimeStamp,
-  fullWidthToHalfWidth,
+  normalizeName,
   listToDict,
   pascalToSpaced,
 } from "../utils";
@@ -22,6 +22,20 @@ import {
 import { dict_zh } from "warframe-public-export-plus";
 import { createAsyncCache } from "../utils/cache";
 
+// ================ initialization ===================
+
+const globalDucatnatorIDDict = createAsyncCache(
+  async (): Promise<Record<string, Ducatnator> | undefined> => {
+    const data = await getWFMDucatnator();
+    if (!data || !data.payload) {
+      return undefined;
+    }
+
+    return listToDict(data.payload.previous_hour, (d) => [d.item]);
+  },
+  3600_000
+);
+
 let globalItemList: ItemShort[] = [];
 let globalRivenItemList: RivenItem[] = [];
 let globalRivenAttributeList: RivenAttribute[] = [];
@@ -33,6 +47,108 @@ export let globalRivenAttributeDict: Record<string, RivenAttribute> = {};
 /** A dictonary with normalized wfm item i18n name as key and corresponding id as value. Initialized on 'ready' event. */
 let globalItemNameToSlugDict: Record<string, string> = {};
 let globalItemGameRefDict: Record<string, ItemShort> = {};
+
+const warframeAlias = {
+  Volt: ["电", "电男", "伏特"],
+  Trinity: ["奶妈", "奶"],
+  Rhino: ["犀牛", "牛", "铁甲犀牛"],
+  Mag: ["磁妹", "磁力"],
+  Loki: ["洛基"],
+  Excalibur: ["咖喱棒", "圣剑", "咖喱"],
+  Ember: ["火鸡"],
+  Ash: ["灰烬", "灰烬之刃"],
+  Nyx: ["脑溢血"],
+  Frost: ["冰男", "冰雪寒霜", "冰队", "冰"],
+  Saryn: ["毒妈", "毒"],
+  Banshee: ["女妖", "女高音"],
+  Vauban: ["工程"],
+  Nova: ["诺娃", "加速", "加速娃"],
+  Nekros: ["摸尸", "摸"],
+  Valkyr: ["瓦尔基里", "瓦喵", "瓦"],
+  Oberon: ["奶爸", "龙王", "奥伯龙"],
+  Zephyr: ["鸟姐", "鸟"],
+  Hydroid: ["水男"],
+  Mirage: ["小丑", "丑"],
+  Limbo: ["小明", "李明博", "明"],
+  Mesa: ["女枪"],
+  Chroma: ["龙甲", "龙"],
+  Equinox: ["阴阳", "双子"],
+  Atlas: ["土石魔像", "土"],
+  Wukong: ["猴子", "齐天大圣", "悟空", "猴"],
+  Ivara: ["弓妹", "弓"],
+  Nezha: ["哪吒", "三太子"],
+  Inaros: ["沙"],
+  Titania: ["蝶妹"],
+  Nidus: ["蛆甲", "蛆"],
+  Octavia: ["DJ", "音乐"],
+  Harrow: ["主教"],
+  Gara: ["玻璃"],
+  Khora: ["猫"],
+  Revenant: ["夜灵"],
+  Garuda: ["血妈", "血"],
+  Baruuk: ["武僧"],
+  Hildryn: ["母牛"],
+  Wisp: ["花"],
+  Gauss: ["高斯"],
+  Grendel: ["肥宅"],
+  Protea: ["茶", "茶妹"],
+  Xaku: ["骨"],
+  Lavos: ["炼金", "药水", "药水哥", "蛇"],
+  Sevagoth: ["鬼", "鲨鱼"],
+  Yareli: ["水妹"],
+  Caliban: ["卡利班"],
+  Gyre: ["电妹"],
+  Styanax: ["斯巴达"],
+  Voruna: ["狼", "狼妹"],
+  Citrine: ["水晶", "宝石"],
+  Kullervo: ["刀哥"],
+  Dagath: ["马", "赛马娘", "马娘"],
+  Qorvex: ["暖气片"],
+  Dante: ["但丁"],
+  Jade: ["翡翠", "天使"],
+  Koumei: [],
+  "Cyte-09": ["Cyte09", "老九", "9", "九"],
+  Temple: ["吉他"],
+  Nokko: ["蘑菇"],
+};
+
+const warframeAliasDict: {
+  [key: string]: string;
+} = ((aliasObject) => {
+  const transformedObject = {};
+  for (const [key, aliases] of Object.entries(aliasObject)) {
+    transformedObject[key] = key;
+    for (const alias of aliases as Array<string>) {
+      if (typeof alias === "string" && alias.length > 0) {
+        transformedObject[alias] = key;
+        const warframeNameWithSuffix = `${alias}甲`;
+        transformedObject[warframeNameWithSuffix] = key;
+      }
+    }
+  }
+
+  return transformedObject;
+})(warframeAlias);
+
+const setSuffix = "一套";
+const bpSuffix = "蓝图";
+const primeSuffix = "prime";
+const warframePartSuffix = ["系统", "头部神经光元", "机体"];
+const weaponPartSuffix = [
+  "枪管",
+  "枪托",
+  "枪机",
+  "弓弦",
+  "上弓臂",
+  "下弓臂",
+  "刀刃",
+  "握柄",
+  "拳套",
+  "圆盘",
+  "连接器",
+];
+
+// ================ features ===================
 
 export const wmOnReady = async () => {
   const data = await getWFMItemList();
@@ -64,10 +180,10 @@ export const setGlobalItem = (data: ItemShort[]) => {
     const result = {};
     for (const item of list) {
       if (item.i18n["zh-hans"]?.name) {
-        result[normalizeOrderName(item.i18n["zh-hans"].name)] = item.slug;
+        result[normalizeName(item.i18n["zh-hans"].name)] = item.slug;
       }
       if (item.i18n["en"]?.name) {
-        result[normalizeOrderName(item.i18n["en"].name)] = item.slug;
+        result[normalizeName(item.i18n["en"].name)] = item.slug;
       }
     }
     return result;
@@ -85,13 +201,11 @@ export const setGlobalRivenAttribute = (data: RivenAttribute[]) => {
   globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [a.slug]);
 };
 
-// ================ features ===================
-
 export const getItemOrders = async (
   input: string
 ): Promise<{ item: ItemShort; orders: OrderWithUser[] }> => {
   if (!input) return null;
-  input = normalizeOrderName(input);
+  input = normalizeName(input);
 
   // 1. Process global option
   const isFullLevel = /^满级|满级$/.test(input);
@@ -104,7 +218,7 @@ export const getItemOrders = async (
   }
 
   // 2. Search item
-  const targetItem = inputToItem(input);
+  const targetItem = stringToWFMItem(input);
   if (!targetItem) {
     return null;
   }
@@ -191,7 +305,7 @@ export const generateRivenOrderOutput = async (
   return OutputImage(imgBase64);
 };
 
-export const loadRelicData = async (relic: Relic): Promise<OutputRelic> => {
+export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
   const tier = dict_zh[relic.tierKey] ?? relic.tier;
 
   const wfmDict = await globalDucatnatorIDDict.get();
@@ -213,7 +327,7 @@ export const loadRelicData = async (relic: Relic): Promise<OutputRelic> => {
       };
     }
 
-    const platinum = wfmDict ? wfmDict[item.id]?.wa_price : undefined;
+    const platinum = wfmDict ? wfmDict[item.id]?.median : undefined;
 
     return {
       ...element,
@@ -230,108 +344,150 @@ export const loadRelicData = async (relic: Relic): Promise<OutputRelic> => {
   };
 };
 
-// ================ privates ===================
+export const stringToWFMItem = (input: string): ItemShort | undefined => {
+  input = normalizeName(input);
 
-const warframeAlias = {
-  Volt: ["电", "电男", "伏特"],
-  Trinity: ["奶妈", "奶"],
-  Rhino: ["犀牛", "牛", "铁甲犀牛"],
-  Mag: ["磁妹", "磁力"],
-  Loki: ["洛基"],
-  Excalibur: ["咖喱棒", "圣剑", "咖喱"],
-  Ember: ["火鸡"],
-  Ash: ["灰烬", "灰烬之刃"],
-  Nyx: ["脑溢血"],
-  Frost: ["冰男", "冰雪寒霜", "冰队", "冰"],
-  Saryn: ["毒妈", "毒"],
-  Banshee: ["女妖", "女高音"],
-  Vauban: ["工程"],
-  Nova: ["诺娃", "加速", "加速娃"],
-  Nekros: ["摸尸", "摸"],
-  Valkyr: ["瓦尔基里", "瓦喵", "瓦"],
-  Oberon: ["奶爸", "龙王", "奥伯龙"],
-  Zephyr: ["鸟姐", "鸟"],
-  Hydroid: ["水男"],
-  Mirage: ["小丑", "丑"],
-  Limbo: ["小明", "李明博", "明"],
-  Mesa: ["女枪"],
-  Chroma: ["龙甲", "龙"],
-  Equinox: ["阴阳", "双子"],
-  Atlas: ["土石魔像", "土"],
-  Wukong: ["猴子", "齐天大圣", "悟空", "猴"],
-  Ivara: ["弓妹", "弓"],
-  Nezha: ["哪吒", "三太子"],
-  Inaros: ["沙"],
-  Titania: ["蝶妹"],
-  Nidus: ["蛆甲", "蛆"],
-  Octavia: ["DJ", "音乐"],
-  Harrow: ["主教"],
-  Gara: ["玻璃"],
-  Khora: ["猫"],
-  Revenant: ["夜灵"],
-  Garuda: ["血妈", "血"],
-  Baruuk: ["武僧"],
-  Hildryn: ["母牛"],
-  Wisp: ["花"],
-  Gauss: ["高斯"],
-  Grendel: ["肥宅"],
-  Protea: ["茶", "茶妹"],
-  Xaku: ["骨"],
-  Lavos: ["炼金", "药水", "药水哥", "蛇"],
-  Sevagoth: ["鬼", "鲨鱼"],
-  Yareli: ["水妹"],
-  Caliban: ["卡利班"],
-  Gyre: ["电妹"],
-  Styanax: ["斯巴达"],
-  Voruna: ["狼", "狼妹"],
-  Citrine: ["水晶", "宝石"],
-  Kullervo: ["刀哥"],
-  Dagath: ["马", "赛马娘", "马娘"],
-  Qorvex: ["暖气片"],
-  Dante: ["但丁"],
-  Jade: ["翡翠", "天使"],
-  Koumei: [],
-  "Cyte-09": ["Cyte09", "老九", "9", "九"],
-  Temple: ["吉他"],
-  Nokko: ["蘑菇"],
-};
+  // 1. Direct Compare (Normalized equivalent at least)
+  const slug = globalItemNameToSlugDict[input];
+  if (slug) return globalItemDict[slug];
 
-const warframeAliasDict: {
-  [key: string]: string;
-} = ((aliasObject) => {
-  const transformedObject = {};
-  for (const [key, aliases] of Object.entries(aliasObject)) {
-    for (const alias of aliases as Array<string>) {
-      if (typeof alias === "string" && alias.length > 0) {
-        transformedObject[alias] = key;
-        const warframeNameWithSuffix = `${alias}甲`;
-        transformedObject[warframeNameWithSuffix] = key;
-      }
+  // 2. Low-level Shorthands
+  const normalShortHandRes = shortHandProcess(input);
+  if (normalShortHandRes) return normalShortHandRes;
 
-      transformedObject[key] = key;
+  // 3. High-level Alias (Warframes Only)
+  const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
+  const aliasHasEndP = inputNoSuffix.endsWith(primeSuffix)
+    ? inputNoSuffix.replace(new RegExp(`${primeSuffix}$`), "")
+    : inputNoSuffix;
+  const mappedAliasHasEndP = warframeAliasDict[aliasHasEndP];
+  if (mappedAliasHasEndP) {
+    const aliasHasEndPRes = shortHandProcess(
+      normalizeName(mappedAliasHasEndP) + primeSuffix + suffix
+    );
+    if (aliasHasEndPRes) return aliasHasEndPRes;
+  }
+
+  if (inputNoSuffix.endsWith("p")) {
+    const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
+    const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
+    if (mappedAliasNoEndP) {
+      const aliasNoEndPRes = shortHandProcess(
+        normalizeName(mappedAliasNoEndP) + primeSuffix + suffix
+      );
+      if (aliasNoEndPRes) return aliasNoEndPRes;
     }
   }
 
-  return transformedObject;
-})(warframeAlias);
+  // 4. TODO: First char compare
+  // Not implemented
 
-const setSuffix = "一套";
-const bpSuffix = "蓝图";
-const primeSuffix = "prime";
-const warframePartSuffix = ["系统", "头部神经光元", "机体"];
-const weaponPartSuffix = [
-  "枪管",
-  "枪托",
-  "枪机",
-  "弓弦",
-  "上弓臂",
-  "下弓臂",
-  "刀刃",
-  "握柄",
-  "拳套",
-  "圆盘",
-  "连接器",
-];
+  // 5. TODO: Fuzzy word match
+  // Not implemented
+
+  // 6. TODO: AI?
+
+  // Legacy code
+  const compareCNOrderName = (input: string, standard: string) => {
+    // 1. 边界校验：空值/空字符串直接返回false（避免replace报错）
+    if (
+      !input ||
+      !standard ||
+      typeof input !== "string" ||
+      typeof standard !== "string"
+    ) {
+      return false;
+    }
+
+    // 2. 标准化名称
+    const normalizedInput = normalizeName(input);
+    const normalizedStandard = normalizeName(standard);
+
+    // 3. 避免空字符串匹配
+    if (!normalizedInput || !normalizedStandard) return false;
+
+    // 4. 特殊处理
+    // 移除“一套”
+    const normalizedStandardNoSet = normalizedStandard.replace(/一套/g, "");
+    const normalizedStandardNoSetSimplifiedPrime =
+      normalizedStandardNoSet.replace(/prime/g, "p");
+    // 移除“蓝图”
+    const normalizedStandardNoBlueprint = normalizedStandard.replace(
+      /蓝图/g,
+      ""
+    );
+    const normalizedStandardNoBlueprintSimplifiedPrime =
+      normalizedStandardNoBlueprint.replace(/prime/g, "p");
+    // 替换“头部神经光源”
+    const normalizedStandardNoNeu =
+      normalizedStandardNoBlueprintSimplifiedPrime.replace(
+        /头部神经光元/g,
+        "头"
+      );
+
+    return (
+      normalizedInput === normalizedStandard ||
+      normalizedInput === normalizedStandardNoSet ||
+      normalizedInput === normalizedStandardNoSetSimplifiedPrime ||
+      normalizedInput === normalizedStandardNoBlueprintSimplifiedPrime ||
+      normalizedInput === normalizedStandardNoNeu
+    );
+  };
+
+  const compareENOrderName = (input: string, standard: string) => {
+    if (
+      !input ||
+      !standard ||
+      typeof input !== "string" ||
+      typeof standard !== "string"
+    ) {
+      return false;
+    }
+
+    const endWithSet = standard.toLowerCase().endsWith(" set");
+    const standardNoSet = endWithSet ? standard.slice(0, -4) : standard;
+    const endWithBlueprint = standard.toLocaleLowerCase().endsWith("blueprint");
+    const standardNoBlueprint = endWithBlueprint
+      ? standard.slice(0, -10)
+      : standard;
+
+    const standardSimplifiedPrime = standardNoSet.replace(/ Prime/g, "p");
+    const standardNoBlueprintSimplifiedPrime = standardNoBlueprint.replace(
+      / Prime/g,
+      "p"
+    );
+
+    const normalizedInput = normalizeName(input);
+    const normalizedStandard = normalizeName(standard);
+    if (!normalizedInput || !normalizedStandard) return false;
+
+    const normalizedStandardNoSet = normalizeName(standardNoSet);
+    const normalizedStandardSimplifiedPrime = normalizeName(
+      standardSimplifiedPrime
+    );
+    const normalizedStandardNoBlueprint = normalizeName(
+      standardNoBlueprintSimplifiedPrime
+    );
+
+    return (
+      normalizedInput === normalizedStandard ||
+      normalizedInput === normalizedStandardNoSet ||
+      normalizedInput === normalizedStandardSimplifiedPrime ||
+      normalizedInput === normalizedStandardNoBlueprint
+    );
+  };
+
+  return (
+    globalItemList.find((item) =>
+      compareCNOrderName(input, item.i18n["zh-hans"].name)
+    ) ??
+    globalItemList.find((item) =>
+      compareENOrderName(input, item.i18n["en"].name)
+    )
+  );
+};
+
+// ================ privates ===================
 
 const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   let hasBPSuffix = false;
@@ -416,149 +572,6 @@ const shortHandProcess = (input: string): ItemShort | undefined => {
   }
 };
 
-export const inputToItem = (input: string): ItemShort | undefined => {
-  input = normalizeOrderName(input);
-
-  // 1. Direct Compare (Normalized equivalent at least)
-  const slug = globalItemNameToSlugDict[input];
-  if (slug) return globalItemDict[slug];
-
-  // 2. Low-level Shorthands
-  const normalShortHandRes = shortHandProcess(input);
-  if (normalShortHandRes) return normalShortHandRes;
-
-  // 3. High-level Alias (Warframes Only)
-  const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
-  const aliasHasEndP = inputNoSuffix.endsWith(primeSuffix)
-    ? inputNoSuffix.replace(new RegExp(`${primeSuffix}$`), "")
-    : inputNoSuffix;
-  const mappedAliasHasEndP = warframeAliasDict[aliasHasEndP];
-  if (mappedAliasHasEndP) {
-    const aliasHasEndPRes = shortHandProcess(
-      normalizeOrderName(mappedAliasHasEndP) + primeSuffix + suffix
-    );
-    if (aliasHasEndPRes) return aliasHasEndPRes;
-  }
-
-  if (inputNoSuffix.endsWith("p")) {
-    const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
-    const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
-    if (mappedAliasNoEndP) {
-      const aliasNoEndPRes = shortHandProcess(
-        normalizeOrderName(mappedAliasNoEndP) + primeSuffix + suffix
-      );
-      if (aliasNoEndPRes) return aliasNoEndPRes;
-    }
-  }
-
-  // 4. TODO: First char compare
-  // Not implemented
-
-  // 5. TODO: Fuzzy word match
-  // Not implemented
-
-  // 6. TODO: AI?
-
-  // Legacy code
-  const compareCNOrderName = (input: string, standard: string) => {
-    // 1. 边界校验：空值/空字符串直接返回false（避免replace报错）
-    if (
-      !input ||
-      !standard ||
-      typeof input !== "string" ||
-      typeof standard !== "string"
-    ) {
-      return false;
-    }
-
-    // 2. 标准化名称
-    const normalizedInput = normalizeOrderName(input);
-    const normalizedStandard = normalizeOrderName(standard);
-
-    // 3. 避免空字符串匹配
-    if (!normalizedInput || !normalizedStandard) return false;
-
-    // 4. 特殊处理
-    // 移除“一套”
-    const normalizedStandardNoSet = normalizedStandard.replace(/一套/g, "");
-    const normalizedStandardNoSetSimplifiedPrime =
-      normalizedStandardNoSet.replace(/prime/g, "p");
-    // 移除“蓝图”
-    const normalizedStandardNoBlueprint = normalizedStandard.replace(
-      /蓝图/g,
-      ""
-    );
-    const normalizedStandardNoBlueprintSimplifiedPrime =
-      normalizedStandardNoBlueprint.replace(/prime/g, "p");
-    // 替换“头部神经光源”
-    const normalizedStandardNoNeu =
-      normalizedStandardNoBlueprintSimplifiedPrime.replace(
-        /头部神经光元/g,
-        "头"
-      );
-
-    return (
-      normalizedInput === normalizedStandard ||
-      normalizedInput === normalizedStandardNoSet ||
-      normalizedInput === normalizedStandardNoSetSimplifiedPrime ||
-      normalizedInput === normalizedStandardNoBlueprintSimplifiedPrime ||
-      normalizedInput === normalizedStandardNoNeu
-    );
-  };
-
-  const compareENOrderName = (input: string, standard: string) => {
-    if (
-      !input ||
-      !standard ||
-      typeof input !== "string" ||
-      typeof standard !== "string"
-    ) {
-      return false;
-    }
-
-    const endWithSet = standard.toLowerCase().endsWith(" set");
-    const standardNoSet = endWithSet ? standard.slice(0, -4) : standard;
-    const endWithBlueprint = standard.toLocaleLowerCase().endsWith("blueprint");
-    const standardNoBlueprint = endWithBlueprint
-      ? standard.slice(0, -10)
-      : standard;
-
-    const standardSimplifiedPrime = standardNoSet.replace(/ Prime/g, "p");
-    const standardNoBlueprintSimplifiedPrime = standardNoBlueprint.replace(
-      / Prime/g,
-      "p"
-    );
-
-    const normalizedInput = normalizeOrderName(input);
-    const normalizedStandard = normalizeOrderName(standard);
-    if (!normalizedInput || !normalizedStandard) return false;
-
-    const normalizedStandardNoSet = normalizeOrderName(standardNoSet);
-    const normalizedStandardSimplifiedPrime = normalizeOrderName(
-      standardSimplifiedPrime
-    );
-    const normalizedStandardNoBlueprint = normalizeOrderName(
-      standardNoBlueprintSimplifiedPrime
-    );
-
-    return (
-      normalizedInput === normalizedStandard ||
-      normalizedInput === normalizedStandardNoSet ||
-      normalizedInput === normalizedStandardSimplifiedPrime ||
-      normalizedInput === normalizedStandardNoBlueprint
-    );
-  };
-
-  return (
-    globalItemList.find((item) =>
-      compareCNOrderName(input, item.i18n["zh-hans"].name)
-    ) ??
-    globalItemList.find((item) =>
-      compareENOrderName(input, item.i18n["en"].name)
-    )
-  );
-};
-
 const compareRivenItemName = (input: string, standard: string) => {
   if (
     !input ||
@@ -570,35 +583,10 @@ const compareRivenItemName = (input: string, standard: string) => {
   }
 
   // 2. 标准化名称
-  const normalizedInput = normalizeOrderName(input);
-  const normalizedStandard = normalizeOrderName(standard);
+  const normalizedInput = normalizeName(input);
+  const normalizedStandard = normalizeName(standard);
 
   if (!normalizedInput || !normalizedStandard) return false;
 
   return normalizedInput === normalizedStandard;
 };
-
-const normalizeOrderName = (str: string) => {
-  // 全角转半角 → 转小写 → 过滤特殊字符 → 移除所有空白
-  const normalize = (str: string) => {
-    return fullWidthToHalfWidth(str)
-      .toLowerCase() // 统一大小写
-      .replace(/[·'\-+()【】\[\]{}，。！？；：_]/g, "") // 过滤冗余符号
-      .replace(/\s+/g, ""); // 移除所有空白
-  };
-
-  return normalize(str);
-};
-
-const updateDucatnator = async (): Promise<
-  Record<string, Ducatnator> | undefined
-> => {
-  const data = await getWFMDucatnator();
-  if (!data || !data.payload) {
-    return undefined;
-  }
-
-  return listToDict(data.payload.previous_hour, (d) => [d.item]);
-};
-
-const globalDucatnatorIDDict = createAsyncCache(updateDucatnator, 3600_000);

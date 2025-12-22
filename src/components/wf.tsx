@@ -272,7 +272,7 @@ export const RelicComponent = (relic: OutputRelic): Element => {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         color: #000000;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        max-width: 400px;
+        max-width: 500px;
         min-width: 320px;`}
     >
       {/* 遗物标题 */}

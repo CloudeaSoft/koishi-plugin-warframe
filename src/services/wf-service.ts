@@ -1,15 +1,14 @@
 import Puppeteer from "koishi-plugin-puppeteer";
-import { WorldState } from "warframe-worldstate-parser";
 import {
   ExportMissionTypes,
   ExportRelics,
   ExportRewards,
-  dict_zh as i18nDict,
+  dict_zh,
   ExportRegions as regions,
 } from "warframe-public-export-plus";
 
-import i18nDict_ex_zh from "../assets/zh.json";
-import i18nDict_ex_en from "../assets/en.json";
+import dict_zh_ex from "../assets/zh.json";
+import dict_en_ex from "../assets/en.json";
 import arbyRewards from "../assets/arbyRewards";
 import arbys from "../assets/arbys";
 import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
@@ -24,14 +23,18 @@ import {
 } from "../components/wf";
 import { getWorldState } from "../api/wf-api";
 import {
+  createAsyncCache,
   fissureTierName,
   fissureTierNumToNumber,
   fixRelicRewardKey,
   getMissionTypeKey,
   getSolNodeKey,
+  normalizeName,
   regionToShort,
   removeSpace,
 } from "../utils";
+
+// ================ initialization ===================
 
 const arbitrationSchedule: ArbitrationShort[] = arbys
   .split("\n")
@@ -44,51 +47,119 @@ const arbitrationSchedule: ArbitrationShort[] = arbys
     };
   });
 
-let worldState: WorldState = null;
-let worldStateLastUpdatedAt: Date = null;
-let worldstateUpdating: boolean = false;
-let fissures: Fissure[] = [];
-let spFissures: Fissure[] = [];
-let rjFissures: Fissure[] = [];
+const globalWorldState = createAsyncCache(async () => {
+  const worldState = await getWorldState();
+  const fissures = [];
+  const rjFissures = [];
+  const spFissures = [];
+  for (const fissure of worldState.fissures) {
+    const nodeKey = await getSolNodeKey(fissure.nodeKey);
+    const obj = {
+      category: fissure.isStorm
+        ? "rj-fissures"
+        : fissure.isHard
+        ? "sp-fissures"
+        : "fissures",
+      hard: fissure.isHard,
+      activation: fissure.activation.getTime(),
+      expiry: fissure.expiry.getTime(),
+      node: regionToShort(regions[nodeKey], dict_zh),
+      tier: dict_zh[fissureTierName[fissure.tierNum]],
+      tierNum: fissureTierNumToNumber(fissure.tierNum),
+    };
+
+    if (fissure.isStorm) {
+      rjFissures.push(obj);
+    } else if (fissure.isHard) {
+      spFissures.push(obj);
+    } else {
+      fissures.push(obj);
+    }
+  }
+
+  fissures.sort((a, b) => a.tierNum - b.tierNum);
+  spFissures.sort((a, b) => a.tierNum - b.tierNum);
+  rjFissures.sort((a, b) => a.tierNum - b.tierNum);
+  return { raw: worldState, fissures, spFissures, rjFissures };
+}, 120_000);
+
+const loadRelics = () => {
+  const result: Record<string, Relic> = {};
+  for (const key in ExportRelics) {
+    const exportRelic = ExportRelics[key];
+    const exportRewards = ExportRewards[exportRelic.rewardManifest];
+
+    const era = "/Lotus/Language/Relics/Era_" + exportRelic.era.toUpperCase();
+    const relicKey = normalizeName(exportRelic.era + exportRelic.category);
+
+    const rewards = (exportRewards[0] ?? []).map((r) => {
+      const item = fixRelicRewardKey(r.type);
+      return {
+        name: item,
+        rarity: r.rarity as any,
+        quantity: r.itemCount,
+      };
+    });
+
+    const relic: Relic = {
+      tier: exportRelic.era,
+      tierKey: era,
+      num: exportRelic.category,
+      items: rewards,
+    };
+    result[relicKey] = relic;
+  }
+
+  relics = result;
+};
+
 let relics: Record<string, Relic> = null;
+
+const tierListForMatch = [
+  "古纪",
+  "前纪",
+  "中纪",
+  "后纪",
+  "安魂",
+  "先锋",
+  "Lith",
+  "Meso",
+  "Neo",
+  "Axi",
+  "Requiem",
+  "Vanguard",
+].map((t) => normalizeName(t));
+
+// ================ features ===================
 
 export const wfOnReady = async () => {
   loadRelics();
 };
 
-// ================ features ===================
-
 export const getRelic = async (input: string): Promise<Relic | string> => {
+  if (!input) {
+    return "请提供正确的遗物名称";
+  }
+
+  input = normalizeName(input);
+  if (!input) {
+    return "请提供正确的遗物名称";
+  }
+
   if (!relics) {
     return "遗物数据未加载完成，请稍后再试";
   }
 
-  input = removeSpace(input);
-  const tierList = [
-    "古纪",
-    "前纪",
-    "中纪",
-    "后纪",
-    "安魂",
-    "先锋",
-    "Lith",
-    "Meso",
-    "Neo",
-    "Axi",
-    "Requiem",
-    "Vanguard",
-  ];
-  const tier = tierList.find((t) => input.startsWith(t));
+  const tier = tierListForMatch.find((t) => input.startsWith(t));
   if (!tier) {
     return "请提供正确的遗物名称";
   }
 
-  let category = input.replace(new RegExp(`^${tier}`), "");
-  if (category.endsWith("遗物") || category.endsWith("Relic")) {
-    category = category.replace(/遗物$|Relic$/, "");
-  }
+  let category = input
+    .replace(new RegExp(`^${tier}`), "")
+    .replace(/遗物$|relic$/, "");
 
-  const tierMap = {
+  const zhTierMap = {
     古纪: "Lith",
     前纪: "Meso",
     中纪: "Neo",
@@ -96,8 +167,8 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
     安魂: "Requiem",
     先锋: "Vanguard",
   };
-  const mappedTier = tierMap[tier] ?? tier;
-  const key = mappedTier + category;
+  const enTier = zhTierMap[tier] ?? tier;
+  const key = normalizeName(enTier + category);
   return relics[key] ?? "未找到对应遗物信息";
 };
 
@@ -128,7 +199,7 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   return weekArbys
     .filter((a) => arbyRewards[a.node])
     .map((a) => {
-      const obj = regionToShort(regions[a.node], i18nDict);
+      const obj = regionToShort(regions[a.node], dict_zh);
       return {
         ...obj,
         time: new Date(a.time * 1000).toLocaleString("zh-cn", {
@@ -157,12 +228,13 @@ export const generateArbitrationsOutput = async (
 };
 
 export const getWeekly = async () => {
-  if (!(await updateWorldState())) {
+  const { raw: worldState } = await globalWorldState.get();
+  if (!worldState) {
     return "内部错误，获取最新信息失败";
   }
 
   const archon =
-    i18nDict[
+    dict_zh[
       "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
     ];
 
@@ -171,20 +243,20 @@ export const getWeekly = async () => {
     name: string,
     prefix: string
   ): ArchiMedeaDebuff => {
-    const keyToName = i18nDict_ex_zh[`${prefix}${key}`];
+    const keyToName = dict_zh_ex[`${prefix}${key}`];
 
     if (!keyToName) {
-      for (const transKey in i18nDict_ex_en) {
-        if (i18nDict_ex_en[transKey] === name) {
+      for (const transKey in dict_en_ex) {
+        if (dict_en_ex[transKey] === name) {
           return {
-            name: i18nDict_ex_zh[transKey],
-            desc: i18nDict_ex_zh[transKey + "_Desc"],
+            name: dict_zh_ex[transKey],
+            desc: dict_zh_ex[transKey + "_Desc"],
           };
         }
       }
     }
 
-    const riskDesc = i18nDict_ex_zh[`${prefix}${key}_Desc`];
+    const riskDesc = dict_zh_ex[`${prefix}${key}_Desc`];
     return {
       name: keyToName,
       desc: riskDesc,
@@ -196,7 +268,7 @@ export const getWeekly = async () => {
     deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        i18nDict[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
+        dict_zh[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
       const diviation = stringToDebuff(
         m.diviation.key,
         m.diviation.name,
@@ -227,7 +299,7 @@ export const getWeekly = async () => {
     temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        i18nDict[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+        dict_zh[ExportMissionTypes[receivedType]?.name] ?? receivedType;
       const diviation = stringToDebuff(
         m.diviation.key,
         m.diviation.name,
@@ -274,7 +346,8 @@ export const generateWeeklyOutput = async (
 };
 
 export const getRegionTime = async (): Promise<string> => {
-  if (!(await updateWorldState())) {
+  const { raw: worldState } = await globalWorldState.get();
+  if (!worldState) {
     return "内部错误，获取最新信息失败";
   }
 
@@ -317,10 +390,10 @@ export const getCircuitWeek = (): {
   const EPOCH = 1734307200 * 1000;
   const week = Math.trunc((Date.now() - EPOCH) / 604800000);
   const incarnons = incarnonRewards[week % incarnonRewards.length].map(
-    (i) => i18nDict[i]
+    (i) => dict_zh[i]
   );
   const warframes = warframeRewards[week % warframeRewards.length].map(
-    (i) => i18nDict[i]
+    (i) => dict_zh[i]
   );
   return {
     incarnons,
@@ -341,27 +414,18 @@ export const generateCircuitWeekOutput = async (
 };
 
 export const getFissures = async () => {
-  if (!(await updateWorldState())) {
-    return "内部错误，获取最新信息失败";
-  }
-
-  return fissures;
+  const { fissures } = await globalWorldState.get();
+  return fissures ?? "内部错误，获取最新信息失败";
 };
 
 export const getSteelPathFissures = async () => {
-  if (!(await updateWorldState())) {
-    return "内部错误，获取最新信息失败";
-  }
-
-  return spFissures;
+  const { spFissures } = await globalWorldState.get();
+  return spFissures ?? "内部错误，获取最新信息失败";
 };
 
 export const getRailjackFissures = async () => {
-  if (!(await updateWorldState())) {
-    return "内部错误，获取最新信息失败";
-  }
-
-  return rjFissures;
+  const { rjFissures } = await globalWorldState.get();
+  return rjFissures ?? "内部错误，获取最新信息失败";
 };
 
 export const generateFissureOutput = async (
@@ -372,92 +436,4 @@ export const generateFissureOutput = async (
   const element = FissureTable(fissures, type);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);
-};
-
-// ================ internal functions ===================
-
-const updateWorldState = async () => {
-  if (worldstateUpdating) return true;
-  if (
-    worldState &&
-    worldStateLastUpdatedAt &&
-    Date.now() - worldStateLastUpdatedAt.getTime() < 120000
-  )
-    return true;
-
-  try {
-    worldState = await getWorldState();
-    worldStateLastUpdatedAt = new Date();
-    worldstateUpdating = true;
-    fissures = [];
-    rjFissures = [];
-    spFissures = [];
-    for (const fissure of worldState.fissures) {
-      const nodeKey = await getSolNodeKey(fissure.nodeKey);
-      const obj = {
-        category: fissure.isStorm
-          ? "rj-fissures"
-          : fissure.isHard
-          ? "sp-fissures"
-          : "fissures",
-        hard: fissure.isHard,
-        activation: fissure.activation.getTime(),
-        expiry: fissure.expiry.getTime(),
-        node: regionToShort(regions[nodeKey], i18nDict),
-        tier: i18nDict[fissureTierName[fissure.tierNum]],
-        tierNum: fissureTierNumToNumber(fissure.tierNum),
-      };
-
-      if (fissure.isStorm) {
-        rjFissures.push(obj);
-      } else if (fissure.isHard) {
-        spFissures.push(obj);
-      } else {
-        fissures.push(obj);
-      }
-    }
-
-    fissures.sort((a, b) => a.tierNum - b.tierNum);
-    spFissures.sort((a, b) => a.tierNum - b.tierNum);
-    rjFissures.sort((a, b) => a.tierNum - b.tierNum);
-  } catch {
-  } finally {
-    worldstateUpdating = false;
-    return (
-      worldState &&
-      worldStateLastUpdatedAt &&
-      Date.now() - worldStateLastUpdatedAt.getTime() < 120000
-    );
-  }
-};
-
-const loadRelics = () => {
-  const result: Record<string, Relic> = {};
-  for (const key in ExportRelics) {
-    const exportRelic = ExportRelics[key];
-    const exportRewards = ExportRewards[exportRelic.rewardManifest];
-
-    const era = "/Lotus/Language/Relics/Era_" + exportRelic.era.toUpperCase();
-    const relicKey = exportRelic.era + exportRelic.category;
-
-    const rewards = (exportRewards[0] ?? [])
-      .map((r) => {
-        const item = fixRelicRewardKey(r.type);
-        return {
-          name: item,
-          rarity: r.rarity as any,
-          quantity: r.itemCount,
-        };
-      });
-
-    const relic: Relic = {
-      tier: exportRelic.era,
-      tierKey: era,
-      num: exportRelic.category,
-      items: rewards,
-    };
-    result[relicKey] = relic;
-  }
-
-  relics = result;
 };

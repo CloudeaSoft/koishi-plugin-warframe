@@ -109,5 +109,5 @@ const setupCommands = (ctx: Context) => {
 };
 
 const inDevelopment = () => {
-  return "Work in progress...";
+  return "功能暂未开放";
 };
