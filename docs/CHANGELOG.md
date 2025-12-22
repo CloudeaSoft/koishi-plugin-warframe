@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.2.0...v1.2.1) (2025-12-22)
+
+### Bug Fixes
+
+* **wf:** add price data to relic output ([#8](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/8)) ([f91e289](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/f91e2899cb46077bd3149a77063e30a30b30daa4))
+
 ## [1.2.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.1.2...v1.2.0) (2025-12-19)
 
 ### Features
