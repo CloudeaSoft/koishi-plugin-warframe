@@ -431,7 +431,7 @@ const updateWorldState = async () => {
   }
 };
 
-const loadRelics = async () => {
+const loadRelics = () => {
   const result: Record<string, Relic> = {};
   for (const key in ExportRelics) {
     const exportRelic = ExportRelics[key];
