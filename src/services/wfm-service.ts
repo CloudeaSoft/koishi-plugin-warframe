@@ -117,14 +117,13 @@ const warframeAliasDict: {
 } = ((aliasObject) => {
   const transformedObject = {};
   for (const [key, aliases] of Object.entries(aliasObject)) {
+    transformedObject[key] = key;
     for (const alias of aliases as Array<string>) {
       if (typeof alias === "string" && alias.length > 0) {
         transformedObject[alias] = key;
         const warframeNameWithSuffix = `${alias}甲`;
         transformedObject[warframeNameWithSuffix] = key;
       }
-
-      transformedObject[key] = key;
     }
   }
 
