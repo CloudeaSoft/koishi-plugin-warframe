@@ -328,7 +328,7 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
       };
     }
 
-    const platinum = wfmDict ? wfmDict[item.id]?.wa_price : undefined;
+    const platinum = wfmDict ? wfmDict[item.id]?.median : undefined;
 
     return {
       ...element,
