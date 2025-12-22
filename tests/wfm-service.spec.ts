@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { inputToItem, setGlobalItem } from "../src/services";
+import { stringToWFMItem, setGlobalItem } from "../src/services";
 
 import testItems from "./assets/test-items.json";
 
@@ -19,7 +19,7 @@ it("wfm-service.inputToItem", () => {
   inputToItemTestCases.forEach((element) => {
     const input = element.a;
     const predict = element.b;
-    const output = inputToItem(input);
+    const output = stringToWFMItem(input);
     if (typeof output === "undefined" && predict === undefined) {
       expect(output).to.be.equal(predict);
     } else {
