@@ -137,8 +137,8 @@ export const wfOnReady = async () => {
 };
 
 export const getRelic = async (input: string): Promise<Relic | string> => {
-  if (!relics) {
-    return "遗物数据未加载完成，请稍后再试";
+  if (!input) {
+    return "请提供正确的遗物名称";
   }
 
   input = removeSpace(input);
@@ -147,6 +147,10 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
   }
 
   input = normalizeName(input);
+
+  if (!relics) {
+    return "遗物数据未加载完成，请稍后再试";
+  }
 
   const tier = tierListForMatch.find((t) => input.startsWith(t));
   if (!tier) {
@@ -167,7 +171,6 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
   };
   const enTier = zhTierMap[tier] ?? tier;
   const key = normalizeName(enTier + category);
-  console.log(key);
   return relics[key] ?? "未找到对应遗物信息";
 };
 
