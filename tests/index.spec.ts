@@ -16,10 +16,14 @@ app.middleware(({ content }, next) => {
   }
 });
 
-before(() => app.start());
+describe("main", function () {
+  this.timeout(10000);
 
-it("example", async () => {
-  await client.shouldReply("天王盖地虎", "宝塔镇河妖");
-  await client.shouldReply("天王盖地虎");
-  await client.shouldNotReply("宫廷玉液酒");
+  before(() => app.start());
+
+  it("example", async () => {
+    await client.shouldReply("天王盖地虎", "宝塔镇河妖");
+    await client.shouldReply("天王盖地虎");
+    await client.shouldNotReply("宫廷玉液酒");
+  });
 });
