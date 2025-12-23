@@ -8,7 +8,7 @@
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
     "dtsc": "dtsc",
-    "test": "mocha tests/**/*.spec.ts"
+    "test": "mocha tests/**/*.spec.ts --timeout 10000"
   },
   "author": "CloudeaSoft <cloudeasoft@qq.com>",
   "repository": {

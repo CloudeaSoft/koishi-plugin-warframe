@@ -1,8 +1,8 @@
-import { Context } from "koishi";
+import { App } from "koishi";
 import mock from "@koishijs/plugin-mock";
 import * as warframe from "../src/index";
 
-const app = new Context();
+const app = new App();
 app.plugin(mock as any);
 app.plugin(warframe);
 
