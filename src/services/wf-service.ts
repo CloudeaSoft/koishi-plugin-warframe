@@ -816,6 +816,7 @@ export const analyzeRivenStat = (parseResult: {
         normalizeName(firstStat.attr.i18n["en"].name)
       ];
 
+    // Use the lowest value of 2_1 type riven to check the first stat
     if (firstStat.value >= firstStatBaseValue * 1.2375 * 0.9 * disposition) {
       return "2_1";
     } else {

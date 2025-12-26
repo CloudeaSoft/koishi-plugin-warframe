@@ -1056,12 +1056,6 @@ describe("Transform Attr Base Value Tests", function () {
           normalizeName(attr.attr.i18n["en"].name)
         ]
       ).to.be.equal(true);
-      // console.log(
-      //   attr.attr.i18n["en"].name,
-      //   rivenAttrValueDict[
-      //     weaponRivenDispositionDict[input.name].calc.riventype
-      //   ][normalizeName(attr.attr.i18n["en"].name)]
-      // );
     }
   });
 
@@ -1698,7 +1692,7 @@ describe("Transform Attr Base Value Tests", function () {
   it("Analyze", () => {
     inputs.forEach((input) => {
       const analyzed = analyzeRivenStat(input);
-      console.log(analyzed);
+      expect(analyzed).to.be.not.undefined;
     });
   });
 });

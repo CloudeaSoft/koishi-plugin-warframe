@@ -4,7 +4,7 @@ import { GeneralBasicOCRResponse } from "tencentcloud-sdk-nodejs-ocr/tencentclou
 export const extractTextFromImage = async (
   image: string | Blob,
   secret: OcrAPISecret
-): Promise<GeneralBasicOCRResponse> => {
+): Promise<GeneralBasicOCRResponse | undefined> => {
   if (image instanceof Blob) {
     const buffer = await image.arrayBuffer();
     image = Buffer.from(buffer).toString("base64");
@@ -26,17 +26,12 @@ export const extractTextFromImage = async (
   };
 
   const client = new ocrClient(clientConfig) as Client;
-  return await client
-    .GeneralAccurateOCR({
+  try {
+    return await client.GeneralAccurateOCR({
       ImageBase64: image,
-    })
-    .then(
-      (data) => {
-        return data;
-      },
-      (err) => {
-        console.error("error", err);
-        return undefined;
-      }
-    );
+    });
+  } catch (err) {
+    console.error("error", err);
+    return undefined;
+  }
 };
