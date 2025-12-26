@@ -1,5 +1,5 @@
 import { Element } from "koishi";
-import { msToHumanReadable } from "../utils";
+import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from "../utils";
 
 export const ArbitrationTable = (arbi: Arbitration[]): Element => {
   return (
@@ -401,7 +401,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
         case "percent":
           return `${num.toFixed(1)}%`;
         case "multiply":
-          return `${num.toFixed(2)}x`;
+          return `x${num.toFixed(2)}`;
         case "seconds":
           return `${num.toFixed(2)}s`;
         default:
@@ -411,32 +411,23 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
     return `${format(min)} - ${format(max)}`;
   };
 
-  // 检查数值是否在范围内
   const isInRange = (percent: number): boolean => {
     return percent <= 0.1 && percent >= -0.1;
   };
 
-  // 获取百分比颜色
   const getPercentColor = (percent: number) => {
-    // 确保输入值在 [-0.1, 0.1] 范围内
     const clampedPercent = Math.max(-0.1, Math.min(0.1, percent));
-
-    // 将 [-0.1, 0.1] 映射到 [0, 1] 的范围内
     const normalized = (clampedPercent + 0.1) / 0.2;
-
-    // 定义渐变的关键颜色点
     const colors = [
-      { pos: 0.0, color: "#fa4336" }, // -0.1: 差
-      { pos: 0.25, color: "#ff9800" }, // -0.06: 一般
-      { pos: 0.5, color: "#ff9800" }, // 0: 一般
-      { pos: 0.75, color: "#8bc34a" }, // 0.06: 好
-      { pos: 1.0, color: "#4caf50" }, // 0.1: 很好
+      { pos: 0.0, color: "#fa4336" },
+      { pos: 0.25, color: "#ff9800" },
+      { pos: 0.5, color: "#ff9800" },
+      { pos: 0.75, color: "#8bc34a" },
+      { pos: 1.0, color: "#4caf50" },
     ];
 
-    // 找到 normalized 值所在的两个颜色区间
     let startColor = colors[0];
     let endColor = colors[colors.length - 1];
-
     for (let i = 0; i < colors.length - 1; i++) {
       if (normalized >= colors[i].pos && normalized <= colors[i + 1].pos) {
         startColor = colors[i];
@@ -445,32 +436,13 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
       }
     }
 
-    // 计算在区间内的相对位置
     const range = endColor.pos - startColor.pos;
     const relativePosition =
       range > 0 ? (normalized - startColor.pos) / range : 0;
 
-    // 颜色插值函数
-    const lerp = (start: number, end: number, t: number) =>
-      Math.round(start + (end - start) * t);
-
-    // 将十六进制颜色转换为RGB
-    const hexToRgb = (hex: string) => {
-      const r = parseInt(hex.slice(1, 3), 16);
-      const g = parseInt(hex.slice(3, 5), 16);
-      const b = parseInt(hex.slice(5, 7), 16);
-      return { r, g, b };
-    };
-
-    // 将RGB转换为十六进制
-    const rgbToHex = (r: number, g: number, b: number) =>
-      `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-
-    // 获取起始和结束颜色的RGB值
     const startRgb = hexToRgb(startColor.color);
     const endRgb = hexToRgb(endColor.color);
 
-    // 计算插值后的RGB值
     const r = lerp(startRgb.r, endRgb.r, relativePosition);
     const g = lerp(startRgb.g, endRgb.g, relativePosition);
     const b = lerp(startRgb.b, endRgb.b, relativePosition);
@@ -494,9 +466,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
     }
   };
 
-  // 获取进度条宽度
   const getProgressWidth = (percent: number): string => {
-    // 将-1到1的范围映射到0-100%
     const normalized = ((percent + 1) / 2) * 100;
     return `${Math.max(0, Math.min(100, normalized))}%`;
   };
