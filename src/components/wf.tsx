@@ -666,7 +666,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
             </ul>
           </div>
         ) : (
-          <></>
+          ""
         )}
       </div>
     </div>
