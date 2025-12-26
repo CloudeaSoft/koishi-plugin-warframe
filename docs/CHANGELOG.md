@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.2.2...v1.3.0) (2025-12-26)
+
+### Features
+
+* **wf:** add new command riven ([#14](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/14)) ([5b1e083](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/5b1e08365dc9c33cb33929cf9791e53156358d4d))
+
 ## [1.2.2](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.2.1...v1.2.2) (2025-12-22)
 
 ### Bug Fixes
