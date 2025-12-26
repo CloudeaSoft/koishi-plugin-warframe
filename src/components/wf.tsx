@@ -374,3 +374,301 @@ export const RelicComponent = (relic: OutputRelic): Element => {
     </div>
   );
 };
+
+export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
+  // 格式化数值显示
+  const formatValue = (value: number, unit: RivenAttributeUnit): string => {
+    switch (unit) {
+      case "percent":
+        return `${value.toFixed(1)}%`;
+      case "multiply":
+        return `x${value.toFixed(2)}`;
+      case "seconds":
+        return `${value.toFixed(2)}s`;
+      default:
+        return value.toString();
+    }
+  };
+
+  // 格式化范围显示
+  const formatRange = (
+    min: number,
+    max: number,
+    unit: RivenAttributeUnit
+  ): string => {
+    const format = (num: number) => {
+      switch (unit) {
+        case "percent":
+          return `${num.toFixed(1)}%`;
+        case "multiply":
+          return `${num.toFixed(2)}x`;
+        case "seconds":
+          return `${num.toFixed(2)}s`;
+        default:
+          return num.toString();
+      }
+    };
+    return `${format(min)} - ${format(max)}`;
+  };
+
+  // 检查数值是否在范围内
+  const isInRange = (percent: number): boolean => {
+    return percent <= 0.1 && percent >= -0.1;
+  };
+
+  // 获取百分比颜色
+  const getPercentColor = (percent: number) => {
+    // 确保输入值在 [-0.1, 0.1] 范围内
+    const clampedPercent = Math.max(-0.1, Math.min(0.1, percent));
+
+    // 将 [-0.1, 0.1] 映射到 [0, 1] 的范围内
+    const normalized = (clampedPercent + 0.1) / 0.2;
+
+    // 定义渐变的关键颜色点
+    const colors = [
+      { pos: 0.0, color: "#fa4336" }, // -0.1: 差
+      { pos: 0.25, color: "#ff9800" }, // -0.06: 一般
+      { pos: 0.5, color: "#ff9800" }, // 0: 一般
+      { pos: 0.75, color: "#8bc34a" }, // 0.06: 好
+      { pos: 1.0, color: "#4caf50" }, // 0.1: 很好
+    ];
+
+    // 找到 normalized 值所在的两个颜色区间
+    let startColor = colors[0];
+    let endColor = colors[colors.length - 1];
+
+    for (let i = 0; i < colors.length - 1; i++) {
+      if (normalized >= colors[i].pos && normalized <= colors[i + 1].pos) {
+        startColor = colors[i];
+        endColor = colors[i + 1];
+        break;
+      }
+    }
+
+    // 计算在区间内的相对位置
+    const range = endColor.pos - startColor.pos;
+    const relativePosition =
+      range > 0 ? (normalized - startColor.pos) / range : 0;
+
+    // 颜色插值函数
+    const lerp = (start: number, end: number, t: number) =>
+      Math.round(start + (end - start) * t);
+
+    // 将十六进制颜色转换为RGB
+    const hexToRgb = (hex: string) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return { r, g, b };
+    };
+
+    // 将RGB转换为十六进制
+    const rgbToHex = (r: number, g: number, b: number) =>
+      `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+
+    // 获取起始和结束颜色的RGB值
+    const startRgb = hexToRgb(startColor.color);
+    const endRgb = hexToRgb(endColor.color);
+
+    // 计算插值后的RGB值
+    const r = lerp(startRgb.r, endRgb.r, relativePosition);
+    const g = lerp(startRgb.g, endRgb.g, relativePosition);
+    const b = lerp(startRgb.b, endRgb.b, relativePosition);
+
+    return rgbToHex(r, g, b);
+  };
+
+  const getDispositionIcon = (disposition: number) => {
+    if (disposition < 0.5) {
+      return "◯◯◯◯◯";
+    } else if (disposition < 0.69) {
+      return "⬤◯◯◯◯";
+    } else if (disposition <= 0.89) {
+      return "⬤⬤◯◯◯";
+    } else if (disposition <= 1.1) {
+      return "⬤⬤⬤◯◯";
+    } else if (disposition <= 1.3) {
+      return "⬤⬤⬤⬤◯";
+    } else {
+      return "⬤⬤⬤⬤⬤";
+    }
+  };
+
+  // 获取进度条宽度
+  const getProgressWidth = (percent: number): string => {
+    // 将-1到1的范围映射到0-100%
+    const normalized = ((percent + 1) / 2) * 100;
+    return `${Math.max(0, Math.min(100, normalized))}%`;
+  };
+
+  return (
+    <div style={`display: flex; gap: 20px; width: 600px;`}>
+      <div
+        style={`width: 100%; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid #444;`}
+      >
+        {/* 武器名称和倾向 */}
+        <div
+          style={`display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #444;`}
+        >
+          <h2 style={`margin: 0; font-size: 20px;`}>{data.name}</h2>
+          <div
+            style={`background-color: #f0f0f0; padding: 4px 12px; border-radius: 12px; font-size: 14px; line-height: 1;`}
+          >
+            {`倾向: ${getDispositionIcon(
+              data.disposition
+            )} (${data.disposition.toFixed(2)})`}
+          </div>
+        </div>
+
+        {/* 正面词条 */}
+        <div style={`margin-bottom: 25px;`}>
+          <h3
+            style={`color: #4caf50; margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;`}
+          >
+            正面词条 ({data.buffs.length})
+          </h3>
+
+          <ul>
+            {data.buffs.map((buff) => {
+              const inRange = isInRange(buff.percent);
+              const percentColor = getPercentColor(buff.percent);
+
+              return (
+                <li
+                  style={`
+                    background-color: #eeeeee;
+                    border-radius: 6px;
+                    padding: 12px;
+                    margin-bottom: 10px;
+                    border-left: 4px solid ${percentColor};
+                    position: relative;`}
+                >
+                  <div
+                    style={`display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;`}
+                  >
+                    <span style={`font-weight: bold;`}>{buff.name}</span>
+                    <span style={`font-size: 18px; font-weight: bold;`}>
+                      {formatValue(buff.value, buff.unit)}
+                    </span>
+                  </div>
+
+                  {/* 进度条 */}
+                  <div
+                    style={`height: 10px; background-color: #444; border-radius: 3px; margin-bottom: 8px;`}
+                  >
+                    <div
+                      style={`height: 10px; position: relative; overflow: hidden;`}
+                    >
+                      <p
+                        style={`position: absolute; left: 0; top: 0; height: 100%; width: ${getProgressWidth(
+                          buff.percent * 10
+                        )}; background-color: ${percentColor}; border-radius: 3px;`}
+                      ></p>
+                    </div>
+                  </div>
+
+                  <div
+                    style={`display: flex; justify-content: space-between; font-size: 12px; color: #aaa;`}
+                  >
+                    <span>
+                      范围: {formatRange(buff.min, buff.max, buff.unit)}
+                    </span>
+                    <span style={`color: ${percentColor};`}>
+                      {buff.percent > 0 ? "+" : ""}
+                      {(buff.percent * 100).toFixed(2) + "%"}
+                    </span>
+                  </div>
+
+                  {/* 范围警告 */}
+                  {!inRange ? (
+                    <div
+                      style={`margin-top: 8px; padding: 6px; background-color: rgba(244, 67, 54, 0.2); border-radius: 4px; font-size: 12px; color: #f44336; display: flex; align-items: center;`}
+                    >
+                      <span style={`margin-right: 6px;`}>⚠</span>
+                      数值不在正常范围内（可能未满级或倾向未更新）
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        {/* 负面词条 */}
+        {data.curses.length > 0 ? (
+          <div>
+            <h3
+              style={`color: #f44336; margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;`}
+            >
+              负面词条 ({data.curses.length})
+            </h3>
+
+            <ul>
+              {data.curses.map((curse, curseIndex) => {
+                const inRange = isInRange(curse.percent);
+                const percentColor = getPercentColor(curse.percent);
+                return (
+                  <li
+                    style={`background-color: #eeeeee; border-radius: 6px; padding: 12px; margin-bottom: 10px; border-left: 4px solid ${percentColor};`}
+                  >
+                    <div
+                      style={`display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;`}
+                    >
+                      <span style={`font-weight: bold;`}>{curse.name}</span>
+                      <span style={`font-size: 18px; font-weight: bold;`}>
+                        {formatValue(curse.value, curse.unit)}
+                      </span>
+                    </div>
+
+                    {/* 进度条 */}
+                    <div
+                      style={`height: 10px; background-color: #444; border-radius: 3px; margin-bottom: 8px;`}
+                    >
+                      <div
+                        style={`height: 10px; position: relative; overflow: hidden;`}
+                      >
+                        <p
+                          style={`position: absolute; left: 0; top: 0; height: 100%; width: ${getProgressWidth(
+                            curse.percent * 10
+                          )}; background-color: ${percentColor}; border-radius: 3px;`}
+                        ></p>
+                      </div>
+                    </div>
+
+                    <div
+                      style={`display: flex; justify-content: space-between; font-size: 12px; color: #aaa;`}
+                    >
+                      <span>
+                        范围: {formatRange(curse.min, curse.max, curse.unit)}
+                      </span>
+                      <span style={`color: ${percentColor};`}>
+                        {curse.percent > 0 ? "+" : ""}
+                        {(curse.percent * 100).toFixed(2) + "%"}
+                      </span>
+                    </div>
+
+                    {/* 范围警告 */}
+                    {!inRange ? (
+                      <div
+                        style={`margin-top: 8px; padding: 6px; background-color: rgba(244, 67, 54, 0.2); border-radius: 4px; font-size: 12px; color: #f44336; display: flex; align-items: center;`}
+                      >
+                        <span style={`margin-right: 6px;`}>⚠</span>
+                        数值不在正常范围内（可能未满级或倾向未更新）
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
+  );
+};

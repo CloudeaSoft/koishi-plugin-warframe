@@ -8,10 +8,15 @@ export const name = "warframe";
 
 export interface Config {
   developerMode: boolean;
+  ocrAPISecret: OcrAPISecret;
 }
 
 export const Config: Schema<Config> = Schema.object({
   developerMode: Schema.boolean().default(false),
+  ocrAPISecret: Schema.object({
+    id: Schema.string().required(),
+    key: Schema.string().required(),
+  }).description("OCR API 密钥"),
 });
 
 export function apply(ctx: Context) {
@@ -104,6 +109,10 @@ const setupCommands = (ctx: Context) => {
     .action(commands.circuitCommand);
   ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
   ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
+
+  ctx.command("riven <img:image>", "分析紫卡截图").action((a, b) => {
+    return commands.rivenCommand(a, b, ctx.config.ocrAPISecret);
+  });
 
   // ctx.command("about", "关于").action(commands.aboutCommand);
 };

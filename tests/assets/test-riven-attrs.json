@@ -1,0 +1,734 @@
+{
+  "apiVersion": "0.22.7",
+  "data": [
+    {
+      "id": "5c5ca81a96e8d2003834fe78",
+      "slug": "punch_through",
+      "gameRef": "WeaponPunctureDepthMod",
+      "group": "default",
+      "prefix": "Lexi",
+      "suffix": "Nok",
+      "i18n": {
+        "en": {
+          "name": "Punch Through",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "穿透",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe7c",
+      "slug": "slash_damage",
+      "gameRef": "WeaponSlashDamageMod",
+      "group": "default",
+      "prefix": "Sci",
+      "suffix": "Sus",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Slash",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "切割伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe74",
+      "slug": "impact_damage",
+      "gameRef": "WeaponImpactDamageMod",
+      "group": "default",
+      "prefix": "Magna",
+      "suffix": "Ton",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "冲击伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Impact",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe77",
+      "slug": "toxin_damage",
+      "gameRef": "WeaponToxinDamageMod",
+      "group": "default",
+      "prefix": "Toxi",
+      "suffix": "Tox",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "毒素伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Toxin",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe7e",
+      "slug": "status_duration",
+      "gameRef": "WeaponProcTimeMod",
+      "group": "default",
+      "prefix": "Deci",
+      "suffix": "Des",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "触发时间",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Status Duration",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe63",
+      "slug": "ammo_maximum",
+      "gameRef": "WeaponAmmoMaxMod",
+      "group": "default",
+      "prefix": "Ampi",
+      "suffix": "Bin",
+      "exclusiveTo": [
+        "shotgun",
+        "rifle",
+        "pistol",
+        "kitgun"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "弹药上限",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Ammo Maximum",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe7f",
+      "slug": "recoil",
+      "gameRef": "WeaponRecoilReductionMod",
+      "group": "default",
+      "prefix": "Zeti",
+      "suffix": "Mag",
+      "exclusiveTo": [
+        "shotgun",
+        "rifle",
+        "pistol",
+        "kitgun"
+      ],
+      "positiveIsNegative": true,
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "后坐力",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Weapon Recoil",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe80",
+      "slug": "zoom",
+      "gameRef": "WeaponZoomFovMod",
+      "group": "default",
+      "prefix": "Hera",
+      "suffix": "Lis",
+      "exclusiveTo": [
+        "shotgun",
+        "rifle",
+        "pistol",
+        "kitgun"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "变焦",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Zoom",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe68",
+      "slug": "channeling_damage",
+      "gameRef": "WeaponMeleeComboInitialBonusMod",
+      "group": "melee",
+      "prefix": "Para",
+      "suffix": "Um",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "i18n": {
+        "zh-hans": {
+          "name": "初始连击数",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Initial combo",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe69",
+      "slug": "channeling_efficiency",
+      "gameRef": "WeaponMeleeComboEfficiencyMod",
+      "group": "melee",
+      "prefix": "Forti",
+      "suffix": "Us",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "重击效率",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Heavy Attack Efficiency",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe6b",
+      "slug": "critical_chance",
+      "gameRef": "WeaponCritChanceMod",
+      "group": "default",
+      "prefix": "Crita",
+      "suffix": "Cron",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "暴击率",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Critical Chance",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe6d",
+      "slug": "critical_damage",
+      "gameRef": "WeaponCritDamageMod",
+      "group": "default",
+      "prefix": "Acri",
+      "suffix": "Tis",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "暴击伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Critical Damage",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe6e",
+      "slug": "base_damage_/_melee_damage",
+      "gameRef": "WeaponDamageAmountMod",
+      "group": "default",
+      "prefix": "Visi",
+      "suffix": "Ata",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "基础伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Damage",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe70",
+      "slug": "heat_damage",
+      "gameRef": "WeaponFireDamageMod",
+      "group": "default",
+      "prefix": "Igni",
+      "suffix": "Pha",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Heat",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "火焰伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe76",
+      "slug": "multishot",
+      "gameRef": "WeaponFireIterationsMod",
+      "group": "default",
+      "prefix": "Sati",
+      "suffix": "Can",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Multishot",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "多重射击",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe7a",
+      "slug": "reload_speed",
+      "gameRef": "WeaponReloadSpeedMod",
+      "group": "default",
+      "prefix": "Feva",
+      "suffix": "Tak",
+      "exclusiveTo": [
+        "shotgun",
+        "rifle",
+        "pistol",
+        "kitgun"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "装填速度",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Reload Speed",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe7b",
+      "slug": "range",
+      "gameRef": "WeaponMeleeRangeIncMod",
+      "group": "melee",
+      "prefix": "Locti",
+      "suffix": "Tor",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "i18n": {
+        "zh-hans": {
+          "name": "攻击范围",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Range",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe64",
+      "slug": "damage_vs_corpus",
+      "gameRef": "WeaponFactionDamageCorpus",
+      "group": "default",
+      "prefix": "Manti",
+      "suffix": "Tron",
+      "unit": "multiply",
+      "i18n": {
+        "zh-hans": {
+          "name": "对Corpus伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Damage to Corpus",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe65",
+      "slug": "damage_vs_grineer",
+      "gameRef": "WeaponFactionDamageGrineer",
+      "group": "default",
+      "prefix": "Argi",
+      "suffix": "Con",
+      "unit": "multiply",
+      "i18n": {
+        "zh-hans": {
+          "name": "对Grineer伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Damage to Grineer",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe79",
+      "slug": "puncture_damage",
+      "gameRef": "WeaponArmorPiercingDamageMod",
+      "group": "default",
+      "prefix": "Insi",
+      "suffix": "Cak",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Puncture",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "穿刺伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe66",
+      "slug": "damage_vs_infested",
+      "gameRef": "WeaponFactionDamageInfested",
+      "group": "default",
+      "prefix": "Pura",
+      "suffix": "Ada",
+      "unit": "multiply",
+      "i18n": {
+        "zh-hans": {
+          "name": "对Infested伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Damage to Infested",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe6f",
+      "slug": "electric_damage",
+      "gameRef": "WeaponElectricityDamageMod",
+      "group": "default",
+      "prefix": "Vexi",
+      "suffix": "Tio",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Electricity",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "电击伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe71",
+      "slug": "finisher_damage",
+      "gameRef": "WeaponMeleeFinisherDamageMod",
+      "group": "melee",
+      "prefix": "Exi",
+      "suffix": "Cta",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Finisher Damage",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "处决伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe72",
+      "slug": "fire_rate_/_attack_speed",
+      "gameRef": "WeaponFireRateMod",
+      "group": "default",
+      "prefix": "Croni",
+      "suffix": "Dra",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "射速/攻击速度",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Fire Rate / Attack Speed",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe73",
+      "slug": "projectile_speed",
+      "gameRef": "WeaponProjectileSpeedMod",
+      "group": "default",
+      "prefix": "Conci",
+      "suffix": "Nak",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "投射物飞行速度",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Projectile speed",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe75",
+      "slug": "magazine_capacity",
+      "gameRef": "WeaponClipMaxMod",
+      "group": "default",
+      "prefix": "Arma",
+      "suffix": "Tin",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Magazine Capacity",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "弹匣容量",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe7d",
+      "slug": "status_chance",
+      "gameRef": "WeaponStunChanceMod",
+      "group": "default",
+      "prefix": "Hexa",
+      "suffix": "Dex",
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Status Chance",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "触发几率",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe67",
+      "slug": "cold_damage",
+      "gameRef": "WeaponFreezeDamageMod",
+      "group": "default",
+      "prefix": "Geli",
+      "suffix": "Do",
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "冰冻伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Cold",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe6a",
+      "slug": "combo_duration",
+      "gameRef": "ComboDurationMod",
+      "group": "melee",
+      "prefix": "Tempi",
+      "suffix": "Nem",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "unit": "seconds",
+      "i18n": {
+        "zh-hans": {
+          "name": "连击持续时间",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Combo Duration",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5c5ca81a96e8d2003834fe6c",
+      "slug": "critical_chance_on_slide_attack",
+      "gameRef": "SlideAttackCritChanceMod",
+      "group": "melee",
+      "prefix": "Pleci",
+      "suffix": "Nent",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "zh-hans": {
+          "name": "滑行攻击暴击率",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Critical Chance for Slide Attack",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "5dd001d3ff08fd0214d29be2",
+      "slug": "chance_to_gain_extra_combo_count",
+      "gameRef": "WeaponMeleeComboBonusOnHitMod",
+      "group": "melee",
+      "prefix": "Laci",
+      "suffix": "Nus",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "zh-hans": {
+          "name": "额外连击数获取",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "en": {
+          "name": "Additional Combo Count Chance",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "602569349be2f26959a53d66",
+      "slug": "chance_to_gain_combo_count",
+      "gameRef": "WeaponMeleeComboPointsOnHitMod",
+      "group": "melee",
+      "prefix": "",
+      "suffix": "",
+      "exclusiveTo": [
+        "melee",
+        "zaw"
+      ],
+      "unit": "percent",
+      "negativeOnly": true,
+      "i18n": {
+        "en": {
+          "name": "Chance to Gain Combo Count",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "的几率来获得连击数",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    }
+  ],
+  "error": null
+}

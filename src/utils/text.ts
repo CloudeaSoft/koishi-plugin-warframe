@@ -24,3 +24,37 @@ export const toPascalCase = (text: string) =>
     .filter(Boolean)
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join("");
+
+export function normalSimilarity(a, b) {
+  const distance = levenshtein(a, b);
+  return 1 - distance / Math.max(a.length, b.length);
+}
+
+function levenshtein(a, b) {
+  const dp = Array.from({ length: a.length + 1 }, () => []);
+  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+export function tokenSimilarity(a, b) {
+  const tokenize = (s) =>
+    s
+      .replace(/[^\w\u4e00-\u9fa5]+/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+  const A = new Set(tokenize(a));
+  const B = new Set(tokenize(b));
+  const intersection = [...A].filter((x) => B.has(x)).length;
+  const union = new Set([...A, ...B]).size;
+  return intersection / union;
+}

@@ -38,7 +38,7 @@ const globalDucatnatorIDDict = createAsyncCache(
 
 let globalItemList: ItemShort[] = [];
 let globalRivenItemList: RivenItem[] = [];
-let globalRivenAttributeList: RivenAttribute[] = [];
+export let globalRivenAttributeList: RivenAttribute[] = [];
 
 let globalItemDict: Record<string, ItemShort> = {};
 let globalRivenItemDict: Record<string, RivenItem> = {};
