@@ -25,7 +25,7 @@ export const toPascalCase = (text: string) =>
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join("");
 
-export function normalSimilarity(a, b) {
+export function normalSimilarity(a: string, b: string) {
   const distance = levenshtein(a, b);
   return 1 - distance / Math.max(a.length, b.length);
 }
