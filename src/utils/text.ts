@@ -30,7 +30,7 @@ export function normalSimilarity(a: string, b: string) {
   return 1 - distance / Math.max(a.length, b.length);
 }
 
-function levenshtein(a, b) {
+function levenshtein(a: string, b: string) {
   const dp = Array.from({ length: a.length + 1 }, () => []);
   for (let i = 0; i <= a.length; i++) dp[i][0] = i;
   for (let j = 0; j <= b.length; j++) dp[0][j] = j;
