@@ -1,0 +1,3695 @@
+{
+  "weapons": [
+    {
+      "disposition": 0.6,
+      "name": "ACCELTRA",
+      "texture": "_Lotus_Interface_Icons_Store_SapientPrimaryWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "ACK & BRUNT",
+      "texture": "_Lotus_Interface_Icons_Store_RegorAxeShield.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.33,
+      "name": "ACRID",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerAcidBlowDartGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "AFURIS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoAkimboAutoPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.05,
+      "name": "AKARIUS",
+      "texture": "_Lotus_Interface_Icons_Store_SapientPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "AKBOLTO",
+      "texture": "_Lotus_Interface_Icons_Store_TennoAkimboPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "AKBOLTO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_AkboltoPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "AKBRONCO",
+      "texture": "_Lotus_Interface_Icons_Store_DualBroncos.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "AKBRONCO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeDualBroncos.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.05,
+      "name": "AKJAGARA",
+      "texture": "_Lotus_Interface_Icons_Store_TnoBladedPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.95,
+      "name": "AKJAGARA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_AkjagaraPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.52,
+      "name": "AKLATO",
+      "texture": "_Lotus_Interface_Icons_Store_AklatoPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.05,
+      "name": "AKLEX",
+      "texture": "_Lotus_Interface_Icons_Store_Aklex.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.9,
+      "name": "AKLEX PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_AklexPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "AKMAGNUS",
+      "texture": "_Lotus_Interface_Icons_Store_Akmagnus.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "AKSOMATI",
+      "texture": "_Lotus_Interface_Icons_Store_AkimboSomaPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.95,
+      "name": "AKSOMATI PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_AksomatiPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.95,
+      "name": "AKSTILETTO",
+      "texture": "_Lotus_Interface_Icons_Store_TennoUzi.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.7,
+      "name": "AKSTILETTO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_AkstilettoPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "AKVASTO",
+      "texture": "_Lotus_Interface_Icons_Store_DualVasto.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "AKVASTO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_AkvastoPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.52,
+      "name": "AKZANI",
+      "texture": "_Lotus_Interface_Icons_Store_HarlequinPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.05,
+      "name": "AMBASSADOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpArSniper.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.5,
+      "name": "AMPHIS",
+      "texture": "_Lotus_Interface_Icons_Store_HeavyStaff.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.8,
+      "name": "AMPREX",
+      "texture": "_Lotus_Interface_Icons_Store_ChainLightningGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "ANGSTRUM",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusHandRocket.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.46,
+      "name": "ANKU",
+      "texture": "_Lotus_Interface_Icons_Store_ParisScythe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.5,
+      "name": "ANKYROS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoGauntlet.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "ANKYROS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeAnkyros.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.8,
+      "name": "ARCA PLASMOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.1,
+      "name": "ARCA SCISCO",
+      "texture": "_Lotus_Interface_Icons_Store_CrpScopePistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "ARCA TITRON",
+      "texture": "_Lotus_Interface_Icons_Store_CrpHammer.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "ARGONAK",
+      "texture": "_Lotus_Interface_Icons_Store_LaserAimRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.5,
+      "name": "ARQUEBEX",
+      "texture": "_Lotus_Interface_Icons_Store_Mech_ExaltedArtilleryWeapon.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1,
+      "name": "ARTAX",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelGremlin.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "Artemis Bow",
+      "texture": "_Lotus_Interface_Icons_Store_ExaltedBow827.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "ARTEMIS BOW PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_ArtemisBowPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "ARUM SPINOSA",
+      "texture": "_Lotus_Interface_Icons_Store_InfWarfan.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "ASTILLA",
+      "texture": "_Lotus_Interface_Icons_Store_GlassShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.8,
+      "name": "ASTILLA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_AstillaPrime.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1,
+      "name": "ATHODAI",
+      "texture": "_Lotus_Interface_Icons_Store_TnJetTurbinePistolWeapon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.95,
+      "name": "ATOMOS",
+      "texture": "_Lotus_Interface_Icons_Store_GrnHeatGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "ATTERAX",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerWhip.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.42,
+      "name": "ATTICA",
+      "texture": "_Lotus_Interface_Icons_Store_TnoPrmryXbow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "AZIMA",
+      "texture": "_Lotus_Interface_Icons_Store_SundialPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "BALEFIRE CHARGER",
+      "texture": "_Lotus_Interface_Icons_Store_IronFrameBlastWeapon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.8,
+      "name": "BALLA",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipOne.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "BALLISTICA",
+      "texture": "_Lotus_Interface_Icons_Store_TennoAutoCrossbow.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "BALLISTICA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PrimeBallistica.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.15,
+      "name": "BASMU",
+      "texture": "_Lotus_Interface_Icons_Store_SentRifleNewWarGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "BATTACOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpSentExperimentRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "BAZA",
+      "texture": "_Lotus_Interface_Icons_Store_TnSMGWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.95,
+      "name": "BAZA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_BazaPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "BO",
+      "texture": "_Lotus_Interface_Icons_Store_BoStaff.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "BOAR",
+      "texture": "_Lotus_Interface_Icons_Store_TennoFullAutoShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.34,
+      "name": "BOAR PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBoar.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.25,
+      "name": "BOLTACE",
+      "texture": "_Lotus_Interface_Icons_Store_Boltonfa.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.51,
+      "name": "BOLTO",
+      "texture": "_Lotus_Interface_Icons_Store_Lex.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "BOLTOR",
+      "texture": "_Lotus_Interface_Icons_Store_Boltor.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "BOLTOR PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBoltor.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "BO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "BRAKK",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerHandShotgun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "BRATON",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusAutoRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "BRATON PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBraton.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "BRATON VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_VIPWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "BROKEN SCEPTER",
+      "texture": "_Lotus_Interface_Icons_Store_GrnQueenSceptre.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "BROKEN WAR",
+      "texture": "_Lotus_Interface_Icons_Store_StalkerTwoSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "BRONCO",
+      "texture": "_Lotus_Interface_Icons_Store_HandCannon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.4,
+      "name": "BRONCO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBronco.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.7,
+      "name": "BUBONICO",
+      "texture": "_Lotus_Interface_Icons_Store_InfArmCannon.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.45,
+      "name": "BURST LASER",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelBurstLaser.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "BURSTON",
+      "texture": "_Lotus_Interface_Icons_Store_Burston.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "BURSTON PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBurston.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.45,
+      "name": "BUZLOK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnGorgSniperRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.29,
+      "name": "CADUS",
+      "texture": "_Lotus_Interface_Icons_Store_CYSingleStaffSkin.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "CARMINE PENTA",
+      "texture": "_Lotus_Interface_Icons_Store_PentaLoginRewardSkin.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "CASSOWAR",
+      "texture": "_Lotus_Interface_Icons_Store_TnHalberdPolearmWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "CASTANAS",
+      "texture": "_Lotus_Interface_Icons_Store_TaserStar.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "CATABOLYST",
+      "texture": "_Lotus_Interface_Icons_Store_InfBeamPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.5,
+      "name": "CATCHMOON",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_SUModularSecondary_SUModularSecondaryBarrelAPart.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "CAUSTACYST",
+      "texture": "_Lotus_Interface_Icons_Store_EmbolistScythe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.65,
+      "name": "CEDO",
+      "texture": "_Lotus_Interface_Icons_Store_Cedo.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.43,
+      "name": "CERAMIC DAGGER",
+      "texture": "_Lotus_Interface_Icons_Store_CeramicDagger.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.36,
+      "name": "CERATA",
+      "texture": "_Lotus_Interface_Icons_Store_PunctureGlaive.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "CERNOS",
+      "texture": "_Lotus_Interface_Icons_Store_AntlerBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "CERNOS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_CernosPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.52,
+      "name": "CESTRA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusMinigun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.15,
+      "name": "CETI LACERA",
+      "texture": "_Lotus_Interface_Icons_Store_OperationsLacera.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "COBRA & CRANE",
+      "texture": "_Lotus_Interface_Icons_Store_PacifistShieldSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.46,
+      "name": "CONVECTRIX",
+      "texture": "_Lotus_Interface_Icons_Store_CrpSplitRifle.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.15,
+      "name": "CORINTH",
+      "texture": "_Lotus_Interface_Icons_Store_TnHeavyShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.9,
+      "name": "CORINTH PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_CorinthPrime.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1,
+      "name": "CORTEGE",
+      "texture": "_Lotus_Interface_Icons_Store_ThanotechArchGun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.2,
+      "name": "CORVAS",
+      "texture": "_Lotus_Interface_Icons_Store_ArchLaunchGrenade.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.48,
+      "name": "CRONUS",
+      "texture": "_Lotus_Interface_Icons_Store_SwordCeramic_d.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "CRYOTRA",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelCryoxionWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.85,
+      "name": "CYANEX",
+      "texture": "_Lotus_Interface_Icons_Store_CrpSentAmalgPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.9,
+      "name": "CYATH",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipFour.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "CYCRON",
+      "texture": "_Lotus_Interface_Icons_Store_CrpChargeGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "CYNGAS",
+      "texture": "_Lotus_Interface_Icons_Store_ArchBurstGun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.25,
+      "name": "DAIKYU",
+      "texture": "_Lotus_Interface_Icons_Store_AsymmetricBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "DAKRA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_CronusPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "DARK DAGGER",
+      "texture": "_Lotus_Interface_Icons_Store_DarkDagger.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.21,
+      "name": "DARK SPLIT-SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_DarkSwordDaggerHybrid.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.48,
+      "name": "DARK SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_DarkSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "DECONSTRUCTOR",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelGlaiveWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "DECONSTRUCTOR PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeSentinelGlaiveWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "DEHTAT",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipFive.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "DERA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusEnergyRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "DERA VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_DeraVandal.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "Desert Wind",
+      "texture": "_Lotus_Interface_Icons_Store_PacifistFistWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "DESPAIR",
+      "texture": "_Lotus_Interface_Icons_Store_StalkerKunai.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "DESTREZA",
+      "texture": "_Lotus_Interface_Icons_Store_TnoRapier.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.14,
+      "name": "DESTREZA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_DestrezaPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.455,
+      "name": "DETH MACHINE RIFLE",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelDethMachineRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.455,
+      "name": "DETH MACHINE RIFLE PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelDethMachineRiflePrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.15,
+      "name": "DETRON",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusHandCannon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "DEX DAKRA",
+      "texture": "_Lotus_Interface_Icons_Store_DexDakra.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.39,
+      "name": "DEX FURIS",
+      "texture": "_Lotus_Interface_Icons_Store_DexFuris.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "DEX PIXIA",
+      "texture": "_Lotus_Interface_Icons_Store_FlightPistols827.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "DEX PIXIA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_DexPixiaPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "DEX SYBARIS",
+      "texture": "_Lotus_Interface_Icons_Store_DexTheThird.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "DIWATA",
+      "texture": "_Lotus_Interface_Icons_Store_FlightSword827.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "DIWATA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_DiwataPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.75,
+      "name": "DOKRAHM",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipEleven.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "DRAGON NIKANA",
+      "texture": "_Lotus_Interface_Icons_Store_DragonKatana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "DRAKGOON",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerFlakCannon.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.3,
+      "name": "DREAD",
+      "texture": "_Lotus_Interface_Icons_Store_StalkerBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "DUAL CESTRA",
+      "texture": "_Lotus_Interface_Icons_Store_DualCorpusMinigun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "DUAL CLEAVERS",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerDualCleaver.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "DUAL DECURION",
+      "texture": "_Lotus_Interface_Icons_Store_ArchHeavyPistols.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.45,
+      "name": "DUAL ETHER",
+      "texture": "_Lotus_Interface_Icons_Store_EtherSwordAndDagger.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.44,
+      "name": "DUAL HEAT SWORDS",
+      "texture": "_Lotus_Interface_Icons_Store_HeatDaggers.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.16,
+      "name": "DUAL ICHOR",
+      "texture": "_Lotus_Interface_Icons_Store_DualInfestedAxes.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "DUAL KAMAS",
+      "texture": "_Lotus_Interface_Icons_Store_DualKamas.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "DUAL KAMAS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_DualKamasPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "DUAL KERES",
+      "texture": "_Lotus_Interface_Icons_Store_QuillDualSwords.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "DUAL RAZA",
+      "texture": "_Lotus_Interface_Icons_Store_SomaDualKamas.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.48,
+      "name": "DUAL SKANA",
+      "texture": "_Lotus_Interface_Icons_Store_DualSkana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "DUAL TOXOCYST",
+      "texture": "_Lotus_Interface_Icons_Store_InfVomitGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.44,
+      "name": "DUAL ZOREN",
+      "texture": "_Lotus_Interface_Icons_Store_DualAxe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "EMBOLIST",
+      "texture": "_Lotus_Interface_Icons_Store_InfestedPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.4,
+      "name": "ENDURA",
+      "texture": "_Lotus_Interface_Icons_Store_ThreeLeafRapier.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.55,
+      "name": "EPITAPH",
+      "texture": "_Lotus_Interface_Icons_Store_TnWraithSidearmWeapon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.49,
+      "name": "ETHER DAGGERS",
+      "texture": "_Lotus_Interface_Icons_Store_EtherDaggers.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "ETHER REAPER",
+      "texture": "_Lotus_Interface_Icons_Store_EtherScythe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.44,
+      "name": "ETHER SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_EtherBladeSingle.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.85,
+      "name": "EUPHONA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_EuphoraPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "Exalted Blade",
+      "texture": "_Lotus_Interface_Icons_Store_ExaltedBlade827x5127.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "EXALTED PRIME BLADE",
+      "texture": "_Lotus_Interface_Icons_Store_ExaltedBladePrime827x512.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "EXALTED UMBRA BLADE",
+      "texture": "_Lotus_Interface_Icons_Store_ExcaliburUmbraDoomSword827.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "EXERGIS",
+      "texture": "_Lotus_Interface_Icons_Store_CrpShapeBlastShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.3,
+      "name": "FALCOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpGlaive.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.36,
+      "name": "FANG",
+      "texture": "_Lotus_Interface_Icons_Store_DualDaggers.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "FANG PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeFang.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "FERROX",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusSpearGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "FLUCTUS",
+      "texture": "_Lotus_Interface_Icons_Store_ArchRocketCrossbow.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.55,
+      "name": "FLUX RIFLE",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusLaserRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "FRAGOR",
+      "texture": "_Lotus_Interface_Icons_Store_Hammer.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.05,
+      "name": "FRAGOR PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_FragorPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.7,
+      "name": "FULMIN",
+      "texture": "_Lotus_Interface_Icons_Store_TnWispRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.38,
+      "name": "FURAX",
+      "texture": "_Lotus_Interface_Icons_Store_MeleeGauntlets.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.38,
+      "name": "FURAX WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_WraithFurax.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "FURIS",
+      "texture": "_Lotus_Interface_Icons_Store_Furis.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "FUSILAI",
+      "texture": "_Lotus_Interface_Icons_Store_GlassKunai.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.05,
+      "name": "GALATINE",
+      "texture": "_Lotus_Interface_Icons_Store_TennoGreatSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.85,
+      "name": "GALATINE PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PrimeGalatine.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "GALVACORD",
+      "texture": "_Lotus_Interface_Icons_Store_CrpShockWhip.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "GAMMACOR",
+      "texture": "_Lotus_Interface_Icons_Store_Gammacor.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "GARUDA'S TALONS",
+      "texture": "_Lotus_Interface_Icons_Store_GarudaMeleeClaws.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "GAZAL MACHETE",
+      "texture": "_Lotus_Interface_Icons_Store_DjinnMachete.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.9,
+      "name": "GAZE",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_SUModularSecondary_SUModularSecondaryBarrelDPart.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.5,
+      "name": "GHOULSAW",
+      "texture": "_Lotus_Interface_Icons_Store_GrnGhoulSawWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "GLAIVE",
+      "texture": "_Lotus_Interface_Icons_Store_GlaiveLight.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.8,
+      "name": "GLAIVE PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeGlaive.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "GLAXION",
+      "texture": "_Lotus_Interface_Icons_Store_CrpFreezeRayRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "GLAXION VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_CrpFreezeRayVandal.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "GORGON",
+      "texture": "_Lotus_Interface_Icons_Store_Gorgon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "GORGON WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_WraithGorgon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "GRAKATA",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerAssaultRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.44,
+      "name": "GRAM",
+      "texture": "_Lotus_Interface_Icons_Store_GreatSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.75,
+      "name": "GRAM PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_GramPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.05,
+      "name": "GRATTLER",
+      "texture": "_Lotus_Interface_Icons_Store_GrnAntiAirGun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.3,
+      "name": "GRINLOK",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerLeverActionRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "GUANDAO",
+      "texture": "_Lotus_Interface_Icons_Store_TnGuandaoPolearm.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.65,
+      "name": "GUANDAO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_GuandaoPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "GUNSEN",
+      "texture": "_Lotus_Interface_Icons_Store_WarfanWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.44,
+      "name": "HALIKAR",
+      "texture": "_Lotus_Interface_Icons_Store_GrnBoomerang.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.85,
+      "name": "HALIKAR WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_HalikarWraith.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.55,
+      "name": "HARPAK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnHarpoonGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "HATE",
+      "texture": "_Lotus_Interface_Icons_Store_StalkerScythe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.44,
+      "name": "HEAT DAGGER",
+      "texture": "_Lotus_Interface_Icons_Store_HeatDagger.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.48,
+      "name": "HEAT SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_SwordHeat_d.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "HEK",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerQuadShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.35,
+      "name": "HELIOCOR",
+      "texture": "_Lotus_Interface_Icons_Store_CephHammer.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "HELSTRUM",
+      "texture": "_Lotus_Interface_Icons_Store_SwarmerWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "HEMA",
+      "texture": "_Lotus_Interface_Icons_Store_InfestedBurstRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "HIKOU",
+      "texture": "_Lotus_Interface_Icons_Store_ThrowingStar.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "HIKOU PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeHikou.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.42,
+      "name": "HIND",
+      "texture": "_Lotus_Interface_Icons_Store_GrnBurstIcon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "HIRUDO",
+      "texture": "_Lotus_Interface_Icons_Store_InfestedKogake.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "HYSTRIX",
+      "texture": "_Lotus_Interface_Icons_Store_QuillDartGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.6,
+      "name": "IGNIS",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerFlameThrower.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.55,
+      "name": "IGNIS WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_IgnisWraith.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "IMPERATOR",
+      "texture": "_Lotus_Interface_Icons_Store_ArchwingMachinegun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 0.9,
+      "name": "IMPERATOR VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_ImperatorVandal.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1,
+      "name": "IRON STAFF",
+      "texture": "_Lotus_Interface_Icons_Store_MonkeyKingStaff827.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "IRON STAFF PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_WukongPrimeStaff.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "JAT KITTAG",
+      "texture": "_Lotus_Interface_Icons_Store_GrnJetPwrPolearm.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "JAT KUSAR",
+      "texture": "_Lotus_Interface_Icons_Store_GrnKusarigamaWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "JAVLOK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnFlameSpear.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "JAW SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_SwordJaw_d.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.47,
+      "name": "KAMA",
+      "texture": "_Lotus_Interface_Icons_Store_Kama.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KARAK",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerM16Rifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.28,
+      "name": "KARAK WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_KarakWraith.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KARYST",
+      "texture": "_Lotus_Interface_Icons_Store_KrisDagger.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.05,
+      "name": "KARYST PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_KarystPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "KERATINOS",
+      "texture": "_Lotus_Interface_Icons_Store_InfTransformClaws.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KESHEG",
+      "texture": "_Lotus_Interface_Icons_Store_GrnHalberd.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "KESTREL",
+      "texture": "_Lotus_Interface_Icons_Store_Boomerang.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "KNELL",
+      "texture": "_Lotus_Interface_Icons_Store_PriestPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.46,
+      "name": "KOGAKE",
+      "texture": "_Lotus_Interface_Icons_Store_Kogake.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "KOGAKE PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_KogakePrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "KOHM",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerSparkGun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KOHMAK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnWindUpPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.15,
+      "name": "KOMOREX",
+      "texture": "_Lotus_Interface_Icons_Store_CrpSentAmalgSniper.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.75,
+      "name": "KOMPRESSA",
+      "texture": "_Lotus_Interface_Icons_Store_YareliPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KORRUDO",
+      "texture": "_Lotus_Interface_Icons_Store_GrnSpiderSparring.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.53,
+      "name": "KRAKEN",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerHeavyPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KRESKA",
+      "texture": "_Lotus_Interface_Icons_Store_CrpVenusHatchet.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "KROHKUR",
+      "texture": "_Lotus_Interface_Icons_Store_GrnEgyptSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.43,
+      "name": "KRONEN",
+      "texture": "_Lotus_Interface_Icons_Store_TennoTonfa.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.6,
+      "name": "KRONEN PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_KronenPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "KRONSH",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipSix.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "KULSTAR",
+      "texture": "_Lotus_Interface_Icons_Store_GrnTorpedoPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.51,
+      "name": "KUNAI",
+      "texture": "_Lotus_Interface_Icons_Store_KunaiThrowingKnives.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "KUVA AYANGA",
+      "texture": "_Lotus_Interface_Icons_Store_GrnHeavyGrenadeLauncher.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 0.85,
+      "name": "KUVA BRAKK",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichBrakkSkin.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.6,
+      "name": "KUVA BRAMMA",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaGrnBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.85,
+      "name": "KUVA CHAKKHURR",
+      "texture": "_Lotus_Interface_Icons_Store_GrnKuvaLichRifleWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "KUVA DRAKGOON",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichDrakgoonSkin.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.6,
+      "name": "KUVA GRATTLER",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaGrattler.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 0.7,
+      "name": "KUVA HEK",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaHek.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.05,
+      "name": "KUVA HIND",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaHind.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "KUVA KARAK",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichKarakSkin.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.85,
+      "name": "KUVA KOHM",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichKohmSkin.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.05,
+      "name": "KUVA KRAKEN",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichKrakenSkin.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.5,
+      "name": "KUVA NUKOR",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaNukor.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.85,
+      "name": "KUVA OGRIS",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichOgrisSkin.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "KUVA QUARTAKK",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichQuartakkSkin.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "KUVA SEER",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichSeerSkin.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.75,
+      "name": "KUVA SHILDEG",
+      "texture": "_Lotus_Interface_Icons_Store_GrnKuvaLichScytheWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.95,
+      "name": "KUVA TONKOR",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichTonkorSkin.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.85,
+      "name": "KUVA TWIN STUBBAS",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaLichStubbaSkin.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.6,
+      "name": "KUVA ZARR",
+      "texture": "_Lotus_Interface_Icons_Store_KuvaZarr.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.31,
+      "name": "LACERA",
+      "texture": "_Lotus_Interface_Icons_Store_StalkerMios.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.05,
+      "name": "LANKA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusSniperRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.9,
+      "name": "LARKSPUR",
+      "texture": "_Lotus_Interface_Icons_Store_ShieldFrameArchGun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.21,
+      "name": "LASER RIFLE",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelLaserRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "LATO",
+      "texture": "_Lotus_Interface_Icons_Store_Pistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "LATO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_LatoPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "LATO VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_LatoVandal.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.4,
+      "name": "LATRON",
+      "texture": "_Lotus_Interface_Icons_Store_TennoSemiAutoRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "LATRON PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_LatronPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "LATRON WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_WraithLatron.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "LECTA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusWhip.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.95,
+      "name": "LENZ",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.7,
+      "name": "LESION",
+      "texture": "_Lotus_Interface_Icons_Store_InfTipedo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "LEX",
+      "texture": "_Lotus_Interface_Icons_Store_Bolto.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "LEX PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeLex.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "MACHETE",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerMachette.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "MACHETE WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_WraithMachete.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "MAGISTAR",
+      "texture": "_Lotus_Interface_Icons_Store_PaladinMace.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.53,
+      "name": "MAGNUS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoMagnum.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.5,
+      "name": "MAGNUS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_MagnusPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "MARA DETRON",
+      "texture": "_Lotus_Interface_Icons_Store_VTDetron.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "MARELOK",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerLeverActionPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "MASSETER",
+      "texture": "_Lotus_Interface_Icons_Store_TnChiselKanabo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.5,
+      "name": "MAUSOLON",
+      "texture": "_Lotus_Interface_Icons_Store_ThanotechLongGun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.1,
+      "name": "MEWAN",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipThree.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "MIOS",
+      "texture": "_Lotus_Interface_Icons_Store_Mios.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "MIRE",
+      "texture": "_Lotus_Interface_Icons_Store_MireInfestedSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.5,
+      "name": "MITER",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerSawbladeWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "MK1-BO",
+      "texture": "_Lotus_Interface_Icons_Store_BoStaff.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "MK1-BRATON",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusAutoRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.45,
+      "name": "MK1-FURAX",
+      "texture": "_Lotus_Interface_Icons_Store_MeleeGauntlets.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "MK1-FURIS",
+      "texture": "_Lotus_Interface_Icons_Store_Furis.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.51,
+      "name": "MK1-KUNAI",
+      "texture": "_Lotus_Interface_Icons_Store_KunaiThrowingKnives.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "MK1-PARIS",
+      "texture": "_Lotus_Interface_Icons_Store_HuntingBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.45,
+      "name": "MK1-STRUN",
+      "texture": "_Lotus_Interface_Icons_Store_TennoShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.9,
+      "name": "MORGHA",
+      "texture": "_Lotus_Interface_Icons_Store_Mech_ThanoTechGrenadeLauncher.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1,
+      "name": "MULTRON",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelHextraWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "MUTALIST CERNOS",
+      "texture": "_Lotus_Interface_Icons_Store_InfCernos.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.5,
+      "name": "MUTALIST QUANTA",
+      "texture": "_Lotus_Interface_Icons_Store_InfCrpShockSwarm.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "NAGANTAKA",
+      "texture": "_Lotus_Interface_Icons_Store_GarudaCrossbow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "NAMI SKYLA",
+      "texture": "_Lotus_Interface_Icons_Store_TnoCutlassAndPoignard.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.95,
+      "name": "NAMI SKYLA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PrimeNamiSkyla.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.43,
+      "name": "NAMI SOLO",
+      "texture": "_Lotus_Interface_Icons_Store_NamiSolo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.95,
+      "name": "NIKANA",
+      "texture": "_Lotus_Interface_Icons_Store_Katana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.6,
+      "name": "NIKANA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeNikana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.41,
+      "name": "NINKONDI",
+      "texture": "_Lotus_Interface_Icons_Store_Nunchaku.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "NINKONDI PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_NinkondiPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "NUKOR",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerMicrowaveGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "OBEX",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusPunchKickWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "OCUCOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpSentExperimentPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "OGRIS",
+      "texture": "_Lotus_Interface_Icons_Store_Ogris.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "OHMA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusTonfas.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "OKINA",
+      "texture": "_Lotus_Interface_Icons_Store_TennoSais.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "OOLTHA",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipTwo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "OPTICOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBFG.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "OPTICOR VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_OpticorVandal.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "ORTHOS",
+      "texture": "_Lotus_Interface_Icons_Store_PolearmNaginata.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.7,
+      "name": "ORTHOS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimePolearm.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "ORVIUS",
+      "texture": "_Lotus_Interface_Icons_Store_TeshinGlaive.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "PANDERO",
+      "texture": "_Lotus_Interface_Icons_Store_TnBardPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.85,
+      "name": "PANDERO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PanderoPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "PANGOLIN PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PangolinPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.47,
+      "name": "PANGOLIN SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_SwordPangolin_d.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "PANTHERA",
+      "texture": "_Lotus_Interface_Icons_Store_TennoMiter.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "PANTHERA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PantheraPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.6,
+      "name": "PARACESIS",
+      "texture": "_Lotus_Interface_Icons_Store_BallasSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.31,
+      "name": "PARACYST",
+      "texture": "_Lotus_Interface_Icons_Store_InfQuantaRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "PARIS",
+      "texture": "_Lotus_Interface_Icons_Store_HuntingBow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "PARIS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeBowM.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "PATHOCYST",
+      "texture": "_Lotus_Interface_Icons_Store_InfBoomerang.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.85,
+      "name": "PENNANT",
+      "texture": "_Lotus_Interface_Icons_Store_TnRailjackGreatKatana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "PENTA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusGrenadeLauncher.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "PHAEDRA",
+      "texture": "_Lotus_Interface_Icons_Store_ArchLongRifle.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.46,
+      "name": "PHAGE",
+      "texture": "_Lotus_Interface_Icons_Store_InfestedLongGunTwo.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.05,
+      "name": "PHANTASMA",
+      "texture": "_Lotus_Interface_Icons_Store_RevenantShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.75,
+      "name": "PLAGUE KEEWAR",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeInfestedTipTwo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.6,
+      "name": "PLAGUE KRIPATH",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeInfestedTipOne.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.48,
+      "name": "PLASMA SWORD",
+      "texture": "_Lotus_Interface_Icons_Store_SwordPlasma_d.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "PLINX",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBlastorWeapon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "POX",
+      "texture": "_Lotus_Interface_Icons_Store_InfProximityStars.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.21,
+      "name": "PRIME LASER RIFLE",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelBurstLaserPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "PRISMA ANGSTRUM",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaAngstrum.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "PRISMA BURST LASER",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaSentinelBurstLaser.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "PRISMA DUAL CLEAVERS",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaDualCleavers.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "PRISMA DUAL DECURIONS",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaDualDecurion.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.3,
+      "name": "PRISMA GORGON",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaGorgon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "PRISMA GRAKATA",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaGrakata.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "PRISMA GRINLOK",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaGrinlok.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.45,
+      "name": "PRISMA MACHETE",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaMeleeWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "PRISMA OBEX",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaObex.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "PRISMA SKANA",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaSkana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.45,
+      "name": "PRISMA TETRA",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaTetra.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.15,
+      "name": "PRISMA TWIN GREMLINS",
+      "texture": "_Lotus_Interface_Icons_Store_PrismaTwinGremlins.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.6,
+      "name": "PROBOSCIS CERNOS",
+      "texture": "_Lotus_Interface_Icons_Store_DerelictCernos.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "PROVA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusElectroProd.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "PROVA VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_VandalElectroProd.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "PULMONARS",
+      "texture": "_Lotus_Interface_Icons_Store_InfNunchuck.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "PUPACYST",
+      "texture": "_Lotus_Interface_Icons_Store_InfStaff.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.95,
+      "name": "PYRANA",
+      "texture": "_Lotus_Interface_Icons_Store_SawnOffShotgun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.6,
+      "name": "PYRANA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PyranaPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.4,
+      "name": "QUANTA",
+      "texture": "_Lotus_Interface_Icons_Store_CrpShockRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "QUANTA VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_QuantaVandal.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "QUARTAKK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnFourBarrelRifleWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "QUASSUS",
+      "texture": "_Lotus_Interface_Icons_Store_BrokenFrameWarfan.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "QUATZ",
+      "texture": "_Lotus_Interface_Icons_Store_AmphisPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "QUELLOR",
+      "texture": "_Lotus_Interface_Icons_Store_RailjackRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "RABVEE",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipTen.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "RAKTA BALLISTICA",
+      "texture": "_Lotus_Interface_Icons_Store_RVBallistica.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "RAKTA CERNOS",
+      "texture": "_Lotus_Interface_Icons_Store_SyndicateRVCernos.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.95,
+      "name": "RAKTA DARK DAGGER",
+      "texture": "_Lotus_Interface_Icons_Store_RVDarkDagger.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.75,
+      "name": "RATTLEGUTS",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_SUModularSecondary_SUModularSecondaryBarrelCPart.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.7,
+      "name": "REAPER PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_ReaperPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.05,
+      "name": "REDEEMER",
+      "texture": "_Lotus_Interface_Icons_Store_TnoGunblade.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.6,
+      "name": "REDEEMER PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_RedeemerPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "REGULATORS",
+      "texture": "_Lotus_Interface_Icons_Store_SlingerPistols827x512.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "REGULATORS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PrimeSlingerPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.38,
+      "name": "RIPKAS",
+      "texture": "_Lotus_Interface_Icons_Store_GrnClaws.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.95,
+      "name": "RUBICO",
+      "texture": "_Lotus_Interface_Icons_Store_FiveShotSniper.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.6,
+      "name": "RUBICO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_RubicoPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SANCTI CASTANAS",
+      "texture": "_Lotus_Interface_Icons_Store_NLCastanas.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "SANCTI MAGISTAR",
+      "texture": "_Lotus_Interface_Icons_Store_NLMagistar.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "SANCTI TIGRIS",
+      "texture": "_Lotus_Interface_Icons_Store_SyndicateNLTigris.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.24,
+      "name": "SARPA",
+      "texture": "_Lotus_Interface_Icons_Store_TnoGunbladeAuto.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SCINDO",
+      "texture": "_Lotus_Interface_Icons_Store_Axe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "SCINDO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeScindo.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SCOLIAC",
+      "texture": "_Lotus_Interface_Icons_Store_InfestedWhip.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "SCOURGE",
+      "texture": "_Lotus_Interface_Icons_Store_PriestSpearGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SECURA DUAL CESTRA",
+      "texture": "_Lotus_Interface_Icons_Store_PSDualCestra.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.15,
+      "name": "SECURA LECTA",
+      "texture": "_Lotus_Interface_Icons_Store_PSLecta.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SECURA PENTA",
+      "texture": "_Lotus_Interface_Icons_Store_SyndicatePSPenta.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.5,
+      "name": "SEER",
+      "texture": "_Lotus_Interface_Icons_Store_CaptainVorPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.7,
+      "name": "SEPFAHN",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_ModularMeleeTipNine.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "SEPULCRUM",
+      "texture": "_Lotus_Interface_Icons_Store_ThanotechPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.38,
+      "name": "SERRO",
+      "texture": "_Lotus_Interface_Icons_Store_Corpuspolearm.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.5,
+      "name": "Shadow Claws",
+      "texture": "_Lotus_Interface_Icons_Store_WraithReaperClaws.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SHAKU",
+      "texture": "_Lotus_Interface_Icons_Store_TnoNunchaku.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.8,
+      "name": "SHEDU",
+      "texture": "_Lotus_Interface_Icons_Store_Shedu.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SHEEV",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerCombatKnife.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SIBEAR",
+      "texture": "_Lotus_Interface_Icons_Store_IceHammer.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "SICARUS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoBurstPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "SICARUS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeSicarus.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "SIGMA & OCTANTIS",
+      "texture": "_Lotus_Interface_Icons_Store_SundialBoardSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "SILVA & AEGIS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoSwordShield.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "SILVA & AEGIS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_SilvaAegisPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "SIMULOR",
+      "texture": "_Lotus_Interface_Icons_Store_CephPrimary.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SKANA",
+      "texture": "_Lotus_Interface_Icons_Store_Skana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "SKANA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_SkanaPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.9,
+      "name": "SKIAJATI",
+      "texture": "_Lotus_Interface_Icons_Store_UmbraKatana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SNIPETRON",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusSniperRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "SNIPETRON VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_SnipertronVandal.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.33,
+      "name": "SOBEK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnDBSG.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.15,
+      "name": "SOMA",
+      "texture": "_Lotus_Interface_Icons_Store_U10DesignCouncilTennoAR.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "SOMA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeSoma.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.15,
+      "name": "SONICOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpAirPistolArray.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.49,
+      "name": "SPECTRA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusModularPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "SPECTRA VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusModularPistolVandal.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SPIRA",
+      "texture": "_Lotus_Interface_Icons_Store_LiDagger.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "SPIRA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PrimeLiDagger.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.55,
+      "name": "SPORELACER",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_InfModular_InfBarrelEgg.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "SPOROTHRIX",
+      "texture": "_Lotus_Interface_Icons_Store_InfSniperRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.9,
+      "name": "STAHLTA",
+      "texture": "_Lotus_Interface_Icons_Store_CrpRubanRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.7,
+      "name": "STATICOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpElectroMag.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.315,
+      "name": "STINGER",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelStinger.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "STRADAVAR",
+      "texture": "_Lotus_Interface_Icons_Store_TennoTommyGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "STRADAVAR PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_StradavarPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.5,
+      "name": "STROPHA",
+      "texture": "_Lotus_Interface_Icons_Store_CrpGunBladeWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "STRUN",
+      "texture": "_Lotus_Interface_Icons_Store_TennoShotgun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.5,
+      "name": "STRUN PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_StrunPrime.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.35,
+      "name": "STRUN WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_VandalStrun.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.35,
+      "name": "STUBBA",
+      "texture": "_Lotus_Interface_Icons_Store_GrnUziWeapon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.48,
+      "name": "STUG",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerCrossbowGooGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "SUPRA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusMachineGun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "SUPRA VANDAL",
+      "texture": "_Lotus_Interface_Icons_Store_SupraVandal.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "SWEEPER",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelSweeper.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1,
+      "name": "SWEEPER PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelSweeperPrime.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.3,
+      "name": "SYBARIS",
+      "texture": "_Lotus_Interface_Icons_Store_TnoLeverActionRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "SYBARIS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_SybarisPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SYDON",
+      "texture": "_Lotus_Interface_Icons_Store_GrnTridentWeapon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.31,
+      "name": "SYNAPSE",
+      "texture": "_Lotus_Interface_Icons_Store_U10InfPrimary.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "SYNOID GAMMACOR",
+      "texture": "_Lotus_Interface_Icons_Store_SynoidGammacor.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "SYNOID HELIOCOR",
+      "texture": "_Lotus_Interface_Icons_Store_CSHeliocor.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.15,
+      "name": "SYNOID SIMULOR",
+      "texture": "_Lotus_Interface_Icons_Store_SyndicateCSSimulor.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.44,
+      "name": "TALONS",
+      "texture": "_Lotus_Interface_Icons_Store_U18throwingknives.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "TATSU",
+      "texture": "_Lotus_Interface_Icons_Store_TnTwoHandedKatana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "TAZICOR",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelTazronWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "TEKKO",
+      "texture": "_Lotus_Interface_Icons_Store_BrawlerKnuckles.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "TEKKO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_TekkoPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "TELOS AKBOLTO",
+      "texture": "_Lotus_Interface_Icons_Store_AHAkbolto.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.05,
+      "name": "TELOS BOLTACE",
+      "texture": "_Lotus_Interface_Icons_Store_AHBoltace.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "TELOS BOLTOR",
+      "texture": "_Lotus_Interface_Icons_Store_SyndicateAHBoltor.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.55,
+      "name": "TENET AGENDUS",
+      "texture": "_Lotus_Interface_Icons_Store_CrpHammerShield.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.5,
+      "name": "TENET ARCA PLASMOR",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBEArcaPlasmor.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.65,
+      "name": "TENET CYCRON",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBECycron.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.65,
+      "name": "TENET DETRON",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBEDetron.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.55,
+      "name": "TENET DIPLOS",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBriefcaseAkimboGun.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.5,
+      "name": "TENET ENVOY",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBriefcaseLauncher.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.6,
+      "name": "TENET EXEC",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBigSlash.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.7,
+      "name": "TENET FLUX RIFLE",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBEFluxRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.65,
+      "name": "TENET GRIGORI",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBriefcaseScythe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.6,
+      "name": "TENET LIVIA",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBriefcase2HKatana.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.6,
+      "name": "TENET SPIREX",
+      "texture": "_Lotus_Interface_Icons_Store_CrpIgniterPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.7,
+      "name": "TENET TETRA",
+      "texture": "_Lotus_Interface_Icons_Store_CrpBETetra.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "TENORA",
+      "texture": "_Lotus_Interface_Icons_Store_TnBardRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.8,
+      "name": "TENORA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_TenoraPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.5,
+      "name": "TETRA",
+      "texture": "_Lotus_Interface_Icons_Store_CorpusUMP.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "TIBERON",
+      "texture": "_Lotus_Interface_Icons_Store_DrakeRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.95,
+      "name": "TIBERON PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_TiberonPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.15,
+      "name": "TIGRIS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoDoubleBarrelSG.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 0.9,
+      "name": "TIGRIS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_PrimeTigris.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.31,
+      "name": "TIPEDO",
+      "texture": "_Lotus_Interface_Icons_Store_TnoMonkStaff.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "TIPEDO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_TipedoPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.65,
+      "name": "TOMBFINGER",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_SUModularSecondary_SUModularSecondaryBarrelBPart.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.38,
+      "name": "TONBO",
+      "texture": "_Lotus_Interface_Icons_Store_FlowerPowerPolearm.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "TONKOR",
+      "texture": "_Lotus_Interface_Icons_Store_GrnGrenadeLauncher.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "TORID",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerGrenadeLauncher.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.8,
+      "name": "TRUMNA",
+      "texture": "_Lotus_Interface_Icons_Store_ThanotechRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "TWIN BASOLK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnDualFireAxe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.2,
+      "name": "TWIN GRAKATAS",
+      "texture": "_Lotus_Interface_Icons_Store_Akgrakata.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "TWIN GREMLINS",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerBulbousSmg.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.25,
+      "name": "TWIN KOHMAK",
+      "texture": "_Lotus_Interface_Icons_Store_DualKohmak.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.2,
+      "name": "TWIN KROHKUR",
+      "texture": "_Lotus_Interface_Icons_Store_DualGrnEgyptSwords.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "TWIN ROGGA",
+      "texture": "_Lotus_Interface_Icons_Store_GrnQueenGuardDualPistols.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "TWIN VIPERS",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerLightPistolAkimbo.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.41,
+      "name": "TWIN VIPERS WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_WraithTwinVipers.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "TYSIS",
+      "texture": "_Lotus_Interface_Icons_Store_InfestedDartPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1,
+      "name": "VALKYR PRIME TALONS",
+      "texture": "_Lotus_Interface_Icons_Store_BerskerMelee827x512.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "VALKYR TALONS",
+      "texture": "_Lotus_Interface_Icons_Store_BerskerMelee827x512.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.7,
+      "name": "VASTILOK",
+      "texture": "_Lotus_Interface_Icons_Store_GrnGunblade.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.4,
+      "name": "VASTO",
+      "texture": "_Lotus_Interface_Icons_Store_TennoHandCannon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.35,
+      "name": "VASTO PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_PrimeVasto.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "VAYKOR HEK",
+      "texture": "_Lotus_Interface_Icons_Store_SyndicateSMHek.png",
+      "riventype": "Shotgun"
+    },
+    {
+      "disposition": 1.1,
+      "name": "VAYKOR MARELOK",
+      "texture": "_Lotus_Interface_Icons_Store_SMMarelok.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.3,
+      "name": "VAYKOR SYDON",
+      "texture": "_Lotus_Interface_Icons_Store_SMSydon.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "VECTIS",
+      "texture": "_Lotus_Interface_Icons_Store_TennoSniperRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 0.85,
+      "name": "VECTIS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_VectisPrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.3,
+      "name": "VELDT",
+      "texture": "_Lotus_Interface_Icons_Store_TnRevolverRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.1,
+      "name": "VELOCITUS",
+      "texture": "_Lotus_Interface_Icons_Store_ArchRailgun.png",
+      "riventype": "Archgun"
+    },
+    {
+      "disposition": 1.2,
+      "name": "VELOX",
+      "texture": "_Lotus_Interface_Icons_Store_OdaliskSmgWeapon.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "VENKA",
+      "texture": "_Lotus_Interface_Icons_Store_TennoClaws.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.8,
+      "name": "VENKA PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_VenkaPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.3,
+      "name": "VERGLAS",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelFreezeRayRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1,
+      "name": "VERMISPLICER",
+      "texture": "_Lotus_Interface_Icons_Store_Weapons_Modular_InfModular_InfBarrelBeam.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.45,
+      "name": "VIPER",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerLightPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.4,
+      "name": "VIPER WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_WraithGrineerLightPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.9,
+      "name": "VITRICA",
+      "texture": "_Lotus_Interface_Icons_Store_NWOrokinSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.35,
+      "name": "VOLNUS",
+      "texture": "_Lotus_Interface_Icons_Store_GlassHammer.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.8,
+      "name": "VOLNUS PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_VolnusPrime.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1,
+      "name": "VULCAX",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelThermocorWeapon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.45,
+      "name": "VULKAR",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerSniperRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.4,
+      "name": "VULKAR WRAITH",
+      "texture": "_Lotus_Interface_Icons_Store_VulkarWraith.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.245,
+      "name": "VULKLOK",
+      "texture": "_Lotus_Interface_Icons_Store_SentinelElectricRailgun.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.05,
+      "name": "WAR",
+      "texture": "_Lotus_Interface_Icons_Store_StalkerTwoGreatSword.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "WOLF SLEDGE",
+      "texture": "_Lotus_Interface_Icons_Store_WolfHammerSkin.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 0.65,
+      "name": "XORIS",
+      "texture": "_Lotus_Interface_Icons_Store_ProteaPolarizerCrpGlaive.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.25,
+      "name": "ZAKTI",
+      "texture": "_Lotus_Interface_Icons_Store_TnGuandaoPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 0.95,
+      "name": "ZAKTI PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_ZaktiPrime.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.15,
+      "name": "ZARR",
+      "texture": "_Lotus_Interface_Icons_Store_GrineerCannon.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.15,
+      "name": "ZENISTAR",
+      "texture": "_Lotus_Interface_Icons_Store_SundialAxe.png",
+      "riventype": "Melee"
+    },
+    {
+      "disposition": 1.1,
+      "name": "ZENITH",
+      "texture": "_Lotus_Interface_Icons_Store_SundialRifle.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.2,
+      "name": "ZHUGE",
+      "texture": "_Lotus_Interface_Icons_Store_RepeatingCrossbow.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.15,
+      "name": "ZHUGE PRIME",
+      "texture": "_Lotus_Interface_Icons_Store_Primes_ZhugePrime.png",
+      "riventype": "Rifle"
+    },
+    {
+      "disposition": 1.25,
+      "name": "ZYLOK",
+      "texture": "_Lotus_Interface_Icons_Store_ConclaveLeverPistol.png",
+      "riventype": "Pistol"
+    },
+    {
+      "disposition": 1.1,
+      "name": "ZYMOS",
+      "texture": "_Lotus_Interface_Icons_Store_InfUziWeapon.png",
+      "riventype": "Pistol"
+    }
+  ],
+  "buffs": [
+    {
+      "riventype": "Melee",
+      "text": "|val|% Heavy Attack Efficiency",
+      "value": 73.44,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Multishot",
+      "value": 60.300000000000004,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Multishot",
+      "value": 119.7,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Multishot",
+      "value": 119.7,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Multishot",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Melee Damage",
+      "value": 164.70000000000002,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Damage",
+      "value": 164.70000000000002,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Damage",
+      "value": 164.9997,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Damage",
+      "value": 219.6,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Damage",
+      "value": 99.9,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Physical Damage",
+      "value": 119.7,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Physical Damage",
+      "value": 119.997,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Physical Damage",
+      "value": 119.997,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Physical Damage",
+      "value": 119.997,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Physical Damage",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Critical Chance",
+      "value": 180,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Critical Chance",
+      "value": 149.994,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Critical Chance",
+      "value": 149.994,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Critical Chance",
+      "value": 99.9,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Critical Chance",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Critical Damage",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Critical Damage",
+      "value": 119.997,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Critical Damage",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Critical Damage",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Critical Damage",
+      "value": 80.1,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Elemental Damage",
+      "value": 90,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Elemental Damage",
+      "value": 90,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Elemental Damage",
+      "value": 90,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Elemental Damage",
+      "value": 90,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Elemental Damage",
+      "value": 119.7,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Status Chance",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Status Chance",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Status Chance",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Status Chance",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Status Chance",
+      "value": 60.300000000000004,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Status Duration",
+      "value": 99.99,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Status Duration",
+      "value": 99.99,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Status Duration",
+      "value": 99.99,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Status Duration",
+      "value": 99.99,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Status Duration",
+      "value": 99.99,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Damage to Faction",
+      "value": 45,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Damage to Faction",
+      "value": 45,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Damage to Faction",
+      "value": 45,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Damage to Faction",
+      "value": 45,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Damage to Faction",
+      "value": 45,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Fire Rate",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Fire Rate",
+      "value": 74.7,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Fire Rate",
+      "value": 60.03,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Fire Rate",
+      "value": 60.03,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Attack Speed",
+      "value": 54.9,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Finisher Damage",
+      "value": 119.7,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val| Range",
+      "value": 1.9422,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Magazine Capacity",
+      "value": 49.995,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Magazine Capacity",
+      "value": 49.995,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Magazine Capacity",
+      "value": 49.995,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Magazine Capacity",
+      "value": 60.300000000000004,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Ammo Maximum",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Ammo Maximum",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Ammo Maximum",
+      "value": 49.95,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Ammo Maximum",
+      "value": 99.9,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Projectile Speed",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Projectile Speed",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Projectile Speed",
+      "value": 90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Reload Speed",
+      "value": 49.995,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Reload Speed",
+      "value": 49.995,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Reload Speed",
+      "value": 49.995,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Reload Speed",
+      "value": 99.9,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val|% Weapon Recoil",
+      "value": -90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Weapon Recoil",
+      "value": -90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Weapon Recoil",
+      "value": -90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Weapon Recoil",
+      "value": -90,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val|% Zoom",
+      "value": 59.994,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val|% Zoom",
+      "value": 59.994,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val|% Zoom",
+      "value": 80.1,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Archgun",
+      "text": "|val| Punch Through",
+      "value": 2.6999999999999997,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Shotgun",
+      "text": "|val| Punch Through",
+      "value": 2.6999999999999997,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Rifle",
+      "text": "|val| Punch Through",
+      "value": 2.6999999999999997,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Pistol",
+      "text": "|val| Punch Through",
+      "value": 2.6999999999999997,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Critical Chance for Slide Attack",
+      "value": 120.00599999999999,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|s Combo Duration",
+      "value": 8.1,
+      "curse": true,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val| Initial Combo",
+      "value": 24.5016,
+      "curse": false,
+      "buff": true
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Chance to Gain Combo Count",
+      "value": 104.85000000000001,
+      "curse": true,
+      "buff": false
+    },
+    {
+      "riventype": "Melee",
+      "text": "|val|% Additional Combo Count Chance",
+      "value": 58.77,
+      "curse": false,
+      "buff": true
+    }
+  ]
+}

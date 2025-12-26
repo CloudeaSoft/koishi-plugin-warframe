@@ -51,3 +51,30 @@ export const fetchAsyncData: <T>(
     return null;
   }
 };
+
+export const fetchAsyncImage: (
+  url: string,
+  method?: string
+) => Promise<Blob | null> = async (
+  url: string,
+  method: string = "GET"
+): Promise<Blob | null> => {
+  const response = await fetch(url, {
+    method: method,
+    headers: {
+      "Content-Type": "image/png",
+      "response-type": "blob",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok.");
+  }
+
+  try {
+    return await response.blob();
+  } catch (error) {
+    console.log("Error: " + error.message);
+    return null;
+  }
+};

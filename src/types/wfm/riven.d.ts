@@ -15,6 +15,8 @@ interface RivenAttributeShort {
   url_name: string;
 }
 
+type RivenAttributeUnit = "percent" | "multiply" | "seconds" | string;
+
 interface RivenAttribute {
   id: string;
   slug: string;
@@ -26,7 +28,7 @@ interface RivenAttribute {
   positiveIsNegative: boolean;
   positiveOnly: boolean;
   negativeOnly: boolean;
-  unit: "percent" | "multiply" | "seconds" | string;
+  unit: RivenAttributeUnit;
   i18n: {
     [key: WFMLang]: {
       name: string;
