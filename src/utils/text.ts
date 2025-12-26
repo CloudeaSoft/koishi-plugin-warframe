@@ -46,7 +46,7 @@ function levenshtein(a, b) {
   return dp[a.length][b.length];
 }
 
-export function tokenSimilarity(a, b) {
+export function tokenSimilarity(a: string, b: string) {
   const tokenize = (s) =>
     s
       .replace(/[^\w\u4e00-\u9fa5]+/g, " ")
