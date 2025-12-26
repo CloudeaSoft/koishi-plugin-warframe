@@ -7,7 +7,7 @@ interface RivenStatFixFactor {
   curseCount: number;
 }
 
-type RivenStatFixFactorMap = Record<RivenStatCombination, RivenStatFixFactor>;
+type RivenStatFixFactorMap = Record<RivenStatCountType, RivenStatFixFactor>;
 
 interface RivenStatAnalyzsis {
   name: string;
