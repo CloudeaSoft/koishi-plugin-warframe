@@ -880,7 +880,7 @@ export const analyzeRivenStat = (parseResult: {
 
 export const getVoidTrader = async (): Promise<string | VoidTrader> => {
   const { raw: worldState } = await globalWorldState.get();
-  if (worldState.voidTraders.length < 0) {
+  if (worldState.voidTraders.length === 0) {
     return "虚空商人仍在未知地带漂流...";
   }
 
