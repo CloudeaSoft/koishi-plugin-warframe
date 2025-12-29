@@ -1,4 +1,3 @@
-import Puppeteer from "koishi-plugin-puppeteer";
 import {
   ExportMissionTypes,
   ExportRelics,
@@ -13,20 +12,13 @@ import dict_zh_ex from "../assets/zh.json";
 import dict_en_ex from "../assets/en.json";
 import arbyRewards from "../assets/arbyRewards";
 import arbys from "../assets/arbys";
-import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
+import {
+  incarnons as incarnonRewards,
+  warframes as warframeRewards,
+} from "../assets/circuitRewards.json";
 import rivenCalc from "../assets/rivencalc.json";
 import rivenAttrValues from "../assets/rivenAttrValues.json";
 
-import { getHtmlImageBase64, OutputImage } from "../components/wfm";
-import {
-  ArbitrationTable,
-  CircuitTable,
-  FissureTable,
-  RelicComponent,
-  RivenComponent,
-  VoidTraderComponent,
-  WeeklyTable,
-} from "../components/wf";
 import { getWorldState } from "../api/wf-api";
 import {
   createAsyncCache,
@@ -44,10 +36,8 @@ import {
   regionToShort,
   removeSpace,
   tokenSimilarity,
+  extractTextFromImage,
 } from "../utils";
-import { Dict } from "koishi";
-import { extractTextFromImage } from "./ocr-service";
-import { GeneralAccurateOCRResponse } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_models";
 import { globalRivenAttributeList } from "./wfm-service";
 
 // ================ initialization ===================
@@ -298,15 +288,6 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
   return relics[key] ?? "未找到对应遗物信息";
 };
 
-export const generateRelicOutput = async (
-  puppe: Puppeteer,
-  relic: OutputRelic
-) => {
-  const element = RelicComponent(relic);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
 export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   if (day > 14 || day <= 0) {
     return "天数需小于等于14且大于0";
@@ -342,15 +323,6 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
         rewards: arbyRewards[a.node],
       };
     });
-};
-
-export const generateArbitrationsOutput = async (
-  puppe: Puppeteer,
-  arby: Arbitration[]
-) => {
-  const element = ArbitrationTable(arby);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const getWeekly = async () => {
@@ -459,18 +431,6 @@ export const getWeekly = async () => {
   };
 };
 
-export const generateWeeklyOutput = async (
-  puppe: Puppeteer,
-  archon: string,
-  deepArchimedea: ArchiMedea,
-  temporalArchimedea: ArchiMedea
-) => {
-  const element = await WeeklyTable(archon, deepArchimedea, temporalArchimedea);
-  // const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  // return OutputImage(imgBase64);
-  return element;
-};
-
 export const getEnvironment = async (): Promise<string> => {
   const { raw: worldState } = await globalWorldState.get();
   if (!worldState) {
@@ -527,18 +487,6 @@ export const getCircuitWeek = (): {
   };
 };
 
-export const generateCircuitWeekOutput = async (
-  puppe: Puppeteer,
-  data: {
-    incarnons: string[];
-    warframes: string[];
-  }
-) => {
-  const element = CircuitTable(data.incarnons, data.warframes);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
 export const getFissures = async () => {
   const { fissures } = await globalWorldState.get();
   return fissures ?? "内部错误，获取最新信息失败";
@@ -552,16 +500,6 @@ export const getSteelPathFissures = async () => {
 export const getRailjackFissures = async () => {
   const { rjFissures } = await globalWorldState.get();
   return rjFissures ?? "内部错误，获取最新信息失败";
-};
-
-export const generateFissureOutput = async (
-  puppe: Puppeteer,
-  fissures: Fissure[],
-  type: "fissure" | "sp-fissure" | "rj-fissure"
-) => {
-  const element = FissureTable(fissures, type);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const getWeaponRivenDisposition = (name: string) => {
@@ -582,9 +520,9 @@ export const getWeaponRivenDisposition = (name: string) => {
 
 export const getAnalyzedRiven = async (
   secret: OcrAPISecret,
-  dict: Dict
+  url: string
 ): Promise<string | RivenStatAnalyzeResult> => {
-  const img = await fetchAsyncImage(dict.src);
+  const img = await fetchAsyncImage(url);
   if (!img) {
     return "获取图片失败";
   }
@@ -606,18 +544,9 @@ export const getAnalyzedRiven = async (
   return analyzeRivenStat(parseResult as any);
 };
 
-export const generateAnalyzedRivenOutput = async (
-  puppe: Puppeteer,
-  data: RivenStatAnalyzeResult
-) => {
-  const element = RivenComponent(data);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
-export const parseOCRResult = (ocrResult: GeneralAccurateOCRResponse) => {
-  const list = ocrResult.TextDetections;
-  if (!list) {
+export const parseOCRResult = (ocrResult: string[]) => {
+  const list = ocrResult;
+  if (!list!.length) {
     return;
   }
 
@@ -654,7 +583,7 @@ export const parseOCRResult = (ocrResult: GeneralAccurateOCRResponse) => {
     return Math.max(t, s);
   }
 
-  const texts = list.map((item) => item.DetectedText);
+  const texts = list;
   const attributes: {
     attr: RivenAttribute;
     value: number;
@@ -894,15 +823,6 @@ export const getVoidTrader = async (): Promise<string | VoidTrader> => {
   const items = trader.inventory.map(getVoidTraderItem);
 
   return { expiry: msToHumanReadable(diff), items };
-};
-
-export const generateVoidTraderOutput = async (
-  puppe: Puppeteer,
-  data: VoidTrader
-) => {
-  const element = VoidTraderComponent(data);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const getAlerts = async () => {

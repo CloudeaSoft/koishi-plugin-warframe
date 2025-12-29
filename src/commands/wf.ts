@@ -1,13 +1,6 @@
 import { Argv, Dict } from "koishi";
 import {
   applyRelicData,
-  generateAnalyzedRivenOutput,
-  generateArbitrationsOutput,
-  generateCircuitWeekOutput,
-  generateFissureOutput,
-  generateRelicOutput,
-  generateVoidTraderOutput,
-  generateWeeklyOutput,
   getAnalyzedRiven,
   getArbitrations,
   getCircuitWeek,
@@ -19,6 +12,16 @@ import {
   getVoidTrader,
   getWeekly,
 } from "../services";
+import { generateImageOutput } from "../utils";
+import {
+  ArbitrationTable,
+  CircuitTable,
+  FissureTable,
+  RelicComponent,
+  RivenComponent,
+  VoidTraderComponent,
+  WeeklyTable,
+} from "../components/wf";
 
 export const arbitrationCommand = (action: Argv, input?: number) => {
   const result = getArbitrations(input);
@@ -30,12 +33,18 @@ export const arbitrationCommand = (action: Argv, input?: number) => {
     return result;
   }
 
-  return generateArbitrationsOutput(action.session.app.puppeteer, result);
+  return generateImageOutput(
+    action.session.app.puppeteer,
+    ArbitrationTable(result)
+  );
 };
 
 export const circuitCommand = (action: Argv) => {
   const result = getCircuitWeek();
-  return generateCircuitWeekOutput(action.session.app.puppeteer, result);
+  return generateImageOutput(
+    action.session.app.puppeteer,
+    CircuitTable(result.incarnons, result.warframes)
+  );
 };
 
 export const voidtraderCommand = async (action: Argv) => {
@@ -44,7 +53,10 @@ export const voidtraderCommand = async (action: Argv) => {
     return result;
   }
 
-  return await generateVoidTraderOutput(action.session.app.puppeteer, result);
+  return await generateImageOutput(
+    action.session.app.puppeteer,
+    VoidTraderComponent(result)
+  );
 };
 
 export const fissureCommand = async (action: Argv) => {
@@ -57,10 +69,9 @@ export const fissureCommand = async (action: Argv) => {
     return result;
   }
 
-  return await generateFissureOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
-    result,
-    "fissure"
+    FissureTable(result, "fissure")
   );
 };
 
@@ -74,10 +85,9 @@ export const steelPathFissureCommand = async (action: Argv) => {
     return result;
   }
 
-  return await generateFissureOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
-    result,
-    "sp-fissure"
+    FissureTable(result, "sp-fissure")
   );
 };
 
@@ -91,10 +101,9 @@ export const railjackFissureCommand = async (action: Argv) => {
     return result;
   }
 
-  return await generateFissureOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
-    result,
-    "rj-fissure"
+    FissureTable(result, "rj-fissure")
   );
 };
 
@@ -105,7 +114,10 @@ export const relicCommand = async (action: Argv, input: string) => {
   }
   const relic = await applyRelicData(result);
 
-  return await generateRelicOutput(action.session.app.puppeteer, relic);
+  return await generateImageOutput(
+    action.session.app.puppeteer,
+    RelicComponent(relic)
+  );
 };
 
 export const rivenCommand = async (
@@ -118,14 +130,18 @@ export const rivenCommand = async (
   //   src: 'https://multimedia.nt.qq.com.cn/download?appid=1407&fileid=EhSbiKlNhenZ15S4s8g3fKbWnigO_xiq1zQg_woo_ITZ2cPTkQMyBHByb2RQgL2jAVoQYr6GFTzpYU9ru9vH3KRquXoCnkGCAQJuag&rkey=CAISONPsN0nSR8aLvM1wiFc17l9Vp25vzGKOI3P88HGlfq2gum-kDb4TI0oJR8m_2-p4vB6cudJCb-C-&spec=0'
   // }
 
-  const result = await getAnalyzedRiven(secret, input);
+  if (!input?.src) {
+    return "未检测到图片";
+  }
+
+  const result = await getAnalyzedRiven(secret, input.src);
   if (typeof result === "string") {
     return result;
   }
 
-  return await generateAnalyzedRivenOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
-    result
+    RivenComponent(result)
   );
 };
 
@@ -135,8 +151,7 @@ export const weeklyCommand = async (action: Argv) => {
     return "None.";
   }
 
-  return await generateWeeklyOutput(
-    action.session.app.puppeteer,
+  return await WeeklyTable(
     result.archonHunt,
     result.deepArchimedea,
     result.temporalArchimedea
