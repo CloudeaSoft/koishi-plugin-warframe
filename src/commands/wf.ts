@@ -39,9 +39,9 @@ export const arbitrationCommand = async (action: Argv, input?: number) => {
   );
 };
 
-export const circuitCommand = (action: Argv) => {
+export const circuitCommand = async (action: Argv) => {
   const result = getCircuitWeek();
-  return generateImageOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
     CircuitTable(result.incarnons, result.warframes)
   );
