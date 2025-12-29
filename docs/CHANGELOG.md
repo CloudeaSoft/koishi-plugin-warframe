@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.0...v1.4.1) (2025-12-29)
+
+### Bug Fixes
+
+* **deps:** downgrade warframe-public-export-plus to 0.5.96 ([e403361](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/e4033618fe720d9c251b4593f2e0e3566e68f788))
+
 ## [1.4.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.3.0...v1.4.0) (2025-12-29)
 
 ### Features
