@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.3.0...v1.4.0) (2025-12-29)
+
+### Features
+
+* **wf:** add new command voidtrader ([#17](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/17)) ([d854600](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/d854600878b8e2c04d5e3f1ba1471022daec33ac))
+
 ## [1.3.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.2.2...v1.3.0) (2025-12-26)
 
 ### Features
