@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "tencentcloud-sdk-nodejs-ocr": "^4.1.155",
-    "warframe-public-export-plus": "^0.5.97",
+    "warframe-public-export-plus": "^0.5.96",
     "warframe-worldstate-data": "^3.1.18",
     "warframe-worldstate-parser": "^5.2.13"
   }
