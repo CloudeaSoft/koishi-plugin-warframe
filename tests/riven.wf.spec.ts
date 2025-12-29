@@ -861,7 +861,9 @@ describe("OCR Result Tests", function () {
   it("should extract riven stats correctly for each result", () => {
     const statNum = [4, 4, 4, 3, 4, 4];
     results.forEach((result, index) => {
-      const parsed = parseOCRResult(result as any);
+      const parsed = parseOCRResult(
+        result.TextDetections.map((t) => t.DetectedText)
+      );
       expect(parsed).to.not.undefined;
       expect(parsed!.attributes.length, parsed?.name).to.be.equal(
         statNum[index]
