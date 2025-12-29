@@ -23,7 +23,7 @@ import {
   WeeklyTable,
 } from "../components/wf";
 
-export const arbitrationCommand = (action: Argv, input?: number) => {
+export const arbitrationCommand = async (action: Argv, input?: number) => {
   const result = getArbitrations(input);
   if (!result) {
     return "获取失败, 请稍后再试";
@@ -33,7 +33,7 @@ export const arbitrationCommand = (action: Argv, input?: number) => {
     return result;
   }
 
-  return generateImageOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
     ArbitrationTable(result)
   );
