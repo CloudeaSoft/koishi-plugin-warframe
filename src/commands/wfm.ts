@@ -21,7 +21,7 @@ export const wmrCommand = async (action: Argv, input: string) => {
     return `Item not found: ${input}`;
   }
 
-  return generateImageOutput(
+  return await generateImageOutput(
     action.session.app.puppeteer,
     RivenOrderOutput(result.item, result.orders)
   );
