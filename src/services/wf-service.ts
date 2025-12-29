@@ -471,7 +471,7 @@ export const generateWeeklyOutput = async (
   return element;
 };
 
-export const getRegionTime = async (): Promise<string> => {
+export const getEnvironment = async (): Promise<string> => {
   const { raw: worldState } = await globalWorldState.get();
   if (!worldState) {
     return "内部错误，获取最新信息失败";
@@ -903,4 +903,15 @@ export const generateVoidTraderOutput = async (
   const element = VoidTraderComponent(data);
   const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
   return OutputImage(imgBase64);
+};
+
+export const getAlerts = async () => {
+  const { raw } = await globalWorldState.get();
+  const { alerts, invasions, steelPath } = raw;
+  const incursion = steelPath.incursions;
+  return JSON.stringify(
+    alerts.map((a) => a.reward.countedItems),
+    null,
+    4
+  );
 };

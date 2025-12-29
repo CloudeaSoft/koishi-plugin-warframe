@@ -107,8 +107,6 @@ const setupCommands = (ctx: Context) => {
     .alias("灵化之源")
     .alias("灵化")
     .action(commands.circuitCommand);
-  ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
-  ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
 
   ctx.command("riven <img:image>", "分析紫卡截图").action((a, b) => {
     return commands.rivenCommand(a, b, ctx.config.ocrAPISecret);
@@ -119,7 +117,8 @@ const setupCommands = (ctx: Context) => {
     .alias("奸商")
     .action(commands.voidtraderCommand);
 
-  // ctx.command("about", "关于").action(commands.aboutCommand);
+  ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
+  ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
 };
 
 const inDevelopment = () => {
