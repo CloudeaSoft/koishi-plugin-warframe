@@ -5,7 +5,7 @@ import { expect } from "chai";
 
 describe("Void Trader Item Map Tests", function () {
   this.timeout(10000);
-  it("", async () => {
+  it("should correctly map all void trader inventory item names", async () => {
     const worldState = await getWorldState(JSON.stringify(worldStateJSON));
     const trader = worldState.voidTraders[0];
 
