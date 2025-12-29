@@ -113,6 +113,11 @@ const setupCommands = (ctx: Context) => {
   ctx.command("riven <img:image>", "分析紫卡截图").action((a, b) => {
     return commands.rivenCommand(a, b, ctx.config.ocrAPISecret);
   });
+  ctx
+    .command("voidtrader", "虚空商人")
+    .alias("虚空商人")
+    .alias("奸商")
+    .action(commands.voidtraderCommand);
 
   // ctx.command("about", "关于").action(commands.aboutCommand);
 };

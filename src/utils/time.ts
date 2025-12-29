@@ -5,7 +5,15 @@ export const toTimeStamp = (timeStr: string): number => {
 /**
  * 毫秒转「X小时X分钟X秒」格式（0单位不显示）
  * @param {number} ms - 待转换的毫秒数（非负）
- * @returns {string} 示例：3661000ms → "1小时1分钟1秒"；61000ms → "1分钟1秒"；500ms → "0秒"
+ * @returns {string} 示例：
+ *
+ * 90061000ms → "1天1小时1分钟1秒"
+ *
+ * 3661000ms → "1小时1分钟1秒"
+ *
+ * 61000ms → "1分钟1秒"
+ *
+ * 500ms → "0秒"
  */
 export const msToHumanReadable = (ms: number): string => {
   // 容错：处理非数字/负数，默认转为0
@@ -14,12 +22,14 @@ export const msToHumanReadable = (ms: number): string => {
   const totalSeconds = Math.floor(totalMs / 1000);
 
   // 拆分小时、分钟、秒
-  const hours = Math.floor(totalSeconds / 3600);
+  const days = Math.floor(totalSeconds / 86400); // 24 * 3600
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
   // 定义单位映射（过滤0值）
   const parts = [];
+  if (days > 0) parts.push(`${days}天`);
   if (hours > 0) parts.push(`${hours}小时`);
   if (minutes > 0) parts.push(`${minutes}分钟`);
   // 秒数即使为0，也保留（避免空字符串，比如0ms显示"0秒"）

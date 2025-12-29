@@ -642,3 +642,56 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
     </div>
   );
 };
+
+export const VoidTraderComponent = (data: VoidTrader): Element => {
+  return (
+    <div
+      style={`width: 400px; padding: 10px; font-family: sans-serif; font-size: 14px;`}
+    >
+      <table style={`width: 100%; border-collapse: collapse;`}>
+        <thead>
+          <tr>
+            <th
+              style={`border-bottom: 1px solid #ccc; text-align: left; padding: 6px;`}
+            >
+              名称
+            </th>
+            <th
+              style={`border-bottom: 1px solid #ccc; text-align: left; padding: 6px;`}
+            >
+              价格
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.items.map((item) => (
+            <tr>
+              <td style={`padding: 6px; border-bottom: 1px solid #eee;`}>
+                {item.name}
+              </td>
+              <td
+                style={`padding: 6px; border-bottom: 1px solid #eee; text-align: center;line-height: 1;`}
+              >
+                <span>{item.ducats}</span>
+                <svg
+                  viewBox="0 0 18 18"
+                  style="
+                color: rgb(64 64 64 / 75%);
+                height: 1em;
+                width: 1em;
+                vertical-align: -.125em;
+                fill: currentcolor;"
+                >
+                  <use href={`#icon-ducats`}></use>
+                </svg>
+                <span>+</span>
+                <span>{item.credits}</span>
+                <span>现金</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
