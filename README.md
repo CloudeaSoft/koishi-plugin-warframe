@@ -18,6 +18,7 @@ Toolkit for warframe. **(In development)**
 | relic [name:string]      | 遗物, 核桃             | Relic rewards with corresponding data, including wfm medium price and ducats value.         |
 | weekly                   | 周常                   | Weekly mission info (archon hunt, deep archimedea, temporal archimedea)                     |
 | environment              | env, 地球, 福尔图娜    | Region environment (time)                                                                   |
+| voidtrader               | 虚空商人, 奸商         | Void trader info                                                                            |
 
 ## Install
 

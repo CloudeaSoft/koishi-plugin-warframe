@@ -8,3 +8,4 @@ export * from "./wf/environment";
 export * from "./wf/weekly";
 export * from "./wf/relic";
 export * from "./wf/riven";
+export * from "./wf/voidtrader";

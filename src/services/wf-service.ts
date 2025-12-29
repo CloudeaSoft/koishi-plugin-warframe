@@ -24,6 +24,7 @@ import {
   FissureTable,
   RelicComponent,
   RivenComponent,
+  VoidTraderComponent,
   WeeklyTable,
 } from "../components/wf";
 import { getWorldState } from "../api/wf-api";
@@ -35,7 +36,9 @@ import {
   fixRelicRewardKey,
   getMissionTypeKey,
   getSolNodeKey,
+  getVoidTraderItem,
   listToDict,
+  msToHumanReadable,
   normalizeName,
   normalSimilarity,
   regionToShort,
@@ -873,4 +876,31 @@ export const analyzeRivenStat = (parseResult: {
     buffs,
     curses,
   };
+};
+
+export const getVoidTrader = async (): Promise<string | VoidTrader> => {
+  const { raw: worldState } = await globalWorldState.get();
+  if (worldState.voidTraders.length < 0) {
+    return "虚空商人仍在未知地带漂流...";
+  }
+
+  if (worldState.voidTraders[0].activation.getTime() > Date.now()) {
+    const diff = worldState.voidTraders[0].activation.getTime() - Date.now();
+    return "距离虚空商人到达还有: " + msToHumanReadable(diff);
+  }
+
+  const diff = worldState.voidTraders[0].expiry.getTime() - Date.now();
+  const trader = worldState.voidTraders[0];
+  const items = trader.inventory.map(getVoidTraderItem);
+
+  return { expiry: msToHumanReadable(diff), items };
+};
+
+export const generateVoidTraderOutput = async (
+  puppe: Puppeteer,
+  data: VoidTrader
+) => {
+  const element = VoidTraderComponent(data);
+  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
+  return OutputImage(imgBase64);
 };
