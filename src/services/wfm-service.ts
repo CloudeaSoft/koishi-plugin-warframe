@@ -318,6 +318,8 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
   };
 };
 
+// ================ privates ===================
+
 export const stringToWFMItem = (input: string): ItemShort | undefined => {
   input = normalizeName(input);
 
@@ -460,8 +462,6 @@ export const stringToWFMItem = (input: string): ItemShort | undefined => {
     )
   );
 };
-
-// ================ privates ===================
 
 const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   let hasBPSuffix = false;

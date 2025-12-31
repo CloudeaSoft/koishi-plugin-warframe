@@ -42,17 +42,6 @@ import { globalRivenAttributeList } from "./wfm-service";
 
 // ================ initialization ===================
 
-const arbitrationSchedule: ArbitrationShort[] = arbys
-  .split("\n")
-  .map((line) => line.split(","))
-  .filter((arr) => arr.length == 2)
-  .map((arr) => {
-    return {
-      time: parseInt(arr[0]),
-      node: arr[1],
-    };
-  });
-
 const globalWorldState = createAsyncCache(async () => {
   const worldState = await getWorldState();
   const fissures = [];
@@ -89,7 +78,18 @@ const globalWorldState = createAsyncCache(async () => {
   return { raw: worldState, fissures, spFissures, rjFissures };
 }, 120_000);
 
-const loadRelics = () => {
+const arbitrationSchedule: ArbitrationShort[] = arbys
+  .split("\n")
+  .map((line) => line.split(","))
+  .filter((arr) => arr.length == 2)
+  .map((arr) => {
+    return {
+      time: parseInt(arr[0]),
+      node: arr[1],
+    };
+  });
+
+const relics: Record<string, Relic> = (() => {
   const result: Record<string, Relic> = {};
   for (const key in ExportRelics) {
     const exportRelic = ExportRelics[key];
@@ -116,10 +116,8 @@ const loadRelics = () => {
     result[relicKey] = relic;
   }
 
-  relics = result;
-};
-
-let relics: Record<string, Relic> = null;
+  return result;
+})();
 
 const tierListForMatch = [
   "古纪",
@@ -139,7 +137,7 @@ const tierListForMatch = [
 export const rivenAttrValueDict: Record<
   string,
   Record<string, number>
-> = (function () {
+> = (() => {
   const dict: any = {};
   for (const key in rivenAttrValues) {
     const attrs = rivenAttrValues[key];
@@ -159,7 +157,7 @@ export const rivenAttrValueDict: Record<
   return dict;
 })();
 
-const weaponRivenDispositionDict = (function () {
+const weaponRivenDispositionDict = (() => {
   const mapped = rivenCalc.weapons.reduce<
     {
       name: {
@@ -247,10 +245,6 @@ const rivenStatFixFactor: RivenStatFixFactorMap = {
 };
 
 // ================ features ===================
-
-export const wfOnReady = async () => {
-  loadRelics();
-};
 
 export const getRelic = async (input: string): Promise<Relic | string> => {
   if (!input) {
@@ -502,22 +496,6 @@ export const getRailjackFissures = async () => {
   return rjFissures ?? "内部错误，获取最新信息失败";
 };
 
-export const getWeaponRivenDisposition = (name: string) => {
-  const normalizedName = normalizeName(name);
-  const normalRes = weaponRivenDispositionDict[normalizedName];
-  if (normalRes) {
-    return normalRes;
-  }
-
-  const withPrimeSuffix = normalizedName + "prime";
-  const withPrimeRes = weaponRivenDispositionDict[withPrimeSuffix];
-  if (withPrimeRes) {
-    return withPrimeRes;
-  }
-
-  return undefined;
-};
-
 export const getAnalyzedRiven = async (
   secret: OcrAPISecret,
   url: string
@@ -542,6 +520,53 @@ export const getAnalyzedRiven = async (
   }
 
   return analyzeRivenStat(parseResult as any);
+};
+
+export const getVoidTrader = async (): Promise<string | VoidTrader> => {
+  const { raw: worldState } = await globalWorldState.get();
+  if (worldState.voidTraders.length === 0) {
+    return "虚空商人仍在未知地带漂流...";
+  }
+
+  if (worldState.voidTraders[0].activation.getTime() > Date.now()) {
+    const diff = worldState.voidTraders[0].activation.getTime() - Date.now();
+    return "距离虚空商人到达还有: " + msToHumanReadable(diff);
+  }
+
+  const diff = worldState.voidTraders[0].expiry.getTime() - Date.now();
+  const trader = worldState.voidTraders[0];
+  const items = trader.inventory.map(getVoidTraderItem);
+
+  return { expiry: msToHumanReadable(diff), items };
+};
+
+export const getAlerts = async () => {
+  const { raw } = await globalWorldState.get();
+  const { alerts, invasions, steelPath } = raw;
+  const incursion = steelPath.incursions;
+  return JSON.stringify(
+    alerts.map((a) => a.reward.countedItems),
+    null,
+    4
+  );
+};
+
+// ================ privates ===================
+
+export const getWeaponRivenDisposition = (name: string) => {
+  const normalizedName = normalizeName(name);
+  const normalRes = weaponRivenDispositionDict[normalizedName];
+  if (normalRes) {
+    return normalRes;
+  }
+
+  const withPrimeSuffix = normalizedName + "prime";
+  const withPrimeRes = weaponRivenDispositionDict[withPrimeSuffix];
+  if (withPrimeRes) {
+    return withPrimeRes;
+  }
+
+  return undefined;
 };
 
 export const parseOCRResult = (ocrResult: string[]) => {
@@ -805,33 +830,4 @@ export const analyzeRivenStat = (parseResult: {
     buffs,
     curses,
   };
-};
-
-export const getVoidTrader = async (): Promise<string | VoidTrader> => {
-  const { raw: worldState } = await globalWorldState.get();
-  if (worldState.voidTraders.length === 0) {
-    return "虚空商人仍在未知地带漂流...";
-  }
-
-  if (worldState.voidTraders[0].activation.getTime() > Date.now()) {
-    const diff = worldState.voidTraders[0].activation.getTime() - Date.now();
-    return "距离虚空商人到达还有: " + msToHumanReadable(diff);
-  }
-
-  const diff = worldState.voidTraders[0].expiry.getTime() - Date.now();
-  const trader = worldState.voidTraders[0];
-  const items = trader.inventory.map(getVoidTraderItem);
-
-  return { expiry: msToHumanReadable(diff), items };
-};
-
-export const getAlerts = async () => {
-  const { raw } = await globalWorldState.get();
-  const { alerts, invasions, steelPath } = raw;
-  const incursion = steelPath.incursions;
-  return JSON.stringify(
-    alerts.map((a) => a.reward.countedItems),
-    null,
-    4
-  );
 };
