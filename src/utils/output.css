@@ -1,0 +1,78 @@
+:root {
+  --color_success_text: #4d8200;
+  --color_success_border: #4d8200;
+  --color_rgb_success_text: 77 130 0;
+  --color_rgb_success_border: 77 130 0;
+  --color_auction_participant: #1c8a62;
+  --color_auction_sell: #909090;
+  --color_auction_own: mediumpurple;
+  --color_auction_archiving: gray;
+  --color_rgb_auction_archiving: 128 128 128;
+  --color_dark_background--light: #11262b;
+  --color_dark_border--ligth: #283235;
+  --color_dark_background: #171e21;
+  --color_dark_border: #283235;
+  --color_dark_background--darker: #071013;
+  --color_dark_border--darker: #171e21;
+  --color_rgb_dark_background--light: 17 38 43;
+  --color_rgb_dark_border--ligth: 40 50 53;
+  --color_rgb_dark_background: 23 30 33;
+  --color_rgb_dark_border: 40 50 53;
+  --color_rgb_dark_background--darker: 7 16 19;
+  --color_rgb_dark_border--darker: 23 30 33;
+  --color_place_order: #b53600;
+  --color_place_order--hover: #e64400;
+  --color_place_order--active: #ff8f00;
+  --color_place_order_text: #f5f5f5;
+  --color_create_auction: #8960db;
+  --color_create_auction_text: #f5f5f5;
+  --color_create_auction--hover: #b08cff;
+  --color_create_auction--active: #9d92ff;
+  --color_input_inner_shadow: 0 0 0;
+  --color_input_text--highlight: #19a187;
+  --color_attribute_text: white;
+  --color_attribute_background_first: #19a187;
+  --color_attribute_background_second: #358576;
+  --color_attribute_background_third: #516965;
+  --color_attribute_background_negative: #98392d;
+  --color_rgb_attribute_background_first: 25 161 135;
+  --color_rgb_attribute_background_second: 53 133 118;
+  --color_rgb_attribute_background_third: 81 105 101;
+  --color_rgb_attribute_background_negative: 152 57 45;
+  --color_link_dimmed: #408698;
+  --color_link_dimmed--hover: #a3dddb;
+  --color_link_dimmed--active: #acb8dd;
+  --color_rgb_link_dimmed: 64 134 152;
+  --color_rgb_link_dimmed--hover: 163 221 219;
+  --color_rgb_link_dimmed--active: 172 184 221;
+  --color_dark_md_code_background: black;
+  --color_dark_md_code_text: #39a57e;
+  --color_rgb_dark_md_code_background: 0 0 0;
+  --color_status-offline: darkred;
+  --color_highlight: #b53600;
+  --color_highlight_text: #f5f5f5;
+  --color_tooltip_background: #1b2432;
+  --color_tooltip_border: black;
+  --color_tooltip_text: #aab3b6;
+  --color_rgb_tooltip_background: 27 36 50;
+  --color_text_svg: red;
+  --color_dark_text: #aab3b6;
+  --color_dark_h1: #fcfdfd;
+  --color_dark_h2: #e1e4e5;
+  --color_dark_h3: #c5ccce;
+  --color_dark_disclaimer: #333d40;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
