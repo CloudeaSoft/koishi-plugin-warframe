@@ -151,10 +151,13 @@ export const weeklyCommand = async (action: Argv) => {
     return "None.";
   }
 
-  return await WeeklyComponent(
-    result.archonHunt,
-    result.deepArchimedea,
-    result.temporalArchimedea
+  return await generateImageOutput(
+    action.session.app.puppeteer,
+    WeeklyComponent(
+      result.archonHunt,
+      result.deepArchimedea,
+      result.temporalArchimedea
+    )
   );
 };
 

@@ -325,10 +325,11 @@ export const getWeekly = async () => {
     return "内部错误，获取最新信息失败";
   }
 
-  const archon =
-    dict_zh[
+  const archon: ArchonHunt = {
+    name: dict_zh[
       "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
-    ];
+    ],
+  };
 
   const stringToDebuff = (
     key: string,
