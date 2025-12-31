@@ -1,7 +1,7 @@
 import { Element } from "koishi";
 import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from "../utils";
 
-export const ArbitrationTable = (arbi: Arbitration[]): Element => {
+export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
   return (
     <div
       style={
@@ -35,7 +35,7 @@ export const ArbitrationTable = (arbi: Arbitration[]): Element => {
   );
 };
 
-export const CircuitTable = (
+export const CircuitComponent = (
   incarnons: string[],
   warframes: string[]
 ): Element => {
@@ -74,7 +74,7 @@ export const CircuitTable = (
   );
 };
 
-export const FissureTable = (
+export const FissureComponent = (
   fissures: Fissure[],
   type: "fissure" | "sp-fissure" | "rj-fissure"
 ): Element => {
@@ -135,7 +135,7 @@ export const FissureTable = (
   );
 };
 
-export const WeeklyTable = async (
+export const WeeklyComponent = async (
   archon: string,
   deepArchimedea: ArchiMedea,
   temporalArchimedea: ArchiMedea

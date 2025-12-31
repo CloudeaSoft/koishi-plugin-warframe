@@ -14,13 +14,13 @@ import {
 } from "../services";
 import { generateImageOutput } from "../utils";
 import {
-  ArbitrationTable,
-  CircuitTable,
-  FissureTable,
+  ArbitrationComponent,
+  CircuitComponent,
+  FissureComponent,
   RelicComponent,
   RivenComponent,
   VoidTraderComponent,
-  WeeklyTable,
+  WeeklyComponent,
 } from "../components/wf";
 
 export const arbitrationCommand = async (action: Argv, input?: number) => {
@@ -35,7 +35,7 @@ export const arbitrationCommand = async (action: Argv, input?: number) => {
 
   return await generateImageOutput(
     action.session.app.puppeteer,
-    ArbitrationTable(result)
+    ArbitrationComponent(result)
   );
 };
 
@@ -43,7 +43,7 @@ export const circuitCommand = async (action: Argv) => {
   const result = getCircuitWeek();
   return await generateImageOutput(
     action.session.app.puppeteer,
-    CircuitTable(result.incarnons, result.warframes)
+    CircuitComponent(result.incarnons, result.warframes)
   );
 };
 
@@ -71,7 +71,7 @@ export const fissureCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session.app.puppeteer,
-    FissureTable(result, "fissure")
+    FissureComponent(result, "fissure")
   );
 };
 
@@ -87,7 +87,7 @@ export const steelPathFissureCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session.app.puppeteer,
-    FissureTable(result, "sp-fissure")
+    FissureComponent(result, "sp-fissure")
   );
 };
 
@@ -103,7 +103,7 @@ export const railjackFissureCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session.app.puppeteer,
-    FissureTable(result, "rj-fissure")
+    FissureComponent(result, "rj-fissure")
   );
 };
 
@@ -151,7 +151,7 @@ export const weeklyCommand = async (action: Argv) => {
     return "None.";
   }
 
-  return await WeeklyTable(
+  return await WeeklyComponent(
     result.archonHunt,
     result.deepArchimedea,
     result.temporalArchimedea
