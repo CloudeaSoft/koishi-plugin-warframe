@@ -147,8 +147,12 @@ export const rivenCommand = async (
 
 export const weeklyCommand = async (action: Argv) => {
   const result = await getWeekly();
-  if (!result || typeof result === "string") {
-    return "None.";
+  if (!result) {
+    return "内部错误";
+  }
+
+  if (typeof result === "string") {
+    return result;
   }
 
   return await generateImageOutput(

@@ -541,17 +541,6 @@ export const getVoidTrader = async (): Promise<string | VoidTrader> => {
   return { expiry: msToHumanReadable(diff), items };
 };
 
-export const getAlerts = async () => {
-  const { raw } = await globalWorldState.get();
-  const { alerts, invasions, steelPath } = raw;
-  const incursion = steelPath.incursions;
-  return JSON.stringify(
-    alerts.map((a) => a.reward.countedItems),
-    null,
-    4
-  );
-};
-
 // ================ privates ===================
 
 export const getWeaponRivenDisposition = (name: string) => {
