@@ -17,13 +17,12 @@ export const removeSpace = (text: string) => text.replace(/\s/g, "");
 export const pascalToSpaced = (text: string) =>
   text.replace(/([A-Z])/g, " $1").trim();
 
-export const toPascalCase = (text: string) =>
-  text
-    .toLowerCase()
-    .split(/[^a-zA-Z0-9]+/)
-    .filter(Boolean)
-    .map((word) => word[0].toUpperCase() + word.slice(1))
-    .join("");
+export const toPascalCase = (text: string) => {
+  return text.replace(/[A-Za-z0-9]+/g, (segment) => {
+    const lower = segment.toLowerCase();
+    return lower[0].toUpperCase() + lower.slice(1);
+  });
+};
 
 export function normalSimilarity(a: string, b: string) {
   const distance = levenshtein(a, b);

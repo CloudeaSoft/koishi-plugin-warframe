@@ -1,8 +1,11 @@
+import { dict_zh } from "warframe-public-export-plus";
+
 import {
   toTimeStamp,
   normalizeName,
   listToDict,
   pascalToSpaced,
+  createAsyncCache,
 } from "../utils";
 import {
   getWFMDucatnator,
@@ -12,15 +15,6 @@ import {
   getWFMRivenItemList,
   getWFMRivenOrderList,
 } from "../api/wfm-api";
-import Puppeteer from "koishi-plugin-puppeteer";
-import {
-  getHtmlImageBase64,
-  ItemOrderOutput,
-  OutputImage,
-  RivenOrderOutput,
-} from "../components/wfm";
-import { dict_zh } from "warframe-public-export-plus";
-import { createAsyncCache } from "../utils/cache";
 
 // ================ initialization ===================
 
@@ -249,16 +243,6 @@ export const getItemOrders = async (
   };
 };
 
-export const generateItemOrderOutput = async (
-  puppe: Puppeteer,
-  item: ItemShort,
-  orders: OrderWithUser[]
-) => {
-  const element = ItemOrderOutput(item, orders);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
 export const getRivenOrders = async (
   input: string
 ): Promise<{ item: RivenItem; orders: RivenOrder[] }> => {
@@ -293,16 +277,6 @@ export const getRivenOrders = async (
     .slice(0, 5); // Top 5
 
   return { item: targetItem, orders: top5 };
-};
-
-export const generateRivenOrderOutput = async (
-  puppe: Puppeteer,
-  item: RivenItem,
-  orders: RivenOrder[]
-) => {
-  const element = RivenOrderOutput(item, orders);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
@@ -343,6 +317,8 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
     items: loadedItems,
   };
 };
+
+// ================ privates ===================
 
 export const stringToWFMItem = (input: string): ItemShort | undefined => {
   input = normalizeName(input);
@@ -486,8 +462,6 @@ export const stringToWFMItem = (input: string): ItemShort | undefined => {
     )
   );
 };
-
-// ================ privates ===================
 
 const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   let hasBPSuffix = false;
