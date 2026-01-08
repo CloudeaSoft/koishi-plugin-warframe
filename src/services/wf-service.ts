@@ -1,35 +1,22 @@
 import {
   ExportMissionTypes,
-  ExportRelics,
-  ExportRewards,
-  ExportWeapons,
-  dict_en,
+  ExportRegions,
   dict_zh,
-  ExportRegions as regions,
 } from "warframe-public-export-plus";
 
 import dict_zh_ex from "../assets/zh.json";
 import dict_en_ex from "../assets/en.json";
 import arbyRewards from "../assets/arbyRewards";
-import arbys from "../assets/arbys";
+
 import {
   incarnons as incarnonRewards,
   warframes as warframeRewards,
 } from "../assets/circuitRewards.json";
-import rivenCalc from "../assets/rivencalc.json";
-import rivenAttrValues from "../assets/rivenAttrValues.json";
 
-import { getWorldState } from "../api/wf-api";
 import {
-  createAsyncCache,
   fetchAsyncImage,
-  fissureTierName,
-  fissureTierNumToNumber,
-  fixRelicRewardKey,
   getMissionTypeKey,
-  getSolNodeKey,
   getVoidTraderItem,
-  listToDict,
   msToHumanReadable,
   normalizeName,
   normalSimilarity,
@@ -38,211 +25,13 @@ import {
   tokenSimilarity,
   extractTextFromImage,
 } from "../utils";
-import { globalRivenAttributeList } from "./wfm-service";
-
-// ================ initialization ===================
-
-const globalWorldState = createAsyncCache(async () => {
-  const worldState = await getWorldState();
-  const fissures = [];
-  const rjFissures = [];
-  const spFissures = [];
-  for (const fissure of worldState.fissures) {
-    const nodeKey = await getSolNodeKey(fissure.nodeKey);
-    const obj = {
-      category: fissure.isStorm
-        ? "rj-fissures"
-        : fissure.isHard
-        ? "sp-fissures"
-        : "fissures",
-      hard: fissure.isHard,
-      activation: fissure.activation.getTime(),
-      expiry: fissure.expiry.getTime(),
-      node: regionToShort(regions[nodeKey], dict_zh),
-      tier: dict_zh[fissureTierName[fissure.tierNum]],
-      tierNum: fissureTierNumToNumber(fissure.tierNum),
-    };
-
-    if (fissure.isStorm) {
-      rjFissures.push(obj);
-    } else if (fissure.isHard) {
-      spFissures.push(obj);
-    } else {
-      fissures.push(obj);
-    }
-  }
-
-  fissures.sort((a, b) => a.tierNum - b.tierNum);
-  spFissures.sort((a, b) => a.tierNum - b.tierNum);
-  rjFissures.sort((a, b) => a.tierNum - b.tierNum);
-  return { raw: worldState, fissures, spFissures, rjFissures };
-}, 120_000);
-
-const arbitrationSchedule: ArbitrationShort[] = arbys
-  .split("\n")
-  .map((line) => line.split(","))
-  .filter((arr) => arr.length == 2)
-  .map((arr) => {
-    return {
-      time: parseInt(arr[0]),
-      node: arr[1],
-    };
-  });
-
-const relics: Record<string, Relic> = (() => {
-  const result: Record<string, Relic> = {};
-  for (const key in ExportRelics) {
-    const exportRelic = ExportRelics[key];
-    const exportRewards = ExportRewards[exportRelic.rewardManifest];
-
-    const era = "/Lotus/Language/Relics/Era_" + exportRelic.era.toUpperCase();
-    const relicKey = normalizeName(exportRelic.era + exportRelic.category);
-
-    const rewards = (exportRewards[0] ?? []).map((r) => {
-      const item = fixRelicRewardKey(r.type);
-      return {
-        name: item,
-        rarity: r.rarity as any,
-        quantity: r.itemCount,
-      };
-    });
-
-    const relic: Relic = {
-      tier: exportRelic.era,
-      tierKey: era,
-      num: exportRelic.category,
-      items: rewards,
-    };
-    result[relicKey] = relic;
-  }
-
-  return result;
-})();
-
-const tierListForMatch = [
-  "古纪",
-  "前纪",
-  "中纪",
-  "后纪",
-  "安魂",
-  "先锋",
-  "Lith",
-  "Meso",
-  "Neo",
-  "Axi",
-  "Requiem",
-  "Vanguard",
-].map((t) => normalizeName(t));
-
-export const rivenAttrValueDict: Record<
-  string,
-  Record<string, number>
-> = (() => {
-  const dict: any = {};
-  for (const key in rivenAttrValues) {
-    const attrs = rivenAttrValues[key];
-    dict[key] = {};
-    for (const attrKey in attrs) {
-      const removeDamageSuffix =
-        attrKey.endsWith("Damage") &&
-        attrKey !== "Damage" &&
-        attrKey !== "Finisher Damage" &&
-        !attrKey.startsWith("Critical");
-      const wfmKey = removeDamageSuffix
-        ? normalizeName(attrKey.replace("Damage", ""))
-        : normalizeName(attrKey);
-      dict[key][wfmKey] = attrs[attrKey];
-    }
-  }
-  return dict;
-})();
-
-const weaponRivenDispositionDict = (() => {
-  const mapped = rivenCalc.weapons.reduce<
-    {
-      name: {
-        en: string;
-        zh: string;
-      };
-      calc: {
-        disposition: number;
-        name: string;
-        texture: string;
-        riventype: string;
-      };
-      weapon: any;
-    }[]
-  >((prev, element) => {
-    let mapped = undefined;
-    for (const weaponKey in ExportWeapons) {
-      const weapon = ExportWeapons[weaponKey];
-
-      const splited = weapon.name.split("/");
-      if (splited.length <= 0) {
-        continue;
-      }
-
-      const keyName = splited[splited.length - 1];
-      const normalizedCalcName = normalizeName(element.name);
-      if (normalizeName(keyName) === normalizedCalcName) {
-        mapped = weapon;
-        break;
-      }
-
-      const weaponEN = dict_en[weapon.name];
-      if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
-        mapped = weapon;
-        break;
-      }
-    }
-
-    if (!mapped) {
-      return prev;
-    }
-
-    const weaponEN = dict_en[mapped.name];
-    const weaponZH = dict_zh[mapped.name];
-    const result = {
-      name: {
-        en: weaponEN,
-        zh: weaponZH,
-      },
-      calc: element,
-      weapon: mapped,
-    };
-
-    prev.push(result);
-
-    return prev;
-  }, []);
-
-  return listToDict(mapped, (e) => [
-    normalizeName(e.name.zh),
-    normalizeName(e.name.en),
-  ]);
-})();
-
-const rivenStatFixFactor: RivenStatFixFactorMap = {
-  "2_0": { buffFactor: 0.99, buffCount: 2, curseFactor: 0, curseCount: 0 },
-  "2_1": {
-    buffFactor: 1.2375,
-    buffCount: 2,
-    curseFactor: -0.495,
-    curseCount: 1,
-  },
-  "3_0": {
-    buffFactor: 0.75,
-    buffCount: 3,
-    curseFactor: 0,
-    curseCount: 0,
-  },
-  "3_1": {
-    buffFactor: 0.9375,
-    buffCount: 3,
-    curseFactor: -0.75,
-    curseCount: 1,
-  },
-};
+import { globalRivenAttribute } from "../domain/wfm/globalRivenAttribute";
+import { relics } from "../domain/relics";
+import { globalWorldState } from "../domain/worldState";
+import { arbitrationSchedule } from "../domain/arbitrationSchedule";
+import { rivenAttrValueDict } from "../domain/rivenBaseValues";
+import { weaponRivenDispositionDict } from "../domain/rivenDisposition";
+import { rivenStatFixFactor } from "../domain/rivenStatData";
 
 // ================ features ===================
 
@@ -260,12 +49,26 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
     return "遗物数据未加载完成，请稍后再试";
   }
 
+  const tierListForMatch = [
+    "古纪",
+    "前纪",
+    "中纪",
+    "后纪",
+    "安魂",
+    "先锋",
+    "Lith",
+    "Meso",
+    "Neo",
+    "Axi",
+    "Requiem",
+    "Vanguard",
+  ].map((t) => normalizeName(t));
   const tier = tierListForMatch.find((t) => input.startsWith(t));
   if (!tier) {
     return "请提供正确的遗物名称";
   }
 
-  let category = input
+  const category = input
     .replace(new RegExp(`^${tier}`), "")
     .replace(/遗物$|relic$/, "");
 
@@ -300,7 +103,7 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   return weekArbys
     .filter((a) => arbyRewards[a.node])
     .map((a) => {
-      const obj = regionToShort(regions[a.node], dict_zh);
+      const obj = regionToShort(ExportRegions[a.node], dict_zh);
       return {
         ...obj,
         time: new Date(a.time * 1000).toLocaleString("zh-cn", {
@@ -511,7 +314,7 @@ export const getAnalyzedRiven = async (
     return "解析图片失败";
   }
 
-  const parseResult = parseOCRResult(extractResult);
+  const parseResult = await parseOCRResult(extractResult);
   if (
     !parseResult ||
     parseResult.attributes.length < 2 ||
@@ -559,7 +362,9 @@ export const getWeaponRivenDisposition = (name: string) => {
   return undefined;
 };
 
-export const parseOCRResult = (ocrResult: string[]) => {
+export const parseOCRResult = async (ocrResult: string[]) => {
+  const { globalRivenAttributeList } = await globalRivenAttribute.get();
+
   const list = ocrResult;
   if (!list!.length) {
     return;

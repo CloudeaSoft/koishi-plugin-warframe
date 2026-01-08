@@ -1,4 +1,3 @@
-import { globalRivenAttributeDict } from "../services";
 import Element from "@satorijs/element";
 
 export const ItemOrderOutput = (
@@ -70,7 +69,7 @@ export const ItemOrderOutput = (
 
 export const RivenOrderOutput = (
   item: RivenItem,
-  orders: RivenOrder[]
+  orders: RivenOrderInternal[]
 ): Element => {
   const itemNameCN = item.i18n["zh-hans"].name;
   const itemNameEN = item.i18n["en"].name;
@@ -88,7 +87,10 @@ export const RivenOrderOutput = (
   );
 };
 
-const RivenOrderComponent = (item: RivenItem, order: RivenOrder): Element => {
+const RivenOrderComponent = (
+  item: RivenItem,
+  order: RivenOrderInternal
+): Element => {
   const itemNameCN = item.i18n["zh-hans"]?.name ?? item.i18n["en"].name;
   const itemIconLink =
     "https://warframe.market/static/assets/" + item.i18n["en"].thumb;
@@ -227,14 +229,10 @@ const RivenOrderComponent = (item: RivenItem, order: RivenOrder): Element => {
 };
 
 const RivenAttributeComponent = (
-  attr: {
-    value: number;
-    positive: boolean;
-    url_name: string;
-  },
+  attr: RivenAttributeShortInternal,
   index: number
 ): Element => {
-  const attrInfo = globalRivenAttributeDict[attr.url_name];
+  const attrInfo = attr.attribute;
   const attrName = attrInfo.i18n["zh-hans"].name;
   const attrValuePrefix = attrInfo.unit === "multiply" ? "x" : "";
   const unitSuffixMap = {

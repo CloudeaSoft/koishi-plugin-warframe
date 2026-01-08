@@ -74,3 +74,15 @@ interface RivenUser {
   id: string;
   region: string;
 }
+
+interface RivenAttributeShortInternal extends RivenAttributeShort {
+  attribute: RivenAttribute;
+}
+
+interface RivenInternal extends Riven {
+  attributes: RivenAttributeShortInternal[];
+}
+
+interface RivenOrderInternal extends RivenOrder {
+  item: RivenInternal;
+}
