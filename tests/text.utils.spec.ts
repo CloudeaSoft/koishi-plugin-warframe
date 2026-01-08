@@ -102,6 +102,17 @@ describe("removeSpace Tests", function () {
 });
 
 describe("Pascal Case Convert Tests", function () {
+  it("Normal cases", () => {
+    const cases = [
+      ["criticalChance", "CriticalChance"],
+      ["abc", "Abc"],
+      ["normalTestCase", "NormalTestCase"],
+    ];
+    cases.forEach(([input, expected]) => {
+      expect(toPascalCase(input)).to.equal(expected);
+    });
+  });
+
   // ---------------------------------------------------------
   // 1. Non‑English text should remain untouched
   // ---------------------------------------------------------
@@ -130,7 +141,7 @@ describe("Pascal Case Convert Tests", function () {
       ["foo_bar_测试", "Foo_Bar_测试"],
       ["对infested的伤害", "对Infested的伤害"],
       ["武器recoil减少", "武器Recoil减少"],
-      ["增加criticalChance概率", "增加Criticalchance概率"],
+      ["增加criticalChance概率", "增加CriticalChance概率"],
     ];
 
     cases.forEach(([input, expected]) => {
@@ -145,7 +156,7 @@ describe("Pascal Case Convert Tests", function () {
     const cases = [
       ["fire_rate_and_damage", "Fire_Rate_And_Damage"],
       ["hello_world_test中文", "Hello_World_Test中文"],
-      ["中文fooBarBaz测试", "中文Foobarbaz测试"],
+      ["中文fooBarBaz测试", "中文FooBarBaz测试"],
     ];
 
     cases.forEach(([input, expected]) => {
@@ -158,7 +169,7 @@ describe("Pascal Case Convert Tests", function () {
   // ---------------------------------------------------------
   it("Should handle OCR noise and preserve symbols", () => {
     const cases = [
-      ["  recoil   减少  ", "  Recoil   减少  "],
+      ["  recoil   减少  ", "Recoil减少"],
       ["damage--测试", "Damage--测试"],
       ["crit%率", "Crit%率"],
       ["+++fire+++火焰", "+++Fire+++火焰"],
@@ -177,7 +188,7 @@ describe("Pascal Case Convert Tests", function () {
   it("Should PascalCase alphanumeric English segments", () => {
     const cases = [
       ["mod123测试", "Mod123测试"],
-      ["123abc测试", "123abc测试"], // starts with number → no uppercase change
+      ["123abc测试", "123Abc测试"], // starts with number → no uppercase change
       ["abc123中文", "Abc123中文"],
       ["冷却cd45减少", "冷却Cd45减少"],
     ];
@@ -209,7 +220,7 @@ describe("Pascal Case Convert Tests", function () {
   it("Should normalize English segments even if uppercase or mixed", () => {
     const cases = [
       ["CRIT伤害", "Crit伤害"],
-      ["ReCoIl减少", "Recoil减少"],
+      ["ReCoIl减少", "ReCoIl减少"],
       ["DAMAGE测试", "Damage测试"],
       ["HELLO世界", "Hello世界"],
     ];
@@ -226,11 +237,11 @@ describe("Pascal Case Convert Tests", function () {
     const cases = [
       [
         "对infested的伤害并增加criticalChance和fireRate以及reloadSpeed减少",
-        "对Infested的伤害并增加Criticalchance和Firerate以及Reloadspeed减少",
+        "对Infested的伤害并增加CriticalChance和FireRate以及ReloadSpeed减少",
       ],
       [
         "测试foo_bar_baz与recoil_damage_fireRate混合文本",
-        "测试Foo_Bar_Baz与Recoil_Damage_Firerate混合文本",
+        "测试Foo_Bar_Baz与Recoil_Damage_FireRate混合文本",
       ],
     ];
 

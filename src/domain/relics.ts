@@ -14,7 +14,7 @@ export const relics: Record<string, Relic> = (() => {
       const item = fixRelicRewardKey(r.type);
       return {
         name: item,
-        rarity: r.rarity as any,
+        rarity: r.rarity as RelicRewardRarity,
         quantity: r.itemCount,
       };
     });
