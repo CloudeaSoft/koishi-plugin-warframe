@@ -27,34 +27,30 @@ export function apply(ctx: Context) {
 const setupHooks = (ctx: Context) => {
   ctx.on("message", (session) => {
     if (ctx.config.developerMode) {
-      ctx.logger.info(`
-        Koishi recieved message: ${session.content}
-        平台: ${session.platform}
-        用户: ${session.author.name}`);
+      ctx.logger.info(
+        `Koishi recieved message: ${session.content}
+        Platform: ${session.platform}
+        User: ${session.author.name}`
+      );
+    }
+  });
+  ctx.on("command/before-execute", (action) => {
+    if (ctx.config.developerMode) {
+      ctx.logger.info(
+        `WFM Plugin received command ${action.command.name}
+        arguments: ${JSON.stringify(action.args)}`
+      );
     }
   });
   ctx.on("ready", hooks.onReadyHandler);
 };
 
 const setupCommands = (ctx: Context) => {
-  ctx.command("wm <itemId:text>", "请用wmi替代").action((a, b) => {
-    if (ctx.config.developerMode) {
-      ctx.logger.info(`WFM Plugin received command wm: '${b}'`);
-    }
-    return commands.wmCommand(a, b);
-  });
-  ctx.command("wmr <itemId:text>", "查询wm的紫卡价格").action((a, b) => {
-    if (ctx.config.developerMode) {
-      ctx.logger.info(`WFM Plugin received command wmr: '${b}'`);
-    }
-    return commands.wmrCommand(a, b);
-  });
-  ctx.command("wmi <msg:text>", "查询wm的物品价格").action((a, b) => {
-    if (ctx.config.developerMode) {
-      ctx.logger.info(`WFM Plugin received command wmi: '${b}'`);
-    }
-    return commands.wmCommand(a, b);
-  });
+  ctx.command("wm <itemId:text>", "请使用wmi替代").action(commands.wmCommand);
+  ctx
+    .command("wmr <itemId:text>", "查询wm的紫卡价格")
+    .action(commands.wmrCommand);
+  ctx.command("wmi <msg:text>", "查询wm的物品价格").action(commands.wmCommand);
 
   ctx
     .command("arbitration [day:number]", "近期高价值仲裁任务")
