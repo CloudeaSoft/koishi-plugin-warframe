@@ -17,13 +17,34 @@ export const removeSpace = (text: string) => text.replace(/\s/g, "");
 export const pascalToSpaced = (text: string) =>
   text.replace(/([A-Z])/g, " $1").trim();
 
-export const toPascalCase = (text: string) =>
-  text
-    .toLowerCase()
-    .split(/[^a-zA-Z0-9]+/)
-    .filter(Boolean)
-    .map((word) => word[0].toUpperCase() + word.slice(1))
-    .join("");
+export const toPascalCase = (text: string) => {
+  return (
+    text
+      // Tokenize: 英文单词(包括大写缩写)、空格、非字母空格字符
+      .match(/[A-Z]+[a-z]*|[a-z]+|\s+|[^A-Za-z\s]+/g)
+      .map((token) => {
+        // Remove spaces entirely
+        if (/^\s+$/.test(token)) return "";
+
+        // 处理英文单词
+        if (/^[A-Za-z]+$/.test(token)) {
+          // 如果是全大写或单个字母，保持原样（如 "CRIT", "A"）
+          if (/^[A-Z]+$/.test(token) || token.length === 1) {
+            // 但需要首字母大写，其余小写
+            return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
+          }
+
+          // 常规单词：首字母大写，其余小写
+          const lower = token.toLowerCase();
+          return lower[0].toUpperCase() + lower.slice(1);
+        }
+
+        // 其他字符保持原样
+        return token;
+      })
+      .join("")
+  );
+};
 
 export function normalSimilarity(a: string, b: string) {
   const distance = levenshtein(a, b);

@@ -1,7 +1,7 @@
 import { Element } from "koishi";
 import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from "../utils";
 
-export const ArbitrationTable = (arbi: Arbitration[]): Element => {
+export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
   return (
     <div
       style={
@@ -35,7 +35,7 @@ export const ArbitrationTable = (arbi: Arbitration[]): Element => {
   );
 };
 
-export const CircuitTable = (
+export const CircuitComponent = (
   incarnons: string[],
   warframes: string[]
 ): Element => {
@@ -74,7 +74,7 @@ export const CircuitTable = (
   );
 };
 
-export const FissureTable = (
+export const FissureComponent = (
   fissures: Fissure[],
   type: "fissure" | "sp-fissure" | "rj-fissure"
 ): Element => {
@@ -135,41 +135,227 @@ export const FissureTable = (
   );
 };
 
-export const WeeklyTable = async (
-  archon: string,
+export const WeeklyComponent = (
+  archon: ArchonHunt,
   deepArchimedea: ArchiMedea,
   temporalArchimedea: ArchiMedea
-) => {
-  const archonRes = `执行官: ${archon}`;
+): Element => {
+  const archonHuntSection = (
+    <section
+      style={`
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+            padding: 12px 14px;
+            background-color: #0b0f19;
+            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+          `}
+    >
+      <div
+        style={`
+              font-size: 12px;
+              color: #9ca3af;
+              margin-bottom: 6px;
+            `}
+      >
+        {"Archon Hunt"}
+      </div>
 
-  const deepRes = `${deepArchimedea.name}\n${deepArchimedea.missions
-    .map((m) => {
-      let result = `${m.type}\n偏差: ${m.diviation.name}(${m.diviation.desc})`;
-      for (const risk of m.risks) {
-        result += `\n风险: ${risk.name}(${risk.desc})`;
-      }
-      return result;
-    })
-    .join("\n")}\n${deepArchimedea.peronal
-    .map((per) => {
-      return `个人变量: ${per.name}(${per.desc})`;
-    })
-    .join("\n")}`;
+      <div
+        style={`
+              font-size: 16px;
+              font-weight: 600;
+            `}
+      >
+        {`执行官刺杀: ${archon.name}`}
+      </div>
+    </section>
+  );
 
-  const tempRes = `${temporalArchimedea.name}\n${temporalArchimedea.missions
-    .map((m) => {
-      let result = `${m.type}\n偏差: ${m.diviation.name}(${m.diviation.desc})`;
-      for (const risk of m.risks) {
-        result += `\n风险: ${risk.name}(${risk.desc})`;
-      }
-      return result;
-    })
-    .join("\n")}\n${temporalArchimedea.peronal
-    .map((per) => {
-      return `个人变量: ${per.name}(${per.desc})`;
-    })
-    .join("\n")}`;
-  return `${archonRes}\n\n${deepRes}\n\n${tempRes}`;
+  const deepArchimedeaSection = (
+    <section
+      style={`
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+            padding: 12px 14px;
+            background-color: #0b0f19;
+            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+          `}
+    >
+      <div
+        style={`
+              font-size: 12px;
+              color: #6ee7b7;
+              margin-bottom: 6px;
+            `}
+      >
+        {"Deep Archimedea"}
+      </div>
+
+      <div
+        style={`
+              font-size: 16px;
+              font-weight: 600;
+              margin-bottom: 8px;
+            `}
+      >
+        {deepArchimedea.name}
+      </div>
+
+      {deepArchimedea.missions.map((m) => (
+        <div
+          style={`
+                border-radius: 6px;
+                border: 1px solid rgba(255,255,255,0.15);
+                padding: 8px 10px;
+                margin-bottom: 8px;
+                background-color: rgba(255,255,255,0.05);
+              `}
+        >
+          <div
+            style={`
+                  font-size: 13px;
+                  font-weight: 600;
+                  margin-bottom: 4px;
+                `}
+          >
+            {m.type}
+          </div>
+
+          <div style={`font-size: 12px;`}>
+            <div>
+              <span style={`font-weight: 600; margin-right: 4px;`}>
+                {"偏差:"}
+              </span>
+              {`${m.diviation.name}(${m.diviation.desc})`}
+            </div>
+
+            {m.risks.map((r) => (
+              <div>
+                <span style={`font-weight: 600; margin-right: 4px;`}>
+                  {"风险:"}
+                </span>
+                {`${r.name}(${r.desc})`}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {deepArchimedea.peronal.map((p) => (
+        <div style={`font-size: 12px; margin-top: 4px;`}>
+          <span style={`font-weight: 600; margin-right: 4px;`}>
+            {"个人变量:"}
+          </span>
+          {`${p.name}(${p.desc})`}
+        </div>
+      ))}
+    </section>
+  );
+
+  const temporalArchimedeaSection = (
+    <section
+      style={`
+            border-radius: 8px;
+            border: 1px solid #1f2937;
+            padding: 12px 14px;
+            background-color: #0b0f19;
+            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+          `}
+    >
+      <div
+        style={`
+              font-size: 12px;
+              color: #a5b4fc;
+              margin-bottom: 6px;
+            `}
+      >
+        {"Temporal Archimedea"}
+      </div>
+
+      <div
+        style={`
+              font-size: 16px;
+              font-weight: 600;
+              margin-bottom: 8px;
+            `}
+      >
+        {temporalArchimedea.name}
+      </div>
+
+      {temporalArchimedea.missions.map((m) => (
+        <div
+          style={`
+                border-radius: 6px;
+                border: 1px solid rgba(255,255,255,0.15);
+                padding: 8px 10px;
+                margin-bottom: 8px;
+                background-color: rgba(255,255,255,0.05);
+              `}
+        >
+          <div
+            style={`
+                  font-size: 13px;
+                  font-weight: 600;
+                  margin-bottom: 4px;
+                `}
+          >
+            {m.type}
+          </div>
+
+          <div style={`font-size: 12px;`}>
+            <div>
+              <span style={`font-weight: 600; margin-right: 4px;`}>
+                {"偏差:"}
+              </span>
+              {`${m.diviation.name}(${m.diviation.desc})`}
+            </div>
+
+            {m.risks.map((r) => (
+              <div>
+                <span style={`font-weight: 600; margin-right: 4px;`}>
+                  {"风险:"}
+                </span>
+                {`${r.name}(${r.desc})`}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {temporalArchimedea.peronal.map((p) => (
+        <div style={`font-size: 12px; margin-top: 4px;`}>
+          <span style={`font-weight: 600; margin-right: 4px;`}>
+            {"个人变量:"}
+          </span>
+          {`${p.name}(${p.desc})`}
+        </div>
+      ))}
+    </section>
+  );
+
+  return (
+    <div
+      style={`
+          color: #e4e7ec;
+          line-height: 1.5;
+          font-size: 14px;
+          background-color: #05060a;
+          font-family: 'Segoe UI', system-ui, sans-serif;
+          max-width: 1024px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 16px;
+        `}
+    >
+      {archonHuntSection}
+      {deepArchimedeaSection}
+      {temporalArchimedeaSection}
+    </div>
+  );
 };
 
 export const RelicComponent = (relic: OutputRelic): Element => {
