@@ -1,10 +1,13 @@
 /**
  * Creates an async cache with a time-to-live (TTL).
- * @param fetchFn Function to fetch fresh data.
- * @param ttlMs Time-to-live in milliseconds.
+ * @param factory Function to fetch fresh data.
+ * @param ttlMs Time-to-live in milliseconds. Defaults to 60_000 meaning 1 minute. Set to -1 for infinity duration.
  * @returns
  */
-export function createAsyncCache<T>(fetchFn: () => Promise<T>, ttlMs: number) {
+export function createAsyncCache<T>(
+  factory: AsyncCacheFactory<T>,
+  ttlMs: number = 60_000
+): AsyncCache<T> {
   let cache: T = null;
   let lastUpdatedAt: number = 0;
   let inFlight: Promise<T> = null; // promise for ongoing update
@@ -13,7 +16,7 @@ export function createAsyncCache<T>(fetchFn: () => Promise<T>, ttlMs: number) {
     const now = Date.now();
 
     // If cache is fresh, return it
-    if (cache && now - lastUpdatedAt < ttlMs) {
+    if (cache && (ttlMs < 0 || now - lastUpdatedAt < ttlMs)) {
       return cache;
     }
 
@@ -25,7 +28,7 @@ export function createAsyncCache<T>(fetchFn: () => Promise<T>, ttlMs: number) {
     // Otherwise start a new update
     inFlight = (async () => {
       try {
-        const result = await fetchFn();
+        const result = await factory();
         cache = result;
         lastUpdatedAt = Date.now();
         return cache;

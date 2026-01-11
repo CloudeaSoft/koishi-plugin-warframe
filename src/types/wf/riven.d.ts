@@ -24,3 +24,17 @@ interface RivenStatAnalyzeResult {
   buffs: RivenStatAnalyzsis[];
   curses: RivenStatAnalyzsis[];
 }
+
+interface RivenWeaponDisposition {
+  name: {
+    en: string;
+    zh: string;
+  };
+  calc: {
+    disposition: number;
+    name: string;
+    texture: string;
+    riventype: string;
+  };
+  weapon: IWeapon;
+}

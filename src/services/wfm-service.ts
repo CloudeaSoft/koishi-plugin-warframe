@@ -1,26 +1,21 @@
+import { dict_zh } from "warframe-public-export-plus";
+
 import {
   toTimeStamp,
   normalizeName,
   listToDict,
   pascalToSpaced,
+  createAsyncCache,
 } from "../utils";
 import {
   getWFMDucatnator,
-  getWFMItemList,
   getWFMOrderList,
-  getWFMRivenAttributeList,
-  getWFMRivenItemList,
   getWFMRivenOrderList,
 } from "../api/wfm-api";
-import Puppeteer from "koishi-plugin-puppeteer";
-import {
-  getHtmlImageBase64,
-  ItemOrderOutput,
-  OutputImage,
-  RivenOrderOutput,
-} from "../components/wfm";
-import { dict_zh } from "warframe-public-export-plus";
-import { createAsyncCache } from "../utils/cache";
+
+import { globalItemData } from "../domain/wfm/globalItem";
+import { globalRivenItemData } from "../domain/wfm/globalRivenItem";
+import { globalRivenAttribute } from "../domain/wfm/globalRivenAttribute";
 
 // ================ initialization ===================
 
@@ -35,18 +30,6 @@ const globalDucatnatorIDDict = createAsyncCache(
   },
   3600_000
 );
-
-let globalItemList: ItemShort[] = [];
-let globalRivenItemList: RivenItem[] = [];
-export let globalRivenAttributeList: RivenAttribute[] = [];
-
-let globalItemDict: Record<string, ItemShort> = {};
-let globalRivenItemDict: Record<string, RivenItem> = {};
-export let globalRivenAttributeDict: Record<string, RivenAttribute> = {};
-
-/** A dictonary with normalized wfm item i18n name as key and corresponding id as value. Initialized on 'ready' event. */
-let globalItemNameToSlugDict: Record<string, string> = {};
-let globalItemGameRefDict: Record<string, ItemShort> = {};
 
 const warframeAlias = {
   Volt: ["电", "电男", "伏特"],
@@ -150,56 +133,7 @@ const weaponPartSuffix = [
 
 // ================ features ===================
 
-export const wmOnReady = async () => {
-  const data = await getWFMItemList();
-  if (!data) {
-    throw new Error("Failed to fetch items from Warframe Market API.");
-  }
-
-  const rivenData = await getWFMRivenItemList();
-  if (!rivenData) {
-    throw new Error("Failed to fetch riven items from Warframe Market API.");
-  }
-
-  const rivenAttributeData = await getWFMRivenAttributeList();
-  if (!rivenAttributeData) {
-    throw new Error(
-      "Failed to fetch riven attributes from Warframe Market API."
-    );
-  }
-
-  setGlobalItem(data.data);
-  setGlobalRivenItem(rivenData.data);
-  setGlobalRivenAttribute(rivenAttributeData.data);
-};
-
-export const setGlobalItem = (data: ItemShort[]) => {
-  globalItemList = data;
-  globalItemDict = listToDict<ItemShort>(data, (i) => [i.slug]);
-  globalItemNameToSlugDict = ((list) => {
-    const result = {};
-    for (const item of list) {
-      if (item.i18n["zh-hans"]?.name) {
-        result[normalizeName(item.i18n["zh-hans"].name)] = item.slug;
-      }
-      if (item.i18n["en"]?.name) {
-        result[normalizeName(item.i18n["en"].name)] = item.slug;
-      }
-    }
-    return result;
-  })(globalItemList);
-  globalItemGameRefDict = listToDict<ItemShort>(data, (i) => [i.gameRef]);
-};
-
-export const setGlobalRivenItem = (data: RivenItem[]) => {
-  globalRivenItemList = data;
-  globalRivenItemDict = listToDict<RivenItem>(data, (i) => [i.slug]);
-};
-
-export const setGlobalRivenAttribute = (data: RivenAttribute[]) => {
-  globalRivenAttributeList = data;
-  globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [a.slug]);
-};
+export const wmOnReady = async () => {};
 
 export const getItemOrders = async (
   input: string
@@ -218,7 +152,7 @@ export const getItemOrders = async (
   }
 
   // 2. Search item
-  const targetItem = stringToWFMItem(input);
+  const targetItem = await stringToWFMItem(input);
   if (!targetItem) {
     return null;
   }
@@ -249,19 +183,12 @@ export const getItemOrders = async (
   };
 };
 
-export const generateItemOrderOutput = async (
-  puppe: Puppeteer,
-  item: ItemShort,
-  orders: OrderWithUser[]
-) => {
-  const element = ItemOrderOutput(item, orders);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
 export const getRivenOrders = async (
   input: string
-): Promise<{ item: RivenItem; orders: RivenOrder[] }> => {
+): Promise<{ item: RivenItem; orders: RivenOrderInternal[] }> => {
+  const { globalRivenItemList } = await globalRivenItemData.get();
+  const { globalRivenAttributeDict } = await globalRivenAttribute.get();
+
   const targetItem =
     globalRivenItemList.find((item) =>
       compareRivenItemName(input, item.i18n["zh-hans"].name)
@@ -292,22 +219,27 @@ export const getRivenOrders = async (
     .sort((a, b) => a.starting_price - b.starting_price) // Price ASC
     .slice(0, 5); // Top 5
 
-  return { item: targetItem, orders: top5 };
-};
+  const orders = top5.map((e) => {
+    const transformed: RivenAttributeShortInternal[] = e.item.attributes.map(
+      (attr) => {
+        return {
+          ...attr,
+          attribute: globalRivenAttributeDict[attr.url_name],
+        };
+      }
+    );
 
-export const generateRivenOrderOutput = async (
-  puppe: Puppeteer,
-  item: RivenItem,
-  orders: RivenOrder[]
-) => {
-  const element = RivenOrderOutput(item, orders);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
+    e.item.attributes = transformed;
+    return e as RivenOrderInternal;
+  });
+
+  return { item: targetItem, orders: orders };
 };
 
 export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
   const tier = dict_zh[relic.tierKey] ?? relic.tier;
 
+  const { globalItemGameRefDict } = await globalItemData.get();
   const wfmDict = await globalDucatnatorIDDict.get();
 
   const loadedItems = relic.items.map((element): OutputRelicReward => {
@@ -344,7 +276,12 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
   };
 };
 
-export const stringToWFMItem = (input: string): ItemShort | undefined => {
+// ================ privates ===================
+
+export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
+  const { globalItemList, globalItemDict, globalItemNameToSlugDict } =
+    await globalItemData.get();
+
   input = normalizeName(input);
 
   // 1. Direct Compare (Normalized equivalent at least)
@@ -352,7 +289,7 @@ export const stringToWFMItem = (input: string): ItemShort | undefined => {
   if (slug) return globalItemDict[slug];
 
   // 2. Low-level Shorthands
-  const normalShortHandRes = shortHandProcess(input);
+  const normalShortHandRes = await shortHandProcess(input);
   if (normalShortHandRes) return normalShortHandRes;
 
   // 3. High-level Alias (Warframes Only)
@@ -362,7 +299,7 @@ export const stringToWFMItem = (input: string): ItemShort | undefined => {
     : inputNoSuffix;
   const mappedAliasHasEndP = warframeAliasDict[aliasHasEndP];
   if (mappedAliasHasEndP) {
-    const aliasHasEndPRes = shortHandProcess(
+    const aliasHasEndPRes = await shortHandProcess(
       normalizeName(mappedAliasHasEndP) + primeSuffix + suffix
     );
     if (aliasHasEndPRes) return aliasHasEndPRes;
@@ -372,7 +309,7 @@ export const stringToWFMItem = (input: string): ItemShort | undefined => {
     const aliasNoEndP = inputNoSuffix.replace(/p$/, "");
     const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
     if (mappedAliasNoEndP) {
-      const aliasNoEndPRes = shortHandProcess(
+      const aliasNoEndPRes = await shortHandProcess(
         normalizeName(mappedAliasNoEndP) + primeSuffix + suffix
       );
       if (aliasNoEndPRes) return aliasNoEndPRes;
@@ -487,8 +424,6 @@ export const stringToWFMItem = (input: string): ItemShort | undefined => {
   );
 };
 
-// ================ privates ===================
-
 const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   let hasBPSuffix = false;
   if (input.endsWith(bpSuffix)) {
@@ -527,7 +462,9 @@ const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   }
 };
 
-const shortHandProcess = (input: string): ItemShort | undefined => {
+const shortHandProcess = async (input: string): Promise<ItemShort> => {
+  const { globalItemDict, globalItemNameToSlugDict } =
+    await globalItemData.get();
   const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
   if (inputNoSuffix === input) {
     const fixSet = input + setSuffix;
