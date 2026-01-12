@@ -1,7 +1,7 @@
 import { Argv } from "koishi";
 import { getItemOrders, getRivenOrders } from "../services";
 import { generateImageOutput } from "../utils";
-import { ItemOrderOutput, RivenOrderOutput } from "../components/wfm";
+import { ItemOrderComponent, RivenOrderComponent } from "../components/wfm";
 
 export const wmCommand = async (action: Argv, input: string) => {
   const result = await getItemOrders(input);
@@ -11,7 +11,7 @@ export const wmCommand = async (action: Argv, input: string) => {
 
   return await generateImageOutput(
     action.session.app.puppeteer,
-    ItemOrderOutput(result.item, result.orders)
+    ItemOrderComponent(result.item, result.orders)
   );
 };
 
@@ -23,6 +23,6 @@ export const wmrCommand = async (action: Argv, input: string) => {
 
   return await generateImageOutput(
     action.session.app.puppeteer,
-    RivenOrderOutput(result.item, result.orders)
+    RivenOrderComponent(result.item, result.orders)
   );
 };

@@ -1,6 +1,6 @@
 import Element from "@satorijs/element";
 
-export const ItemOrderOutput = (
+export const ItemOrderComponent = (
   item: ItemShort,
   orders: OrderWithUser[]
 ): Element => {
@@ -67,7 +67,7 @@ export const ItemOrderOutput = (
   );
 };
 
-export const RivenOrderOutput = (
+export const RivenOrderComponent = (
   item: RivenItem,
   orders: RivenOrderInternal[]
 ): Element => {
@@ -80,14 +80,14 @@ export const RivenOrderOutput = (
       </h1>
       <ul style={"width:100%;"}>
         {orders.map((order) => {
-          return RivenOrderComponent(item, order);
+          return RivenOrderItemComponent(item, order);
         })}
       </ul>
     </div>
   );
 };
 
-const RivenOrderComponent = (
+const RivenOrderItemComponent = (
   item: RivenItem,
   order: RivenOrderInternal
 ): Element => {
