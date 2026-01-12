@@ -13,9 +13,9 @@ import {
   getWFMRivenOrderList,
 } from "../api/wfm-api";
 
-import { globalItemData } from "../domain/wfm/globalItem";
-import { globalRivenItemData } from "../domain/wfm/globalRivenItem";
-import { globalRivenAttribute } from "../domain/wfm/globalRivenAttribute";
+import { globalItemData } from "../data/wfm/globalItem";
+import { globalRivenItemData } from "../data/wfm/globalRivenItem";
+import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
 
 // ================ initialization ===================
 

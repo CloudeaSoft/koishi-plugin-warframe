@@ -5,7 +5,7 @@ import testItems from "./assets/test-items.json";
 import {
   overrideGlobalItemData,
   globalItemDataFactory,
-} from "../src/domain/wfm/globalItem";
+} from "../src/data/wfm/globalItem";
 import { createAsyncCache } from "../src/utils";
 
 before(() => {

@@ -25,13 +25,13 @@ import {
   tokenSimilarity,
   extractTextFromImage,
 } from "../utils";
-import { globalRivenAttribute } from "../domain/wfm/globalRivenAttribute";
-import { relics } from "../domain/relics";
-import { globalWorldState } from "../domain/worldState";
-import { arbitrationSchedule } from "../domain/arbitrationSchedule";
-import { rivenAttrValueDict } from "../domain/rivenBaseValues";
-import { weaponRivenDispositionDict } from "../domain/rivenDisposition";
-import { rivenStatFixFactor } from "../domain/rivenStatData";
+import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
+import { relics } from "../data/relics";
+import { globalWorldState } from "../data/worldState";
+import { arbitrationSchedule } from "../data/arbitrationSchedule";
+import { rivenAttrValueDict } from "../data/rivenBaseValues";
+import { weaponRivenDispositionDict } from "../data/rivenDisposition";
+import { rivenStatFixFactor } from "../data/rivenStatData";
 
 // ================ features ===================
 

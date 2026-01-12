@@ -1,4 +1,4 @@
-import worldStateJSON from "../src/assets/exampleWorldState.json";
+import worldStateJSON from "./assets/example-world-state.json";
 import { getWorldState } from "../src/api/wf-api";
 import { getVoidTraderItem } from "../src/utils";
 import { expect } from "chai";

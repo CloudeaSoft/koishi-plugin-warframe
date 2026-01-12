@@ -11,15 +11,15 @@ import rivenCalc from "../src/assets/rivencalc.json";
 import { ExportWeapons, dict_en, dict_zh } from "warframe-public-export-plus";
 import { createAsyncCache, normalizeName } from "../src/utils";
 import { expect } from "chai";
-import { rivenAttrValueDict } from "../src/domain/rivenBaseValues";
+import { rivenAttrValueDict } from "../src/data/rivenBaseValues";
 import {
   overrideGlobalItemData,
   globalItemDataFactory,
-} from "../src/domain/wfm/globalItem";
+} from "../src/data/wfm/globalItem";
 import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
-} from "../src/domain/wfm/globalRivenAttribute";
+} from "../src/data/wfm/globalRivenAttribute";
 
 before(() => {
   overrideGlobalItemData(
