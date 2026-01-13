@@ -28,13 +28,13 @@ export let globalRivenAttribute = createAsyncCache(
   -1
 );
 
-export const overrideGlobalRivenAttribute = (cache: {
-  get: () => Promise<{
+export const overrideGlobalRivenAttribute = (
+  cache: AsyncCache<{
     globalRivenAttributeList: RivenAttribute[];
     globalRivenAttributeDict: {
       [key: string]: RivenAttribute;
     };
-  }>;
-}) => {
+  }>
+) => {
   globalRivenAttribute = cache;
 };

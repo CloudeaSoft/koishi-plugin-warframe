@@ -41,13 +41,13 @@ export const globalItemDataFactory = async (
 
 export let globalItemData = createAsyncCache(globalItemDataFactory, -1);
 
-export const overrideGlobalItemData = (cache: {
-  get: () => Promise<{
+export const overrideGlobalItemData = (
+  cache: AsyncCache<{
     globalItemList: ItemShort[];
     globalItemDict: Record<string, ItemShort>;
     globalItemNameToSlugDict: Record<string, string>;
     globalItemGameRefDict: Record<string, ItemShort>;
-  }>;
-}) => {
+  }>
+) => {
   globalItemData = cache;
 };

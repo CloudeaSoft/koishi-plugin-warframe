@@ -12,14 +12,7 @@ export function createAsyncCache<T>(
   let lastUpdatedAt: number = 0;
   let inFlight: Promise<T> = null; // promise for ongoing update
 
-  async function get(): Promise<T> {
-    const now = Date.now();
-
-    // If cache is fresh, return it
-    if (cache && (ttlMs < 0 || now - lastUpdatedAt < ttlMs)) {
-      return cache;
-    }
-
+  async function update(): Promise<T> {
     // If an update is already happening, wait for it
     if (inFlight) {
       return inFlight;
@@ -40,5 +33,16 @@ export function createAsyncCache<T>(
     return inFlight;
   }
 
-  return { get };
+  async function get(): Promise<T> {
+    const now = Date.now();
+
+    // If cache is fresh, return it
+    if (cache && (ttlMs < 0 || now - lastUpdatedAt < ttlMs)) {
+      return cache;
+    }
+
+    return await update();
+  }
+
+  return { get, update };
 }
