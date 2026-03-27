@@ -73,7 +73,7 @@
     "typescript": "^6.0.2",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
-    "yakumo-tsc": "^1.0.0"
+    "yakumo-tsc": "^3.0.1"
   },
   "dependencies": {
     "tencentcloud-sdk-nodejs-ocr": "^4.1.155",
