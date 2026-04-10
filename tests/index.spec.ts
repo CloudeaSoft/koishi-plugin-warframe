@@ -4,7 +4,10 @@ import * as warframe from "../src/index";
 
 const app = new App();
 app.plugin(mock as any);
-app.plugin(warframe);
+app.plugin(warframe, {
+  developerMode: false,
+  ocrAPISecret: { id: "", key: "" },
+});
 
 const client = app.mock.client("123");
 
