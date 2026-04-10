@@ -15,7 +15,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@satorijs/element",
     "types": ["node"],
-    "ignoreDeprecations": "6.0"
   },
   "include": ["src", "src/**/*.json"]
 }
