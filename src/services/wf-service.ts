@@ -26,12 +26,13 @@ import {
   extractTextFromImage,
 } from "../utils";
 import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
-import { relics } from "../data/relics";
-import { globalWorldState } from "../data/worldState";
-import { arbitrationSchedule } from "../data/arbitrationSchedule";
-import { rivenAttrValueDict } from "../data/rivenBaseValues";
-import { weaponRivenDispositionDict } from "../data/rivenDisposition";
-import { rivenStatFixFactor } from "../data/rivenStatData";
+import { relics } from "../data/wf/relics";
+import { globalWorldState } from "../data/wf/globalWorldState";
+import { arbitrationSchedule } from "../data/wf/arbitrationSchedule";
+import { rivenAttrValueDict } from "../data/wf/rivenBaseValues";
+import { weaponRivenDispositionDict } from "../data/wf/rivenDisposition";
+import { rivenStatFixFactor } from "../data/wf/rivenStatData";
+import { RivenAttribute } from "../types/wfm/riven";
 
 // ================ features ===================
 
@@ -91,14 +92,14 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   }
 
   const currentHourTimeStamp = Math.floor(
-    new Date().setMinutes(0, 0, 0) / 1000
+    new Date().setMinutes(0, 0, 0) / 1000,
   );
   const currentHourIndex = arbitrationSchedule.findIndex(
-    (a) => a.time === currentHourTimeStamp
+    (a) => a.time === currentHourTimeStamp,
   );
   const weekArbys = arbitrationSchedule.slice(
     currentHourIndex,
-    currentHourIndex + 24 * day
+    currentHourIndex + 24 * day,
   );
   return weekArbys
     .filter((a) => arbyRewards[a.node])
@@ -137,7 +138,7 @@ export const getWeekly = async () => {
   const stringToDebuff = (
     key: string,
     name: string,
-    prefix: string
+    prefix: string,
   ): ArchiMedeaDebuff => {
     const keyToName = dict_zh_ex[`${prefix}${key}`];
 
@@ -168,10 +169,10 @@ export const getWeekly = async () => {
       const diviation = stringToDebuff(
         m.diviation.key,
         m.diviation.name,
-        "/Lotus/Language/Conquest/MissionVariant_LabConquest_"
+        "/Lotus/Language/Conquest/MissionVariant_LabConquest_",
       );
       const risks = m.risks.map((r) =>
-        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_"),
       );
 
       return {
@@ -179,10 +180,10 @@ export const getWeekly = async () => {
         diviation,
         risks,
       };
-    })
+    }),
   );
   const deepArchimPersonalModifier = deepArchim.personalModifiers.map((p) =>
-    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_"),
   );
   const deepArchimRes: ArchiMedea = {
     name: "深层科研",
@@ -199,10 +200,10 @@ export const getWeekly = async () => {
       const diviation = stringToDebuff(
         m.diviation.key,
         m.diviation.name,
-        "/Lotus/Language/Conquest/MissionVariant_HexConquest_"
+        "/Lotus/Language/Conquest/MissionVariant_HexConquest_",
       );
       const risks = m.risks.map((r) =>
-        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_"),
       );
 
       return {
@@ -210,11 +211,11 @@ export const getWeekly = async () => {
         diviation,
         risks,
       };
-    })
+    }),
   );
   const temporalArchimPersonalModifier = temporalArchim.personalModifiers.map(
     (p) =>
-      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_"),
   );
   const temporalArchimRes: ArchiMedea = {
     name: "时光科研",
@@ -274,10 +275,10 @@ export const getCircuitWeek = (): {
   const EPOCH = 1734307200 * 1000;
   const week = Math.trunc((Date.now() - EPOCH) / 604800000);
   const incarnons = incarnonRewards[week % incarnonRewards.length].map(
-    (i) => dict_zh[i]
+    (i) => dict_zh[i],
   );
   const warframes = warframeRewards[week % warframeRewards.length].map(
-    (i) => dict_zh[i]
+    (i) => dict_zh[i],
   );
   return {
     incarnons,
@@ -302,7 +303,7 @@ export const getRailjackFissures = async () => {
 
 export const getAnalyzedRiven = async (
   secret: OcrAPISecret,
-  url: string
+  url: string,
 ): Promise<string | RivenStatAnalyzeResult> => {
   const img = await fetchAsyncImage(url);
   if (!img) {

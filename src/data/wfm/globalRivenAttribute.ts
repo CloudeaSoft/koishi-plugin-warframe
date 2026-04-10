@@ -1,8 +1,9 @@
-import { getWFMRivenAttributeList } from "../../api/wfm-api";
+import { getWFMRivenAttributeList } from "../../infrastructure/wfm/wfm-api";
+import { RivenAttribute } from "../../types/wfm/riven";
 import { createAsyncCache, listToDict } from "../../utils";
 
 export const globalRivenAttributeFactory = async (
-  rivenAttributeData: WFMResponse<RivenAttribute[]> = undefined
+  rivenAttributeData: RivenAttribute[] = undefined
 ) => {
   rivenAttributeData ??= await getWFMRivenAttributeList();
   if (!rivenAttributeData) {
@@ -10,7 +11,7 @@ export const globalRivenAttributeFactory = async (
       "Failed to fetch riven attributes from Warframe Market API."
     );
   }
-  const data = rivenAttributeData.data;
+  const data = rivenAttributeData;
 
   const globalRivenAttributeList = data;
   const globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [

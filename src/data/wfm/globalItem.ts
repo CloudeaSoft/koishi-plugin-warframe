@@ -1,17 +1,18 @@
-import { getWFMItemList } from "../../api/wfm-api";
+import { getWFMItemList } from "../../infrastructure/wfm/wfm-api";
+import { ItemShort } from "../../types/wfm/item";
 import { createAsyncCache, listToDict, normalizeName } from "../../utils";
 
 export const globalItemDataFactory = async (
-  response: WFMResponse<ItemShort[]> = undefined
+  response: ItemShort[] = undefined
 ) => {
   response ??= await getWFMItemList();
   if (!response) {
     return undefined;
   }
 
-  const data = response.data;
+  const data = response;
 
-  const globalItemList: ItemShort[] = response.data;
+  const globalItemList: ItemShort[] = response;
   const globalItemDict: Record<string, ItemShort> = listToDict<ItemShort>(
     data,
     (i) => [i.slug]

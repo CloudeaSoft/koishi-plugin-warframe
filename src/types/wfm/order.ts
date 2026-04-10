@@ -1,3 +1,5 @@
+import { UserShort } from "./user";
+
 interface Order {
   id: string;
   type: string;
@@ -16,6 +18,6 @@ interface Order {
   itemId: string;
 }
 
-interface OrderWithUser extends Order {
+export interface OrderWithUser extends Order {
   user: UserShort;
 }

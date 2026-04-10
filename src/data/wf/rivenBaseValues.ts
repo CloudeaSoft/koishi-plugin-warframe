@@ -1,5 +1,5 @@
-import rivenAttrValues from "../assets/rivenAttrValues.json";
-import { normalizeName } from "../utils";
+import rivenAttrValues from "../../assets/rivenAttrValues.json";
+import { normalizeName } from "../../utils";
 
 export const rivenAttrValueDict: Record<
   string,

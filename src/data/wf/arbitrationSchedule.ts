@@ -1,4 +1,4 @@
-import arbys from "../assets/arbys";
+import arbys from "../../assets/arbys";
 
 export const arbitrationSchedule: ArbitrationShort[] = arbys
   .split("\n")

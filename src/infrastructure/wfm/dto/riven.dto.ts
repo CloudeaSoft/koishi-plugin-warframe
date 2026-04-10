@@ -1,23 +1,29 @@
-interface Riven {
+interface RivenDTO {
   polarity: string;
   mod_rank: number;
   re_rolls: number;
-  attributes: RivenAttributeShort[];
+  attributes: RivenAttributeShortDTO[];
   type: string;
   name: string;
   weapon_url_name: string;
   mastery_level: number;
 }
 
-interface RivenAttributeShort {
+interface RivenAttributeShortDTO {
   value: number;
   positive: boolean;
   url_name: string;
 }
 
-type RivenAttributeUnit = "percent" | "multiply" | "seconds" | string;
+type RivenAttributeUnitDTO = "percent" | "multiply" | "seconds" | string;
 
-interface RivenAttribute {
+interface RivenAttributeI18NDTO {
+  name: string;
+  icon: string;
+  thumb: string;
+}
+
+export interface RivenAttributeDTO {
   id: string;
   slug: string;
   gameRef: string;
@@ -28,17 +34,11 @@ interface RivenAttribute {
   positiveIsNegative: boolean;
   positiveOnly: boolean;
   negativeOnly: boolean;
-  unit: RivenAttributeUnit;
-  i18n: {
-    [key: WFMLang]: {
-      name: string;
-      icon: string;
-      thumb: string;
-    };
-  };
+  unit: RivenAttributeUnitDTO;
+  i18n: Record<WFMLangDTO, RivenAttributeI18NDTO>;
 }
 
-interface RivenOrder {
+export interface RivenOrderDTO {
   buyout_price: number | null;
   visible: boolean;
   minimal_reputation: number;
@@ -55,13 +55,13 @@ interface RivenOrder {
   note_raw: string;
   is_direct_sell: boolean;
   id: string;
-  owner: RivenUser;
-  winner: RivenUser | null;
-  item: Riven;
+  owner: RivenUserDTO;
+  winner: RivenUserDTO | null;
+  item: RivenDTO;
   private: boolean;
 }
 
-interface RivenUser {
+interface RivenUserDTO {
   reputation: number;
   platform: string;
   locale: string;
@@ -73,16 +73,4 @@ interface RivenUser {
   status: "offline" | "online" | "ingame" | string;
   id: string;
   region: string;
-}
-
-interface RivenAttributeShortInternal extends RivenAttributeShort {
-  attribute: RivenAttribute;
-}
-
-interface RivenInternal extends Riven {
-  attributes: RivenAttributeShortInternal[];
-}
-
-interface RivenOrderInternal extends RivenOrder {
-  item: RivenInternal;
 }

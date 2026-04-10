@@ -1,4 +1,4 @@
-interface Ducatnator {
+export interface Ducatnator {
   datetime: Date;
   position_change_month: number;
   position_change_week: number;

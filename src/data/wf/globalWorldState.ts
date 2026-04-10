@@ -1,12 +1,12 @@
 import { dict_zh, ExportRegions } from "warframe-public-export-plus";
-import { getWorldState } from "../api/wf-api";
+import { getWorldState } from "../../infrastructure/wf/wf-api";
 import {
   createAsyncCache,
   getSolNodeKey,
   regionToShort,
   fissureTierName,
   fissureTierNumToNumber,
-} from "../utils";
+} from "../../utils";
 
 export const globalWorldState = createAsyncCache(async () => {
   const worldState = await getWorldState();
@@ -19,8 +19,8 @@ export const globalWorldState = createAsyncCache(async () => {
       category: fissure.isStorm
         ? "rj-fissures"
         : fissure.isHard
-        ? "sp-fissures"
-        : "fissures",
+          ? "sp-fissures"
+          : "fissures",
       hard: fissure.isHard,
       activation: fissure.activation.getTime(),
       expiry: fissure.expiry.getTime(),

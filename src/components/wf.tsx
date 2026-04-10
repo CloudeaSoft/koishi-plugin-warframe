@@ -1,5 +1,6 @@
 import { Element } from "koishi";
 import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from "../utils";
+import { RivenAttributeUnit } from "../types/wfm/riven";
 
 export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
   return (

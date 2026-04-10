@@ -1,4 +1,4 @@
-interface ItemI18N {
+interface ItemI18NDTO {
   name: string;
   description: string;
   wikiLink: string;
@@ -7,7 +7,7 @@ interface ItemI18N {
   subIcon: string;
 }
 
-interface Item {
+export interface ItemDTO {
   id: string;
   tags: string[];
   slug: string;
@@ -16,7 +16,7 @@ interface Item {
   setRoot: boolean;
   setParts: string[];
   quantityInSet: number;
-  i18n: { [key: WFMLang]: ItemI18N };
+  i18n: Partial<Record<WFMLangDTO, ItemI18NDTO>>;
   rarity: string;
   maxRank: number;
   maxCharges: number;
@@ -32,12 +32,12 @@ interface Item {
   tradingTax: number;
 }
 
-interface ItemShort {
+export interface ItemShortDTO {
   id: string;
   slug: string;
   gameRef: string;
   tags: string[];
-  i18n: Partial<Record<WFMLang, ItemI18N>>;
+  i18n: Partial<Record<WFMLangDTO, ItemI18NDTO>>;
   maxRank: number;
   maxCharges: number;
   vaulted: boolean;
@@ -49,7 +49,7 @@ interface ItemShort {
   subtypes: string[];
 }
 
-interface RivenItem {
+export interface RivenItemDTO {
   id: string;
   slug: string;
   gameRef: string;
@@ -57,10 +57,10 @@ interface RivenItem {
   rivenType?: string;
   disposition: number;
   reqMasteryRank: number;
-  i18n?: Record<string, RivenItemI18N | null>;
+  i18n?: Record<string, RivenItemI18NDTO | null>;
 }
 
-interface RivenItemI18N {
+interface RivenItemI18NDTO {
   name?: string;
   wikiLink?: string;
   icon: string;

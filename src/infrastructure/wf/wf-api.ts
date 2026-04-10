@@ -1,4 +1,4 @@
-import { fetchAsyncText } from "../utils";
+import { fetchAsyncText } from "../../utils";
 import WorldState from "warframe-worldstate-parser";
 
 const apiBase = "https://api.warframe.com/cdn/";
@@ -9,6 +9,5 @@ export const getWorldState = async (json: string = ""): Promise<WorldState> => {
   }
 
   const WorldStateParser = await import("warframe-worldstate-parser");
-  const ws = await WorldStateParser.WorldState.build(json);
-  return ws;
+  return await WorldStateParser.WorldState.build(json);
 };

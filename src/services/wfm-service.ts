@@ -1,35 +1,22 @@
 import { dict_zh } from "warframe-public-export-plus";
 
+import { toTimeStamp, normalizeName, pascalToSpaced } from "../utils";
 import {
-  toTimeStamp,
-  normalizeName,
-  listToDict,
-  pascalToSpaced,
-  createAsyncCache,
-} from "../utils";
-import {
-  getWFMDucatnator,
   getWFMOrderList,
   getWFMRivenOrderList,
-} from "../api/wfm-api";
+} from "../infrastructure/wfm/wfm-api";
 
 import { globalItemData } from "../data/wfm/globalItem";
 import { globalRivenItemData } from "../data/wfm/globalRivenItem";
 import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
+import { globalDucatnatorIDDict } from "../data/wfm/globalDucatnator";
+import { ItemShort } from "../types/wfm/item";
+import {
+  RivenAttributeShortInternal,
+  RivenOrderInternal,
+} from "../types/wfm/riven";
 
 // ================ initialization ===================
-
-const globalDucatnatorIDDict = createAsyncCache(
-  async (): Promise<Record<string, Ducatnator> | undefined> => {
-    const data = await getWFMDucatnator();
-    if (!data || !data.payload) {
-      return undefined;
-    }
-
-    return listToDict(data.payload.previous_hour, (d) => [d.item]);
-  },
-  3600_000
-);
 
 const warframeAlias = {
   Volt: ["电", "电男", "伏特"],
@@ -135,9 +122,7 @@ const weaponPartSuffix = [
 
 export const wmOnReady = async () => {};
 
-export const getItemOrders = async (
-  input: string
-): Promise<{ item: ItemShort; orders: OrderWithUser[] }> => {
+export const getItemOrders = async (input: string) => {
   if (!input) return null;
   input = normalizeName(input);
 
@@ -165,7 +150,7 @@ export const getItemOrders = async (
   }
 
   // 4. Process result
-  const result = data.data
+  const result = data
     .filter(
       (order) =>
         order.user.status === "ingame" &&
@@ -183,9 +168,7 @@ export const getItemOrders = async (
   };
 };
 
-export const getRivenOrders = async (
-  input: string
-): Promise<{ item: RivenItem; orders: RivenOrderInternal[] }> => {
+export const getRivenOrders = async (input: string) => {
   const { globalRivenItemList } = await globalRivenItemData.get();
   const { globalRivenAttributeDict } = await globalRivenAttribute.get();
 
@@ -206,7 +189,7 @@ export const getRivenOrders = async (
     return null;
   }
 
-  const top5 = data.payload.auctions
+  const top5 = data
     .filter(
       (order) =>
         order.owner.status === "ingame" &&
