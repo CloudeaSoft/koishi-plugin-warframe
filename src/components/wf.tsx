@@ -144,7 +144,7 @@ export const WeeklyTable = async (
 
   const deepRes = `${deepArchimedea.name}\n${deepArchimedea.missions
     .map((m) => {
-      let result = `${m.type}\n偏差: ${m.diviation.name}(${m.diviation.desc})`;
+      let result = `${m.type}\n偏差: ${m.deviation.name}(${m.deviation.desc})`;
       for (const risk of m.risks) {
         result += `\n风险: ${risk.name}(${risk.desc})`;
       }
@@ -158,7 +158,7 @@ export const WeeklyTable = async (
 
   const tempRes = `${temporalArchimedea.name}\n${temporalArchimedea.missions
     .map((m) => {
-      let result = `${m.type}\n偏差: ${m.diviation.name}(${m.diviation.desc})`;
+      let result = `${m.type}\n偏差: ${m.deviation.name}(${m.deviation.desc})`;
       for (const risk of m.risks) {
         result += `\n风险: ${risk.name}(${risk.desc})`;
       }

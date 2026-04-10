@@ -52,6 +52,8 @@
     "@koishijs/client": "^5.30.11",
     "@koishijs/plugin-help": "^2.4.6",
     "@koishijs/plugin-mock": "^2.6.6",
+    "@nestjs/common": "^11.1.18",
+    "@nestjs/core": "^11.1.18",
     "@satorijs/element": "^3.1.8",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
@@ -70,7 +72,8 @@
     "koishi": "^4.18.9",
     "koishi-plugin-puppeteer": "^3.9.0",
     "mocha": "^11.7.5",
-    "typescript": "^6.0.2",
+    "rxjs": "^7.8.2",
+    "typescript": "^5.9.3",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
     "yakumo-tsc": "^1.0.0"

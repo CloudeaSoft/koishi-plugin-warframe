@@ -395,9 +395,9 @@ export const getWeekly = async () => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
         dict_zh[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
-      const diviation = stringToDebuff(
-        m.diviation.key,
-        m.diviation.name,
+      const deviation = stringToDebuff(
+        m.deviation.key,
+        m.deviation.name,
         "/Lotus/Language/Conquest/MissionVariant_LabConquest_"
       );
       const risks = m.risks.map((r) =>
@@ -406,7 +406,7 @@ export const getWeekly = async () => {
 
       return {
         type,
-        diviation,
+        deviation,
         risks,
       };
     })
@@ -426,9 +426,9 @@ export const getWeekly = async () => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
         dict_zh[ExportMissionTypes[receivedType]?.name] ?? receivedType;
-      const diviation = stringToDebuff(
-        m.diviation.key,
-        m.diviation.name,
+      const deviation = stringToDebuff(
+        m.deviation.key,
+        m.deviation.name,
         "/Lotus/Language/Conquest/MissionVariant_HexConquest_"
       );
       const risks = m.risks.map((r) =>
@@ -437,7 +437,7 @@ export const getWeekly = async () => {
 
       return {
         type,
-        diviation,
+        deviation,
         risks,
       };
     })
