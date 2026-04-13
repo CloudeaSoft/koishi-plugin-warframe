@@ -1,4 +1,7 @@
-name: Build
+name: Build and Test
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   push:
@@ -21,9 +24,9 @@ jobs:
           node-version: latest
       - name: Install
         run: yarn
-      - name: build
+      - name: Build
         run: yarn build
-      - name: type
+      - name: Type
         run: yarn dtsc
-      - name: test
+      - name: Test
         run: yarn test
