@@ -229,7 +229,7 @@ export const WeeklyComponent = (
               <span style={`font-weight: 600; margin-right: 4px;`}>
                 {"偏差:"}
               </span>
-              {`${m.diviation.name}(${m.diviation.desc})`}
+              {`${m.deviation.name}(${m.deviation.desc})`}
             </div>
 
             {m.risks.map((r) => (
@@ -311,7 +311,7 @@ export const WeeklyComponent = (
               <span style={`font-weight: 600; margin-right: 4px;`}>
                 {"偏差:"}
               </span>
-              {`${m.diviation.name}(${m.diviation.desc})`}
+              {`${m.deviation.name}(${m.deviation.desc})`}
             </div>
 
             {m.risks.map((r) => (

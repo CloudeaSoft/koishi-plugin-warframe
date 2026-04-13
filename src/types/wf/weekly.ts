@@ -16,7 +16,7 @@ interface ArchiMedea {
 
 interface ArchiMedeaMission {
   type: string;
-  diviation: ArchiMedeaDebuff;
+  deviation: ArchiMedeaDebuff;
   risks: ArchiMedeaDebuff[];
 }
 

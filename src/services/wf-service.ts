@@ -177,7 +177,7 @@ export const getWeekly = async () => {
 
       return {
         type,
-        diviation,
+        deviation,
         risks,
       };
     }),
@@ -208,7 +208,7 @@ export const getWeekly = async () => {
 
       return {
         type,
-        diviation,
+        deviation,
         risks,
       };
     }),
