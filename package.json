@@ -45,7 +45,7 @@
   },
   "peerDependenciesMeta": {
     "koishi-plugin-puppeteer": {
-      "optional": true
+      "optional": false
     }
   },
   "devDependencies": {
