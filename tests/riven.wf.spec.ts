@@ -11,7 +11,7 @@ import rivenCalc from "../src/assets/rivencalc.json";
 import { ExportWeapons, dict_en, dict_zh } from "warframe-public-export-plus";
 import { createAsyncCache, normalizeName } from "../src/utils";
 import { expect } from "chai";
-import { rivenAttrValueDict } from "../src/data/rivenBaseValues";
+import { rivenAttrValueDict } from "../src/data/wf/rivenBaseValues";
 import {
   overrideGlobalItemData,
   globalItemDataFactory,
@@ -24,12 +24,12 @@ import {
 before(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
-      return await globalItemDataFactory(testItem);
+      return await globalItemDataFactory(testItem.data);
     }, -1) as any
   );
   overrideGlobalRivenAttribute(
     createAsyncCache(async () => {
-      return await globalRivenAttributeFactory(testAttr);
+      return await globalRivenAttributeFactory(testAttr.data);
     }, -1) as any
   );
 });

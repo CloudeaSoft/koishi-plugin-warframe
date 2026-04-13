@@ -11,7 +11,7 @@ import { createAsyncCache } from "../src/utils";
 before(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
-      return await globalItemDataFactory(testItems);
+      return await globalItemDataFactory(testItems.data);
     }, -1) as any
   );
 });
