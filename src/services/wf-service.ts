@@ -361,7 +361,7 @@ export const getStaticRivenStats = async (
   disposition: number,
 ): Promise<RivenStatResult | string> => {
   // Process inputs
-  if (disposition > 1.51 || disposition < 0.5) {
+  if (disposition > 1.55 || disposition < 0.5) {
     return "裂罅倾向错误";
   }
 
