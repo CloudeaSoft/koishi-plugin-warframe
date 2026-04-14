@@ -1,6 +1,7 @@
 import { Element } from "koishi";
 import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from "../utils";
 import { RivenAttributeUnit } from "../types/wfm/riven";
+import { RivenStatAnalyzeResult, RivenStatResult } from "../types/wf/riven";
 
 export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
   return (
@@ -21,7 +22,7 @@ export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
                 <span style={"margin-left:10px;"}>
                   {`${a.name} ${a.system}-${a.type} (${a.faction})`.replace(
                     /\(|\)/g,
-                    ""
+                    "",
                   )}
                 </span>
                 <span style={"margin-left:10px;"}>
@@ -38,7 +39,7 @@ export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
 
 export const CircuitComponent = (
   incarnons: string[],
-  warframes: string[]
+  warframes: string[],
 ): Element => {
   return (
     <div>
@@ -77,7 +78,7 @@ export const CircuitComponent = (
 
 export const FissureComponent = (
   fissures: Fissure[],
-  type: "fissure" | "sp-fissure" | "rj-fissure"
+  type: "fissure" | "sp-fissure" | "rj-fissure",
 ): Element => {
   const titles = {
     fissure: "虚空裂缝",
@@ -119,8 +120,8 @@ export const FissureComponent = (
                     timeLeft > 3600000
                       ? "green"
                       : timeLeft > 600000
-                      ? "blue"
-                      : "red"
+                        ? "blue"
+                        : "red"
                   };`}
                 >
                   剩余{msToHumanReadable(timeLeft)}
@@ -139,7 +140,7 @@ export const FissureComponent = (
 export const WeeklyComponent = (
   archon: ArchonHunt,
   deepArchimedea: ArchiMedea,
-  temporalArchimedea: ArchiMedea
+  temporalArchimedea: ArchiMedea,
 ): Element => {
   const archonHuntSection = (
     <section
@@ -581,7 +582,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
   const formatRange = (
     min: number,
     max: number,
-    unit: RivenAttributeUnit
+    unit: RivenAttributeUnit,
   ): string => {
     const format = (num: number) => {
       switch (unit) {
@@ -672,7 +673,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
             style={`background-color: #f0f0f0; padding: 4px 12px; border-radius: 12px; font-size: 14px; line-height: 1;`}
           >
             {`倾向: ${getDispositionIcon(
-              data.disposition
+              data.disposition,
             )} (${data.disposition.toFixed(2)})`}
           </div>
         </div>
@@ -718,7 +719,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
                     >
                       <p
                         style={`position: absolute; left: 0; top: 0; height: 100%; width: ${getProgressWidth(
-                          buff.percent * 10
+                          buff.percent * 10,
                         )}; background-color: ${percentColor}; border-radius: 3px;`}
                       ></p>
                     </div>
@@ -788,7 +789,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
                       >
                         <p
                           style={`position: absolute; left: 0; top: 0; height: 100%; width: ${getProgressWidth(
-                            curse.percent * 10
+                            curse.percent * 10,
                           )}; background-color: ${percentColor}; border-radius: 3px;`}
                         ></p>
                       </div>
@@ -824,6 +825,266 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
           </div>
         ) : (
           ""
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const RivenStatComponent = (data: RivenStatResult): Element => {
+  const getValue = (value: number, unit: RivenAttributeUnit) => {
+    switch (unit) {
+      case "multiply":
+        return "x" + (1 + value).toFixed(2);
+      case "seconds":
+        return value.toFixed(2) + "s";
+      case "percent":
+        return value.toFixed(2) + "%";
+      default:
+        return value.toFixed(2);
+    }
+  };
+  return (
+    <div
+      style={`
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        font-family: system-ui, sans-serif;
+        background-color: #1a1a2e;
+        border-radius: 8px;
+        max-width: 600px;
+      `}
+    >
+      <div
+        style={`
+        display: flex;
+        gap: 16px;
+      `}
+      >
+        {/* 正面属性列 */}
+        <div
+          style={`
+          flex: 1;
+        `}
+        >
+          <div
+            style={`
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 8px;
+              padding: 0 4px;
+            `}
+          >
+            <h3
+              style={`
+              margin: 0;
+              color: #7dd56f;
+              font-size: 16px;
+              font-weight: 600;
+            `}
+            >
+              正面属性
+            </h3>
+            <div
+              style={`
+              display: flex;
+              gap: 12px;
+            `}
+            >
+              <span
+                style={`
+                color: #888;
+                font-size: 12px;
+              `}
+              >
+                最小
+              </span>
+              <span
+                style={`
+                color: #888;
+                font-size: 12px;
+              `}
+              >
+                最大
+              </span>
+            </div>
+          </div>
+          <div
+            style={`
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+            `}
+          >
+            {Object.entries(data.positive).map(([_, value]) => (
+              <div
+                style={`
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 8px;
+      background-color: #16213e;
+      border-radius: 4px;
+      border-left: 3px solid #7dd56f;
+    `}
+              >
+                <span
+                  style={`
+      color: #e0e0e0;
+      font-size: 13px;
+    `}
+                >
+                  {value.name}
+                </span>
+                <div
+                  style={`
+      display: flex;
+      gap: 16px;
+    `}
+                >
+                  <span
+                    style={`
+        color: #7dd56f;
+        font-size: 13px;
+        font-weight: 500;
+        min-width: 60px;
+        text-align: right;
+      `}
+                  >
+                    {getValue(value.min, value.unit)}
+                  </span>
+                  <span
+                    style={`
+        color: #7dd56f;
+        font-size: 13px;
+        font-weight: 500;
+        min-width: 60px;
+        text-align: right;
+      `}
+                  >
+                    {getValue(value.max, value.unit)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 负面属性列 */}
+        {data.negative ? (
+          <div
+            style={`
+          flex: 1;
+        `}
+          >
+            <div
+              style={`
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 8px;
+              padding: 0 4px;
+            `}
+            >
+              <h3
+                style={`
+              margin: 0;
+              color: #e35f5f;
+              font-size: 16px;
+              font-weight: 600;
+            `}
+              >
+                负面属性
+              </h3>
+              <div
+                style={`
+              display: flex;
+              gap: 12px;
+            `}
+              >
+                <span
+                  style={`
+                color: #888;
+                font-size: 12px;
+              `}
+                >
+                  最小
+                </span>
+                <span
+                  style={`
+                color: #888;
+                font-size: 12px;
+              `}
+                >
+                  最大
+                </span>
+              </div>
+            </div>
+            <div
+              style={`
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+            `}
+            >
+              {Object.entries(data.negative).map(([key, value]) => (
+                <div
+                  style={`
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 8px;
+      background-color: #16213e;
+      border-radius: 4px;
+      border-left: 3px solid #e35f5f;
+    `}
+                >
+                  <span
+                    style={`
+      color: #e0e0e0;
+      font-size: 13px;
+    `}
+                  >
+                    {value.name}
+                  </span>
+                  <div
+                    style={`
+      display: flex;
+      gap: 16px;
+    `}
+                  >
+                    <span
+                      style={`
+        color: #e35f5f;
+        font-size: 13px;
+        font-weight: 500;
+        min-width: 60px;
+        text-align: right;
+      `}
+                    >
+                      {getValue(value.min, value.unit)}
+                    </span>
+                    <span
+                      style={`
+        color: #e35f5f;
+        font-size: 13px;
+        font-weight: 500;
+        min-width: 60px;
+        text-align: right;
+      `}
+                    >
+                      {getValue(value.max, value.unit)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <></>
         )}
       </div>
     </div>

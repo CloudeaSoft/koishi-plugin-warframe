@@ -11,6 +11,7 @@ import {
   getSteelPathFissures,
   getVoidTrader,
   getWeekly,
+  getStaticRivenStats,
 } from "../services";
 import { generateImageOutput } from "../utils";
 import {
@@ -19,6 +20,7 @@ import {
   FissureComponent,
   RelicComponent,
   RivenComponent,
+  RivenStatComponent,
   VoidTraderComponent,
   WeeklyComponent,
 } from "../components/wf";
@@ -35,7 +37,7 @@ export const arbitrationCommand = async (action: Argv, input?: number) => {
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    ArbitrationComponent(result)
+    ArbitrationComponent(result),
   );
 };
 
@@ -43,7 +45,7 @@ export const circuitCommand = async (action: Argv) => {
   const result = getCircuitWeek();
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    CircuitComponent(result.incarnons, result.warframes)
+    CircuitComponent(result.incarnons, result.warframes),
   );
 };
 
@@ -55,7 +57,7 @@ export const voidtraderCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    VoidTraderComponent(result)
+    VoidTraderComponent(result),
   );
 };
 
@@ -71,7 +73,7 @@ export const fissureCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    FissureComponent(result, "fissure")
+    FissureComponent(result, "fissure"),
   );
 };
 
@@ -87,7 +89,7 @@ export const steelPathFissureCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    FissureComponent(result, "sp-fissure")
+    FissureComponent(result, "sp-fissure"),
   );
 };
 
@@ -103,7 +105,7 @@ export const railjackFissureCommand = async (action: Argv) => {
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    FissureComponent(result, "rj-fissure")
+    FissureComponent(result, "rj-fissure"),
   );
 };
 
@@ -116,14 +118,14 @@ export const relicCommand = async (action: Argv, input: string) => {
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    RelicComponent(relic)
+    RelicComponent(relic),
   );
 };
 
 export const rivenCommand = async (
   action: Argv,
   input: Dict,
-  secret: OcrAPISecret
+  secret: OcrAPISecret,
 ) => {
   // input example
   // {
@@ -141,7 +143,28 @@ export const rivenCommand = async (
 
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    RivenComponent(result)
+    RivenComponent(result),
+  );
+};
+
+export const rivenStatCommand = async (
+  action: Argv,
+  weaponType: string,
+  statType: string,
+  disposition: number,
+) => {
+  if (!weaponType || !statType || !disposition) {
+    return "请输入正确参数";
+  }
+
+  const result = await getStaticRivenStats(weaponType, statType, disposition);
+  if (typeof result === "string") {
+    return result;
+  }
+
+  return await generateImageOutput(
+    action.session!.app.puppeteer,
+    RivenStatComponent(result),
   );
 };
 
@@ -160,8 +183,8 @@ export const weeklyCommand = async (action: Argv) => {
     WeeklyComponent(
       result.archonHunt,
       result.deepArchimedea,
-      result.temporalArchimedea
-    )
+      result.temporalArchimedea,
+    ),
   );
 };
 

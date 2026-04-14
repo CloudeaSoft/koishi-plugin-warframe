@@ -33,6 +33,13 @@ import { rivenAttrValueDict } from "../data/wf/rivenBaseValues";
 import { weaponRivenDispositionDict } from "../data/wf/rivenDisposition";
 import { rivenStatFixFactor } from "../data/wf/rivenStatData";
 import { RivenAttribute } from "../types/wfm/riven";
+import {
+  RivenStatAnalyzeResult,
+  RivenStatAnalyzsis,
+  RivenStatCountType,
+  RivenStatResult,
+  RivenWeaponType,
+} from "../types/wf/riven";
 
 // ================ features ===================
 
@@ -348,6 +355,85 @@ export const getVoidTrader = async (): Promise<string | VoidTrader> => {
   return { expiry: msToHumanReadable(diff), items };
 };
 
+export const getStaticRivenStats = async (
+  weaponType: string,
+  statType: string,
+  disposition: number,
+): Promise<RivenStatResult | string> => {
+  // Process inputs
+  if (disposition > 1.51 || disposition < 0.5) {
+    return "裂罅倾向错误";
+  }
+
+  const weaponTypes = [
+    "步枪",
+    "手枪",
+    "霰弹枪",
+    "Archwing枪械",
+    "近战",
+    "Rifle",
+    "Shotgun",
+    "Pistol",
+    "Archgun",
+    "Melee",
+  ];
+  const matchedWeaponType = weaponTypes.find((v) =>
+    normalizeName(v).startsWith(normalizeName(weaponType)),
+  );
+  if (!matchedWeaponType) {
+    return "武器类型错误";
+  }
+
+  const weaponTypeKeys: Record<string, RivenWeaponType> = {
+    步枪: "Rifle",
+    手枪: "Pistol",
+    霰弹枪: "Shotgun",
+    近战: "Melee",
+    Archwing枪械: "Archgun",
+  };
+
+  const weaponTypeKey = weaponTypeKeys[matchedWeaponType] ?? matchedWeaponType;
+
+  const statTypes: RivenStatCountType[] = ["2", "3", "21", "31"];
+  if (!statTypes.includes(statType as RivenStatCountType)) {
+    return "词条类型错误";
+  }
+
+  const rivenAttrValues = rivenAttrValueDict[weaponTypeKey];
+  const factor = rivenStatFixFactor[statType as RivenStatCountType];
+  const result: RivenStatResult = {
+    positive: {},
+    negative: factor.curseCount > 0 ? {} : undefined,
+  };
+
+  const { globalRivenAttributeList } = await globalRivenAttribute.get();
+  for (const key in rivenAttrValues) {
+    const data = globalRivenAttributeList.find(
+      (v) => normalizeName(v.i18n["en"].name) == key,
+    );
+    const baseValue = rivenAttrValues[key];
+    const buffValue = baseValue * disposition * factor.buffFactor;
+    result.positive[key] = {
+      name: data?.i18n["zh-hans"].name ?? key,
+      max: buffValue * 1.1,
+      min: buffValue * 0.9,
+      unit: data?.unit ?? "",
+    };
+
+    if (result.negative) {
+      const curseValue = baseValue * disposition * factor.curseFactor;
+      result.negative[key] = {
+        name: data?.i18n["zh-hans"].name ?? key,
+        max: curseValue * 0.9,
+        min: curseValue * 1.1,
+        unit: data?.unit ?? "",
+      };
+    }
+  }
+
+  return result;
+};
+
 // ================ privates ===================
 
 export const getWeaponRivenDisposition = (name: string) => {
@@ -561,9 +647,9 @@ export const analyzeRivenStat = (parseResult: {
   const weaponType = weaponRiven.calc.riventype;
   const rivenStatCountType: RivenStatCountType = (function () {
     if (parseResult.attributes.length === 4) {
-      return "3_1";
+      return "31";
     } else if (parseResult.attributes.length === 2) {
-      return "2_0";
+      return "2";
     }
 
     const firstStat = parseResult.attributes[0];
@@ -574,9 +660,9 @@ export const analyzeRivenStat = (parseResult: {
 
     // Use the lowest value of 2_1 type riven to check the first stat
     if (firstStat.value >= firstStatBaseValue * 1.2375 * 0.9 * disposition) {
-      return "2_1";
+      return "21";
     } else {
-      return "3_0";
+      return "3";
     }
   })();
 
