@@ -108,6 +108,15 @@ const setupCommands = (ctx: Context) => {
     return commands.rivenCommand(a, b, ctx.config.ocrAPISecret);
   });
   ctx
+    .command(
+      "rivenstat <weaponType:string> <statType:string> <disposition:number>",
+      "获取紫卡数值范围",
+    )
+    .usage("武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械\n词条类型: 2, 3, 21, 31")
+    .example("rivenstat 步枪 31 0.7")
+    .alias("紫卡数值")
+    .action(commands.rivenStatCommand);
+  ctx
     .command("voidtrader", "虚空商人")
     .alias("虚空商人")
     .alias("奸商")

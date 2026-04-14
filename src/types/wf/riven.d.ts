@@ -1,4 +1,7 @@
-type RivenStatCountType = "3_1" | "2_0" | "2_1" | "3_0";
+import { RivenAttributeUnit } from "../wfm/riven";
+
+type RivenWeaponType = "Rifle" | "Shotgun" | "Pistol" | "Archgun" | "Melee";
+type RivenStatCountType = "31" | "2" | "21" | "3";
 
 interface RivenStatFixFactor {
   buffFactor: number;
@@ -37,4 +40,17 @@ interface RivenWeaponDisposition {
     riventype: string;
   };
   weapon: IWeapon;
+}
+
+interface RivenStatResult {
+  positive: Record<
+    string,
+    { name: string; max: number; min: number; unit: RivenAttributeUnit }
+  >;
+  negative:
+    | Record<
+        string,
+        { name: string; max: number; min: number; unit: RivenAttributeUnit }
+      >
+    | undefined;
 }
