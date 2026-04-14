@@ -1,3 +1,9 @@
+## [1.4.4](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.3...v1.4.4) (2026-04-14)
+
+### Bug Fixes
+
+* rivenstat command ([#29](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/29)) ([638987e](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/638987e945bc267f18fd034794f40bcfd982a16f))
+
 ## [1.4.3](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.2...v1.4.3) (2026-04-14)
 
 ### Bug Fixes
