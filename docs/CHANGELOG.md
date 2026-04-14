@@ -1,3 +1,9 @@
+## [1.4.3](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.2...v1.4.3) (2026-04-14)
+
+### Bug Fixes
+
+* optimize code structure, fix type errors and several bugs ([#18](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/18)) ([7e80866](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/7e80866b6932f32ba282e248674464c96c0d204c))
+
 ## [1.4.2](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.1...v1.4.2) (2026-04-10)
 
 ### Bug Fixes
