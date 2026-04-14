@@ -6,11 +6,11 @@
  */
 export function createAsyncCache<T>(
   factory: AsyncCacheFactory<T>,
-  ttlMs: number = 60_000
+  ttlMs: number = 60_000,
 ): AsyncCache<T> {
-  let cache: T = null;
+  let cache: T;
   let lastUpdatedAt: number = 0;
-  let inFlight: Promise<T> = null; // promise for ongoing update
+  let inFlight: Promise<T> | null; // promise for ongoing update
 
   async function update(): Promise<T> {
     // If an update is already happening, wait for it

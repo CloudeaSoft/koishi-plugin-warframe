@@ -3,7 +3,7 @@ import { RivenAttribute } from "../../types/wfm/riven";
 import { createAsyncCache, listToDict } from "../../utils";
 
 export const globalRivenAttributeFactory = async (
-  rivenAttributeData: RivenAttribute[] = undefined
+  rivenAttributeData?: RivenAttribute[]
 ) => {
   rivenAttributeData ??= await getWFMRivenAttributeList();
   if (!rivenAttributeData) {

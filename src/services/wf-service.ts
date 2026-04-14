@@ -81,7 +81,7 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
     安魂: "Requiem",
     先锋: "Vanguard",
   };
-  const enTier = zhTierMap[tier] ?? tier;
+  const enTier = zhTierMap[tier as keyof typeof zhTierMap] ?? tier;
   const key = normalizeName(enTier + category);
   return relics[key] ?? "未找到对应遗物信息";
 };
@@ -102,7 +102,7 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
     currentHourIndex + 24 * day,
   );
   return weekArbys
-    .filter((a) => arbyRewards[a.node])
+    .filter((a) => arbyRewards[a.node as keyof typeof arbyRewards])
     .map((a) => {
       const obj = regionToShort(ExportRegions[a.node], dict_zh);
       return {
@@ -118,7 +118,7 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
           // hourCycle: 'h23' // 另一种设置 24 小时制的方法
           timeZone: "Asia/Shanghai",
         }),
-        rewards: arbyRewards[a.node],
+        rewards: arbyRewards[a.node as keyof typeof arbyRewards],
       };
     });
 };
@@ -140,20 +140,21 @@ export const getWeekly = async () => {
     name: string,
     prefix: string,
   ): ArchiMedeaDebuff => {
-    const keyToName = dict_zh_ex[`${prefix}${key}`];
+    const keyToName = dict_zh_ex[`${prefix}${key}` as keyof typeof dict_zh_ex];
 
     if (!keyToName) {
       for (const transKey in dict_en_ex) {
-        if (dict_en_ex[transKey] === name) {
+        if (dict_en_ex[transKey as keyof typeof dict_en_ex] === name) {
           return {
-            name: dict_zh_ex[transKey],
-            desc: dict_zh_ex[transKey + "_Desc"],
+            name: dict_zh_ex[transKey as keyof typeof dict_zh_ex],
+            desc: dict_zh_ex[(transKey + "_Desc") as keyof typeof dict_zh_ex],
           };
         }
       }
     }
 
-    const riskDesc = dict_zh_ex[`${prefix}${key}_Desc`];
+    const riskDesc =
+      dict_zh_ex[`${prefix}${key}_Desc` as keyof typeof dict_zh_ex];
     return {
       name: keyToName,
       desc: riskDesc,
@@ -165,7 +166,7 @@ export const getWeekly = async () => {
     deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        dict_zh[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
+        dict_zh[ExportMissionTypes[receivedType].name ?? ""] ?? m.missionType;
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
@@ -196,7 +197,7 @@ export const getWeekly = async () => {
     temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        dict_zh[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+        dict_zh[ExportMissionTypes[receivedType].name ?? ""] ?? receivedType;
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
@@ -256,8 +257,9 @@ export const getEnvironment = async (): Promise<string> => {
     envy: "嫉妒",
   };
   const duviriState =
-    duviriStateTransDict[worldState.duviriCycle.state] ??
-    worldState.duviriCycle.state;
+    duviriStateTransDict[
+      worldState.duviriCycle.state as keyof typeof duviriStateTransDict
+    ] ?? worldState.duviriCycle.state;
   const duviri = `双衍王境: ${duviriState} ${worldState.duviriCycle.endString}`;
 
   const zarimanFaction = worldState.zarimanCycle.isCorpus
@@ -333,13 +335,14 @@ export const getVoidTrader = async (): Promise<string | VoidTrader> => {
     return "虚空商人仍在未知地带漂流...";
   }
 
-  if (worldState.voidTraders[0].activation.getTime() > Date.now()) {
-    const diff = worldState.voidTraders[0].activation.getTime() - Date.now();
+  const trader = worldState.voidTraders[0];
+
+  if (trader && trader.activation && trader.activation.getTime() > Date.now()) {
+    const diff = trader.activation.getTime() - Date.now();
     return "距离虚空商人到达还有: " + msToHumanReadable(diff);
   }
 
-  const diff = worldState.voidTraders[0].expiry.getTime() - Date.now();
-  const trader = worldState.voidTraders[0];
+  const diff = trader.expiry!.getTime() - Date.now();
   const items = trader.inventory.map(getVoidTraderItem);
 
   return { expiry: msToHumanReadable(diff), items };
@@ -410,7 +413,7 @@ export const parseOCRResult = async (ocrResult: string[]) => {
     value: number;
     prefix: string;
   }[] = [];
-  const statLines = [];
+  const statLines: string[] = [];
   for (const t of texts) {
     if (!t || !t.match(/^[x+-]|^[0-9]/)) {
       continue;

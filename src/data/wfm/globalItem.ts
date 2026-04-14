@@ -2,9 +2,7 @@ import { getWFMItemList } from "../../infrastructure/wfm/wfm-api";
 import { ItemShort } from "../../types/wfm/item";
 import { createAsyncCache, listToDict, normalizeName } from "../../utils";
 
-export const globalItemDataFactory = async (
-  response: ItemShort[] = undefined
-) => {
+export const globalItemDataFactory = async (response?: ItemShort[]) => {
   response ??= await getWFMItemList();
   if (!response) {
     return undefined;
@@ -15,10 +13,10 @@ export const globalItemDataFactory = async (
   const globalItemList: ItemShort[] = response;
   const globalItemDict: Record<string, ItemShort> = listToDict<ItemShort>(
     data,
-    (i) => [i.slug]
+    (i) => [i.slug],
   );
   const globalItemNameToSlugDict: Record<string, string> = ((list) => {
-    const result = {};
+    const result: Record<string, string> = {};
     for (const item of list) {
       if (item.i18n["zh-hans"]?.name) {
         result[normalizeName(item.i18n["zh-hans"].name)] = item.slug;
@@ -48,7 +46,7 @@ export const overrideGlobalItemData = (
     globalItemDict: Record<string, ItemShort>;
     globalItemNameToSlugDict: Record<string, string>;
     globalItemGameRefDict: Record<string, ItemShort>;
-  }>
+  }>,
 ) => {
   globalItemData = cache;
 };

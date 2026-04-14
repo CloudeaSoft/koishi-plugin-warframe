@@ -18,32 +18,35 @@ export const pascalToSpaced = (text: string) =>
   text.replace(/([A-Z])/g, " $1").trim();
 
 export const toPascalCase = (text: string) => {
-  return (
-    text
-      // Tokenize: 英文单词(包括大写缩写)、空格、非字母空格字符
-      .match(/[A-Z]+[a-z]*|[a-z]+|\s+|[^A-Za-z\s]+/g)
-      .map((token) => {
-        // Remove spaces entirely
-        if (/^\s+$/.test(token)) return "";
+  const tokens = text
+    // Tokenize: 英文单词(包括大写缩写)、空格、非字母空格字符
+    .match(/[A-Z]+[a-z]*|[a-z]+|\s+|[^A-Za-z\s]+/g);
+  if (!tokens) {
+    return text;
+  }
 
-        // 处理英文单词
-        if (/^[A-Za-z]+$/.test(token)) {
-          // 如果是全大写或单个字母，保持原样（如 "CRIT", "A"）
-          if (/^[A-Z]+$/.test(token) || token.length === 1) {
-            // 但需要首字母大写，其余小写
-            return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
-          }
+  return tokens
+    .map((token) => {
+      // Remove spaces entirely
+      if (/^\s+$/.test(token)) return "";
 
-          // 常规单词：首字母大写，其余小写
-          const lower = token.toLowerCase();
-          return lower[0].toUpperCase() + lower.slice(1);
+      // 处理英文单词
+      if (/^[A-Za-z]+$/.test(token)) {
+        // 如果是全大写或单个字母，保持原样（如 "CRIT", "A"）
+        if (/^[A-Z]+$/.test(token) || token.length === 1) {
+          // 但需要首字母大写，其余小写
+          return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
         }
 
-        // 其他字符保持原样
-        return token;
-      })
-      .join("")
-  );
+        // 常规单词：首字母大写，其余小写
+        const lower = token.toLowerCase();
+        return lower[0].toUpperCase() + lower.slice(1);
+      }
+
+      // 其他字符保持原样
+      return token;
+    })
+    .join("");
 };
 
 export function normalSimilarity(a: string, b: string) {
@@ -52,7 +55,7 @@ export function normalSimilarity(a: string, b: string) {
 }
 
 function levenshtein(a: string, b: string) {
-  const dp = Array.from({ length: a.length + 1 }, () => []);
+  const dp = Array.from({ length: a.length + 1 }, (): number[] => []);
   for (let i = 0; i <= a.length; i++) dp[i][0] = i;
   for (let j = 0; j <= b.length; j++) dp[0][j] = j;
   for (let i = 1; i <= a.length; i++) {
@@ -60,7 +63,7 @@ function levenshtein(a: string, b: string) {
       dp[i][j] = Math.min(
         dp[i - 1][j] + 1,
         dp[i][j - 1] + 1,
-        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
       );
     }
   }
@@ -68,7 +71,7 @@ function levenshtein(a: string, b: string) {
 }
 
 export function tokenSimilarity(a: string, b: string) {
-  const tokenize = (s) =>
+  const tokenize = (s: string) =>
     s
       .replace(/[^\w\u4e00-\u9fa5]+/g, " ")
       .split(/\s+/)

@@ -34,7 +34,7 @@ export const arbitrationCommand = async (action: Argv, input?: number) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     ArbitrationComponent(result)
   );
 };
@@ -42,7 +42,7 @@ export const arbitrationCommand = async (action: Argv, input?: number) => {
 export const circuitCommand = async (action: Argv) => {
   const result = getCircuitWeek();
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     CircuitComponent(result.incarnons, result.warframes)
   );
 };
@@ -54,7 +54,7 @@ export const voidtraderCommand = async (action: Argv) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     VoidTraderComponent(result)
   );
 };
@@ -70,7 +70,7 @@ export const fissureCommand = async (action: Argv) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     FissureComponent(result, "fissure")
   );
 };
@@ -86,7 +86,7 @@ export const steelPathFissureCommand = async (action: Argv) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     FissureComponent(result, "sp-fissure")
   );
 };
@@ -102,7 +102,7 @@ export const railjackFissureCommand = async (action: Argv) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     FissureComponent(result, "rj-fissure")
   );
 };
@@ -115,7 +115,7 @@ export const relicCommand = async (action: Argv, input: string) => {
   const relic = await applyRelicData(result);
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     RelicComponent(relic)
   );
 };
@@ -140,7 +140,7 @@ export const rivenCommand = async (
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     RivenComponent(result)
   );
 };
@@ -156,7 +156,7 @@ export const weeklyCommand = async (action: Argv) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
+    action.session!.app.puppeteer,
     WeeklyComponent(
       result.archonHunt,
       result.deepArchimedea,

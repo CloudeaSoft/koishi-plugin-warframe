@@ -1,14 +1,17 @@
 import Element from "@satorijs/element";
 import { ItemShort, RivenItem } from "../types/wfm/item";
 import { OrderWithUser } from "../types/wfm/order";
-import { RivenOrderInternal, RivenAttributeShortInternal } from "../types/wfm/riven";
+import {
+  RivenOrderInternal,
+  RivenAttributeShortInternal,
+} from "../types/wfm/riven";
 
 export const ItemOrderComponent = (
   item: ItemShort,
-  orders: OrderWithUser[]
+  orders: OrderWithUser[],
 ): Element => {
-  const itemNameCN = item.i18n["zh-hans"].name;
-  const itemNameEN = item.i18n["en"].name;
+  const itemNameCN = item.i18n["zh-hans"]?.name;
+  const itemNameEN = item.i18n["en"]?.name;
   let result = `物品: ${itemNameCN} / ${itemNameEN} (ID: ${item.slug})\n`;
   for (const order of orders) {
     result += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`;
@@ -58,7 +61,7 @@ export const ItemOrderComponent = (
           const firstOrder = orders[0];
           const comment = `/w ${
             firstOrder.user.ingameName
-          } Hi! I want to buy: "${item.i18n["en"].name}${
+          } Hi! I want to buy: "${itemNameEN}${
             !item.maxRank || item.maxRank === 0
               ? ""
               : ` (rank ${firstOrder.rank})`
@@ -72,10 +75,11 @@ export const ItemOrderComponent = (
 
 export const RivenOrderComponent = (
   item: RivenItem,
-  orders: RivenOrderInternal[]
+  orders: RivenOrderInternal[],
 ): Element => {
-  const itemNameCN = item.i18n["zh-hans"].name;
-  const itemNameEN = item.i18n["en"].name;
+  const itemNameCN = item.i18n ? item.i18n["zh-hans"]?.name : undefined;
+  const itemNameEN = item.i18n ? item.i18n["en"]?.name : undefined;
+  const itemThumb = item.i18n ? item.i18n["en"]?.thumb : undefined;
   return (
     <div style={"display:flex; flex-direction: column; font-size: 12px;"}>
       <h1 style={"text-align: center;"}>
@@ -83,7 +87,12 @@ export const RivenOrderComponent = (
       </h1>
       <ul style={"width:100%;"}>
         {orders.map((order) => {
-          return RivenOrderItemComponent(item, order);
+          return RivenOrderItemComponent(
+            order,
+            itemNameCN,
+            itemNameEN,
+            itemThumb,
+          );
         })}
       </ul>
     </div>
@@ -91,12 +100,15 @@ export const RivenOrderComponent = (
 };
 
 const RivenOrderItemComponent = (
-  item: RivenItem,
-  order: RivenOrderInternal
+  order: RivenOrderInternal,
+  cnName?: string,
+  enName?: string,
+  thumb?: string,
 ): Element => {
-  const itemNameCN = item.i18n["zh-hans"]?.name ?? item.i18n["en"].name;
-  const itemIconLink =
-    "https://warframe.market/static/assets/" + item.i18n["en"].thumb;
+  const itemNameCN = cnName ?? enName;
+  const itemIconLink = thumb
+    ? "https://warframe.market/static/assets/" + thumb
+    : undefined;
   const ownerAvatarLink = order.owner.avatar
     ? "https://warframe.market/static/assets/" + order.owner.avatar
     : undefined;
@@ -109,9 +121,14 @@ const RivenOrderItemComponent = (
     ingame: ["ONLINE IN GAME", "#634b93"],
     online: ["ONLINE", "darkgreen"],
     offline: ["OFFLINE", "darkred"],
+    _: ["UNKNOWN", "grey"],
   };
-  const statusText = statusData[order.owner.status][0];
-  const statusColor = statusData[order.owner.status][1];
+  const status =
+    order.owner.status in statusData
+      ? (order.owner.status as keyof typeof statusData)
+      : "_";
+  const statusText = statusData[status][0];
+  const statusColor = statusData[status][1];
 
   return (
     <div style="border: 1px solid gray; margin: 20px; padding: 10px 15px 10px 11px; font-family: 'Lato', sans-serif, Helvetica, Arial; display: flex; flex-direction: column;">
@@ -233,7 +250,7 @@ const RivenOrderItemComponent = (
 
 const RivenAttributeComponent = (
   attr: RivenAttributeShortInternal,
-  index: number
+  index: number,
 ): Element => {
   const attrInfo = attr.attribute;
   const attrName = attrInfo.i18n["zh-hans"].name;

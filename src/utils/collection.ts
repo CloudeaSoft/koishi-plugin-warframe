@@ -1,11 +1,11 @@
 export const listToDict: <T>(
   dict: T[],
-  predict: (obj: T) => string[]
+  predict: (obj: T) => string[],
 ) => Record<string, T> = <T>(
   dict: T[],
-  predict: (obj: T) => string[]
+  predict: (obj: T) => string[],
 ): Record<string, T> => {
-  const result = {};
+  const result: Record<string, T> = {};
   for (const obj of dict) {
     const keys = predict(obj);
     for (const key of keys) {
@@ -20,13 +20,13 @@ export const listToDict: <T>(
 export const listToDictSpec: <TObj, TValue>(
   dict: TObj[],
   predict: (obj: TObj) => string[],
-  value: (obj: TObj) => TValue
+  value: (obj: TObj) => TValue,
 ) => Record<string, TValue> = <TObj, TValue>(
   dict: TObj[],
   predict: (obj: TObj) => string[],
-  value: (obj: TObj) => TValue
+  value: (obj: TObj) => TValue,
 ): Record<string, TValue> => {
-  const result = {};
+  const result: Record<string, TValue> = {};
   for (const obj of dict) {
     const keys = predict(obj);
     for (const key of keys) {
@@ -40,9 +40,9 @@ export const listToDictSpec: <TObj, TValue>(
 
 export const dictToKeyDict: <T>(
   dict: Record<string, T>,
-  predict: (obj: T) => string[]
+  predict: (obj: T) => string[],
 ) => Record<string, string> = (dict, predict) => {
-  const result = {};
+  const result: Record<string, string> = {};
   for (const obj in dict) {
     const keys = predict(dict[obj]);
     for (const key of keys) {

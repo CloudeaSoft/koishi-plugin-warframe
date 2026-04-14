@@ -38,13 +38,17 @@ const htmlString = (() => {
 
 export const generateImageOutput = async (
   puppe: Puppeteer,
-  element: Element
+  element: Element,
 ) => {
+  if (!puppe) {
+    return "本功能需要启用 koishi-plugin-puppeteer 插件";
+  }
+
   return await puppe.render(
     htmlString(element.toString()),
     async (page, next) => {
       const handle = await page.$("#root>*");
-      return await next(handle);
-    }
+      return await next(handle ?? undefined);
+    },
   );
 };

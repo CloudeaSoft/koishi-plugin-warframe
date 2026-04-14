@@ -7,7 +7,7 @@ export const rivenAttrValueDict: Record<
 > = (() => {
   const dict: any = {};
   for (const key in rivenAttrValues) {
-    const attrs = rivenAttrValues[key];
+    const attrs = rivenAttrValues[key as keyof typeof rivenAttrValues];
     dict[key] = {};
     for (const attrKey in attrs) {
       const removeDamageSuffix =
@@ -18,7 +18,7 @@ export const rivenAttrValueDict: Record<
       const wfmKey = removeDamageSuffix
         ? normalizeName(attrKey.replace("Damage", ""))
         : normalizeName(attrKey);
-      dict[key][wfmKey] = attrs[attrKey];
+      dict[key][wfmKey] = attrs[attrKey as keyof typeof attrs];
     }
   }
   return dict;

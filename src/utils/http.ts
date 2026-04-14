@@ -1,10 +1,10 @@
 export const fetchAsyncText: (
   url: string,
-  method?: string
-) => Promise<string | null> = async (
+  method?: string,
+) => Promise<string | undefined> = async (
   url: string,
-  method: string = "GET"
-): Promise<string | null> => {
+  method: string = "GET",
+): Promise<string | undefined> => {
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -20,18 +20,23 @@ export const fetchAsyncText: (
   try {
     return await response.text();
   } catch (error) {
-    console.log("Error: " + error.message);
-    return null;
+    if (error instanceof Error) {
+      console.log(error.message);
+      console.log(error.stack);
+    } else {
+      console.log("未知错误", error);
+    }
+    return undefined;
   }
 };
 
 export const fetchAsyncData: <T>(
   url: string,
-  method?: string
-) => Promise<T | null> = async <T = string>(
+  method?: string,
+) => Promise<T | undefined> = async <T = string>(
   url: string,
-  method: string = "GET"
-): Promise<T | null> => {
+  method: string = "GET",
+): Promise<T | undefined> => {
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -47,18 +52,23 @@ export const fetchAsyncData: <T>(
   try {
     return await response.json();
   } catch (error) {
-    console.log("Error: " + error.message);
-    return null;
+    if (error instanceof Error) {
+      console.log(error.message);
+      console.log(error.stack);
+    } else {
+      console.log("未知错误", error);
+    }
+    return undefined;
   }
 };
 
 export const fetchAsyncImage: (
   url: string,
-  method?: string
-) => Promise<Blob | null> = async (
+  method?: string,
+) => Promise<Blob | undefined> = async (
   url: string,
-  method: string = "GET"
-): Promise<Blob | null> => {
+  method: string = "GET",
+): Promise<Blob | undefined> => {
   const response = await fetch(url, {
     method: method,
     headers: {
@@ -74,7 +84,12 @@ export const fetchAsyncImage: (
   try {
     return await response.blob();
   } catch (error) {
-    console.log("Error: " + error.message);
-    return null;
+    if (error instanceof Error) {
+      console.log(error.message);
+      console.log(error.stack);
+    } else {
+      console.log("未知错误", error);
+    }
+    return undefined;
   }
 };

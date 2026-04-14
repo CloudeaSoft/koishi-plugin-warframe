@@ -11,54 +11,61 @@ import { RivenAttributeDTO, RivenOrderDTO } from "./dto/riven.dto";
 const wfmApiV1Base = "https://api.warframe.market/v1/";
 const wfmApiV2Base = "https://api.warframe.market/v2/";
 
-export const getWFMItemList = async (): Promise<ItemShort[]> => {
+export const getWFMItemList = async (): Promise<ItemShort[] | undefined> => {
   const response = await fetchAsyncData<WFMResponse<ItemShortDTO[]>>(
-    `${wfmApiV2Base}items`
+    `${wfmApiV2Base}items`,
   );
 
   return response?.data;
 };
 
 export const getWFMOrderList = async (
-  itemId: string
-): Promise<OrderWithUser[]> => {
+  itemId: string,
+): Promise<OrderWithUser[] | undefined> => {
   const response = await fetchAsyncData<WFMResponse<OrderWithUserDTO[]>>(
-    `${wfmApiV2Base}orders/item/${itemId}`
+    `${wfmApiV2Base}orders/item/${itemId}`,
   );
 
   return response?.data;
 };
 
-export const getWFMRivenItemList = async (): Promise<RivenItem[]> => {
+export const getWFMRivenItemList = async (): Promise<
+  RivenItem[] | undefined
+> => {
   const response = await fetchAsyncData<WFMResponse<RivenItemDTO[]>>(
-    `${wfmApiV2Base}riven/weapons`
+    `${wfmApiV2Base}riven/weapons`,
   );
 
   return response?.data;
 };
 
 export const getWFMRivenOrderList = async (
-  itemId: string
-): Promise<RivenOrder[]> => {
+  itemId: string,
+): Promise<RivenOrder[] | undefined> => {
   const response = await fetchAsyncData<WFMResponseV1<Auction<RivenOrderDTO>>>(
-    `${wfmApiV1Base}auctions/search?type=riven&sort_by=price_asc&weapon_url_name=${itemId}`
+    `${wfmApiV1Base}auctions/search?type=riven&sort_by=price_asc&weapon_url_name=${itemId}`,
   );
 
   return response?.payload.auctions;
 };
 
-export const getWFMRivenAttributeList = async (): Promise<RivenAttribute[]> => {
+export const getWFMRivenAttributeList = async (): Promise<
+  RivenAttribute[] | undefined
+> => {
   const response = await fetchAsyncData<WFMResponse<RivenAttributeDTO[]>>(
-    `${wfmApiV2Base}riven/attributes`
+    `${wfmApiV2Base}riven/attributes`,
   );
 
-  return response.data;
+  return response?.data;
 };
 
-export const getWFMDucatnator = async (): Promise<{
-  day: Ducatnator[];
-  hour: Ducatnator[];
-}> => {
+export const getWFMDucatnator = async (): Promise<
+  | {
+      day: Ducatnator[];
+      hour: Ducatnator[];
+    }
+  | undefined
+> => {
   const response = await fetchAsyncData<
     WFMResponseV1<{
       previous_day: DucatnatorDTO[];

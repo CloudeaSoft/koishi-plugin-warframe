@@ -15,6 +15,12 @@ export const globalWorldState = createAsyncCache(async () => {
   const spFissures = [];
   for (const fissure of worldState.fissures) {
     const nodeKey = await getSolNodeKey(fissure.nodeKey);
+    const tierName =
+      fissure.tierNum in fissureTierName
+        ? dict_zh[
+            fissureTierName[fissure.tierNum as keyof typeof fissureTierName]
+          ]
+        : fissure.tierNum;
     const obj = {
       category: fissure.isStorm
         ? "rj-fissures"
@@ -22,10 +28,10 @@ export const globalWorldState = createAsyncCache(async () => {
           ? "sp-fissures"
           : "fissures",
       hard: fissure.isHard,
-      activation: fissure.activation.getTime(),
-      expiry: fissure.expiry.getTime(),
+      activation: fissure.activation?.getTime(),
+      expiry: fissure.expiry?.getTime(),
       node: regionToShort(ExportRegions[nodeKey], dict_zh),
-      tier: dict_zh[fissureTierName[fissure.tierNum]],
+      tier: tierName,
       tierNum: fissureTierNumToNumber(fissure.tierNum),
     };
 

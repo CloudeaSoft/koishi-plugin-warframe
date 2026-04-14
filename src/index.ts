@@ -30,15 +30,15 @@ const setupHooks = (ctx: Context) => {
       ctx.logger.info(
         `Koishi recieved message: ${session.content}
         Platform: ${session.platform}
-        User: ${session.author.name}`
+        User: ${session.author.name}`,
       );
     }
   });
   ctx.on("command/before-execute", (action) => {
     if (ctx.config.developerMode) {
       ctx.logger.info(
-        `WFM Plugin received command ${action.command.name}
-        arguments: ${JSON.stringify(action.args)}`
+        `WFM Plugin received command ${action.command?.name}
+        arguments: ${JSON.stringify(action.args)}`,
       );
     }
   });

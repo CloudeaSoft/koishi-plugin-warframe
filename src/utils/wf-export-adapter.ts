@@ -4,25 +4,36 @@ import {
 } from "warframe-public-export-plus";
 
 export const regionToShort = (region: IRegion, dict: any) => {
+  let faction;
+  if (region.faction) {
+    const name = factions[region.faction].name;
+    if (name) {
+      faction = dict[name];
+    }
+  }
+  if (!faction) {
+    faction = region.faction;
+  }
+
   return {
     name: dict[region.name],
     system: dict[region.systemName],
     type: dict[region.missionName],
-    faction: dict[factions[region.faction].name],
+    faction,
     maxLevel: region.maxEnemyLevel,
     minLevel: region.minEnemyLevel,
   };
 };
 
 export const relicQualityToName = (quality: string): RelicQuality => {
-  const map = {
+  const map: Record<string, RelicQuality> = {
     VPQ_BRONZE: "Intact",
     VPQ_SILVER: "Exceptional",
     VPQ_GOLD: "Flawless",
     VPQ_PLATINUM: "Radiant",
   };
 
-  return map[quality] || quality;
+  return map[quality] || "Intact";
 };
 
 /** transform relic quality to translation key, return original if not matched.

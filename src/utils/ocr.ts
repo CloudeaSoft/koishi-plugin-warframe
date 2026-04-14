@@ -3,7 +3,7 @@ import { GeneralBasicOCRResponse } from "tencentcloud-sdk-nodejs-ocr/tencentclou
 
 export const extractTextFromImage = async (
   image: string | Blob,
-  secret: OcrAPISecret
+  secret: OcrAPISecret,
 ): Promise<string[] | undefined> => {
   if (image instanceof Blob) {
     const buffer = await image.arrayBuffer();
@@ -31,7 +31,9 @@ export const extractTextFromImage = async (
       ImageBase64: image,
     });
 
-    return result.TextDetections.map((t) => t.DetectedText);
+    return result.TextDetections?.map((t) => t.DetectedText).filter(
+      (v): v is string => !!v,
+    );
   } catch (err) {
     console.error("error", err);
     return undefined;

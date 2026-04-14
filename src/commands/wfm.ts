@@ -10,8 +10,8 @@ export const wmCommand = async (action: Argv, input: string) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
-    ItemOrderComponent(result.item, result.orders)
+    action.session!.app.puppeteer,
+    ItemOrderComponent(result.item, result.orders),
   );
 };
 
@@ -22,7 +22,7 @@ export const wmrCommand = async (action: Argv, input: string) => {
   }
 
   return await generateImageOutput(
-    action.session.app.puppeteer,
-    RivenOrderComponent(result.item, result.orders)
+    action.session!.app.puppeteer,
+    RivenOrderComponent(result.item, result.orders),
   );
 };
