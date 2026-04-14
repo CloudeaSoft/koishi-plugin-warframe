@@ -197,7 +197,7 @@ export const getWeekly = async () => {
     temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        dict_zh[ExportMissionTypes[receivedType].name ?? ""] ?? receivedType;
+        dict_zh[ExportMissionTypes[receivedType]?.name ?? ""] ?? receivedType;
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
