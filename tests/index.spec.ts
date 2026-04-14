@@ -19,10 +19,10 @@ app.middleware(({ content }, next) => {
   }
 });
 
-describe("main", function () {
-  this.timeout(10000);
+before(() => app.start());
 
-  before(() => app.start());
+describe("Main Project", function () {
+  this.timeout(10000);
 
   it("example", async () => {
     await client.shouldReply("天王盖地虎", "宝塔镇河妖");

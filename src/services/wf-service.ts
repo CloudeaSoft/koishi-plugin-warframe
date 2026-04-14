@@ -1,266 +1,40 @@
-import Puppeteer from "koishi-plugin-puppeteer";
 import {
   ExportMissionTypes,
-  ExportRelics,
-  ExportRewards,
-  ExportWeapons,
-  dict_en,
+  ExportRegions,
   dict_zh,
-  ExportRegions as regions,
 } from "warframe-public-export-plus";
 
 import dict_zh_ex from "../assets/zh.json";
 import dict_en_ex from "../assets/en.json";
 import arbyRewards from "../assets/arbyRewards";
-import arbys from "../assets/arbys";
-import { incarnonRewards, warframeRewards } from "../assets/circuitRewards";
-import rivenCalc from "../assets/rivencalc.json";
-import rivenAttrValues from "../assets/rivenAttrValues.json";
 
-import { getHtmlImageBase64, OutputImage } from "../components/wfm";
 import {
-  ArbitrationTable,
-  CircuitTable,
-  FissureTable,
-  RelicComponent,
-  RivenComponent,
-  VoidTraderComponent,
-  WeeklyTable,
-} from "../components/wf";
-import { getWorldState } from "../api/wf-api";
+  incarnons as incarnonRewards,
+  warframes as warframeRewards,
+} from "../assets/circuitRewards.json";
+
 import {
-  createAsyncCache,
   fetchAsyncImage,
-  fissureTierName,
-  fissureTierNumToNumber,
-  fixRelicRewardKey,
   getMissionTypeKey,
-  getSolNodeKey,
   getVoidTraderItem,
-  listToDict,
   msToHumanReadable,
   normalizeName,
   normalSimilarity,
   regionToShort,
   removeSpace,
   tokenSimilarity,
+  extractTextFromImage,
 } from "../utils";
-import { Dict } from "koishi";
-import { extractTextFromImage } from "./ocr-service";
-import { GeneralAccurateOCRResponse } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_models";
-import { globalRivenAttributeList } from "./wfm-service";
-
-// ================ initialization ===================
-
-const arbitrationSchedule: ArbitrationShort[] = arbys
-  .split("\n")
-  .map((line) => line.split(","))
-  .filter((arr) => arr.length == 2)
-  .map((arr) => {
-    return {
-      time: parseInt(arr[0]),
-      node: arr[1],
-    };
-  });
-
-const globalWorldState = createAsyncCache(async () => {
-  const worldState = await getWorldState();
-  const fissures = [];
-  const rjFissures = [];
-  const spFissures = [];
-  for (const fissure of worldState.fissures) {
-    const nodeKey = await getSolNodeKey(fissure.nodeKey);
-    const obj = {
-      category: fissure.isStorm
-        ? "rj-fissures"
-        : fissure.isHard
-        ? "sp-fissures"
-        : "fissures",
-      hard: fissure.isHard,
-      activation: fissure.activation.getTime(),
-      expiry: fissure.expiry.getTime(),
-      node: regionToShort(regions[nodeKey], dict_zh),
-      tier: dict_zh[fissureTierName[fissure.tierNum]],
-      tierNum: fissureTierNumToNumber(fissure.tierNum),
-    };
-
-    if (fissure.isStorm) {
-      rjFissures.push(obj);
-    } else if (fissure.isHard) {
-      spFissures.push(obj);
-    } else {
-      fissures.push(obj);
-    }
-  }
-
-  fissures.sort((a, b) => a.tierNum - b.tierNum);
-  spFissures.sort((a, b) => a.tierNum - b.tierNum);
-  rjFissures.sort((a, b) => a.tierNum - b.tierNum);
-  return { raw: worldState, fissures, spFissures, rjFissures };
-}, 120_000);
-
-const loadRelics = () => {
-  const result: Record<string, Relic> = {};
-  for (const key in ExportRelics) {
-    const exportRelic = ExportRelics[key];
-    const exportRewards = ExportRewards[exportRelic.rewardManifest];
-
-    const era = "/Lotus/Language/Relics/Era_" + exportRelic.era.toUpperCase();
-    const relicKey = normalizeName(exportRelic.era + exportRelic.category);
-
-    const rewards = (exportRewards[0] ?? []).map((r) => {
-      const item = fixRelicRewardKey(r.type);
-      return {
-        name: item,
-        rarity: r.rarity as any,
-        quantity: r.itemCount,
-      };
-    });
-
-    const relic: Relic = {
-      tier: exportRelic.era,
-      tierKey: era,
-      num: exportRelic.category,
-      items: rewards,
-    };
-    result[relicKey] = relic;
-  }
-
-  relics = result;
-};
-
-let relics: Record<string, Relic> = null;
-
-const tierListForMatch = [
-  "古纪",
-  "前纪",
-  "中纪",
-  "后纪",
-  "安魂",
-  "先锋",
-  "Lith",
-  "Meso",
-  "Neo",
-  "Axi",
-  "Requiem",
-  "Vanguard",
-].map((t) => normalizeName(t));
-
-export const rivenAttrValueDict: Record<
-  string,
-  Record<string, number>
-> = (function () {
-  const dict: any = {};
-  for (const key in rivenAttrValues) {
-    const attrs = rivenAttrValues[key];
-    dict[key] = {};
-    for (const attrKey in attrs) {
-      const removeDamageSuffix =
-        attrKey.endsWith("Damage") &&
-        attrKey !== "Damage" &&
-        attrKey !== "Finisher Damage" &&
-        !attrKey.startsWith("Critical");
-      const wfmKey = removeDamageSuffix
-        ? normalizeName(attrKey.replace("Damage", ""))
-        : normalizeName(attrKey);
-      dict[key][wfmKey] = attrs[attrKey];
-    }
-  }
-  return dict;
-})();
-
-const weaponRivenDispositionDict = (function () {
-  const mapped = rivenCalc.weapons.reduce<
-    {
-      name: {
-        en: string;
-        zh: string;
-      };
-      calc: {
-        disposition: number;
-        name: string;
-        texture: string;
-        riventype: string;
-      };
-      weapon: any;
-    }[]
-  >((prev, element) => {
-    let mapped = undefined;
-    for (const weaponKey in ExportWeapons) {
-      const weapon = ExportWeapons[weaponKey];
-
-      const splited = weapon.name.split("/");
-      if (splited.length <= 0) {
-        continue;
-      }
-
-      const keyName = splited[splited.length - 1];
-      const normalizedCalcName = normalizeName(element.name);
-      if (normalizeName(keyName) === normalizedCalcName) {
-        mapped = weapon;
-        break;
-      }
-
-      const weaponEN = dict_en[weapon.name];
-      if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
-        mapped = weapon;
-        break;
-      }
-    }
-
-    if (!mapped) {
-      return prev;
-    }
-
-    const weaponEN = dict_en[mapped.name];
-    const weaponZH = dict_zh[mapped.name];
-    const result = {
-      name: {
-        en: weaponEN,
-        zh: weaponZH,
-      },
-      calc: element,
-      weapon: mapped,
-    };
-
-    prev.push(result);
-
-    return prev;
-  }, []);
-
-  return listToDict(mapped, (e) => [
-    normalizeName(e.name.zh),
-    normalizeName(e.name.en),
-  ]);
-})();
-
-const rivenStatFixFactor: RivenStatFixFactorMap = {
-  "2_0": { buffFactor: 0.99, buffCount: 2, curseFactor: 0, curseCount: 0 },
-  "2_1": {
-    buffFactor: 1.2375,
-    buffCount: 2,
-    curseFactor: -0.495,
-    curseCount: 1,
-  },
-  "3_0": {
-    buffFactor: 0.75,
-    buffCount: 3,
-    curseFactor: 0,
-    curseCount: 0,
-  },
-  "3_1": {
-    buffFactor: 0.9375,
-    buffCount: 3,
-    curseFactor: -0.75,
-    curseCount: 1,
-  },
-};
+import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
+import { relics } from "../data/wf/relics";
+import { globalWorldState } from "../data/wf/globalWorldState";
+import { arbitrationSchedule } from "../data/wf/arbitrationSchedule";
+import { rivenAttrValueDict } from "../data/wf/rivenBaseValues";
+import { weaponRivenDispositionDict } from "../data/wf/rivenDisposition";
+import { rivenStatFixFactor } from "../data/wf/rivenStatData";
+import { RivenAttribute } from "../types/wfm/riven";
 
 // ================ features ===================
-
-export const wfOnReady = async () => {
-  loadRelics();
-};
 
 export const getRelic = async (input: string): Promise<Relic | string> => {
   if (!input) {
@@ -276,12 +50,26 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
     return "遗物数据未加载完成，请稍后再试";
   }
 
+  const tierListForMatch = [
+    "古纪",
+    "前纪",
+    "中纪",
+    "后纪",
+    "安魂",
+    "先锋",
+    "Lith",
+    "Meso",
+    "Neo",
+    "Axi",
+    "Requiem",
+    "Vanguard",
+  ].map((t) => normalizeName(t));
   const tier = tierListForMatch.find((t) => input.startsWith(t));
   if (!tier) {
     return "请提供正确的遗物名称";
   }
 
-  let category = input
+  const category = input
     .replace(new RegExp(`^${tier}`), "")
     .replace(/遗物$|relic$/, "");
 
@@ -293,18 +81,9 @@ export const getRelic = async (input: string): Promise<Relic | string> => {
     安魂: "Requiem",
     先锋: "Vanguard",
   };
-  const enTier = zhTierMap[tier] ?? tier;
+  const enTier = zhTierMap[tier as keyof typeof zhTierMap] ?? tier;
   const key = normalizeName(enTier + category);
   return relics[key] ?? "未找到对应遗物信息";
-};
-
-export const generateRelicOutput = async (
-  puppe: Puppeteer,
-  relic: OutputRelic
-) => {
-  const element = RelicComponent(relic);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const getArbitrations = (day: number = 3): Arbitration[] | string => {
@@ -313,19 +92,19 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
   }
 
   const currentHourTimeStamp = Math.floor(
-    new Date().setMinutes(0, 0, 0) / 1000
+    new Date().setMinutes(0, 0, 0) / 1000,
   );
   const currentHourIndex = arbitrationSchedule.findIndex(
-    (a) => a.time === currentHourTimeStamp
+    (a) => a.time === currentHourTimeStamp,
   );
   const weekArbys = arbitrationSchedule.slice(
     currentHourIndex,
-    currentHourIndex + 24 * day
+    currentHourIndex + 24 * day,
   );
   return weekArbys
-    .filter((a) => arbyRewards[a.node])
+    .filter((a) => arbyRewards[a.node as keyof typeof arbyRewards])
     .map((a) => {
-      const obj = regionToShort(regions[a.node], dict_zh);
+      const obj = regionToShort(ExportRegions[a.node], dict_zh);
       return {
         ...obj,
         time: new Date(a.time * 1000).toLocaleString("zh-cn", {
@@ -339,18 +118,9 @@ export const getArbitrations = (day: number = 3): Arbitration[] | string => {
           // hourCycle: 'h23' // 另一种设置 24 小时制的方法
           timeZone: "Asia/Shanghai",
         }),
-        rewards: arbyRewards[a.node],
+        rewards: arbyRewards[a.node as keyof typeof arbyRewards],
       };
     });
-};
-
-export const generateArbitrationsOutput = async (
-  puppe: Puppeteer,
-  arby: Arbitration[]
-) => {
-  const element = ArbitrationTable(arby);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const getWeekly = async () => {
@@ -359,30 +129,32 @@ export const getWeekly = async () => {
     return "内部错误，获取最新信息失败";
   }
 
-  const archon =
-    dict_zh[
+  const archon: ArchonHunt = {
+    name: dict_zh[
       "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
-    ];
+    ],
+  };
 
   const stringToDebuff = (
     key: string,
     name: string,
-    prefix: string
+    prefix: string,
   ): ArchiMedeaDebuff => {
-    const keyToName = dict_zh_ex[`${prefix}${key}`];
+    const keyToName = dict_zh_ex[`${prefix}${key}` as keyof typeof dict_zh_ex];
 
     if (!keyToName) {
       for (const transKey in dict_en_ex) {
-        if (dict_en_ex[transKey] === name) {
+        if (dict_en_ex[transKey as keyof typeof dict_en_ex] === name) {
           return {
-            name: dict_zh_ex[transKey],
-            desc: dict_zh_ex[transKey + "_Desc"],
+            name: dict_zh_ex[transKey as keyof typeof dict_zh_ex],
+            desc: dict_zh_ex[(transKey + "_Desc") as keyof typeof dict_zh_ex],
           };
         }
       }
     }
 
-    const riskDesc = dict_zh_ex[`${prefix}${key}_Desc`];
+    const riskDesc =
+      dict_zh_ex[`${prefix}${key}_Desc` as keyof typeof dict_zh_ex];
     return {
       name: keyToName,
       desc: riskDesc,
@@ -394,14 +166,14 @@ export const getWeekly = async () => {
     deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        dict_zh[ExportMissionTypes[receivedType]?.name] ?? m.missionType;
+        dict_zh[ExportMissionTypes[receivedType]?.name ?? ""] ?? m.missionType;
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
-        "/Lotus/Language/Conquest/MissionVariant_LabConquest_"
+        "/Lotus/Language/Conquest/MissionVariant_LabConquest_",
       );
       const risks = m.risks.map((r) =>
-        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_"),
       );
 
       return {
@@ -409,10 +181,10 @@ export const getWeekly = async () => {
         deviation,
         risks,
       };
-    })
+    }),
   );
   const deepArchimPersonalModifier = deepArchim.personalModifiers.map((p) =>
-    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_"),
   );
   const deepArchimRes: ArchiMedea = {
     name: "深层科研",
@@ -425,14 +197,14 @@ export const getWeekly = async () => {
     temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        dict_zh[ExportMissionTypes[receivedType]?.name] ?? receivedType;
+        dict_zh[ExportMissionTypes[receivedType]?.name ?? ""] ?? receivedType;
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
-        "/Lotus/Language/Conquest/MissionVariant_HexConquest_"
+        "/Lotus/Language/Conquest/MissionVariant_HexConquest_",
       );
       const risks = m.risks.map((r) =>
-        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_")
+        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_"),
       );
 
       return {
@@ -440,11 +212,11 @@ export const getWeekly = async () => {
         deviation,
         risks,
       };
-    })
+    }),
   );
   const temporalArchimPersonalModifier = temporalArchim.personalModifiers.map(
     (p) =>
-      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_")
+      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_"),
   );
   const temporalArchimRes: ArchiMedea = {
     name: "时光科研",
@@ -459,19 +231,7 @@ export const getWeekly = async () => {
   };
 };
 
-export const generateWeeklyOutput = async (
-  puppe: Puppeteer,
-  archon: string,
-  deepArchimedea: ArchiMedea,
-  temporalArchimedea: ArchiMedea
-) => {
-  const element = await WeeklyTable(archon, deepArchimedea, temporalArchimedea);
-  // const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  // return OutputImage(imgBase64);
-  return element;
-};
-
-export const getRegionTime = async (): Promise<string> => {
+export const getEnvironment = async (): Promise<string> => {
   const { raw: worldState } = await globalWorldState.get();
   if (!worldState) {
     return "内部错误，获取最新信息失败";
@@ -497,8 +257,9 @@ export const getRegionTime = async (): Promise<string> => {
     envy: "嫉妒",
   };
   const duviriState =
-    duviriStateTransDict[worldState.duviriCycle.state] ??
-    worldState.duviriCycle.state;
+    duviriStateTransDict[
+      worldState.duviriCycle.state as keyof typeof duviriStateTransDict
+    ] ?? worldState.duviriCycle.state;
   const duviri = `双衍王境: ${duviriState} ${worldState.duviriCycle.endString}`;
 
   const zarimanFaction = worldState.zarimanCycle.isCorpus
@@ -516,27 +277,15 @@ export const getCircuitWeek = (): {
   const EPOCH = 1734307200 * 1000;
   const week = Math.trunc((Date.now() - EPOCH) / 604800000);
   const incarnons = incarnonRewards[week % incarnonRewards.length].map(
-    (i) => dict_zh[i]
+    (i) => dict_zh[i],
   );
   const warframes = warframeRewards[week % warframeRewards.length].map(
-    (i) => dict_zh[i]
+    (i) => dict_zh[i],
   );
   return {
     incarnons,
     warframes,
   };
-};
-
-export const generateCircuitWeekOutput = async (
-  puppe: Puppeteer,
-  data: {
-    incarnons: string[];
-    warframes: string[];
-  }
-) => {
-  const element = CircuitTable(data.incarnons, data.warframes);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };
 
 export const getFissures = async () => {
@@ -554,15 +303,52 @@ export const getRailjackFissures = async () => {
   return rjFissures ?? "内部错误，获取最新信息失败";
 };
 
-export const generateFissureOutput = async (
-  puppe: Puppeteer,
-  fissures: Fissure[],
-  type: "fissure" | "sp-fissure" | "rj-fissure"
-) => {
-  const element = FissureTable(fissures, type);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
+export const getAnalyzedRiven = async (
+  secret: OcrAPISecret,
+  url: string,
+): Promise<string | RivenStatAnalyzeResult> => {
+  const img = await fetchAsyncImage(url);
+  if (!img) {
+    return "获取图片失败";
+  }
+
+  const extractResult = await extractTextFromImage(img, secret);
+  if (!extractResult) {
+    return "解析图片失败";
+  }
+
+  const parseResult = await parseOCRResult(extractResult);
+  if (
+    !parseResult ||
+    parseResult.attributes.length < 2 ||
+    parseResult.attributes.length > 4
+  ) {
+    return "解析图片失败";
+  }
+
+  return analyzeRivenStat(parseResult as any);
 };
+
+export const getVoidTrader = async (): Promise<string | VoidTrader> => {
+  const { raw: worldState } = await globalWorldState.get();
+  if (worldState.voidTraders.length === 0) {
+    return "虚空商人仍在未知地带漂流...";
+  }
+
+  const trader = worldState.voidTraders[0];
+
+  if (trader && trader.activation && trader.activation.getTime() > Date.now()) {
+    const diff = trader.activation.getTime() - Date.now();
+    return "距离虚空商人到达还有: " + msToHumanReadable(diff);
+  }
+
+  const diff = trader.expiry!.getTime() - Date.now();
+  const items = trader.inventory.map(getVoidTraderItem);
+
+  return { expiry: msToHumanReadable(diff), items };
+};
+
+// ================ privates ===================
 
 export const getWeaponRivenDisposition = (name: string) => {
   const normalizedName = normalizeName(name);
@@ -580,44 +366,11 @@ export const getWeaponRivenDisposition = (name: string) => {
   return undefined;
 };
 
-export const getAnalyzedRiven = async (
-  secret: OcrAPISecret,
-  dict: Dict
-): Promise<string | RivenStatAnalyzeResult> => {
-  const img = await fetchAsyncImage(dict.src);
-  if (!img) {
-    return "获取图片失败";
-  }
+export const parseOCRResult = async (ocrResult: string[]) => {
+  const { globalRivenAttributeList } = await globalRivenAttribute.get();
 
-  const extractResult = await extractTextFromImage(img, secret);
-  if (!extractResult) {
-    return "解析图片失败";
-  }
-
-  const parseResult = parseOCRResult(extractResult);
-  if (
-    !parseResult ||
-    parseResult.attributes.length < 2 ||
-    parseResult.attributes.length > 4
-  ) {
-    return "解析图片失败";
-  }
-
-  return analyzeRivenStat(parseResult as any);
-};
-
-export const generateAnalyzedRivenOutput = async (
-  puppe: Puppeteer,
-  data: RivenStatAnalyzeResult
-) => {
-  const element = RivenComponent(data);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
-};
-
-export const parseOCRResult = (ocrResult: GeneralAccurateOCRResponse) => {
-  const list = ocrResult.TextDetections;
-  if (!list) {
+  const list = ocrResult;
+  if (!list!.length) {
     return;
   }
 
@@ -654,13 +407,13 @@ export const parseOCRResult = (ocrResult: GeneralAccurateOCRResponse) => {
     return Math.max(t, s);
   }
 
-  const texts = list.map((item) => item.DetectedText);
+  const texts = list;
   const attributes: {
     attr: RivenAttribute;
     value: number;
     prefix: string;
   }[] = [];
-  const statLines = [];
+  const statLines: string[] = [];
   for (const t of texts) {
     if (!t || !t.match(/^[x+-]|^[0-9]/)) {
       continue;
@@ -876,31 +629,4 @@ export const analyzeRivenStat = (parseResult: {
     buffs,
     curses,
   };
-};
-
-export const getVoidTrader = async (): Promise<string | VoidTrader> => {
-  const { raw: worldState } = await globalWorldState.get();
-  if (worldState.voidTraders.length === 0) {
-    return "虚空商人仍在未知地带漂流...";
-  }
-
-  if (worldState.voidTraders[0].activation.getTime() > Date.now()) {
-    const diff = worldState.voidTraders[0].activation.getTime() - Date.now();
-    return "距离虚空商人到达还有: " + msToHumanReadable(diff);
-  }
-
-  const diff = worldState.voidTraders[0].expiry.getTime() - Date.now();
-  const trader = worldState.voidTraders[0];
-  const items = trader.inventory.map(getVoidTraderItem);
-
-  return { expiry: msToHumanReadable(diff), items };
-};
-
-export const generateVoidTraderOutput = async (
-  puppe: Puppeteer,
-  data: VoidTrader
-) => {
-  const element = VoidTraderComponent(data);
-  const imgBase64 = await getHtmlImageBase64(puppe, element.toString());
-  return OutputImage(imgBase64);
 };

@@ -11,10 +11,11 @@ import {
   ExportUpgrades,
   ExportVirtuals,
   ExportWeapons,
+  TMissionType,
 } from "warframe-public-export-plus";
 import { dictToKeyDict, relicToFullNameZH } from "./";
 
-let solNodesEnDict = null;
+let solNodesEnDict: Record<string, string>;
 
 export const getSolNodeKey = async (name: string): Promise<string> => {
   const worldstateData = await import("warframe-worldstate-data");
@@ -26,15 +27,15 @@ export const getSolNodeKey = async (name: string): Promise<string> => {
   return solNodesEnDict[name];
 };
 
-let missionTypeEnDict = null;
+let missionTypeEnDict: Record<string, TMissionType>;
 
-export const getMissionTypeKey = async (name: string): Promise<string> => {
+export const getMissionTypeKey = async (name: string): Promise<TMissionType> => {
   const worldstateData = await import("warframe-worldstate-data");
   if (!missionTypeEnDict) {
     missionTypeEnDict = dictToKeyDict(
       worldstateData.default.missionTypes,
-      (n) => [n.value]
-    );
+      (n) => [n.value],
+    ) as any;
   }
 
   if (name === "Disruption") return "MT_ARTIFACT";
@@ -66,8 +67,9 @@ export const getVoidTraderItem = (i: {
   const itemName = !itemNameKey
     ? i.item
     : typeof itemNameKey === "string"
-    ? dict_zh[itemNameKey] ?? (itemNameKey.includes("/") ? i.item : itemNameKey)
-    : relicToFullNameZH(itemNameKey.era, itemNameKey.category);
+      ? (dict_zh[itemNameKey] ??
+        (itemNameKey.includes("/") ? i.item : itemNameKey))
+      : relicToFullNameZH(itemNameKey.era, itemNameKey.category);
   return { name: itemName, ducats: i.ducats, credits: i.credits };
 };
 
