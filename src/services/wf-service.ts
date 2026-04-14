@@ -166,7 +166,7 @@ export const getWeekly = async () => {
     deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
       const receivedType = await getMissionTypeKey(m.missionType);
       const type =
-        dict_zh[ExportMissionTypes[receivedType].name ?? ""] ?? m.missionType;
+        dict_zh[ExportMissionTypes[receivedType]?.name ?? ""] ?? m.missionType;
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
