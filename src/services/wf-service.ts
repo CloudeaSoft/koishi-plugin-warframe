@@ -472,6 +472,10 @@ export const parseOCRResult = async (ocrResult: string[]) => {
       return standard === "基础伤害" ? 1 : 0;
     }
 
+    if (input === "弹药最大值") {
+      return standard === "弹药上限" ? 1 : 0;
+    }
+
     if (standard === "基础伤害" && input.match(/^伤害$|近战伤害/)) {
       return 1;
     }
