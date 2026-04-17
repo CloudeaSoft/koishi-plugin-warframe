@@ -46,3 +46,60 @@ export function createAsyncCache<T>(
 
   return { get, update };
 }
+
+export class CacheStorage<T> {
+  private _limit: number;
+  private _storage: Map<string, Promise<T>>;
+
+  /**
+   *
+   * @param limit defaults to 100.
+   */
+  constructor(limit: number = 100) {
+    if (limit <= 0) {
+      throw new Error("Size of cache storage must be larger than 0!");
+    }
+
+    this._limit = limit;
+    this._storage = new Map<string, Promise<T>>();
+  }
+
+  /**
+   * Get or set caches.
+   * @param hash The identity of data.
+   * @param fetchFn The function to get the data.
+   * @returns `Promise<T>` or `undefined`.
+   */
+  async get(hash: string, fetchFn: () => Promise<T>): Promise<T> {
+    const existingPromise = this._storage.get(hash);
+    if (existingPromise) {
+      this._storage.delete(hash);
+      this._storage.set(hash, existingPromise);
+      return existingPromise;
+    }
+
+    const promise = fetchFn().catch((err) => {
+      this._storage.delete(hash);
+      throw err;
+    });
+
+    this._storage.set(hash, promise);
+
+    if (this._storage.size > this._limit) {
+      const oldestKey = this._storage.keys().next().value;
+      if (oldestKey) {
+        this._storage.delete(oldestKey);
+      }
+    }
+
+    return promise;
+  }
+
+  clear() {
+    this._storage.clear();
+  }
+
+  get size() {
+    return this._storage.size;
+  }
+}
