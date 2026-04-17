@@ -1,5 +1,5 @@
 import { Client } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_client";
-import { CacheStorage, createAsyncCache } from "./cache";
+import { CacheStorage } from "./cache";
 
 const ocrCache = new CacheStorage<string[]>(100);
 
