@@ -1,3 +1,9 @@
+## [1.4.6](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.5...v1.4.6) (2026-04-17)
+
+### Bug Fixes
+
+* add ocr cache and amend riven stat match ([#33](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/33)) ([46a1f26](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/46a1f26dc602a6506ad6bb6de2b83d057231b268))
+
 ## [1.4.5](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.4...v1.4.5) (2026-04-14)
 
 ### Bug Fixes
