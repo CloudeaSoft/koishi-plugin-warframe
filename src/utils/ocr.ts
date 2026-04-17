@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import { Client } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_client";
 import { CacheStorage } from "./cache";
 
@@ -9,14 +10,9 @@ const ocrCache = new CacheStorage<string[]>(100);
  * @param algorithm Hash algorithm: SHA-256 / SHA-1 / MD5
  * @returns Hexadecimal hash string
  */
-const getImageBase64Hash = async (
-  base64: string,
-  algorithm: AlgorithmIdentifier = "SHA-256",
-): Promise<string> => {
+const getImageBase64Hash = (base64: string): string => {
   const pureBase64 = base64.replace(/^data:image\/\w+;base64,/, "");
-  const uint8Array = Buffer.from(pureBase64, "base64");
-  const hashBuffer = await crypto.subtle.digest(algorithm, uint8Array);
-  return Buffer.from(hashBuffer).toString("hex");
+  return crypto.createHash("sha256").update(pureBase64, "base64").digest("hex");
 };
 
 const getTextFromTencentOCR = async (image: string, secret: OcrAPISecret) => {
@@ -57,10 +53,12 @@ export const extractTextFromImage = async (
     image = Buffer.from(buffer).toString("base64");
   }
 
-  const imageHash = await getImageBase64Hash(image);
+  const imageHash = getImageBase64Hash(image);
 
   try {
-    return ocrCache.get(imageHash, () => getTextFromTencentOCR(image, secret));
+    return await ocrCache.get(imageHash, () =>
+      getTextFromTencentOCR(image, secret),
+    );
   } catch (err) {
     console.error("Ocr request error!", err);
     return undefined;
