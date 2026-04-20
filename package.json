@@ -80,7 +80,7 @@
     "@nestjs/core": "^11.1.19",
     "rxjs": "^7.8.2",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.155",
-    "warframe-public-export-plus": "^0.5.105",
+    "warframe-public-export-plus": "^0.6.0",
     "warframe-worldstate-data": "^3.13.1",
     "warframe-worldstate-parser": "^5.3.3"
   }
