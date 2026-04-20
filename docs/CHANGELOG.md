@@ -1,3 +1,9 @@
+## [1.4.7](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.6...v1.4.7) (2026-04-20)
+
+### Bug Fixes
+
+* **deps:** add missing peer dependencies during runtime ([#35](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/35)) ([0b23e60](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/0b23e60b576cda8894eb9272cffe1a9a322bb58d))
+
 ## [1.4.6](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.5...v1.4.6) (2026-04-17)
 
 ### Bug Fixes
