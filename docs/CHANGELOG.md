@@ -1,3 +1,9 @@
+## [1.4.8](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.7...v1.4.8) (2026-04-20)
+
+### Bug Fixes
+
+* bump warframe-public-export-plus from 0.5.106 to 0.6.0 ([#37](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/37)) ([a75e683](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/a75e683d0118e85e27989d85550be71bf246b342))
+
 ## [1.4.7](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.6...v1.4.7) (2026-04-20)
 
 ### Bug Fixes
