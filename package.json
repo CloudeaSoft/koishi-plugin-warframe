@@ -52,8 +52,6 @@
     "@koishijs/client": "^5.30.11",
     "@koishijs/plugin-help": "^2.4.6",
     "@koishijs/plugin-mock": "^2.6.6",
-    "@nestjs/common": "^11.1.18",
-    "@nestjs/core": "^11.1.18",
     "@satorijs/element": "^3.1.8",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
@@ -79,6 +77,8 @@
     "yakumo-tsc": "^1.0.0"
   },
   "dependencies": {
+    "@nestjs/common": "^11.1.19",
+    "@nestjs/core": "^11.1.19",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.155",
     "warframe-public-export-plus": "^0.5.105",
     "warframe-worldstate-data": "^3.13.1",
