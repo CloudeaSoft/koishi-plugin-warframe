@@ -18,8 +18,8 @@ updates:
     pull-request-branch-name:
       separator: '-'
     rebase-strategy: 'auto'
-    # allow:
-    #   - dependency-name: "warframe-worldstate-data"
-    #   - dependency-name: "warframe-worldstate-parser"
-    #   - dependency-name: "warframe-public-export-plus"
+    allow:
+      - dependency-name: "warframe-worldstate-data"
+      - dependency-name: "warframe-worldstate-parser"
+      - dependency-name: "warframe-public-export-plus"
 
