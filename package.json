@@ -73,7 +73,7 @@
     "typescript": "^5.9.3",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
-    "yakumo-tsc": "^1.0.0"
+    "yakumo-tsc": "^3.0.1"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.19",
