@@ -45,7 +45,7 @@ export const circuitCommand = async (action: Argv) => {
   const result = getCircuitWeek();
   return await generateImageOutput(
     action.session!.app.puppeteer,
-    CircuitComponent(result.incarnons, result.warframes),
+    CircuitComponent(result.currentIncarnons, result.currentWarframes, result.allIncarnons, result.allWarframes),
   );
 };
 

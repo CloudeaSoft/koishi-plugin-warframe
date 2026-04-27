@@ -278,20 +278,22 @@ export const getEnvironment = async (): Promise<string> => {
 };
 
 export const getCircuitWeek = (): {
-  incarnons: string[];
-  warframes: string[];
+  currentIncarnons: number;
+  currentWarframes: number;
+  allIncarnons: string[][];
+  allWarframes: string[][];
 } => {
   const EPOCH = 1734307200 * 1000;
   const week = Math.trunc((Date.now() - EPOCH) / 604800000);
-  const incarnons = incarnonRewards[week % incarnonRewards.length].map(
-    (i) => dict_zh[i],
-  );
-  const warframes = warframeRewards[week % warframeRewards.length].map(
-    (i) => dict_zh[i],
-  );
+  const index1 = (week + 1) % incarnonRewards.length;
+  const index2 = (week + 8) % warframeRewards.length;
+  const incarnons = incarnonRewards.map((v) => v.map((i) => dict_zh[i]));
+  const warframes = warframeRewards.map((v) => v.map((i) => dict_zh[i]));
   return {
-    incarnons,
-    warframes,
+    currentIncarnons: index1,
+    currentWarframes: index2,
+    allIncarnons: incarnons,
+    allWarframes: warframes,
   };
 };
 

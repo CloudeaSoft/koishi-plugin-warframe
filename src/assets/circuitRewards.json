@@ -1,6 +1,13 @@
 {
   "incarnons": [
     [
+      "/Lotus/Language/Items/RifleName",
+      "/Lotus/Language/Items/PistolName",
+      "/Lotus/Language/Items/LongSwordName",
+      "/Lotus/Language/Items/HuntingBowName",
+      "/Lotus/Language/Items/KunaiName"
+    ],
+    [
       "/Lotus/Language/Items/AutoShotgunName",
       "/Lotus/Language/Items/ReconnasorName",
       "/Lotus/Language/Items/CorpusHandRocketLauncherName",
@@ -48,31 +55,9 @@
       "/Lotus/Language/Items/CorpusMinigunName",
       "/Lotus/Language/Items/BurstPistolName",
       "/Lotus/Language/Items/TennoSaiName"
-    ],
-    [
-      "/Lotus/Language/Items/RifleName",
-      "/Lotus/Language/Items/PistolName",
-      "/Lotus/Language/Items/LongSwordName",
-      "/Lotus/Language/Items/HuntingBowName",
-      "/Lotus/Language/Items/KunaiName"
     ]
   ],
   "warframes": [
-    [
-      "/Lotus/Language/Suits/InfestationName",
-      "/Lotus/Language/Suits/BardName",
-      "/Lotus/Language/Suits/PriestName"
-    ],
-    [
-      "/Lotus/Language/Suits/GlassName",
-      "/Lotus/Language/Suits/KhoraName",
-      "/Lotus/Language/Suits/RevenantName"
-    ],
-    [
-      "/Lotus/Language/Suits/GarudaName",
-      "/Lotus/Language/Suits/PacifistName",
-      "/Lotus/Language/Suits/IronFrameName"
-    ],
     [
       "/Lotus/Language/Suits/ExcaliburName",
       "/Lotus/Language/Suits/TrinityName",
@@ -112,6 +97,21 @@
       "/Lotus/Language/Suits/IvaraName",
       "/Lotus/Language/Suits/InarosName",
       "/Lotus/Language/Suits/TitaniaName"
+    ],
+    [
+      "/Lotus/Language/Suits/InfestationName",
+      "/Lotus/Language/Suits/BardName",
+      "/Lotus/Language/Suits/PriestName"
+    ],
+    [
+      "/Lotus/Language/Suits/GlassName",
+      "/Lotus/Language/Suits/KhoraName",
+      "/Lotus/Language/Suits/RevenantName"
+    ],
+    [
+      "/Lotus/Language/Suits/GarudaName",
+      "/Lotus/Language/Suits/PacifistName",
+      "/Lotus/Language/Suits/IronFrameName"
     ]
   ]
 }

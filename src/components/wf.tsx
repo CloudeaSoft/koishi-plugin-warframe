@@ -38,38 +38,354 @@ export const ArbitrationComponent = (arbi: Arbitration[]): Element => {
 };
 
 export const CircuitComponent = (
-  incarnons: string[],
-  warframes: string[],
+  currentIncarnons: number,
+  currentWarframes: number,
+  allIncarnons: string[][],
+  allWarframes: string[][],
 ): Element => {
   return (
-    <div>
-      <header style={"text-align: center;font-size:30px;"}>
-        <h1>本周回廊奖励</h1>
-      </header>
+    <div
+      style={`
+      background: linear-gradient(135deg, #f5f0e8 0%, #fff8f0 100%);
+      min-height: 100vh;
+      padding: 40px 24px;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    `}
+    >
       <div
-        style={
-          "display:flex;flex-direction:column;align-items:center;margin-top:40px;font-size:40px;"
-        }
+        style={`
+        max-width: 1280px;
+        margin: 0 auto;
+      `}
       >
-        <div style={"display:flex;align-items:center;line-height:1;"}>
-          <span>灵化之源:</span>
-          <ul style={"display:flex;gap:13px;margin-left:15px;"}>
-            {incarnons.map((i) => {
-              return <li>{i}</li>;
-            })}
-          </ul>
-        </div>
-        <div
-          style={
-            "display:flex;align-items:center;line-height:1;margin-top:40px;"
-          }
+        <header
+          style={`
+          text-align: center;
+          margin-bottom: 48px;
+        `}
         >
-          <span>战甲:</span>
-          <ul style={"display:flex;gap:13px;margin-left:15px;"}>
-            {warframes.map((i) => {
-              return <li>{i}</li>;
-            })}
-          </ul>
+          <h1
+            style={`
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff8c42, #ff3c00);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0;
+            letter-spacing: -1px;
+          `}
+          >
+            🌀 回廊奖励总览
+          </h1>
+          <p
+            style={`
+            color: #8b7355;
+            font-size: 1.1rem;
+            margin-top: 12px;
+            opacity: 0.8;
+          `}
+          >
+            共 {Math.max(allIncarnons.length, allWarframes.length)} 周 ·
+            当前灵化周第 {currentIncarnons + 1} 周 · 当前战甲周第{" "}
+            {currentWarframes + 1} 周
+          </p>
+        </header>
+
+        <div
+          style={`
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        `}
+        >
+          {/* 灵化之源 - 按 allIncarnons 循环 */}
+          <div
+            style={`
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 24px 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+          `}
+          >
+            <div
+              style={`
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 20px;
+              padding-bottom: 12px;
+              border-bottom: 1px solid #e8ddd0;
+            `}
+            >
+              <span
+                style={`
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: #c97e3a;
+              `}
+              >
+                🔮 灵化之源
+              </span>
+              <span
+                style={`
+                background: #ffedd5;
+                color: #c97e3a;
+                padding: 4px 12px;
+                border-radius: 40px;
+                font-size: 0.85rem;
+                font-weight: 600;
+              `}
+              >
+                共 {allIncarnons.length} 周
+              </span>
+            </div>
+
+            <div
+              style={`
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+            `}
+            >
+              {allIncarnons.map((incarnons, weekIdx) => {
+                const isCurrentWeek = weekIdx === currentIncarnons;
+
+                return (
+                  <div
+                    style={`
+                      background: ${
+                        isCurrentWeek
+                          ? "linear-gradient(135deg, #fff8e7, #fff2e0)"
+                          : "rgba(250, 245, 238, 0.8)"
+                      };
+                      border-radius: 20px;
+                      padding: 16px 20px;
+                      box-shadow: ${
+                        isCurrentWeek
+                          ? "0 8px 20px rgba(255, 107, 53, 0.15), 0 0 0 2px #ff8c42 inset"
+                          : "0 2px 6px rgba(0, 0, 0, 0.02)"
+                      };
+                      transition: all 0.2s ease;
+                      transform: ${isCurrentWeek ? "scale(1.01)" : "scale(1)"};
+                    `}
+                  >
+                    <div
+                      style={`
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      margin-bottom: 12px;
+                    `}
+                    >
+                      <span
+                        style={`
+                        font-weight: 700;
+                        font-size: 1.2rem;
+                        color: ${isCurrentWeek ? "#ff6b3d" : "#b87c4f"};
+                      `}
+                      >
+                        第 {weekIdx + 1} 周
+                      </span>
+                      {isCurrentWeek ? (
+                        <span
+                          style={`
+                          background: #ff6b3d;
+                          color: white;
+                          padding: 2px 10px;
+                          border-radius: 40px;
+                          font-size: 0.7rem;
+                          font-weight: 600;
+                        `}
+                        >
+                          🔥 当前周
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <ul
+                      style={`
+                      display: flex;
+                      flex-wrap: wrap;
+                      gap: 10px;
+                      margin: 0;
+                      padding: 0;
+                      list-style: none;
+                    `}
+                    >
+                      {incarnons.map((item) => (
+                        <li
+                          style={`
+                          background: ${isCurrentWeek ? "#fff0e0" : "#faf5ee"};
+                          padding: 6px 18px;
+                          border-radius: 40px;
+                          font-size: 0.95rem;
+                          font-weight: 500;
+                          color: #b45a2a;
+                          border: ${isCurrentWeek ? "1px solid #ffd7a5" : "1px solid #f0e2d4"};
+                        `}
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 战甲 - 按 allWarframes 循环 */}
+          <div
+            style={`
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 24px 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+          `}
+          >
+            <div
+              style={`
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 20px;
+              padding-bottom: 12px;
+              border-bottom: 1px solid #e8ddd0;
+            `}
+            >
+              <span
+                style={`
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: #3d8b7a;
+              `}
+              >
+                🛡️ 战甲
+              </span>
+              <span
+                style={`
+                background: #d1fae5;
+                color: #3d8b7a;
+                padding: 4px 12px;
+                border-radius: 40px;
+                font-size: 0.85rem;
+                font-weight: 600;
+              `}
+              >
+                共 {allWarframes.length} 周
+              </span>
+            </div>
+
+            <div
+              style={`
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+            `}
+            >
+              {allWarframes.map((warframes, weekIdx) => {
+                const isCurrentWeek = weekIdx === currentWarframes;
+
+                return (
+                  <div
+                    style={`
+                      background: ${
+                        isCurrentWeek
+                          ? "linear-gradient(135deg, #e6f9f5, #dcf3ef)"
+                          : "rgba(240, 248, 246, 0.8)"
+                      };
+                      border-radius: 20px;
+                      padding: 16px 20px;
+                      box-shadow: ${
+                        isCurrentWeek
+                          ? "0 8px 20px rgba(71, 181, 165, 0.15), 0 0 0 2px #47b5a5 inset"
+                          : "0 2px 6px rgba(0, 0, 0, 0.02)"
+                      };
+                      transition: all 0.2s ease;
+                      transform: ${isCurrentWeek ? "scale(1.01)" : "scale(1)"};
+                    `}
+                  >
+                    <div
+                      style={`
+                      display: flex;
+                      align-items: center;
+                      gap: 10px;
+                      margin-bottom: 12px;
+                    `}
+                    >
+                      <span
+                        style={`
+                        font-weight: 700;
+                        font-size: 1.2rem;
+                        color: ${isCurrentWeek ? "#2e8b7a" : "#5f9e8e"};
+                      `}
+                      >
+                        第 {weekIdx + 1} 周
+                      </span>
+                      {isCurrentWeek ? (
+                        <span
+                          style={`
+                          background: #47b5a5;
+                          color: white;
+                          padding: 2px 10px;
+                          border-radius: 40px;
+                          font-size: 0.7rem;
+                          font-weight: 600;
+                        `}
+                        >
+                          🔥 当前周
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <ul
+                      style={`
+                      display: flex;
+                      flex-wrap: wrap;
+                      gap: 10px;
+                      margin: 0;
+                      padding: 0;
+                      list-style: none;
+                    `}
+                    >
+                      {warframes.map((item) => (
+                        <li
+                          style={`
+                          background: ${isCurrentWeek ? "#e0f7f2" : "#f0f8f6"};
+                          padding: 6px 18px;
+                          border-radius: 40px;
+                          font-size: 0.95rem;
+                          font-weight: 500;
+                          color: #2c6b5e;
+                          border: ${isCurrentWeek ? "1px solid #9ed9ce" : "1px solid #dcece8"};
+                        `}
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* 底部装饰 */}
+        <div
+          style={`
+          margin-top: 40px;
+          text-align: center;
+          font-size: 0.85rem;
+          color: #c0a080;
+          border-top: 1px solid #f0e2d4;
+          padding-top: 24px;
+        `}
+        >
+          ✨ 每周一更新 ✨
         </div>
       </div>
     </div>
