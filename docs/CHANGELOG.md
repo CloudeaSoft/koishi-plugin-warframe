@@ -1,3 +1,9 @@
+## [1.4.9](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.8...v1.4.9) (2026-04-27)
+
+### Bug Fixes
+
+* **wf:** optimize weekly command ([#39](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/39)) ([d4b07d2](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/d4b07d2d906fcd4d2a3f7db6714852bbc8748545))
+
 ## [1.4.8](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.7...v1.4.8) (2026-04-20)
 
 ### Bug Fixes
