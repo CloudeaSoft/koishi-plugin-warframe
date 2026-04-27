@@ -1,3 +1,9 @@
+## [1.4.10](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.9...v1.4.10) (2026-04-27)
+
+### Bug Fixes
+
+* **wf:** amend translation, text color and layout of weekly command ([#40](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/40)) ([f9fc5a7](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/f9fc5a76fed9414661f679ef9bf2a74e034be167))
+
 ## [1.4.9](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.8...v1.4.9) (2026-04-27)
 
 ### Bug Fixes
