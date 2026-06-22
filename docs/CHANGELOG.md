@@ -1,3 +1,9 @@
+## [1.4.13](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.12...v1.4.13) (2026-06-22)
+
+### Bug Fixes
+
+* hotriven command ([#43](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/43)) ([b1e8451](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/b1e845151fd3e99d5cce3ccddf9a4a97f12c363c))
+
 ## [1.4.12](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.11...v1.4.12) (2026-06-22)
 
 ### Bug Fixes
