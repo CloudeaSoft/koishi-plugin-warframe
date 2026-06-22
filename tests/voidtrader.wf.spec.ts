@@ -2,6 +2,7 @@ import worldStateJSON from "./assets/example-world-state.json";
 import { getWorldState } from "../src/infrastructure/wf/wf-api";
 import { getVoidTraderItem } from "../src/utils";
 import { expect } from "chai";
+import 'reflect-metadata'
 
 describe("Void Trader Item Map Tests", function () {
   this.timeout(100000);

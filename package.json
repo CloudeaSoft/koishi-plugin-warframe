@@ -70,6 +70,7 @@
     "koishi": "^4.18.11",
     "koishi-plugin-puppeteer": "^3.9.0",
     "mocha": "^11.7.5",
+    "reflect-metadata": "^0.2.2",
     "typescript": "^5.9.3",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
@@ -80,8 +81,8 @@
     "@nestjs/core": "^11.1.19",
     "rxjs": "^7.8.2",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.213",
-    "warframe-public-export-plus": "^0.6.0",
-    "warframe-worldstate-data": "^3.15.1",
-    "warframe-worldstate-parser": "^5.3.3"
+    "warframe-public-export-plus": "^0.6.2",
+    "warframe-worldstate-data": "^3.16.1",
+    "warframe-worldstate-parser": "^5.4.1"
   }
 }
