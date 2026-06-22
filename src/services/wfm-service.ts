@@ -122,13 +122,26 @@ const weaponPartSuffix = [
 
 export const wmOnReady = async () => {};
 
-export const updateCache = async () => {
-  await Promise.all([
-    globalItemData.update(),
-    globalRivenAttribute.update(),
-    globalRivenItemData.update(),
-    globalDucatnatorIDDict.update(),
-  ]);
+export const updateCache = async (): Promise<string> => {
+  const updateTasks = [
+    { name: "globalItemData", fn: globalItemData.update() },
+    { name: "globalRivenAttribute", fn: globalRivenAttribute.update() },
+    { name: "globalRivenItemData", fn: globalRivenItemData.update() },
+    { name: "globalDucatnatorIDDict", fn: globalDucatnatorIDDict.update() },
+  ];
+
+  const results = await Promise.allSettled(updateTasks.map((task) => task.fn));
+
+  const lines = updateTasks.map((task, index) => {
+    const result = results[index];
+    if (result.status === "fulfilled") {
+      return `${task.name}: 成功`;
+    } else {
+      return `${task.name}: 失败 - ${result.reason}`;
+    }
+  });
+
+  return lines.join("\n");
 };
 
 export const getItemOrders = async (input: string) => {
