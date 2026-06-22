@@ -5,7 +5,12 @@ import { createAsyncCache, listToDict, normalizeName } from "../../utils";
 export const globalItemDataFactory = async (response?: ItemShort[]) => {
   response ??= await getWFMItemList();
   if (!response) {
-    return undefined;
+    return {
+      globalItemList: [],
+      globalItemDict: {},
+      globalItemNameToSlugDict: {},
+      globalItemGameRefDict: {},
+    };
   }
 
   const data = response;

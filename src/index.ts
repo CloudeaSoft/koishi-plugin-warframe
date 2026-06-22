@@ -51,6 +51,7 @@ const setupCommands = (ctx: Context) => {
     .command("wmr <itemId:text>", "查询wm的紫卡价格")
     .action(commands.wmrCommand);
   ctx.command("wmi <msg:text>", "查询wm的物品价格").action(commands.wmCommand);
+  ctx.command("wmu", "更新wm缓存数据").action(commands.wmuCommand);
 
   ctx
     .command("arbitration [day:number]", "近期高价值仲裁任务")
@@ -112,7 +113,9 @@ const setupCommands = (ctx: Context) => {
       "rivenstat <weaponType:string> <statType:string> <disposition:number>",
       "获取紫卡数值范围",
     )
-    .usage("武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械\n词条类型: 2, 3, 21, 31")
+    .usage(
+      "武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械\n词条类型: 2, 3, 21, 31",
+    )
     .example("rivenstat 步枪 31 0.7")
     .alias("紫卡数值")
     .action(commands.rivenStatCommand);

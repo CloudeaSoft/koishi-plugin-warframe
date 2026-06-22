@@ -1,5 +1,5 @@
 import { Argv } from "koishi";
-import { getItemOrders, getRivenOrders } from "../services";
+import { getItemOrders, getRivenOrders, updateCache } from "../services";
 import { generateImageOutput } from "../utils";
 import { ItemOrderComponent, RivenOrderComponent } from "../components/wfm";
 
@@ -25,4 +25,8 @@ export const wmrCommand = async (action: Argv, input: string) => {
     action.session!.app.puppeteer,
     RivenOrderComponent(result.item, result.orders),
   );
+};
+
+export const wmuCommand = async (action: Argv, input: string) => {
+  return await updateCache();
 };
