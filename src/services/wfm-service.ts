@@ -85,7 +85,7 @@ const warframeAlias = {
 const warframeAliasDict: {
   [key: string]: string;
 } = ((aliasObject) => {
-  const transformedObject = {};
+  const transformedObject: Record<string, string> = {};
   for (const [key, aliases] of Object.entries(aliasObject)) {
     transformedObject[key] = key;
     for (const alias of aliases as Array<string>) {
@@ -122,6 +122,13 @@ const weaponPartSuffix = [
 
 export const wmOnReady = async () => {};
 
+export const updateCache = async () => {
+  await globalItemData.update();
+  await globalRivenAttribute.update();
+  await globalRivenItemData.update();
+  await globalDucatnatorIDDict.update();
+};
+
 export const getItemOrders = async (input: string) => {
   if (!input) return null;
   input = normalizeName(input);
@@ -156,7 +163,7 @@ export const getItemOrders = async (input: string) => {
         order.user.status === "ingame" &&
         order.visible &&
         order.type === "sell" &&
-        (!isFullLevel || order.rank == targetItem.maxRank)
+        (!isFullLevel || order.rank == targetItem.maxRank),
     )
     .sort((a, b) => toTimeStamp(b.updatedAt) - toTimeStamp(a.updatedAt)) // Update Time DESC
     .sort((a, b) => a.platinum - b.platinum) // Price ASC
@@ -174,10 +181,10 @@ export const getRivenOrders = async (input: string) => {
 
   const targetItem =
     globalRivenItemList.find((item) =>
-      compareRivenItemName(input, item.i18n["zh-hans"].name)
+      compareRivenItemName(input, item.i18n["zh-hans"].name),
     ) ??
     globalRivenItemList.find((item) =>
-      compareRivenItemName(input, item.i18n["en"].name)
+      compareRivenItemName(input, item.i18n["en"].name),
     );
   if (!targetItem) {
     return null;
@@ -196,7 +203,7 @@ export const getRivenOrders = async (input: string) => {
         order.visible &&
         !order.private &&
         !order.closed &&
-        order.is_direct_sell
+        order.is_direct_sell,
     )
     .sort((a, b) => toTimeStamp(b.updated) - toTimeStamp(a.updated)) // Update Time DESC
     .sort((a, b) => a.starting_price - b.starting_price) // Price ASC
@@ -209,7 +216,7 @@ export const getRivenOrders = async (input: string) => {
           ...attr,
           attribute: globalRivenAttributeDict[attr.url_name],
         };
-      }
+      },
     );
 
     e.item.attributes = transformed;
@@ -231,7 +238,7 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
       const nameArr = element.name.split("/");
       const name = pascalToSpaced(nameArr[nameArr.length - 1]).replace(
         "Blueprint",
-        "蓝图"
+        "蓝图",
       );
       const quantityPrefix =
         element.quantity > 1 ? `${element.quantity} X ` : "";
@@ -283,7 +290,7 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
   const mappedAliasHasEndP = warframeAliasDict[aliasHasEndP];
   if (mappedAliasHasEndP) {
     const aliasHasEndPRes = await shortHandProcess(
-      normalizeName(mappedAliasHasEndP) + primeSuffix + suffix
+      normalizeName(mappedAliasHasEndP) + primeSuffix + suffix,
     );
     if (aliasHasEndPRes) return aliasHasEndPRes;
   }
@@ -293,7 +300,7 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
     const mappedAliasNoEndP = warframeAliasDict[aliasNoEndP];
     if (mappedAliasNoEndP) {
       const aliasNoEndPRes = await shortHandProcess(
-        normalizeName(mappedAliasNoEndP) + primeSuffix + suffix
+        normalizeName(mappedAliasNoEndP) + primeSuffix + suffix,
       );
       if (aliasNoEndPRes) return aliasNoEndPRes;
     }
@@ -334,7 +341,7 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
     // 移除“蓝图”
     const normalizedStandardNoBlueprint = normalizedStandard.replace(
       /蓝图/g,
-      ""
+      "",
     );
     const normalizedStandardNoBlueprintSimplifiedPrime =
       normalizedStandardNoBlueprint.replace(/prime/g, "p");
@@ -342,7 +349,7 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
     const normalizedStandardNoNeu =
       normalizedStandardNoBlueprintSimplifiedPrime.replace(
         /头部神经光元/g,
-        "头"
+        "头",
       );
 
     return (
@@ -374,7 +381,7 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
     const standardSimplifiedPrime = standardNoSet.replace(/ Prime/g, "p");
     const standardNoBlueprintSimplifiedPrime = standardNoBlueprint.replace(
       / Prime/g,
-      "p"
+      "p",
     );
 
     const normalizedInput = normalizeName(input);
@@ -383,10 +390,10 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
 
     const normalizedStandardNoSet = normalizeName(standardNoSet);
     const normalizedStandardSimplifiedPrime = normalizeName(
-      standardSimplifiedPrime
+      standardSimplifiedPrime,
     );
     const normalizedStandardNoBlueprint = normalizeName(
-      standardNoBlueprintSimplifiedPrime
+      standardNoBlueprintSimplifiedPrime,
     );
 
     return (
@@ -399,10 +406,10 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
 
   return (
     globalItemList.find((item) =>
-      compareCNOrderName(input, item.i18n["zh-hans"].name)
+      compareCNOrderName(input, item.i18n["zh-hans"].name),
     ) ??
     globalItemList.find((item) =>
-      compareENOrderName(input, item.i18n["en"].name)
+      compareENOrderName(input, item.i18n["en"].name),
     )
   );
 };
@@ -445,7 +452,9 @@ const removeNameSuffix = (input: string): { pure: string; suffix: string } => {
   }
 };
 
-const shortHandProcess = async (input: string): Promise<ItemShort> => {
+const shortHandProcess = async (
+  input: string,
+): Promise<ItemShort | undefined> => {
   const { globalItemDict, globalItemNameToSlugDict } =
     await globalItemData.get();
   const { pure: inputNoSuffix, suffix } = removeNameSuffix(input);
@@ -457,8 +466,8 @@ const shortHandProcess = async (input: string): Promise<ItemShort> => {
     const fixPrime = input.endsWith(primeSuffix)
       ? input
       : input.endsWith("p")
-      ? input.slice(0, input.length - 1) + primeSuffix
-      : input + primeSuffix;
+        ? input.slice(0, input.length - 1) + primeSuffix
+        : input + primeSuffix;
     const fixPrimeRes = globalItemNameToSlugDict[fixPrime];
     if (fixPrimeRes) return globalItemDict[fixPrimeRes];
 
@@ -481,8 +490,8 @@ const shortHandProcess = async (input: string): Promise<ItemShort> => {
     const fixPrime = inputNoSuffix.endsWith(primeSuffix)
       ? inputNoSuffix
       : inputNoSuffix.endsWith("p")
-      ? inputNoSuffix.slice(0, inputNoSuffix.length - 1) + primeSuffix
-      : inputNoSuffix + primeSuffix;
+        ? inputNoSuffix.slice(0, inputNoSuffix.length - 1) + primeSuffix
+        : inputNoSuffix + primeSuffix;
     const fixPrimeRes = globalItemNameToSlugDict[fixPrime + suffix];
     if (fixPrimeRes) return globalItemDict[fixPrimeRes];
 
