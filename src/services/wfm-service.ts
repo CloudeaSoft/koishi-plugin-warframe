@@ -21,7 +21,7 @@ import {
 const warframeAlias = {
   Volt: ["电", "电男", "伏特"],
   Trinity: ["奶妈", "奶"],
-  Rhino: ["犀牛", "牛", "铁甲犀牛"],
+  Rhino: ["犀牛", "牛"],
   Mag: ["磁妹", "磁力"],
   Loki: ["洛基"],
   Excalibur: ["咖喱棒", "圣剑", "咖喱"],
@@ -123,10 +123,12 @@ const weaponPartSuffix = [
 export const wmOnReady = async () => {};
 
 export const updateCache = async () => {
-  await globalItemData.update();
-  await globalRivenAttribute.update();
-  await globalRivenItemData.update();
-  await globalDucatnatorIDDict.update();
+  await Promise.all([
+    globalItemData.update(),
+    globalRivenAttribute.update(),
+    globalRivenItemData.update(),
+    globalDucatnatorIDDict.update(),
+  ]);
 };
 
 export const getItemOrders = async (input: string) => {
