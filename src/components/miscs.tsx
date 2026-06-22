@@ -5,7 +5,7 @@ export const HotRivenComponent = (data: RivenWeaponItem[]): Element => {
   const displayData = data.slice(0, 20);
 
   return (
-    <div style="width: 600px ;display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <div style="width: 600px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
       {displayData.map((item) => (
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; background-color: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid #e8ecf0;">
           <div style="flex: 1; min-width: 0; max-width: 60%;">
