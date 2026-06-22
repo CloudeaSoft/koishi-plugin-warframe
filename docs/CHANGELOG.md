@@ -1,3 +1,9 @@
+## [1.4.12](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.11...v1.4.12) (2026-06-22)
+
+### Bug Fixes
+
+* **wf:** new incarnon genesis ([#42](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/42)) ([ad92816](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/ad928160b779b3574c9ac89e3a5eb33bd12197ab))
+
 ## [1.4.11](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.10...v1.4.11) (2026-06-22)
 
 ### Bug Fixes
