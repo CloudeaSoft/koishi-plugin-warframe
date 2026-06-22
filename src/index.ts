@@ -127,6 +127,8 @@ const setupCommands = (ctx: Context) => {
 
   ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
   ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
+
+  ctx.command("hotriven", "热门紫卡").action(commands.hotRivenCommand);
 };
 
 const inDevelopment = () => {
