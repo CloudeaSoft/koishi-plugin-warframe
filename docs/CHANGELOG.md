@@ -1,3 +1,9 @@
+## [1.4.11](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.10...v1.4.11) (2026-06-22)
+
+### Bug Fixes
+
+* **wfm:** new command wmu for updating cache ([#41](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/41)) ([da5610e](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/da5610e19c4dc723618ef687fa3530b70da250a5))
+
 ## [1.4.10](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.9...v1.4.10) (2026-04-27)
 
 ### Bug Fixes
