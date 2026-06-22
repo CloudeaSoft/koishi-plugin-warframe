@@ -55,6 +55,13 @@
       "/Lotus/Language/Items/CorpusMinigunName",
       "/Lotus/Language/Items/BurstPistolName",
       "/Lotus/Language/Items/TennoSaiName"
+    ],
+    [
+      "/Lotus/Language/Items/TennoSniperRifleName",
+      "/Lotus/Language/Items/GrineerGooGunName",
+      "/Lotus/Language/Items/AutoCrossBowName",
+      "/Lotus/Language/Items/TnoRapierName",
+      "/Lotus/Language/Items/CorpusPunchKickWeaponName"
     ]
   ],
   "warframes": [
