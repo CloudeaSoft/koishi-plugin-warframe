@@ -31,6 +31,7 @@ export const wmuCommand = async (action: Argv, input: string) => {
   try {
     await updateCache();
   } catch (ex) {
+    console.error(ex);
     return "更新失败, 请检查控制台报错";
   }
 
