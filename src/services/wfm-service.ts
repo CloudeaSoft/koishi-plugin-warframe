@@ -344,7 +344,7 @@ export const primedModHistory = createAsyncCache(async () => {
   }
 
   return result;
-}, 3_600_000);
+}, 43_200_000);
 
 // ================ privates ===================
 
