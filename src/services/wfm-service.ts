@@ -303,9 +303,11 @@ export const primedModHistory = createAsyncCache(async () => {
     }
   }
 
-  primeModHistory.sort(
-    (a, b) => new Date(a.Last).getTime() - new Date(b.Last).getTime(),
-  );
+  primeModHistory.sort((a, b) => {
+    const timeA = a.Last ? new Date(a.Last).getTime() : 0;
+    const timeB = b.Last ? new Date(b.Last).getTime() : 0;
+    return (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
+  });
 
   const result: Array<PrimedModHistoryItem> = [];
   const { globalItemDict, globalItemNameToSlugDict } =
