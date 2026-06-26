@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.13...v1.5.0) (2026-06-26)
+
+### Features
+
+* **wfm:** new command pmodhistory ([#44](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/44)) ([f11ef35](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/f11ef35dcb240d84c5acfca05058466f1b77ba2e))
+
 ## [1.4.13](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.12...v1.4.13) (2026-06-22)
 
 ### Bug Fixes
