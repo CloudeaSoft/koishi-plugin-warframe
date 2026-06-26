@@ -3,7 +3,7 @@ import { } from "@koishijs/plugin-help";
 
 import * as commands from "./commands";
 import * as hooks from "./hooks/on-ready";
-import 'reflect-metadata' // TODO: Solving the error 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
+import 'reflect-metadata'; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 
 export const name = "warframe";
 
