@@ -10,9 +10,9 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 | Command | Arguments | Aliases | Description |
 | ------- | --------- | ------- | ----------- |
-| `wmi` | `<msg:text>` | | Query Warframe Market item orders (medians, ducat values, etc.) Displayed as an image. |
-| `wm` | `<itemId:text>` | | **Deprecated**, use `wmi` instead. |
-| `wmr` | `<itemId:text>` | | Query Warframe Market riven orders. |
+| `wmi` | `<item:text>` | | Query Warframe Market item orders (medians, ducat values, etc.) Displayed as an image. |
+| `wm` | `<item:text>` | | **Deprecated**, use `wmi` instead. |
+| `wmr` | `<item:text>` | | Query Warframe Market riven orders. |
 | `wmu` | | | Update Warframe Market cache. |
 | `pmodhistory` | | `pmod`, `P卡`, `p卡`, `P卡历史`, `p卡历史` | Query Primed MOD price history. |
 | `hotriven` | | | Query trending riven weapons ranking. |
@@ -29,7 +29,7 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 | Command | Arguments | Aliases | Description |
 | ------- | --------- | ------- | ----------- |
-| `relic` | `<input:text>` | `遗物`, `核桃` | Query relic contents with drop chances, WFM median prices, and ducat values. |
+| `relic` | `<relic:text>` | `遗物`, `核桃` | Query relic contents with drop chances, WFM median prices, and ducat values. |
 
 ### Weekly & Activities
 
@@ -43,7 +43,7 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 | Command | Arguments | Aliases | Description |
 | ------- | --------- | ------- | ----------- |
-| `environment` | | `env`, `平原`, `地球`, `金星`, `夜灵`, `夜灵平野`, `奥布山谷` | Query current open world cycles (Earth, Venus, Cetus day/night). |
+| `environment` | | `env`, `平原`, `地球`, `金星`, `夜灵`, `夜灵平野`, `奥布山谷` | Query current open world cycles (Earth, Venus, Deimos, Duviri, Zariman). |
 
 ### Void Trader
 
@@ -56,7 +56,7 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 | Command | Arguments | Aliases | Description |
 | ------- | --------- | ------- | ----------- |
 | `riven` | `<img:image>` | | Analyze riven stats from a screenshot using OCR. |
-| `rivenstat` | `<weaponType:string> <statType:string> <disposition:number>` | `紫卡数值` | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(arch-gun)<br>Stat types: 2, 3, 21, 31 |
+| `rivenstat` | `<weaponType:string> <statType:string> <disposition:number>` | `紫卡数值` | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun)<br>Stat types: 2, 3, 21, 31 |
 
 ### Kuva/Tenet/Coda (In Development)
 
