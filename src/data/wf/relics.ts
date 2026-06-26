@@ -1,5 +1,6 @@
 import { ExportRelics, ExportRewards } from "warframe-public-export-plus";
-import { normalizeName, fixRelicRewardKey } from "../../utils";
+import { normalizeName } from "../../utils";
+import { fixRelicRewardKey } from "../../infrastructure/wf/wf-export-adapter";
 
 export const relics: Record<string, Relic> = (() => {
   const result: Record<string, Relic> = {};

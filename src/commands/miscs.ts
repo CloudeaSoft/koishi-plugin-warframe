@@ -1,6 +1,6 @@
 import { Argv } from "koishi";
 import { globalHotRivenWeapons } from "../data/miscs/lab";
-import { generateImageOutput } from "../utils";
+import { generateImageOutput } from "../components/render";
 import { HotRivenComponent } from "../components/miscs";
 
 export const hotRivenCommand = async (action: Argv) => {

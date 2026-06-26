@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { Client } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_client";
-import { CacheStorage } from "./cache";
+import { CacheStorage } from "../utils";
 
 const ocrCache = new CacheStorage<string[]>(100);
 

@@ -1,6 +1,6 @@
 import worldStateJSON from "./assets/example-world-state.json";
 import { getWorldState } from "../src/infrastructure/wf/wf-api";
-import { getVoidTraderItem } from "../src/utils";
+import { getVoidTraderItem } from "../src/infrastructure/wf/wfcd-adapter";
 import { expect } from "chai";
 import 'reflect-metadata'
 
