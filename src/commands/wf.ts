@@ -13,7 +13,7 @@ import {
   getWeekly,
   getStaticRivenStats,
 } from "../services";
-import { generateImageOutput } from "../utils";
+import { generateImageOutput } from "../components/render";
 import {
   ArbitrationComponent,
   CircuitComponent,

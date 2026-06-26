@@ -1,12 +1,12 @@
 import { dict_zh, ExportRegions } from "warframe-public-export-plus";
 import { getWorldState } from "../../infrastructure/wf/wf-api";
+import { createAsyncCache } from "../../utils";
+import { regionToShort } from "../../infrastructure/wf/wf-export-adapter";
 import {
-  createAsyncCache,
   getSolNodeKey,
-  regionToShort,
   fissureTierName,
   fissureTierNumToNumber,
-} from "../../utils";
+} from "../../infrastructure/wf/wfcd-adapter";
 
 export const globalWorldState = createAsyncCache(async () => {
   const worldState = await getWorldState();

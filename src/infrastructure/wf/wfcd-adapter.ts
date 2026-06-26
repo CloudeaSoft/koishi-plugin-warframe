@@ -13,7 +13,14 @@ import {
   ExportWeapons,
   TMissionType,
 } from "warframe-public-export-plus";
-import { dictToKeyDict, relicToFullNameZH } from "./";
+import { dictToKeyDict, toPascalCase } from "../../utils";
+import { relicEraToTransKey } from "./wf-export-adapter";
+
+const relicToFullNameZH = (tier: string, category: string) => {
+  return `${
+    dict_zh[relicEraToTransKey(tier)] ?? toPascalCase(tier)
+  } ${category} 遗物`;
+};
 
 let solNodesEnDict: Record<string, string>;
 

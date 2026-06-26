@@ -15,16 +15,18 @@ import {
 
 import {
   fetchAsyncImage,
-  getMissionTypeKey,
-  getVoidTraderItem,
   msToHumanReadable,
   normalizeName,
   normalSimilarity,
-  regionToShort,
   removeSpace,
   tokenSimilarity,
-  extractTextFromImage,
 } from "../utils";
+import { extractTextFromImage } from "../infrastructure/ocr-api";
+import { regionToShort } from "../infrastructure/wf/wf-export-adapter";
+import {
+  getMissionTypeKey,
+  getVoidTraderItem,
+} from "../infrastructure/wf/wfcd-adapter";
 import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
 import { relics } from "../data/wf/relics";
 import { globalWorldState } from "../data/wf/globalWorldState";

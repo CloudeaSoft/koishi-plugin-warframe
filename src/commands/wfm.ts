@@ -5,7 +5,7 @@ import {
   primedModHistory,
   updateCache,
 } from "../services";
-import { generateImageOutput } from "../utils";
+import { generateImageOutput } from "../components/render";
 import {
   ItemOrderComponent,
   RivenOrderComponent,
