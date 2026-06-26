@@ -68,3 +68,49 @@ interface RivenItemI18N {
   icon: string;
   thumb: string;
 }
+
+interface ClosedStatisticsEntry {
+  datetime: string;
+  volume: number;
+  min_price: number;
+  max_price: number;
+  open_price: number;
+  closed_price: number;
+  avg_price: number;
+  wa_price: number;
+  median: number;
+  moving_avg: number;
+  donch_top: number;
+  donch_bot: number;
+  id: string;
+}
+
+interface LiveStatisticsEntry {
+  datetime: string;
+  volume: number;
+  min_price: number;
+  max_price: number;
+  avg_price: number;
+  wa_price: number;
+  median: number;
+  order_type: "buy" | "sell";
+  moving_avg: number;
+  id: string;
+}
+
+export interface StatisticsCollection {
+  statistics_closed: {
+    "48hours": ClosedStatisticsEntry[];
+    "90days": ClosedStatisticsEntry[];
+  };
+  statistics_live: {
+    "48hours": LiveStatisticsEntry[];
+    "90days": LiveStatisticsEntry[];
+  };
+}
+
+export interface PrimedModHistoryItem {
+  name: string | undefined;
+  last: string;
+  plats?: number;
+}

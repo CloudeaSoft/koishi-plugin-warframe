@@ -66,3 +66,43 @@ interface RivenItemI18NDTO {
   icon: string;
   thumb: string;
 }
+
+interface ClosedStatisticsEntryDTO {
+  datetime: string;
+  volume: number;
+  min_price: number;
+  max_price: number;
+  open_price: number;
+  closed_price: number;
+  avg_price: number;
+  wa_price: number;
+  median: number;
+  moving_avg: number;
+  donch_top: number;
+  donch_bot: number;
+  id: string;
+}
+
+interface LiveStatisticsEntryDTO {
+  datetime: string;
+  volume: number;
+  min_price: number;
+  max_price: number;
+  avg_price: number;
+  wa_price: number;
+  median: number;
+  order_type: "buy" | "sell";
+  moving_avg: number;
+  id: string;
+}
+
+export interface StatisticsCollectionDTO {
+  statistics_closed: {
+    "48hours": ClosedStatisticsEntryDTO[];
+    "90days": ClosedStatisticsEntryDTO[];
+  };
+  statistics_live: {
+    "48hours": LiveStatisticsEntryDTO[];
+    "90days": LiveStatisticsEntryDTO[];
+  };
+}

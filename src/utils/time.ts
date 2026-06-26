@@ -38,3 +38,7 @@ export const msToHumanReadable = (ms: number): string => {
   // 拼接结果（如果所有单位都是0，最终会是"0秒"）
   return parts.join("");
 };
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

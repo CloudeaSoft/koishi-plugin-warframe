@@ -129,6 +129,14 @@ const setupCommands = (ctx: Context) => {
   ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
 
   ctx.command("hotriven", "热门紫卡").action(commands.hotRivenCommand);
+  ctx
+    .command("pmodhistory", "Primed MOD 历史")
+    .alias("pmod")
+    .alias("P卡")
+    .alias("p卡")
+    .alias("P卡历史")
+    .alias("p卡历史")
+    .action(commands.pmodhistoryCommand);
 };
 
 const inDevelopment = () => {

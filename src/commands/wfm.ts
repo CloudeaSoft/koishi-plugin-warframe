@@ -1,7 +1,16 @@
 import { Argv } from "koishi";
-import { getItemOrders, getRivenOrders, updateCache } from "../services";
+import {
+  getItemOrders,
+  getRivenOrders,
+  primedModHistory,
+  updateCache,
+} from "../services";
 import { generateImageOutput } from "../utils";
-import { ItemOrderComponent, RivenOrderComponent } from "../components/wfm";
+import {
+  ItemOrderComponent,
+  RivenOrderComponent,
+  PrimedModHistoryComponent,
+} from "../components/wfm";
 
 export const wmCommand = async (action: Argv, input: string) => {
   const result = await getItemOrders(input);
@@ -29,4 +38,12 @@ export const wmrCommand = async (action: Argv, input: string) => {
 
 export const wmuCommand = async (action: Argv, input: string) => {
   return await updateCache();
+};
+
+export const pmodhistoryCommand = async (action: Argv, input: string) => {
+  const history = await primedModHistory.get();
+  return await generateImageOutput(
+    action.session!.app.puppeteer,
+    PrimedModHistoryComponent(history),
+  );
 };
