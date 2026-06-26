@@ -77,9 +77,6 @@
     "yakumo-tsc": "^1.0.0"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.19",
-    "@nestjs/core": "^11.1.19",
-    "rxjs": "^7.8.2",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.213",
     "warframe-public-export-plus": "^0.6.2",
     "warframe-worldstate-data": "^3.16.1",
