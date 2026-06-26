@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.5.0...v1.5.1) (2026-06-26)
+
+### Bug Fixes
+
+* resolve possible runtime error, remove unused dependencies ([#47](https://github.com/CloudeaSoft/koishi-plugin-warframe/issues/47)) ([1b8d9ac](https://github.com/CloudeaSoft/koishi-plugin-warframe/commit/1b8d9ac1251d5bdeaece4fcb3c41871cd9a4c909))
+
 ## [1.5.0](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.4.13...v1.5.0) (2026-06-26)
 
 ### Features
