@@ -1,5 +1,5 @@
 import Element from "@satorijs/element";
-import { ItemShort, RivenItem } from "../types/wfm/item";
+import { ItemShort, PrimedModHistoryItem, RivenItem } from "../types/wfm/item";
 import { OrderWithUser } from "../types/wfm/order";
 import {
   RivenOrderInternal,
@@ -290,5 +290,238 @@ const RivenAttributeComponent = (
       </b>
       <span>{attrName}</span>
     </li>
+  );
+};
+
+const PMH_ITEMS_PER_COLUMN = 15;
+const PMH_GRID_GAP = 6;
+
+const getPriceTier = (
+  plats: number,
+): {
+  borderColor: string;
+  bgColor: string;
+  label: string;
+  textGlow?: string;
+} => {
+  if (plats > 250) {
+    return {
+      borderColor: "#ff6eb4",
+      bgColor:
+        "linear-gradient(135deg, rgba(255,110,180,0.18), rgba(110,200,255,0.18), rgba(255,230,80,0.18))",
+      label: "legendary",
+      textGlow: "0 0 6px rgba(255,110,180,0.6)",
+    };
+  }
+  if (plats > 80) {
+    return {
+      borderColor: "#ff6b35",
+      bgColor: "rgba(255,107,53,0.12)",
+      label: "premium",
+    };
+  }
+  if (plats > 60) {
+    return {
+      borderColor: "#f0c040",
+      bgColor: "rgba(240,192,64,0.10)",
+      label: "high",
+    };
+  }
+  return { borderColor: "#d0d0d0", bgColor: "transparent", label: "normal" };
+};
+
+const calcDaysAgo = (dateStr: string): number | null => {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return null;
+  const now = Date.now();
+  const diff = now - d.getTime();
+  return Math.floor(diff / 86400000);
+};
+
+const PMHCard = (item: PrimedModHistoryItem, index: number): Element => {
+  const pr = item.plats;
+  const tier =
+    pr !== undefined
+      ? getPriceTier(pr)
+      : { borderColor: "#d0d0d0", bgColor: "transparent", label: "normal" };
+
+  const dateStr = item.last
+    ? (() => {
+        const d = new Date(item.last);
+        if (!isNaN(d.getTime())) {
+          const year = d.getFullYear();
+          const month = String(d.getMonth() + 1).padStart(2, "0");
+          const day = String(d.getDate()).padStart(2, "0");
+          return `${year}-${month}-${day}`;
+        }
+        return item.last;
+      })()
+    : "";
+
+  const daysAgo = calcDaysAgo(item.last);
+  const isOld = daysAgo !== null && daysAgo > 90;
+
+  const isLegendary = pr !== undefined && pr > 300;
+  const showGlow = pr !== undefined && pr > 80;
+
+  const cardContent = (
+    <div
+      style={`
+        border-radius: 6px;
+        padding: 6px 10px;
+        background: ${isLegendary ? "linear-gradient(135deg, rgba(255,50,100,0.20), rgba(255,200,50,0.20), rgba(50,255,100,0.20), rgba(50,150,255,0.20), rgba(200,50,255,0.20))" : tier.bgColor};
+        border-left: 4px solid ${tier.borderColor};
+        box-shadow: ${showGlow ? (isLegendary ? "0 0 14px rgba(255,50,100,0.30), 0 0 28px rgba(200,50,255,0.20)" : `0 0 8px ${tier.borderColor}44`) : "0 1px 2px rgba(0,0,0,0.04)"};
+        ${isLegendary ? "border-image: linear-gradient(135deg, #ff3264, #ffcc33, #33ff66, #3399ff, #cc33ff) 1; border-image-slice: 1; border-left: 4px solid transparent;" : ""}
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 11px;
+        min-width: 0;
+        overflow: hidden;
+      `}
+    >
+      <div
+        style={`
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-weight: 600;
+          color: #1a1a1a;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          line-height: 1.3;
+        `}
+      >
+        <span style="overflow:hidden;text-overflow:ellipsis;">
+          {item.name ?? "未知"}
+        </span>
+        {daysAgo ? (
+          <span
+            style={`flex-shrink:0;margin-left:4px;background:#eee;color:${isOld ? "#e05050" : "#999"};border-radius:3px;padding:0 5px;font-size:9px;font-weight:400;line-height:1.5;`}
+          >
+            距今{daysAgo}天
+          </span>
+        ) : null}
+      </div>
+      <div
+        style={`
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-variant-numeric: tabular-nums;
+        `}
+      >
+        <span style={`color: #888; font-size: 10px;`}>{dateStr || "未知"}</span>
+        {pr !== undefined ? (
+          <span
+            style={`
+              display: inline-flex;
+              align-items: center;
+              gap: 2px;
+              font-weight: 700;
+              font-size: 12px;
+              color: #0d93b8;
+              ${isLegendary ? "text-shadow: 0 0 6px rgba(255,50,100,0.7), 0 0 12px rgba(200,50,255,0.4);" : ""}
+            `}
+          >
+            {pr}
+            <svg
+              viewBox="0 0 215.535 215.535"
+              style="height: 0.85em; width: 0.85em; fill: currentcolor;"
+            >
+              <use href="#icon-platinum"></use>
+            </svg>
+          </span>
+        ) : (
+          <span style="color: #bbb; font-size: 10px;">暂无</span>
+        )}
+      </div>
+    </div>
+  );
+
+  return cardContent;
+};
+
+export const PrimedModHistoryComponent = (
+  history: PrimedModHistoryItem[],
+): Element => {
+  // 按 plats 降序排列（价格高的在前）
+  const sorted = [...history].sort((a, b) => {
+    const pa = a.plats ?? 0;
+    const pb = b.plats ?? 0;
+    if (pb !== pa) return pb - pa;
+    return 0;
+  });
+
+  // 切分为每 15 个一列
+  const columns: PrimedModHistoryItem[][] = [];
+  for (let i = 0; i < sorted.length; i += PMH_ITEMS_PER_COLUMN) {
+    columns.push(sorted.slice(i, i + PMH_ITEMS_PER_COLUMN));
+  }
+
+  return (
+    <div
+      style={`
+        border-radius: 8px;
+        padding: 16px;
+        margin: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 100%;
+        min-width: 320px;
+        background: #ffffff;
+      `}
+    >
+      {/* 标题 */}
+      <div
+        style={`
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 12px;
+          padding-bottom: 10px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        `}
+      >
+        <h1
+          style={`
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            color: #1a1a1a;
+          `}
+        >
+          Prime Mod 历史记录
+        </h1>
+        <span style="color: #999; font-size: 11px;">{history.length} 项</span>
+      </div>
+
+      {/* 多列网格 */}
+      <div
+        style={`
+          display: flex;
+          gap: ${PMH_GRID_GAP}px;
+          align-items: flex-start;
+        `}
+      >
+        {columns.map((col) => (
+          <div
+            style={`
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              min-width: 0;
+            `}
+          >
+            {col.map((item, idx) => PMHCard(item, idx))}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };

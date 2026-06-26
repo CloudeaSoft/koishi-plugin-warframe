@@ -1,10 +1,18 @@
 import { Ducatnator } from "../../types/wfm/ducatnator";
-import { ItemShort, RivenItem } from "../../types/wfm/item";
+import {
+  ItemShort,
+  RivenItem,
+  StatisticsCollection,
+} from "../../types/wfm/item";
 import { OrderWithUser } from "../../types/wfm/order";
 import { RivenAttribute, RivenOrder } from "../../types/wfm/riven";
 import { fetchAsyncData } from "../../utils";
 import { DucatnatorDTO } from "./dto/ducats.dto";
-import { ItemShortDTO, RivenItemDTO } from "./dto/item.dto";
+import {
+  ItemShortDTO,
+  RivenItemDTO,
+  StatisticsCollectionDTO,
+} from "./dto/item.dto";
 import { OrderWithUserDTO } from "./dto/order.dto";
 import { RivenAttributeDTO, RivenOrderDTO } from "./dto/riven.dto";
 
@@ -17,6 +25,16 @@ export const getWFMItemList = async (): Promise<ItemShort[] | undefined> => {
   );
 
   return response?.data;
+};
+
+export const getWFMItemStatistics = async (
+  itemId: string,
+): Promise<StatisticsCollection | undefined> => {
+  const response = await fetchAsyncData<WFMResponseV1<StatisticsCollectionDTO>>(
+    `${wfmApiV1Base}items/${itemId}/statistics`,
+  );
+
+  return response?.payload;
 };
 
 export const getWFMOrderList = async (

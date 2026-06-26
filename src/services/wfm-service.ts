@@ -1,7 +1,14 @@
 import { dict_zh } from "warframe-public-export-plus";
 
-import { toTimeStamp, normalizeName, pascalToSpaced } from "../utils";
 import {
+  toTimeStamp,
+  normalizeName,
+  pascalToSpaced,
+  createAsyncCache,
+  sleep,
+} from "../utils";
+import {
+  getWFMItemStatistics,
   getWFMOrderList,
   getWFMRivenOrderList,
 } from "../infrastructure/wfm/wfm-api";
@@ -10,11 +17,12 @@ import { globalItemData } from "../data/wfm/globalItem";
 import { globalRivenItemData } from "../data/wfm/globalRivenItem";
 import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
 import { globalDucatnatorIDDict } from "../data/wfm/globalDucatnator";
-import { ItemShort } from "../types/wfm/item";
+import { ItemShort, PrimedModHistoryItem } from "../types/wfm/item";
 import {
   RivenAttributeShortInternal,
   RivenOrderInternal,
 } from "../types/wfm/riven";
+import { getVoidTraderHistory } from "../infrastructure/wf/wf-api";
 
 // ================ initialization ===================
 
@@ -280,6 +288,61 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
     items: loadedItems,
   };
 };
+
+export const primedModHistory = createAsyncCache(async () => {
+  const history = await getVoidTraderHistory();
+
+  const primeModHistory: { Name: string; Last: string }[] = [];
+  for (const key in history) {
+    const item = history[key];
+    if (item.Name.startsWith("Primed") && item.Type.includes("Mod")) {
+      primeModHistory.push({
+        Name: item.Name,
+        Last: item.OfferingDates?.at(-1) ?? "",
+      });
+    }
+  }
+
+  primeModHistory.sort(
+    (a, b) => new Date(a.Last).getTime() - new Date(b.Last).getTime(),
+  );
+
+  const result: Array<PrimedModHistoryItem> = [];
+  const { globalItemDict, globalItemNameToSlugDict } =
+    await globalItemData.get();
+
+  for (let i = 0; i < primeModHistory.length; i++) {
+    const mod = primeModHistory[i];
+    const name = normalizeName(mod.Name);
+    const slug = globalItemNameToSlugDict[name];
+    if (slug) {
+      const item = globalItemDict[slug];
+
+      try {
+        const data = await getWFMItemStatistics(slug);
+        result.push({
+          name: item.i18n["zh-hans"]?.name,
+          last: mod.Last,
+          plats: data?.statistics_closed["90days"].at(-1)?.median, // Get medium price
+        });
+      } catch {
+        result.push({
+          name: item.i18n["zh-hans"]?.name,
+          last: mod.Last,
+        });
+      }
+
+      await sleep(300);
+    } else {
+      result.push({
+        name: mod.Name,
+        last: mod.Last,
+      });
+    }
+  }
+
+  return result;
+}, 3_600_000);
 
 // ================ privates ===================
 
