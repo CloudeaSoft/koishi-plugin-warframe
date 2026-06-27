@@ -341,8 +341,9 @@ export const primedModHistory = createAsyncCache(async () => {
         (e) => e.mod_rank === 0,
       );
       const lastThree = zeroRankList.slice(-3);
-      const sum = lastThree.reduce((acc, e) => acc + e.median, 0);
-      const avg = Math.round((sum / lastThree.length) * 10) / 10;
+      const avg = lastThree.length > 0
+        ? Math.round((lastThree.reduce((acc, e) => acc + e.median, 0) / lastThree.length) * 10) / 10
+        : undefined;
       result.push({
         name: item.i18n["zh-hans"]?.name,
         last: mod.Last,
