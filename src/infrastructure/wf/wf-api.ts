@@ -237,11 +237,9 @@ export const getVoidTraderHistory = async (
   }
 
   if (!data) {
-    try {
-      data = await fetchAsyncText(
-        "https://docs.google.com/spreadsheets/d/1cdT7M2qbOhZ01AQT2RaH8_6VL1yww4BHkTRtLzqZ7_g/export?format=csv&gid=564427308",
-      );
-    } catch {}
+    data = await fetchAsyncText(
+      "https://docs.google.com/spreadsheets/d/1cdT7M2qbOhZ01AQT2RaH8_6VL1yww4BHkTRtLzqZ7_g/export?format=csv&gid=564427308",
+    );
 
     if (!data) {
       return parseBaroLuaTable(Baro);
