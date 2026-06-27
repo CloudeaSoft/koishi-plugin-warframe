@@ -37,9 +37,12 @@ async function request<T, R extends ResponseType>(
     });
   } catch (err) {
     const e = err as FetchError;
-    logger.error(
-      `[HTTP] ${method} ${url} -> ${e.statusCode ?? "network"} ${e.data ?? e.message ?? ""}`.trimEnd(),
-    );
+    const status = e.statusCode ?? "Network";
+    const detail =
+      e.data && typeof e.data === "object"
+        ? JSON.stringify(e.data)
+        : (e.data ?? e.message ?? "");
+    logger.error(`[HTTP] ${method} ${url} -> ${status} ${detail}`.trimEnd());
     return undefined;
   }
 }

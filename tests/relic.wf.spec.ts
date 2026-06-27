@@ -58,17 +58,17 @@ describe("getRelic Tests", function () {
   it("Should strip trailing '遗物' suffix", async () => {
     const result1 = await getRelic("古纪A1");
     const result2 = await getRelic("古纪A1遗物");
-    if (typeof result1 !== "string" && typeof result2 !== "string") {
-      expect(result1.num).to.equal(result2.num);
-    }
+    expect(result1).to.not.be.a("string");
+    expect(result2).to.not.be.a("string");
+    expect((result1 as any).num).to.equal((result2 as any).num);
   });
 
   it("Should strip trailing 'relic' suffix (case-insensitive)", async () => {
     const result1 = await getRelic("LithA1");
     const result2 = await getRelic("LithA1relic");
-    if (typeof result1 !== "string" && typeof result2 !== "string") {
-      expect(result1.num).to.equal(result2.num);
-    }
+    expect(result1).to.not.be.a("string");
+    expect(result2).to.not.be.a("string");
+    expect((result1 as any).num).to.equal((result2 as any).num);
   });
 
   it("Should return error for valid tier but nonexistent relic", async () => {
@@ -78,10 +78,9 @@ describe("getRelic Tests", function () {
 
   it("Should return relic with items array", async () => {
     const result = await getRelic("古纪A1");
-    if (typeof result !== "string") {
-      expect(result.items).to.be.an("array");
-      expect(result.items.length).to.be.greaterThan(0);
-      expect(result.tierKey).to.include("/Lotus/Language/Relics/Era_");
-    }
+    expect(result).to.not.be.a("string");
+    expect((result as any).items).to.be.an("array");
+    expect((result as any).items.length).to.be.greaterThan(0);
+    expect((result as any).tierKey).to.include("/Lotus/Language/Relics/Era_");
   });
 });

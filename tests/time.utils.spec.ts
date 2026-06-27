@@ -41,7 +41,7 @@ describe("msToHumanReadable Tests", () => {
   });
 
   it("Should format seconds only", () => {
-    expect(msToHumanReadable(61000)).to.equal("1分钟1秒");
+    expect(msToHumanReadable(5000)).to.equal("5秒");
   });
 
   it("Should format hours + minutes + seconds", () => {

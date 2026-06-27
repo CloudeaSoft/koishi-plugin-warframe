@@ -13,9 +13,7 @@ describe("fissureTierName Tests", () => {
     expect(fissureTierName[4]).to.equal("/Lotus/Language/Relics/Era_AXI");
     expect(fissureTierName[5]).to.equal("/Lotus/Language/Relics/Era_REQUIEM");
     expect(fissureTierName[6]).to.equal("/Lotus/Language/Relics/Era_OMNI");
-    expect(fissureTierName[7]).to.equal(
-      "/Lotus/Language/Relics/Era_VANGUARD",
-    );
+    expect(fissureTierName[7]).to.equal("/Lotus/Language/Relics/Era_VANGUARD");
   });
 });
 
@@ -26,11 +24,9 @@ describe("fissureTierNumToNumber Tests", () => {
     expect(fissureTierNumToNumber(7)).to.equal(7);
   });
 
-  it("Should convert string input using charCodeAt(5)", () => {
-    // charCodeAt(5): index 5 of "tier01" is '1' (charCode 49)
-    expect(fissureTierNumToNumber("tier01")).to.equal(49);
-    // index 5 of "tier04" is '4' (charCode 52)
-    expect(fissureTierNumToNumber("tier04")).to.equal(52);
+  it("Should convert string input to actual tier number", () => {
+    expect(fissureTierNumToNumber("tier01")).to.equal(1);
+    expect(fissureTierNumToNumber("tier04")).to.equal(4);
   });
 });
 
