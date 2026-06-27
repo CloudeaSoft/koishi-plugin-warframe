@@ -36,7 +36,9 @@ export const getSolNodeKey = async (name: string): Promise<string> => {
 
 let missionTypeEnDict: Record<string, TMissionType>;
 
-export const getMissionTypeKey = async (name: string): Promise<TMissionType> => {
+export const getMissionTypeKey = async (
+  name: string,
+): Promise<TMissionType> => {
   const worldstateData = await import("warframe-worldstate-data");
   if (!missionTypeEnDict) {
     missionTypeEnDict = dictToKeyDict(
@@ -61,7 +63,7 @@ export const fissureTierName = {
 };
 
 export const fissureTierNumToNumber = (a: number | string) => {
-  return typeof a === "string" ? a.charCodeAt(5) : a;
+  return typeof a === "string" ? Number(a.charAt(5)) : a;
 };
 
 export const getVoidTraderItem = (i: {
