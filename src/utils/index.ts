@@ -1,3 +1,4 @@
+export * from "./logger";
 export * from "./time";
 export * from "./cache";
 export * from "./text";
