@@ -1,12 +1,10 @@
-import { Logger } from "koishi";
+import { logger } from "./logger";
 import {
   ofetch,
   FetchError,
   type MappedResponseType,
   type ResponseType,
 } from "ofetch";
-
-const logger = new Logger("warframe-http");
 
 // Realistic browser headers to reduce unnecessary validation challenges
 const defaultHeaders = {

@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { Client } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_client";
-import { CacheStorage } from "../utils";
+import { CacheStorage, logger } from "../utils";
 
 const ocrCache = new CacheStorage<string[]>(100);
 
@@ -60,7 +60,7 @@ export const extractTextFromImage = async (
       getTextFromTencentOCR(image, secret),
     );
   } catch (err) {
-    console.error("Ocr request error!", err);
+    logger.error("OCR request error:", err);
     return undefined;
   }
 };

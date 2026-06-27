@@ -3,6 +3,7 @@ import { } from "@koishijs/plugin-help";
 
 import * as commands from "./commands";
 import * as hooks from "./hooks/on-ready";
+import { logger } from "./utils";
 import 'reflect-metadata'; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 
 export const name = "warframe";
@@ -28,7 +29,7 @@ export function apply(ctx: Context) {
 const setupHooks = (ctx: Context) => {
   ctx.on("message", (session) => {
     if (ctx.config.developerMode) {
-      ctx.logger.info(
+      logger.info(
         `Koishi recieved message: ${session.content}
         Platform: ${session.platform}
         User: ${session.author.name}`,
@@ -37,7 +38,7 @@ const setupHooks = (ctx: Context) => {
   });
   ctx.on("command/before-execute", (action) => {
     if (ctx.config.developerMode) {
-      ctx.logger.info(
+      logger.info(
         `WFM Plugin received command ${action.command?.name}
         arguments: ${JSON.stringify(action.args)}`,
       );
