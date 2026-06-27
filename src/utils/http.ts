@@ -1,95 +1,56 @@
-export const fetchAsyncText: (
-  url: string,
-  method?: string,
-) => Promise<string | undefined> = async (
-  url: string,
-  method: string = "GET",
-): Promise<string | undefined> => {
-  const response = await fetch(url, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-      Language: "zh-hans",
-    },
-  });
+import { Logger } from "koishi";
+import {
+  ofetch,
+  FetchError,
+  type MappedResponseType,
+  type ResponseType,
+} from "ofetch";
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok.");
-  }
+const logger = new Logger("warframe-http");
 
-  try {
-    return await response.text();
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      console.log(error.stack);
-    } else {
-      console.log("未知错误", error);
-    }
-    return undefined;
-  }
+// Realistic browser headers to reduce unnecessary validation challenges
+const defaultHeaders = {
+  Accept: "text/html,application/json;q=0.9,image/*;q=0.8,*/*;q=0.8",
+  "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  Language: "zh-hans",
 };
 
-export const fetchAsyncData: <T>(
-  url: string,
-  method?: string,
-) => Promise<T | undefined> = async <T = string>(
-  url: string,
-  method: string = "GET",
-): Promise<T | undefined> => {
-  const response = await fetch(url, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-      Language: "zh-hans",
-    },
-  });
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok.");
-  }
-
+// Shared core: single retry/timeout/error-log policy for all entry points.
+// Any failure (HTTP 4xx/5xx, timeout, retries exhausted, parse error) is
+// logged and resolves to undefined, so callers only handle one contract.
+async function request<T, R extends ResponseType>(
+  url: string,
+  method: HttpMethod,
+  responseType: R,
+): Promise<MappedResponseType<R, T> | undefined> {
   try {
-    return await response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      console.log(error.stack);
-    } else {
-      console.log("未知错误", error);
-    }
+    return await ofetch<T, R>(url, {
+      method,
+      headers: defaultHeaders,
+      responseType,
+      timeout: 10_000,
+      retry: 3,
+      retryDelay: 500,
+      retryStatusCodes: [408, 429, 500, 502, 503, 504],
+    });
+  } catch (err) {
+    const e = err as FetchError;
+    logger.error(
+      `[HTTP] ${method} ${url} -> ${e.statusCode ?? "network"} ${e.data ?? e.message ?? ""}`.trimEnd(),
+    );
     return undefined;
   }
-};
+}
 
-export const fetchAsyncImage: (
-  url: string,
-  method?: string,
-) => Promise<Blob | undefined> = async (
-  url: string,
-  method: string = "GET",
-): Promise<Blob | undefined> => {
-  const response = await fetch(url, {
-    method: method,
-    headers: {
-      "Content-Type": "image/png",
-      "response-type": "blob",
-    },
-  });
+export const fetchAsyncText = (url: string, method: HttpMethod = "GET") =>
+  request<string, "text">(url, method, "text");
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok.");
-  }
+export const fetchAsyncData = <T>(url: string, method: HttpMethod = "GET") =>
+  request<T, "json">(url, method, "json");
 
-  try {
-    return await response.blob();
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      console.log(error.stack);
-    } else {
-      console.log("未知错误", error);
-    }
-    return undefined;
-  }
-};
+export const fetchAsyncImage = (url: string, method: HttpMethod = "GET") =>
+  request<Blob, "blob">(url, method, "blob");
