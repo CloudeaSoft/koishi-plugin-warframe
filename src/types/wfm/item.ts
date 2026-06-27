@@ -83,6 +83,7 @@ interface ClosedStatisticsEntry {
   donch_top: number;
   donch_bot: number;
   id: string;
+  mod_rank: number;
 }
 
 interface LiveStatisticsEntry {
@@ -96,6 +97,7 @@ interface LiveStatisticsEntry {
   order_type: "buy" | "sell";
   moving_avg: number;
   id: string;
+  mod_rank: number;
 }
 
 export interface StatisticsCollection {

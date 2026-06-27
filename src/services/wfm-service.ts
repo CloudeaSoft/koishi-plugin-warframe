@@ -313,31 +313,44 @@ export const primedModHistory = createAsyncCache(async () => {
   const { globalItemDict, globalItemNameToSlugDict } =
     await globalItemData.get();
 
-  for (let i = 0; i < primeModHistory.length; i++) {
-    const mod = primeModHistory[i];
+  // WFM API allows max 3 req/s; use 500ms interval (2 req/s) to leave
+  // headroom for other concurrent requests.
+  const minInterval = 500;
+  let lastRequestTime = 0;
+
+  for (const mod of primeModHistory) {
     const name = normalizeName(mod.Name);
     const slug = globalItemNameToSlugDict[name];
-    if (slug) {
-      const item = globalItemDict[slug];
+    if (!slug) {
+      result.push({ name: mod.Name, last: mod.Last });
+      continue;
+    }
 
-      try {
-        const data = await getWFMItemStatistics(slug);
-        result.push({
-          name: item.i18n["zh-hans"]?.name,
-          last: mod.Last,
-          plats: data?.statistics_closed["90days"].at(-1)?.median, // Get medium price
-        });
-      } catch {
-        result.push({
-          name: item.i18n["zh-hans"]?.name,
-          last: mod.Last,
-        });
-      }
+    const item = globalItemDict[slug];
 
-      await sleep(300);
+    const elapsed = Date.now() - lastRequestTime;
+    if (elapsed < minInterval) {
+      await sleep(minInterval - elapsed);
+    }
+
+    const data = await getWFMItemStatistics(slug);
+    lastRequestTime = Date.now();
+
+    if (data) {
+      const zeroRankList = data.statistics_closed["90days"].filter(
+        (e) => e.mod_rank === 0,
+      );
+      const lastThree = zeroRankList.slice(-3);
+      const sum = lastThree.reduce((acc, e) => acc + e.median, 0);
+      const avg = Math.round((sum / lastThree.length) * 10) / 10;
+      result.push({
+        name: item.i18n["zh-hans"]?.name,
+        last: mod.Last,
+        plats: avg,
+      });
     } else {
       result.push({
-        name: mod.Name,
+        name: item.i18n["zh-hans"]?.name,
         last: mod.Last,
       });
     }
