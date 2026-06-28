@@ -1,9 +1,10 @@
 import { Context, Schema } from "koishi";
 import { } from "@koishijs/plugin-help";
+import Bottleneck from "bottleneck";
 
 import * as commands from "./commands";
 import * as hooks from "./hooks/on-ready";
-import { logger } from "./utils";
+import { logger, registerDomainPolicy } from "./utils";
 import 'reflect-metadata'; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 
 export const name = "warframe";
@@ -22,6 +23,11 @@ export const Config: Schema<Config> = Schema.object({
 });
 
 export function apply(ctx: Context) {
+  registerDomainPolicy("api.warframe.market", {
+    limiter: new Bottleneck({ minTime: 500 }),
+    cacheTtl: 60,
+  });
+
   setupHooks(ctx);
   setupCommands(ctx);
 }
