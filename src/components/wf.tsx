@@ -300,7 +300,7 @@ export const FissureComponent = (
         {fissures
           .filter((f) => f.expiry - Date.now() > 0)
           .map((f) => {
-            let timeLeft = f.expiry - Date.now();
+            const timeLeft = f.expiry - Date.now();
             return (
               <li style={"margin-top: 10px;"}>
                 <span style={`color:${colors[f.tierNum - 1]};`}>
@@ -581,7 +581,7 @@ export const RelicComponent = (relic: OutputRelic): Element => {
   const renderRewards = (items: OutputRelicReward[]) => {
     if (items.length === 0) return null;
 
-    return items.map((item, index) => (
+    return items.map((item) => (
       <div
         style={`padding: 8px 12px;
           margin: 4px 0;
@@ -963,7 +963,7 @@ export const RivenComponent = (data: RivenStatAnalyzeResult): Element => {
             </h3>
 
             <ul>
-              {data.curses.map((curse, curseIndex) => {
+              {data.curses.map((curse) => {
                 const inRange = isInRange(curse.percent);
                 const percentColor = getPercentColor(curse.percent);
                 return (
@@ -1118,7 +1118,7 @@ export const RivenStatComponent = (data: RivenStatResult): Element => {
               gap: 4px;
             `}
           >
-            {Object.entries(data.positive).map(([_, value]) => (
+            {Object.entries(data.positive).map(([, value]) => (
               <div
                 style={`
       display: flex;
@@ -1229,7 +1229,7 @@ export const RivenStatComponent = (data: RivenStatResult): Element => {
               gap: 4px;
             `}
             >
-              {Object.entries(data.negative).map(([key, value]) => (
+              {Object.entries(data.negative).map(([, value]) => (
                 <div
                   style={`
       display: flex;
