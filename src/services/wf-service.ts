@@ -519,7 +519,7 @@ export const parseOCRResult = async (ocrResult: string[]) => {
     const attr = globalRivenAttributeList.find((a) => {
       if (!a) return false;
 
-      let zhName = a.i18n["zh-hans"]?.name;
+      const zhName = a.i18n["zh-hans"]?.name;
       if (!zhName) return false;
       const sim = similarity(zhName, attrNamePart);
       if (sim < 0.8) return false;
@@ -616,7 +616,7 @@ export const parseOCRResult = async (ocrResult: string[]) => {
 
     function removeRivenSuffix(name: string) {
       // Remove spaces
-      let s = name.replace(/\s+/g, "");
+      const s = name.replace(/\s+/g, "");
 
       // Pattern: <latin>-<latin> at the end
       // Example: Pura-cronitis | Acricron | Visisaticron
