@@ -127,6 +127,11 @@ commands → services → data → infrastructure → utils
 - **commands/**: thin handlers. Call service → branch on result → render component. No business logic.
 - **components/**: JSX renderers. Transform data → Element. Pure helpers can be extracted.
 
+## Repository Rules
+
+- **Do not create `yarn.lock`**. Per Koishi workspace conventions, lockfiles are managed at the workspace root; this package must not introduce its own lockfile.
+- **Do not modify staged changes without explicit instruction**. If `git status` shows staged changes, leave them untouched unless the user explicitly asks you to modify them.
+
 ## Known Issues & Technical Debt
 
 - `relicQualityToName` and `relicQualityToTransKey` in `wf-export-adapter.ts` have no external callers — possible dead code.
