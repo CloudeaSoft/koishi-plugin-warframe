@@ -1,140 +1,185 @@
 # AGENTS.md
 
-This file provides guidance to AI assistants (opencode, Cursor, Copilot, etc.) working in this codebase.
+Guidance for AI assistants working in this package.
 
-## Project Overview
+## Project Snapshot
 
-**koishi-plugin-warframe** — A Warframe toolkit plugin for the Koishi chatbot framework. Provides Warframe Market prices, fissures, arbitrations, relics, weekly missions, open world cycles, riven analysis (OCR), and void trader info.
+`koishi-plugin-warframe` is a Koishi v4 plugin that provides Warframe toolkit commands:
+Warframe Market prices, fissures, arbitrations, relics, weekly missions, open-world
+cycles, Riven analysis/OCR, and Void Trader information.
 
-## Tech Stack
+## Environment And Commands
 
-- **Language**: TypeScript (target: es2022, module: esnext, JSX: react-jsx via @satorijs/element)
-- **Runtime**: Node.js (>=18, tested on v24)
-- **Framework**: Koishi v4 (`koishi`, `@koishijs/plugin-help`, `@koishijs/plugin-mock`)
-- **Package Manager**: **yarn** (Yarn 4 with PnP-compatible workspace). Always use `yarn` commands, never `npm`.
-- **Build**: `yakumo` (dtsc for type-checking, esbuild for bundling)
-- **Test**: `mocha` + `chai` (no `chai-as-promised`; use try/catch for rejected-promise assertions)
-- **Key Dependencies**: `ofetch` (HTTP), `warframe-public-export-plus` (game data), `warframe-worldstate-parser` (live game state), `tencentcloud-sdk-nodejs-ocr` (OCR)
+- Language: TypeScript, target `es2022`, module `esnext`.
+- JSX: `react-jsx` with `jsxImportSource: "@satorijs/element"`.
+- Runtime: Node.js >= 18.
+- Framework: Koishi v4 with `@satorijs/element` JSX output and Puppeteer image
+  rendering.
+- Package manager: Yarn. Use `yarn` commands only; do not run `npm` or `npx`
+  directly. If a script internally uses another tool, run it through `yarn <script>`.
+- Build system: `yakumo` with `yakumo-tsc` and `yakumo-esbuild`.
+- Test stack: Mocha + Chai. Do not add `chai-as-promised`; use explicit
+  `try`/`catch` assertions for rejected promises.
 
-## Common Commands
+Common commands:
 
 ```bash
-yarn dtsc          # Type-check (no emit; uses dtsc)
-yarn test          # Run all tests (mocha + esbuild-register)
-yarn build         # Full build (yakumo)
-yarn install       # Install dependencies
+yarn dtsc          # type-check declarations
+yarn test          # run all tests
+yarn build         # full yakumo build
+yarn lint          # eslint, including markdown
+yarn install       # install dependencies from the workspace setup
 ```
 
-To run a single test file:
+Run one test file with:
+
 ```bash
 yarn mocha tests/<file>.spec.ts
 ```
 
+Repository rule: do not create a package-local `yarn.lock`. This package is part
+of a Koishi/Yarn workspace where lockfiles are managed at the workspace root.
+
 ## Architecture
 
-The project follows a **domain-driven layered architecture**. Three domains: `wf` (Warframe game state), `wfm` (Warframe Market), `miscs` (miscellaneous APIs). Each layer is split by domain.
+The code is organized by domain and layer. The main domains are:
 
-```
+- `wf`: Warframe game state and static game data.
+- `wfm`: Warframe Market data.
+- `miscs`: miscellaneous external APIs.
+
+High-level layout:
+
+```text
 src/
-├── index.ts              # Plugin entry: apply(ctx) registers commands & hooks
-├── commands/             # Command handlers (thin: service → component → render)
-│   ├── wf.ts wfm.ts miscs.ts
-├── components/           # JSX → koishi Element renderers + Puppeteer output
-│   ├── wf.tsx wfm.tsx miscs.tsx render.tsx
-├── services/             # Business logic (pure functions + data orchestration)
-│   ├── wf-service.ts wfm-service.ts
-├── data/                 # Cached data singletons (createAsyncCache wrappers)
-│   ├── wf/ wfm/ miscs/
-├── infrastructure/       # External API clients & data adapters
-│   ├── wf/ wfm/ miscs/ ocr-api.ts
-├── utils/                # Generic, domain-agnostic primitives
-│   ├── cache.ts collection.ts color.ts http.ts logger.ts text.ts time.ts
-├── types/                # Ambient .d.ts type declarations (no runtime)
-├── hooks/                # Lifecycle hooks (on-ready)
-└── assets/               # Static data (JSON, TS string constants)
+|-- index.ts              # plugin entry; registers commands and hooks
+|-- commands/             # thin Koishi command handlers
+|-- components/           # JSX -> Koishi Element renderers and Puppeteer output
+|-- services/             # business logic and data orchestration
+|-- data/                 # cached data singletons
+|-- infrastructure/       # external API clients and package adapters
+|-- utils/                # generic primitives
+|-- types/                # ambient/domain type declarations
+|-- hooks/                # lifecycle hooks
+`-- assets/               # static JSON and TS data
 ```
 
-### Layer Dependencies (strict, one-directional)
+Layer direction is one-way:
 
+```text
+commands -> services -> data -> infrastructure -> utils
+commands -> components -> utils
 ```
-commands → services → data → infrastructure → utils
-       └→ components ──┘
-```
 
-- **utils/** must not import from any other layer (except `logger.ts` which imports `koishi`).
-- **infrastructure/** may import from utils only.
-- **data/** may import from infrastructure + utils.
-- **services/** may import from data + infrastructure + utils + assets + types (not components).
-- **commands/** may import from services + components + utils.
-- **components/** may import from utils + types only (not from services/data/infrastructure).
+Dependency rules:
 
-### Domain Adapters
+- `utils/` must stay generic and domain-agnostic. The exception is
+  `utils/logger.ts`, which imports Koishi.
+- `infrastructure/` may import from `utils/`.
+- `data/` may import from `infrastructure/` and `utils/`.
+- `services/` may import from `data/`, `infrastructure/`, `utils/`, `assets/`,
+  and `types/`. It must not import from `components/`.
+- `commands/` may import from `services/`, `components/`, and `utils/`.
+- `components/` may import from `utils/` and `types/` only. It must not import
+  from `services/`, `data/`, or `infrastructure/`.
 
-`infrastructure/wf/` contains two adapter modules that transform data from external packages:
-- `wf-export-adapter.ts` — adapts `warframe-public-export-plus` (relics, regions, qualities)
-- `wfcd-adapter.ts` — adapts `warframe-worldstate-data` (sol nodes, mission types, void trader items, fissure tiers). Also contains `relicToFullNameZH` (merged from former `translation.ts`).
+## Layer Responsibilities
 
-## Code Conventions
+- Commands: parse command input, call services, branch on service results, and
+  render component output. Keep business logic out of command files.
+- Services: implement user-facing behavior. Prefer pure helpers for transforms
+  and keep external-data orchestration explicit.
+- Data: expose cache-backed singletons around infrastructure calls. Use
+  `createAsyncCache()` and keep test injection seams when practical.
+- Infrastructure: isolate external services, HTTP clients, and third-party data
+  adapters.
+- Components: transform service data into `Element` output. Extract non-trivial
+  formatting helpers when they need focused tests.
+- Utils: reusable primitives only. If a utility imports Warframe-specific data
+  or packages, it belongs outside `utils/`.
 
-### Logging
-- Use the **single global logger**: `import { logger } from "./utils"` (or relative path).
-- Scope is `"koishi-plugin-warframe"` — defined in `src/utils/logger.ts`.
-- **Never** use `console.log`/`console.error` — always use `logger`.
-- `Logger` is a stateless static class (koishi core pattern); safe to instantiate at module scope without ctx.
+## Important Modules
 
-### HTTP Requests
-- Use `fetchAsyncText` / `fetchAsyncData<T>` / `fetchAsyncImage` from `src/utils/http.ts`.
-- All three wrap a shared `request()` core with: ofetch, 10s timeout, 3 retries (500ms backoff, retry on 408/429/500/502/503/504), realistic browser headers, `Language: zh-hans`.
-- **Error contract**: any failure → `logger.error(...)` → `return undefined`. Callers handle `T | undefined`.
-- **Never** use raw `fetch()` or `ofetch()` directly.
+- `src/infrastructure/wf/wf-export-adapter.ts` adapts
+  `warframe-public-export-plus` data such as relics, regions, and relic quality.
+- `src/infrastructure/wf/wfcd-adapter.ts` adapts `warframe-worldstate-data`
+  values such as nodes, mission types, fissure tiers, and Void Trader items.
+  It also owns `relicToFullNameZH`.
+- `src/components/render.tsx` owns Puppeteer image output through
+  `generateImageOutput(puppe, element)`.
+- `src/utils/http.ts` owns all HTTP request behavior and retry/error handling.
+- `src/utils/logger.ts` defines the shared logger scope.
 
-### Caching
-- `createAsyncCache(factory, ttlMs)` — TTL-based async cache with in-flight deduplication. Use `-1` for infinite TTL.
-- `CacheStorage<T>(limit)` — LRU Map-backed promise cache (used by OCR).
-- Data layer singletons use `createAsyncCache` with appropriate TTLs.
-- **Factory + override pattern**: `globalItem.ts` and `globalRivenAttribute.ts` expose `*Factory(data?)` + `overrideGlobal*(cache)` pairs for test injection. Follow this pattern when adding new data singletons.
+## Coding Conventions
 
-### TypeScript
-- Type declarations live in `src/types/` as ambient `.d.ts` files (global types, no import needed).
-- Domain types are organized: `types/wf/`, `types/wfm/`, `types/miscs/`.
-- Use `declare module` for extending external interfaces when needed.
+Logging:
 
-### JSX / Components
-- Components produce `Element` from `@satorijs/element` (via `koishi`).
-- `.tsx` files use `jsxImportSource: "@satorijs/element"`.
-- `render.tsx` handles Puppeteer rendering: `generateImageOutput(puppe, element)`.
-- Pure helper functions inside components should be extracted for testability when they contain non-trivial logic.
+- Import the shared logger from `src/utils` or the appropriate relative path.
+- Logger scope is `koishi-plugin-warframe`.
+- Do not use `console.log`, `console.error`, or similar console calls in source
+  code. Use `logger` instead.
 
-### Testing
-- Test files in `tests/`, named `<feature>.<domain>.spec.ts` or `<module>.utils.spec.ts`.
-- Use `chai` `expect()` style assertions.
-- For async tests needing network, set `this.timeout(...)` appropriately.
-- **Test isolation**: put `before()`/`after()` hooks **inside** `describe()` blocks, never at file root — mocha runs root-level hooks before ALL test files, causing cross-file interference.
-- Use `overrideGlobal*` functions to inject fixture data (avoid live network in unit tests).
-- Fixture JSON files go in `tests/assets/`.
+HTTP:
 
-### Error Handling
-- Service functions return `string` for user-facing error messages (Chinese), or the data type on success.
-- Infrastructure functions return `T | undefined` (undefined = failure, logged internally).
-- Never throw from infrastructure/utils — catch, log, return undefined.
+- Use `fetchAsyncText`, `fetchAsyncData<T>`, or `fetchAsyncImage` from
+  `src/utils/http.ts`.
+- Do not call raw `fetch()` or `ofetch()` outside the HTTP utility.
+- The HTTP utility owns timeout, retry, browser-like headers, and `Language:
+  zh-hans` behavior.
+- HTTP helpers log failures and return `undefined`; callers must handle
+  `T | undefined`.
 
-## File Organization Rules
+Caching:
 
-- **utils/**: only generic, domain-agnostic primitives. If it imports a Warframe-specific package, it belongs in `infrastructure/`.
-- **infrastructure/**: external service clients and data adapters. One file per external API.
-- **data/**: cached singletons wrapping infrastructure calls. Each file exports a `createAsyncCache` instance.
-- **services/**: business logic. Pure functions when possible; orchestrate data + infrastructure.
-- **commands/**: thin handlers. Call service → branch on result → render component. No business logic.
-- **components/**: JSX renderers. Transform data → Element. Pure helpers can be extracted.
+- Use `createAsyncCache(factory, ttlMs)` for async caches with in-flight
+  deduplication. Use `-1` for an infinite TTL.
+- Use `CacheStorage<T>(limit)` for LRU promise caches, as in OCR flows.
+- Prefer the factory + override pattern used by `globalItem.ts` and
+  `globalRivenAttribute.ts` when adding testable data singletons.
 
-## Repository Rules
+TypeScript and types:
 
-- **Do not create `yarn.lock`**. Per Koishi workspace conventions, lockfiles are managed at the workspace root; this package must not introduce its own lockfile.
-- **Do not modify staged changes without explicit instruction**. If `git status` shows staged changes, leave them untouched unless the user explicitly asks you to modify them.
+- Keep ambient declarations in `src/types/`.
+- Domain types live under `src/types/wf/`, `src/types/wfm/`, and
+  `src/types/miscs/`.
+- Use `declare module` only when extending external package interfaces.
 
-## Known Issues & Technical Debt
+Error handling:
 
-- `relicQualityToName` and `relicQualityToTransKey` in `wf-export-adapter.ts` have no external callers — possible dead code.
-- `globalRivenItem.ts`, `globalDucatnator.ts`, `globalWorldState.ts` lack the factory+override pattern — harder to unit test.
-- Several IIFE-built statics in `data/wf/` (`rivenDisposition`, `relics`, `rivenBaseValues`, `arbitrationSchedule`) have no injection seam — their transform logic is inlined.
-- `lichc` / `lichi` commands are stubs ("功能暂未开放").
+- Infrastructure and utils should catch operational failures, log them, and
+  return `undefined`.
+- Services return either user-facing error strings or successful data.
+- User-facing error strings are in Chinese.
+
+## Testing Rules
+
+- Test files live in `tests/` and use `*.spec.ts`.
+- Use Chai `expect()` assertions.
+- Put `before()` and `after()` hooks inside `describe()` blocks. Do not add
+  root-level Mocha hooks; they run before all test files and can leak state.
+- Prefer fixture data and override helpers over live network calls.
+- Test fixtures belong in `tests/assets/`.
+- For async tests that intentionally touch slow paths or network-like behavior,
+  set an explicit `this.timeout(...)`.
+
+## Git And Workspace Safety
+
+- Check `git status --short` before editing.
+- If staged changes exist, do not modify them unless the user explicitly asks.
+- Do not revert user changes.
+- Keep edits focused on the requested area. Avoid unrelated refactors and
+  metadata churn.
+- Use `yarn` for validation commands.
+
+## Current Maintenance Notes
+
+- `globalRivenItem.ts`, `globalDucatnator.ts`, and `globalWorldState.ts` do not
+  yet expose the factory + override injection pattern used by other data
+  singletons.
+- Several `data/wf/` modules build static caches through inline IIFEs, including
+  `rivenDisposition`, `relics`, `rivenBaseValues`, and `arbitrationSchedule`.
+  Their transform logic is harder to test in isolation.
+- `relicQualityToName` and `relicQualityToTransKey` are exported and covered by
+  adapter tests, but currently appear to have no runtime callers.
+- `lichc` and `lichi` are hidden placeholder commands that return an
+  in-development message.
