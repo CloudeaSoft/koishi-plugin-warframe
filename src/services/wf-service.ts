@@ -461,7 +461,7 @@ export const parseOCRResult = async (ocrResult: string[]) => {
   const { globalRivenAttributeList } = await globalRivenAttribute.get();
 
   const list = ocrResult;
-  if (!list!.length) {
+  if (!list.length) {
     return;
   }
 

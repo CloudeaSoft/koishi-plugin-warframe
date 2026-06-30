@@ -1,5 +1,4 @@
 import crypto from "node:crypto";
-import { Client } from "tencentcloud-sdk-nodejs-ocr/tencentcloud/services/ocr/v20181119/ocr_client";
 import { CacheStorage, logger } from "../utils";
 
 const ocrCache = new CacheStorage<string[]>(100);
@@ -16,7 +15,8 @@ const getImageBase64Hash = (base64: string): string => {
 };
 
 const getTextFromTencentOCR = async (image: string, secret: OcrAPISecret) => {
-  const tencentcloud = require("tencentcloud-sdk-nodejs-ocr");
+  const tencentcloud =
+    require("tencentcloud-sdk-nodejs-ocr") as typeof import("tencentcloud-sdk-nodejs-ocr");
   const ocrClient = tencentcloud.ocr.v20181119.Client;
   const clientConfig = {
     credential: {
@@ -31,7 +31,7 @@ const getTextFromTencentOCR = async (image: string, secret: OcrAPISecret) => {
     },
   };
 
-  const client = new ocrClient(clientConfig) as Client;
+  const client = new ocrClient(clientConfig);
 
   const { TextDetections } = await client.GeneralAccurateOCR({
     ImageBase64: image,

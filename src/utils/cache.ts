@@ -86,7 +86,7 @@ export class CacheStorage<T> {
     this._storage.set(hash, promise);
 
     if (this._storage.size > this._limit) {
-      const oldestKey = this._storage.keys().next().value;
+      const oldestKey = this._storage.keys().next().value as string | undefined;
       if (oldestKey) {
         this._storage.delete(oldestKey);
       }

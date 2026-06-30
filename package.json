@@ -7,7 +7,7 @@
     "build": "yakumo build",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
-    "dtsc": "dtsc",
+    "dtsc": "tsc",
     "test": "mocha tests/**/*.spec.ts",
     "prepare": "husky",
     "lint": "eslint"

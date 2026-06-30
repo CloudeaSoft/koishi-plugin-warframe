@@ -97,11 +97,11 @@ export const getWFMDucatnator = async (): Promise<
   }
 
   const day = response.payload.previous_day.map((e) => {
-    return e as Ducatnator;
+    return e;
   });
 
   const hour = response.payload.previous_hour.map((e) => {
-    return e as Ducatnator;
+    return e;
   });
 
   return {

@@ -14,6 +14,23 @@ export default defineConfig([
   {
     files: ["**/*.{js,ts}"],
     extends: [tseslint.configs.recommended],
+  },
+  {
+    files: ["**/*.{js,ts}"],
+    ignores: ["tests/**/*", "./*.{js,ts}"],
+    extends: [tseslint.configs.recommendedTypeCheckedOnly],
+    rules: {
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/no-redundant-type-constituents": "off",
+    },
+    languageOptions: {
+      parserOptions: {
+        projectService: true
+      },
+    },
+  },
+  {
+    files: ["**/*.{js,ts}"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
     },

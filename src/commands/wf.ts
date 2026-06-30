@@ -136,7 +136,7 @@ export const rivenCommand = async (
     return "未检测到图片";
   }
 
-  const result = await getAnalyzedRiven(secret, input.src);
+  const result = await getAnalyzedRiven(secret, input.src as string);
   if (typeof result === "string") {
     return result;
   }

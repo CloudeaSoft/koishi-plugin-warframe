@@ -204,10 +204,10 @@ export const getRivenOrders = async (input: string) => {
 
   const targetItem =
     globalRivenItemList.find((item) =>
-      compareRivenItemName(input, item.i18n["zh-hans"].name),
+      compareRivenItemName(input, item.i18n?.["zh-hans"]?.name ?? ""),
     ) ??
     globalRivenItemList.find((item) =>
-      compareRivenItemName(input, item.i18n["en"].name),
+      compareRivenItemName(input, item.i18n?.en?.name ?? ""),
     );
   if (!targetItem) {
     return null;
@@ -276,7 +276,7 @@ export const applyRelicData = async (relic: Relic): Promise<OutputRelic> => {
 
     return {
       ...element,
-      name: item.i18n["zh-hans"].name,
+      name: item.i18n?.["zh-hans"]?.name ?? item.i18n?.en?.name ?? element.name,
       ducats: item.ducats,
       platinum: platinum,
     };
@@ -327,6 +327,10 @@ export const primedModHistory = createAsyncCache(async () => {
     }
 
     const item = globalItemDict[slug];
+    if (!item) {
+      result.push({ name: mod.Name, last: mod.Last });
+      continue;
+    }
 
     const elapsed = Date.now() - lastRequestTime;
     if (elapsed < minInterval) {
@@ -362,7 +366,9 @@ export const primedModHistory = createAsyncCache(async () => {
 
 // ================ privates ===================
 
-export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
+export const stringToWFMItem = async (
+  input: string,
+): Promise<ItemShort | undefined> => {
   const { globalItemList, globalItemDict, globalItemNameToSlugDict } =
     await globalItemData.get();
 
@@ -500,10 +506,10 @@ export const stringToWFMItem = async (input: string): Promise<ItemShort> => {
 
   return (
     globalItemList.find((item) =>
-      compareCNOrderName(input, item.i18n["zh-hans"].name),
+      compareCNOrderName(input, item.i18n?.["zh-hans"]?.name ?? ""),
     ) ??
     globalItemList.find((item) =>
-      compareENOrderName(input, item.i18n["en"].name),
+      compareENOrderName(input, item.i18n?.en?.name ?? ""),
     )
   );
 };

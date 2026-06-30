@@ -41,7 +41,7 @@ async function request<T, R extends ResponseType>(
     const detail =
       e.data && typeof e.data === "object"
         ? JSON.stringify(e.data)
-        : (e.data ?? e.message ?? "");
+        : ((e.data as string | undefined) ?? e.message ?? "");
     logger.error(`[HTTP] ${method} ${url} -> ${status} ${detail}`.trimEnd());
     return undefined;
   }
