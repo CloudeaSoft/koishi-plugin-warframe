@@ -20,6 +20,10 @@ type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
 
 interface DomainPolicy {
   limiter?: Bottleneck;
+
+  /**
+   * In seconds.
+   */
   cacheTtl?: number;
 }
 

@@ -326,11 +326,6 @@ export const primedModHistory = createAsyncCache(async () => {
       continue;
     }
 
-    const elapsed = Date.now() - lastRequestTime;
-    if (elapsed < minInterval) {
-      await sleep(minInterval - elapsed);
-    }
-
     const data = await getWFMItemStatistics(slug);
 
     if (data) {
