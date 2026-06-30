@@ -1,3 +1,5 @@
+import { WFMLangDTO } from "./lang.dto";
+
 interface ItemI18NDTO {
   name: string;
   description: string;

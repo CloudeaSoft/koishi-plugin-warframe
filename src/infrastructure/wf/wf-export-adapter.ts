@@ -3,7 +3,10 @@ import {
   ExportFactions as factions,
 } from "warframe-public-export-plus";
 
-export const regionToShort = (region: IRegion, dict: any) => {
+export const regionToShort = (
+  region: IRegion,
+  dict: Record<string, string>,
+) => {
   let faction;
   if (region.faction) {
     const name = factions[region.faction].name;

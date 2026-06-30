@@ -1,4 +1,4 @@
-type WFMLangDTO =
+export type WFMLangDTO =
   | "ko"
   | "ru"
   | "de"

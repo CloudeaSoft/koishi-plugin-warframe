@@ -14,6 +14,7 @@ import {
   StatisticsCollectionDTO,
 } from "./dto/item.dto";
 import { OrderWithUserDTO } from "./dto/order.dto";
+import { WFMResponse, WFMResponseV1, Auction } from "./dto/response.dto";
 import { RivenAttributeDTO, RivenOrderDTO } from "./dto/riven.dto";
 
 const wfmApiV1Base = "https://api.warframe.market/v1/";
