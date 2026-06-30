@@ -12,7 +12,7 @@ describe("Void Trader Item Map Tests", function () {
 
     trader.inventory.forEach((element) => {
       const item = getVoidTraderItem(element);
-      expect(item.name).not.undefined;
+      expect(item.name).to.not.equal(undefined);
     });
   });
 });

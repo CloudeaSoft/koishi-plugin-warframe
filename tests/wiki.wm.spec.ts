@@ -5,7 +5,7 @@ import { Baro } from "../src/assets/baro";
 describe("Wiki void trader history parse test", async function () {
   it("Should not return empty", async () => {
     const result = await getVoidTraderHistory(Baro);
-    expect(result).not.undefined;
+    expect(result).to.not.equal(undefined);
 
     const newData: { Name: string; Last: string }[] = [];
     for (const key in result) {
@@ -22,6 +22,6 @@ describe("Wiki void trader history parse test", async function () {
       (a, b) => new Date(a.Last).getTime() - new Date(b.Last).getTime(),
     );
 
-    expect(newData).not.empty;
+    expect(newData.length).to.be.greaterThan(0);
   });
 });

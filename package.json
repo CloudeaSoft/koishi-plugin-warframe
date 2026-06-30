@@ -10,7 +10,7 @@
     "dtsc": "dtsc",
     "test": "mocha tests/**/*.spec.ts",
     "prepare": "husky",
-    "lint": "npx --node-options='--experimental-strip-types' eslint --flag unstable_native_nodejs_ts_config"
+    "lint": "eslint"
   },
   "author": "CloudeaSoft <cloudeasoft@qq.com>",
   "repository": {

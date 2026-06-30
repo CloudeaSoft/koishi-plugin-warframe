@@ -32,10 +32,10 @@ describe("globalItemDataFactory Tests", () => {
     expect(result.globalItemList).to.have.length(2);
     expect(result.globalItemList[0].slug).to.equal("valkyr_prime_set");
 
-    expect(result.globalItemDict["valkyr_prime_set"]).to.exist;
+    expect(result.globalItemDict["valkyr_prime_set"]).to.not.equal(undefined);
     expect(result.globalItemDict["valkyr_prime_set"].id).to.equal("1");
 
-    expect(result.globalItemGameRefDict["/Lotus/Weapons/Warframes/ValkyrPrime"]).to.exist;
+    expect(result.globalItemGameRefDict["/Lotus/Weapons/Warframes/ValkyrPrime"]).to.not.equal(undefined);
   });
 
   it("Should build name-to-slug dict with both zh and en names", async () => {
@@ -72,7 +72,7 @@ describe("globalItemDataFactory Tests", () => {
         thumb: "",
         i18n: {
           en: { name: "Test Item", description: "" },
-        } as any,
+        },
       },
     ];
     const result = await globalItemDataFactory(items);
@@ -89,7 +89,7 @@ describe("globalItemDataFactory Tests", () => {
         thumb: "",
         i18n: {
           "zh-hans": { name: "测试物品", description: "" },
-        } as any,
+        },
       },
     ];
     const result = await globalItemDataFactory(items);

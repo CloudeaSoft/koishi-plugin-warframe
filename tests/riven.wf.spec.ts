@@ -8,7 +8,7 @@ import testItem from "./assets/test-items.json";
 import testAttr from "./assets/test-riven-attrs.json";
 import rivenCalc from "../src/assets/rivencalc.json";
 
-import { ExportWeapons, dict_en, dict_zh } from "warframe-public-export-plus";
+import { ExportWeapons, dict_en } from "warframe-public-export-plus";
 import { createAsyncCache, normalizeName } from "../src/utils";
 import { expect } from "chai";
 import { rivenAttrValueDict } from "../src/data/wf/rivenBaseValues";
@@ -20,17 +20,19 @@ import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
 } from "../src/data/wfm/globalRivenAttribute";
+import { ItemShort } from "../src/types/wfm/item";
+import { RivenAttribute } from "../src/types/wfm/riven";
 
 before(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
-      return await globalItemDataFactory(testItem.data);
-    }, -1) as any
+      return await globalItemDataFactory(testItem.data as ItemShort[]);
+    }, -1),
   );
   overrideGlobalRivenAttribute(
     createAsyncCache(async () => {
-      return await globalRivenAttributeFactory(testAttr.data);
-    }, -1) as any
+      return await globalRivenAttributeFactory(testAttr.data as RivenAttribute[]);
+    }, -1),
   );
 });
 
@@ -880,10 +882,10 @@ describe("OCR Result Tests", async function () {
       const parsed = await parseOCRResult(
         result.TextDetections.map((t) => t.DetectedText)
       );
-      expect(parsed).to.not.undefined;
+      expect(parsed).to.not.equal(undefined);
       expect(parsed!.attributes.length, parsed?.name).to.be.equal(statNum[i]);
       parsed!.attributes.forEach((element) => {
-        expect(element.attr).to.not.undefined;
+        expect(element.attr).to.not.equal(undefined);
         expect(element.value).to.not.equal(0);
       });
     }
@@ -891,8 +893,7 @@ describe("OCR Result Tests", async function () {
 
   it("Transform Riven Calc Data Tests", () => {
     let count = 0;
-    const mapped = rivenCalc.weapons.reduce<any[]>((prev, element) => {
-      let mapped = undefined;
+    for (const element of rivenCalc.weapons) {
       for (const weaponKey in ExportWeapons) {
         const weapon = ExportWeapons[weaponKey];
 
@@ -905,41 +906,18 @@ describe("OCR Result Tests", async function () {
         const normalizedCalcName = normalizeName(element.name);
         if (normalizeName(keyName) === normalizedCalcName) {
           count++;
-          mapped = weapon;
           break;
         }
 
         const weaponEN = dict_en[weapon.name];
         if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
           count++;
-          mapped = weapon;
           break;
         }
       }
+    }
 
-      if (!mapped) {
-        return prev;
-      }
-
-      const weaponEN = dict_en[mapped.name];
-      const weaponZH = dict_zh[mapped.name];
-      const result = {
-        name: {
-          en: weaponEN,
-          zh: weaponZH,
-        },
-        calc: element,
-        weapon: mapped,
-      };
-
-      prev.push(result);
-
-      return prev;
-    }, []);
-
-    // console.log(`${count}/${rivenCalc.weapons.length}`);
-    // console.log(mapped.length);
-    // console.log(mapped.find((e) => e.name.zh === "草原猎手"));
+    expect(count).to.be.greaterThan(0);
   });
 
   it("Weapon Names", () => {
@@ -953,7 +931,7 @@ describe("OCR Result Tests", async function () {
     ];
 
     for (const name of names) {
-      expect(getWeaponRivenDisposition(name), name).not.be.undefined;
+      expect(getWeaponRivenDisposition(name), name).to.not.equal(undefined);
     }
   });
 });
@@ -1706,7 +1684,7 @@ describe("Transform Attr Base Value Tests", function () {
           rivenAttrValueDict[w.calc.riventype][
             normalizeName(attr.attr.i18n["en"].name)
           ];
-        expect(attrV, attr.attr.i18n["en"].name).to.be.not.undefined;
+        expect(attrV, attr.attr.i18n["en"].name).to.not.equal(undefined);
       }
     });
   });
@@ -1714,7 +1692,7 @@ describe("Transform Attr Base Value Tests", function () {
   it("Analyze", () => {
     inputs.forEach((input) => {
       const analyzed = analyzeRivenStat(input);
-      expect(analyzed).to.be.not.undefined;
+      expect(analyzed).to.not.equal(undefined);
     });
   });
 });

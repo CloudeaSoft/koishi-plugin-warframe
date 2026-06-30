@@ -9,7 +9,7 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
   },
   {
-    ignores: ["lib/**/*", "tests/**/*"], // Exclude build and test files
+    ignores: ["lib/**/*"], // Exclude build files
   },
   {
     files: ["**/*.{js,ts}"],
