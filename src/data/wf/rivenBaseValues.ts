@@ -5,7 +5,7 @@ export const rivenAttrValueDict: Record<
   string,
   Record<string, number>
 > = (() => {
-  const dict: any = {};
+  const dict: Record<string, Record<string, number>> = {};
   for (const key in rivenAttrValues) {
     const attrs = rivenAttrValues[key as keyof typeof rivenAttrValues];
     dict[key] = {};

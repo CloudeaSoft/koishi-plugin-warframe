@@ -44,7 +44,7 @@ export const getMissionTypeKey = async (
     missionTypeEnDict = dictToKeyDict(
       worldstateData.default.missionTypes,
       (n) => [n.value],
-    ) as any;
+    ) as Record<string, TMissionType>;
   }
 
   if (name === "Disruption") return "MT_ARTIFACT";

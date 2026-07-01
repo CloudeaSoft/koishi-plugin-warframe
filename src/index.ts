@@ -27,8 +27,9 @@ export function apply(ctx: Context) {
 }
 
 const setupHooks = (ctx: Context) => {
+  const config = ctx.config as Config;
   ctx.on("message", (session) => {
-    if (ctx.config.developerMode) {
+    if (config.developerMode) {
       logger.info(
         `Koishi recieved message: ${session.content}
         Platform: ${session.platform}
@@ -37,7 +38,7 @@ const setupHooks = (ctx: Context) => {
     }
   });
   ctx.on("command/before-execute", (action) => {
-    if (ctx.config.developerMode) {
+    if (config.developerMode) {
       logger.info(
         `WFM Plugin received command ${action.command?.name}
         arguments: ${JSON.stringify(action.args)}`,
@@ -48,6 +49,7 @@ const setupHooks = (ctx: Context) => {
 };
 
 const setupCommands = (ctx: Context) => {
+  const config = ctx.config as Config;
   ctx.command("wm <itemId:text>", "请使用wmi替代").action(commands.wmCommand);
   ctx
     .command("wmr <itemId:text>", "查询wm的紫卡价格")
@@ -108,7 +110,7 @@ const setupCommands = (ctx: Context) => {
     .action(commands.circuitCommand);
 
   ctx.command("riven <img:image>", "分析紫卡截图").action((a, b) => {
-    return commands.rivenCommand(a, b, ctx.config.ocrAPISecret);
+    return commands.rivenCommand(a, b, config.ocrAPISecret);
   });
   ctx
     .command(

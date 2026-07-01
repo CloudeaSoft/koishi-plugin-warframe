@@ -36,8 +36,8 @@ describe("globalRivenAttributeFactory Tests", function () {
       "critical_chance",
     );
 
-    expect(result.globalRivenAttributeDict["critical_chance"]).to.exist;
-    expect(result.globalRivenAttributeDict["damage"]).to.exist;
+    expect(result.globalRivenAttributeDict["critical_chance"]).to.not.equal(undefined);
+    expect(result.globalRivenAttributeDict["damage"]).to.not.equal(undefined);
   });
 
   it("Should handle empty array (returns empty structures, does not throw)", async () => {

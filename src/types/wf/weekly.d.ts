@@ -1,6 +1,6 @@
 interface ArchonHunt {
   name: string;
-  // missions: ArchonHuntMissions[];
+  missions: ArchonHuntMissions[];
 }
 
 interface ArchonHuntMissions {

@@ -3,8 +3,11 @@ import {
   ExportFactions as factions,
 } from "warframe-public-export-plus";
 
-export const regionToShort = (region: IRegion, dict: any) => {
-  let faction;
+export const regionToShort = (
+  region: IRegion,
+  dict: Record<string, string>,
+) => {
+  let faction: string | undefined;
   if (region.faction) {
     const name = factions[region.faction].name;
     if (name) {
@@ -19,7 +22,7 @@ export const regionToShort = (region: IRegion, dict: any) => {
     name: dict[region.name],
     system: dict[region.systemName],
     type: dict[region.missionName],
-    faction,
+    faction: faction ?? "",
     maxLevel: region.maxEnemyLevel,
     minLevel: region.minEnemyLevel,
   };

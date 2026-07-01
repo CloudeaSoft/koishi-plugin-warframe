@@ -1,9 +1,9 @@
-import { App } from "koishi";
+import { App, Plugin } from "koishi";
 import mock from "@koishijs/plugin-mock";
 import * as warframe from "../src/index";
 
 const app = new App();
-app.plugin(mock as any);
+app.plugin(mock as Plugin.Object);
 app.plugin(warframe, {
   developerMode: false,
   ocrAPISecret: { id: "", key: "" },

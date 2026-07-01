@@ -28,7 +28,7 @@ export const msToHumanReadable = (ms: number): string => {
   const seconds = totalSeconds % 60;
 
   // 定义单位映射（过滤0值）
-  const parts = [];
+  const parts: string[] = [];
   if (days > 0) parts.push(`${days}天`);
   if (hours > 0) parts.push(`${hours}小时`);
   if (minutes > 0) parts.push(`${minutes}分钟`);

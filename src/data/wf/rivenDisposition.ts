@@ -1,4 +1,4 @@
-import { ExportWeapons, dict_en, dict_zh } from "warframe-public-export-plus";
+import { ExportWeapons, IWeapon, dict_en, dict_zh } from "warframe-public-export-plus";
 import { normalizeName, listToDict } from "../../utils";
 import rivenCalc from "../../assets/rivencalc.json";
 import { RivenWeaponDisposition } from "../../types/wf/riven";
@@ -6,7 +6,7 @@ import { RivenWeaponDisposition } from "../../types/wf/riven";
 export const weaponRivenDispositionDict = (() => {
   const mapped = rivenCalc.weapons.reduce<RivenWeaponDisposition[]>(
     (prev, element) => {
-      let mapped = undefined;
+      let mapped: IWeapon | undefined = undefined;
       for (const weaponKey in ExportWeapons) {
         const weapon = ExportWeapons[weaponKey];
 

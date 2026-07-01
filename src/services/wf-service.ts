@@ -142,6 +142,7 @@ export const getWeekly = async () => {
     name: dict_zh[
       "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
     ],
+    missions: [],
   };
 
   const stringToDebuff = (
@@ -337,7 +338,7 @@ export const getAnalyzedRiven = async (
     return "解析图片失败";
   }
 
-  return analyzeRivenStat(parseResult as any);
+  return analyzeRivenStat(parseResult);
 };
 
 export const getVoidTrader = async (): Promise<string | VoidTrader> => {
@@ -460,7 +461,7 @@ export const parseOCRResult = async (ocrResult: string[]) => {
   const { globalRivenAttributeList } = await globalRivenAttribute.get();
 
   const list = ocrResult;
-  if (!list!.length) {
+  if (!list.length) {
     return;
   }
 

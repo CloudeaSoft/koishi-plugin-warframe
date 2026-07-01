@@ -1,3 +1,5 @@
+import { WFMLangDTO } from "./lang.dto";
+
 interface RivenDTO {
   polarity: string;
   mod_rank: number;

@@ -183,7 +183,7 @@ describe("CacheStorage Tests", function () {
     const reFetchCount = fetchCount;
     fetchCount = 0;
 
-    const aAgain = await storage.get("a", async () => {
+    await storage.get("a", async () => {
       fetchCount++;
       return "re-fetched-a";
     });
@@ -205,14 +205,14 @@ describe("CacheStorage Tests", function () {
       cCalled = true;
       return "3";
     });
-    expect(cCalled).to.be.true;
+    expect(cCalled).to.equal(true);
 
     let bCalled = false;
-    const bVal = await storage.get("b", async () => {
+    await storage.get("b", async () => {
       bCalled = true;
       return "re-b";
     });
-    expect(bCalled).to.be.true;
+    expect(bCalled).to.equal(true);
   });
 
   it("Should delete entry when fetchFn rejects", async () => {
@@ -230,7 +230,7 @@ describe("CacheStorage Tests", function () {
       return "ok";
     });
 
-    expect(called).to.be.true;
+    expect(called).to.equal(true);
   });
 
   it("clear() should empty storage", async () => {

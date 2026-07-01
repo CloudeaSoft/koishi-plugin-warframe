@@ -15,7 +15,7 @@ interface WFRegion {
   masteryExp: number;
   levelOverride: string;
   rewardManifests: string[];
-  nextNodes: any[];
+  nextNodes: unknown[];
 }
 
 interface WFRegionShort {

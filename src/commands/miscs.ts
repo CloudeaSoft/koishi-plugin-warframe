@@ -14,7 +14,7 @@ export const hotRivenCommand = async (action: Argv) => {
       action.session!.app.puppeteer,
       HotRivenComponent(result),
     );
-  } catch (error) {
+  } catch {
     return "获取热门紫卡数据失败";
   }
 };

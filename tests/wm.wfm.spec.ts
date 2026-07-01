@@ -7,12 +7,13 @@ import {
   globalItemDataFactory,
 } from "../src/data/wfm/globalItem";
 import { createAsyncCache } from "../src/utils";
+import { ItemShort } from "../src/types/wfm/item";
 
 before(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
-      return await globalItemDataFactory(testItems.data);
-    }, -1) as any
+      return await globalItemDataFactory(testItems.data as ItemShort[]);
+    }, -1),
   );
 });
 

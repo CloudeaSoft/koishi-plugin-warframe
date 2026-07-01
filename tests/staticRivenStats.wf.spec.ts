@@ -54,6 +54,16 @@ const fixtureAttrs: RivenAttribute[] = [
   },
 ];
 
+function expectRivenStatResult(
+  value: unknown,
+): { positive: Record<string, unknown>; negative?: Record<string, unknown> } {
+  expect(value).to.not.be.a("string");
+  return value as {
+    positive: Record<string, unknown>;
+    negative?: Record<string, unknown>;
+  };
+}
+
 describe("getStaticRivenStats Tests", function () {
   this.timeout(10000);
 
@@ -61,7 +71,7 @@ describe("getStaticRivenStats Tests", function () {
     overrideGlobalRivenAttribute(
       createAsyncCache(async () => {
         return await globalRivenAttributeFactory(fixtureAttrs);
-      }, -1) as any,
+      }, -1),
     );
   });
 
@@ -111,29 +121,39 @@ describe("getStaticRivenStats Tests", function () {
   });
 
   it("Should include positive stats for type '2'", async () => {
-    const result: any = await getStaticRivenStats("步枪", "2", 1.0);
+    const result = expectRivenStatResult(
+      await getStaticRivenStats("步枪", "2", 1.0),
+    );
     expect(result.positive).to.be.an("object");
     expect(Object.keys(result.positive).length).to.be.greaterThan(0);
   });
 
   it("Should not include negative stats for type '2' (no curse)", async () => {
-    const result: any = await getStaticRivenStats("步枪", "2", 1.0);
-    expect(result.negative).to.be.undefined;
+    const result = expectRivenStatResult(
+      await getStaticRivenStats("步枪", "2", 1.0),
+    );
+    expect(result.negative).to.equal(undefined);
   });
 
   it("Should include negative stats for type '21' (1 curse)", async () => {
-    const result: any = await getStaticRivenStats("步枪", "21", 1.0);
+    const result = expectRivenStatResult(
+      await getStaticRivenStats("步枪", "21", 1.0),
+    );
     expect(result.negative).to.be.an("object");
     expect(Object.keys(result.negative).length).to.be.greaterThan(0);
   });
 
   it("Should include negative stats for type '31' (1 curse)", async () => {
-    const result: any = await getStaticRivenStats("步枪", "31", 1.0);
+    const result = expectRivenStatResult(
+      await getStaticRivenStats("步枪", "31", 1.0),
+    );
     expect(result.negative).to.be.an("object");
   });
 
   it("Each positive stat should have name, max, min, unit", async () => {
-    const result: any = await getStaticRivenStats("步枪", "2", 1.0);
+    const result = expectRivenStatResult(
+      await getStaticRivenStats("步枪", "2", 1.0),
+    );
     for (const key in result.positive) {
       const stat = result.positive[key];
       expect(stat).to.have.property("name");

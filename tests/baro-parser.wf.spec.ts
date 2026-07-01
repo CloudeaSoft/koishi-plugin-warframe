@@ -15,8 +15,8 @@ describe("Baro Lua Table Parser Tests", function () {
 }`;
 
     const result = await getVoidTraderHistory(lua);
-    expect(result).to.not.be.undefined;
-    expect(result!["TestItem"]).to.not.be.undefined;
+    expect(result).to.not.equal(undefined);
+    expect(result!["TestItem"]).to.not.equal(undefined);
     expect(result!["TestItem"].Name).to.equal("TestItem");
     expect(result!["TestItem"].Type).to.equal("Mod");
     expect(result!["TestItem"].DucatCost).to.equal(100);
@@ -102,8 +102,8 @@ garbage line here
 }`;
 
     const result = await getVoidTraderHistory(lua);
-    expect(result!["Good"]).to.exist;
+    expect(result!["Good"]).to.not.equal(undefined);
     expect(result!["Good"].DucatCost).to.equal(100);
-    expect(result!["AlsoGood"]).to.exist;
+    expect(result!["AlsoGood"]).to.not.equal(undefined);
   });
 });

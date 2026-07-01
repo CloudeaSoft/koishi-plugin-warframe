@@ -14,6 +14,7 @@ import {
   StatisticsCollectionDTO,
 } from "./dto/item.dto";
 import { OrderWithUserDTO } from "./dto/order.dto";
+import { WFMResponse, WFMResponseV1, Auction } from "./dto/response.dto";
 import { RivenAttributeDTO, RivenOrderDTO } from "./dto/riven.dto";
 
 const wfmApiV1Base = "https://api.warframe.market/v1/";
@@ -95,16 +96,8 @@ export const getWFMDucatnator = async (): Promise<
     return undefined;
   }
 
-  const day = response.payload.previous_day.map((e) => {
-    return e as Ducatnator;
-  });
-
-  const hour = response.payload.previous_hour.map((e) => {
-    return e as Ducatnator;
-  });
-
   return {
-    day,
-    hour,
+    day: response.payload.previous_day,
+    hour: response.payload.previous_hour,
   };
 };

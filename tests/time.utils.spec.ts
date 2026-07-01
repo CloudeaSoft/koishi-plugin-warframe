@@ -14,12 +14,12 @@ describe("toTimeStamp Tests", () => {
   it("Should convert date-only string", () => {
     const ts = toTimeStamp("2024-06-15");
     expect(ts).to.be.a("number");
-    expect(ts).to.be.finite;
+    expect(Number.isFinite(ts)).to.equal(true);
   });
 
   it("Should return NaN for invalid date string", () => {
     const ts = toTimeStamp("not-a-date");
-    expect(ts).to.be.NaN;
+    expect(Number.isNaN(ts)).to.equal(true);
   });
 });
 
@@ -37,7 +37,7 @@ describe("msToHumanReadable Tests", () => {
   });
 
   it("Should return '0秒' for non-numeric input", () => {
-    expect(msToHumanReadable("abc" as any)).to.equal("0秒");
+    expect(msToHumanReadable("abc" as unknown as number)).to.equal("0秒");
   });
 
   it("Should format seconds only", () => {
