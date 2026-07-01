@@ -31,7 +31,7 @@ export const globalWorldState = createAsyncCache(async () => {
       activation: fissure.activation?.getTime() ?? 0,
       expiry: fissure.expiry?.getTime() ?? 0,
       node: regionToShort(ExportRegions[nodeKey], dict_zh),
-      tier: tierName as string,
+      tier: String(tierName),
       tierNum: fissureTierNumToNumber(fissure.tierNum),
     };
 

@@ -96,16 +96,8 @@ export const getWFMDucatnator = async (): Promise<
     return undefined;
   }
 
-  const day = response.payload.previous_day.map((e) => {
-    return e;
-  });
-
-  const hour = response.payload.previous_hour.map((e) => {
-    return e;
-  });
-
   return {
-    day,
-    hour,
+    day: response.payload.previous_day,
+    hour: response.payload.previous_hour,
   };
 };

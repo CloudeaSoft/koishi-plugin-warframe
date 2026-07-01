@@ -15,8 +15,7 @@ const getImageBase64Hash = (base64: string): string => {
 };
 
 const getTextFromTencentOCR = async (image: string, secret: OcrAPISecret) => {
-  const tencentcloud =
-    require("tencentcloud-sdk-nodejs-ocr") as typeof import("tencentcloud-sdk-nodejs-ocr");
+  const tencentcloud = await import("tencentcloud-sdk-nodejs-ocr");
   const ocrClient = tencentcloud.ocr.v20181119.Client;
   const clientConfig = {
     credential: {
