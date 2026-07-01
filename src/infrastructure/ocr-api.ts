@@ -1,7 +1,22 @@
 import crypto from "node:crypto";
-import { CacheStorage, logger } from "../utils";
+import { createCache } from "async-cache-dedupe";
+import { logger } from "../utils";
 
-const ocrCache = new CacheStorage<string[]>(100);
+interface OcrCacheParams {
+  hash: string;
+  image: string;
+  secret: OcrAPISecret;
+}
+
+const ocrCache = createCache({
+  storage: { type: "memory", options: { size: 100 } },
+}).define(
+  "extract",
+  { ttl: 86_400, serialize: (params: OcrCacheParams) => params.hash },
+  async (params: OcrCacheParams) => {
+    return getTextFromTencentOCR(params.image, params.secret);
+  },
+);
 
 /**
  * Calculate the hash value of an image Base64 string
@@ -52,12 +67,10 @@ export const extractTextFromImage = async (
     image = Buffer.from(buffer).toString("base64");
   }
 
-  const imageHash = getImageBase64Hash(image);
+  const hash = getImageBase64Hash(image);
 
   try {
-    return await ocrCache.get(imageHash, () =>
-      getTextFromTencentOCR(image, secret),
-    );
+    return await ocrCache.extract({ hash, image, secret });
   } catch (err) {
     logger.error("OCR request error:", err);
     return undefined;
