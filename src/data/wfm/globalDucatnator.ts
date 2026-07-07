@@ -1,8 +1,8 @@
-import { getWFMDucatnator } from "../../infrastructure/wfm/wfm-api";
+import { wfmClient } from "../../infrastructure/wfm-client";
 import { createAsyncCache, listToDict } from "../../utils";
 
 export const globalDucatnatorIDDict = createAsyncCache(async () => {
-  const data = await getWFMDucatnator();
+  const data = await wfmClient.tools.getDucatnator();
   if (!data) {
     return undefined;
   }

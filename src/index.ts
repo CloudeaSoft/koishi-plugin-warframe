@@ -4,7 +4,6 @@ import { Context, Element, Schema } from "koishi";
 import "reflect-metadata"; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 import * as commands from "./commands";
 import { generateImageOutput } from "./components/render";
-import * as hooks from "./hooks/on-ready";
 import type { Config as PluginConfig, PluginDependencies } from "./types/config";
 
 export const name = "warframe";
@@ -51,7 +50,6 @@ const setupHooks = (ctx: Context, deps: PluginDependencies) => {
       );
     }
   });
-  ctx.on("ready", hooks.onReadyHandler);
 };
 
 const setupCommands = (ctx: Context, deps: PluginDependencies) => {

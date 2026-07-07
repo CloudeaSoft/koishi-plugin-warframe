@@ -246,19 +246,3 @@ export interface Ducatnator {
   wa_price: number;
   id: string;
 }
-
-export interface WfmApiClient {
-  items: {
-    getList: () => Promise<ItemShort[] | undefined>;
-    getStatistics: (itemId: string) => Promise<StatisticsCollection | undefined>;
-    getOrders: (itemId: string) => Promise<OrderWithUser[] | undefined>;
-  };
-  rivens: {
-    getItems: () => Promise<RivenItem[] | undefined>;
-    getOrders: (itemId: string) => Promise<RivenOrder[] | undefined>;
-    getAttributes: () => Promise<RivenAttribute[] | undefined>;
-  };
-  tools: {
-    getDucatnator: () => Promise<{ day: Ducatnator[]; hour: Ducatnator[] } | undefined>;
-  };
-}

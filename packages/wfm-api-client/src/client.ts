@@ -9,7 +9,6 @@ import type {
   RivenItem,
   RivenOrder,
   StatisticsCollection,
-  WfmApiClient,
   WfmApiClientOptions,
   WfmCacheOptions,
   WFMResponse,
@@ -52,7 +51,7 @@ const defaultFetcher: WfmFetcher = async <T>(url: string): Promise<T> => {
 
 export function createWfmApiClient(
   options: WfmApiClientOptions = {},
-): WfmApiClient {
+) {
   const fetcher = options.fetcher ?? defaultFetcher;
   const cacheOptions = resolveCacheOptions(options.cache);
   const limiter = resolveLimiter(options.rateLimit);
@@ -143,6 +142,8 @@ export function createWfmApiClient(
     },
   };
 }
+
+export type WfmApiClient = ReturnType<typeof createWfmApiClient>;
 
 function resolveCacheOptions(
   cache: WfmApiClientOptions["cache"],

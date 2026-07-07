@@ -6,21 +6,18 @@ import {
   pascalToSpaced,
   createAsyncCache,
 } from "../utils";
-import {
-  getWFMItemStatistics,
-  getWFMOrderList,
-  getWFMRivenOrderList,
-} from "../infrastructure/wfm/wfm-api";
+import { wfmClient } from "../infrastructure/wfm-client";
 
 import { globalItemData } from "../data/wfm/globalItem";
 import { globalRivenItemData } from "../data/wfm/globalRivenItem";
 import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
 import { globalDucatnatorIDDict } from "../data/wfm/globalDucatnator";
-import { ItemShort, PrimedModHistoryItem } from "../types/wfm/item";
-import {
+import type {
+  ItemShort,
+  PrimedModHistoryItem,
   RivenAttributeShortInternal,
   RivenOrderInternal,
-} from "../types/wfm/riven";
+} from "../types/wfm";
 import { getVoidTraderHistory } from "../infrastructure/wf/wf-api";
 
 // ================ initialization ===================
@@ -126,9 +123,6 @@ const weaponPartSuffix = [
 ];
 
 // ================ features ===================
-
-export const wmOnReady = async () => {};
-
 export const updateCache = async (): Promise<string> => {
   const updateTasks = [
     { name: "globalItemData", fn: globalItemData.update() },
@@ -173,7 +167,7 @@ export const getItemOrders = async (input: string) => {
 
   // 3. Fetch orders
   const itemId = targetItem.slug;
-  const data = await getWFMOrderList(itemId);
+  const data = await wfmClient.items.getOrders(itemId);
   if (!data) {
     return null;
   }
@@ -213,7 +207,7 @@ export const getRivenOrders = async (input: string) => {
   }
 
   const itemId = targetItem.slug;
-  const data = await getWFMRivenOrderList(itemId);
+  const data = await wfmClient.rivens.getOrders(itemId);
   if (!data) {
     return null;
   }
@@ -326,7 +320,7 @@ export const primedModHistory = createAsyncCache(async () => {
       continue;
     }
 
-    const data = await getWFMItemStatistics(slug);
+    const data = await wfmClient.items.getStatistics(slug);
 
     if (data) {
       const zeroRankList = data.statistics_closed["90days"].filter(

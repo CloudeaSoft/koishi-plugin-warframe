@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { globalRivenAttributeFactory } from "../src/data/wfm/globalRivenAttribute";
-import { RivenAttribute } from "../src/types/wfm/riven";
+import type { RivenAttribute } from "../src/types/wfm";
 
 const fixtureAttrs: RivenAttribute[] = [
   {

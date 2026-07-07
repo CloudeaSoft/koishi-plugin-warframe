@@ -1,10 +1,12 @@
 import Element from "@satorijs/element";
-import { ItemShort, PrimedModHistoryItem, RivenItem } from "../types/wfm/item";
-import { OrderWithUser } from "../types/wfm/order";
-import {
-  RivenOrderInternal,
+import type {
+  ItemShort,
+  OrderWithUser,
+  PrimedModHistoryItem,
   RivenAttributeShortInternal,
-} from "../types/wfm/riven";
+  RivenItem,
+  RivenOrderInternal,
+} from "../types/wfm";
 
 export const ItemOrderComponent = (
   item: ItemShort,

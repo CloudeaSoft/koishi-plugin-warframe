@@ -1,4 +1,4 @@
-import { RivenAttributeUnit } from "../wfm/riven";
+import type { RivenAttributeUnit } from "../wfm";
 
 type RivenWeaponType = "Rifle" | "Shotgun" | "Pistol" | "Archgun" | "Melee";
 type RivenStatCountType = "31" | "2" | "21" | "3";

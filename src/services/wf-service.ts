@@ -34,7 +34,7 @@ import { arbitrationSchedule } from "../data/wf/arbitrationSchedule";
 import { rivenAttrValueDict } from "../data/wf/rivenBaseValues";
 import { weaponRivenDispositionDict } from "../data/wf/rivenDisposition";
 import { rivenStatFixFactor } from "../data/wf/rivenStatData";
-import { RivenAttribute } from "../types/wfm/riven";
+import type { RivenAttribute } from "../types/wfm";
 import {
   RivenStatAnalyzeResult,
   RivenStatAnalyzsis,
