@@ -4,7 +4,7 @@ export class WfmMemoryCache {
     { expiresAt: number; promise: Promise<unknown> }
   >();
 
-  constructor(private readonly maxSize: number) {}
+  constructor(private readonly maxSize: number) { }
 
   get<T>(
     key: string,
@@ -25,7 +25,10 @@ export class WfmMemoryCache {
     }
 
     const promise = factory().catch((err) => {
-      this.storage.delete(key);
+      const existing = this.storage.get(key);
+      if (existing && existing.promise === promise) {
+        this.storage.delete(key);
+      }
       throw err;
     });
 
