@@ -12,6 +12,7 @@ export default antfu(
       '**/node_modules/**',
       '**/*.tsbuildinfo',
       '/tests/assets/*',
+      '**/assets/**',
     ],
     typescript: {
       tsconfigPath: 'tsconfig.json',
@@ -22,6 +23,7 @@ export default antfu(
       overridesTypeAware: {
         'ts/no-redundant-type-constituents': 'off',
         'ts/require-await': 'off',
+        'ts/strict-boolean-expressions': 'off',
       },
     },
   },
@@ -31,6 +33,29 @@ export default antfu(
       'no-unused-vars': 'off',
       'ts/no-unused-vars': 'off',
       'unused-imports/no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['src/components/*.tsx'],
+    rules: { 'ts/no-unsafe-assignment': 'off', '@typescript-eslint/no-unsafe-return': 'off' },
+  },
+  {
+    files: ['src/data/**/*.ts'],
+    rules: {
+      'import/no-mutable-exports': 'off',
+    },
+  },
+  {
+    files: [
+      'test/**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}',
+    ],
+    rules: {
+      'antfu/no-top-level-await': 'off',
+      'curly': ['error', 'all'],
+      'no-undef': 'off',
+      'test/consistent-test-it': 'off',
+      'unicorn/consistent-function-scoping': 'off',
+      'unused-imports/no-unused-imports': 'error',
     },
   },
   { files: ['**/*.md'], plugins: { markdown }, language: 'markdown/gfm' },
