@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "yarn --cwd ../.. workspace wfm-api-client build && yakumo build",
+    "build": "yarn --cwd packages/wfm-api-client build && yakumo build",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
     "dtsc": "tsc",
@@ -82,7 +82,7 @@
     "reflect-metadata": "^0.2.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.62.0",
-    "wfm-api-client": "workspace:*",
+    "wfm-api-client": "file:packages/wfm-api-client",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
     "yakumo-tsc": "^1.0.0"
