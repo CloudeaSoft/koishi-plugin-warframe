@@ -1,19 +1,20 @@
-import { Context, Schema } from "koishi";
 import { } from "@koishijs/plugin-help";
+import { Context, Element, Schema } from "koishi";
 
+
+import "reflect-metadata"; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 import * as commands from "./commands";
+import { generateImageOutput } from "./components/render";
 import * as hooks from "./hooks/on-ready";
-import { logger } from "./utils";
-import 'reflect-metadata'; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
+import type { Config as PluginConfig, PluginDependencies } from "./types/config";
 
 export const name = "warframe";
 
-export interface Config {
-  developerMode: boolean;
-  ocrAPISecret: OcrAPISecret;
+export const inject = {
+  required: ["puppeteer"]
 }
 
-export const Config: Schema<Config> = Schema.object({
+export const Config: Schema<PluginConfig> = Schema.object({
   developerMode: Schema.boolean().default(false),
   ocrAPISecret: Schema.object({
     id: Schema.string().required(),
@@ -22,12 +23,19 @@ export const Config: Schema<Config> = Schema.object({
 });
 
 export function apply(ctx: Context) {
-  setupHooks(ctx);
-  setupCommands(ctx);
+  const deps: PluginDependencies = {
+    config: ctx.config as PluginConfig,
+    logger: ctx.logger("koishi-plugin-warframe"),
+    puppeteer: ctx.puppeteer,
+    render: (e: Element) => generateImageOutput(ctx.puppeteer, e)
+  }
+
+  setupHooks(ctx, deps);
+  setupCommands(ctx, deps);
 }
 
-const setupHooks = (ctx: Context) => {
-  const config = ctx.config as Config;
+const setupHooks = (ctx: Context, deps: PluginDependencies) => {
+  const { config, logger } = deps
   ctx.on("message", (session) => {
     if (config.developerMode) {
       logger.info(
@@ -48,8 +56,10 @@ const setupHooks = (ctx: Context) => {
   ctx.on("ready", hooks.onReadyHandler);
 };
 
-const setupCommands = (ctx: Context) => {
-  const config = ctx.config as Config;
+const setupCommands = (ctx: Context, deps: PluginDependencies) => {
+  const { config } = deps
+  const miscs = commands.createMiscsCommands(deps)
+
   ctx.command("wm <itemId:text>", "请使用wmi替代").action(commands.wmCommand);
   ctx
     .command("wmr <itemId:text>", "查询wm的紫卡价格")
@@ -132,7 +142,7 @@ const setupCommands = (ctx: Context) => {
   ctx.command("lichc", "c系玄骸武器", { hidden: true }).action(inDevelopment);
   ctx.command("lichi", "i系玄骸武器", { hidden: true }).action(inDevelopment);
 
-  ctx.command("hotriven", "热门紫卡").action(commands.hotRivenCommand);
+  ctx.command("hotriven", "热门紫卡").action(miscs.hotRivenCommand);
   ctx
     .command("pmodhistory", "Primed MOD 历史")
     .alias("pmod")
