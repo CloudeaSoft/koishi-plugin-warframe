@@ -17,8 +17,8 @@ export const inject = {
 export const Config: Schema<PluginConfig> = Schema.object({
   developerMode: Schema.boolean().default(false),
   ocrAPISecret: Schema.object({
-    id: Schema.string().required(),
-    key: Schema.string().required(),
+    id: Schema.string(),
+    key: Schema.string(),
   }).description("OCR API 密钥"),
 });
 

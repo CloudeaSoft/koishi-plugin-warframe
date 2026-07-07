@@ -123,7 +123,7 @@ export function createWfCommands(deps: PluginDependencies) {
       }
 
       if (!config.ocrAPISecret?.id || !config.ocrAPISecret?.key) {
-        return "未配置 OCR API 密钥，请在插件设置中配置。";
+        return "未配置 OCR，请在插件设置中配置。";
       }
 
       const result = await getAnalyzedRiven(
