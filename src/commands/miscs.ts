@@ -1,20 +1,25 @@
-import { Argv } from "koishi";
-import { globalHotRivenWeapons } from "../data/miscs/lab";
-import { generateImageOutput } from "../components/render";
+import { PluginDependencies } from "../types/config";
 import { HotRivenComponent } from "../components/miscs";
+import { globalHotRivenWeapons } from "../data/miscs/lab";
 
-export const hotRivenCommand = async (action: Argv) => {
-  try {
-    const result = await globalHotRivenWeapons.get();
-    if (!result || result.length === 0) {
-      return "暂无热门紫卡数据。";
+export function createMiscsCommands(deps: PluginDependencies) {
+  const { logger, render } = deps
+
+  return {
+    hotRivenCommand: async () => {
+      try {
+        const result = await globalHotRivenWeapons.get();
+        if (!result || result.length === 0) {
+          return "暂无热门紫卡数据";
+        }
+
+        return await render(
+          HotRivenComponent(result),
+        );
+      } catch (ex) {
+        logger.error(ex)
+        return "获取热门紫卡数据失败";
+      }
     }
-
-    return await generateImageOutput(
-      action.session!.app.puppeteer,
-      HotRivenComponent(result),
-    );
-  } catch {
-    return "获取热门紫卡数据失败";
   }
-};
+}
