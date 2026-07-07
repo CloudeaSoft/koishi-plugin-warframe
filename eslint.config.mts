@@ -1,47 +1,37 @@
-import globals from "globals";
-import tseslint from "typescript-eslint";
-import markdown from "@eslint/markdown";
-import { defineConfig } from "eslint/config";
+import antfu from '@antfu/eslint-config'
 
-export default defineConfig([
+import markdown from '@eslint/markdown'
+
+export default antfu(
   {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    languageOptions: { globals: globals.node },
-  },
-  {
-    ignores: ["**/lib/**", "**/dist/**", "**/node_modules/**"], // Exclude build files
-  },
-  {
-    files: ["**/*.{js,ts}"],
-    extends: [tseslint.configs.recommended],
-  },
-  {
-    files: ["**/*.{js,ts}"],
-    ignores: ["tests/**/*", "./*.{js,ts}"],
-    extends: [tseslint.configs.recommendedTypeCheckedOnly],
-    rules: {
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/no-redundant-type-constituents": "off",
-    },
-    languageOptions: {
-      parserOptions: {
-        projectService: true
+    vue: false,
+    type: 'lib',
+    ignores: [
+      '**/lib/**',
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/*.tsbuildinfo',
+      '/tests/assets/*',
+    ],
+    typescript: {
+      tsconfigPath: 'tsconfig.json',
+      filesTypeAware: ['src/**/*.{ts,tsx}'],
+      overrides: {
+        'ts/no-require-imports': 'off',
+      },
+      overridesTypeAware: {
+        'ts/no-redundant-type-constituents': 'off',
+        'ts/require-await': 'off',
       },
     },
   },
   {
-    files: ["**/*.{js,ts}"],
+    files: ['src/commands/*.ts'],
     rules: {
-      "@typescript-eslint/no-require-imports": "off",
+      'no-unused-vars': 'off',
+      'ts/no-unused-vars': 'off',
+      'unused-imports/no-unused-vars': 'off',
     },
   },
-  {
-    // Disable unused vars check for commands
-    files: ["src/commands/*.ts"],
-    rules: {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-    },
-  },
-  { files: ["**/*.md"], plugins: { markdown }, language: "markdown/gfm" },
-]);
+  { files: ['**/*.md'], plugins: { markdown }, language: 'markdown/gfm' },
+)
