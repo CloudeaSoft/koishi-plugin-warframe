@@ -1,5 +1,5 @@
-import Puppeteer from "koishi-plugin-puppeteer";
-import { Element } from "koishi";
+import type { Element } from 'koishi'
+import type Puppeteer from 'koishi-plugin-puppeteer'
 
 const style = `
 :root {
@@ -649,30 +649,27 @@ const htmlString = (() => {
       <div style="display: none;">{{svg}}</div>
       <div id="root">{{htmlString}}</div>
     </body>
-  </html>`;
+  </html>`
 
-  return (htmlString: string, title: string = "title") => {
+  return (htmlString: string, title: string = 'title') => {
     return template
-      .replace("{{htmlString}}", htmlString)
-      .replace("{{title}}", title)
-      .replace("{{style}}", style)
-      .replace("{{svg}}", svg);
-  };
-})();
+      .replace('{{htmlString}}', htmlString)
+      .replace('{{title}}', title)
+      .replace('{{style}}', style)
+      .replace('{{svg}}', svg)
+  }
+})()
 
-export const generateImageOutput = async (
-  puppe: Puppeteer,
-  element: Element,
-) => {
+export async function generateImageOutput(puppe: Puppeteer, element: Element) {
   if (!puppe) {
-    return "本功能需要启用 koishi-plugin-puppeteer 插件";
+    return '本功能需要启用 koishi-plugin-puppeteer 插件'
   }
 
-  return await puppe.render(
+  return puppe.render(
     htmlString(element.toString()),
     async (page, next) => {
-      const handle = await page.$("#root>*");
-      return await next(handle ?? undefined);
+      const handle = await page.$('#root>*')
+      return next(handle ?? undefined)
     },
-  );
-};
+  )
+}

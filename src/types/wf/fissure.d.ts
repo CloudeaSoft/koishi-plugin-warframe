@@ -1,11 +1,11 @@
 interface Fissure {
-  category: string;
-  hard: boolean;
+  category: string
+  hard: boolean
   /** Expire time. Timestamp in miliseconds  */
-  activation: number;
+  activation: number
   /** Expire time. Timestamp in miliseconds */
-  expiry: number;
-  node: WFRegionShort;
-  tier: string;
-  tierNum: number;
+  expiry: number
+  node: WFRegionShort
+  tier: string
+  tierNum: number
 }

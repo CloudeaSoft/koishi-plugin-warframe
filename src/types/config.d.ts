@@ -1,24 +1,24 @@
-import type { Element, Logger } from "koishi";
+import type { Element, Logger } from 'koishi'
 
 export interface OcrAPISecret {
-  id: string;
-  key: string;
+  id: string
+  key: string
 }
 
 export interface Config {
-  developerMode: boolean;
-  ocrAPISecret: OcrAPISecret;
+  developerMode: boolean
+  ocrAPISecret: OcrAPISecret
 }
 
 export interface PluginDependencies {
-  config: Config;
-  logger: Logger;
-  render: (element: Element) => Promise<string>;
+  config: Config
+  logger: Logger
+  render: (element: Element) => Promise<string>
 }
 
 declare global {
   interface OcrAPISecret {
-    id: string;
-    key: string;
+    id: string
+    key: string
   }
 }

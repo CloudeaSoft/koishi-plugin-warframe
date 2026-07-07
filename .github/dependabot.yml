@@ -5,21 +5,20 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "daily"
+      interval: daily
     commit-message:
-      prefix: 'fix'
-      prefix-development: 'ci'
+      prefix: fix
+      prefix-development: ci
     labels:
-      - 'dependencies'
+      - dependencies
     open-pull-requests-limit: 10
     pull-request-branch-name:
       separator: '-'
-    rebase-strategy: 'auto'
+    rebase-strategy: auto
     allow:
-      - dependency-name: "warframe-worldstate-data"
-      - dependency-name: "warframe-worldstate-parser"
-      - dependency-name: "warframe-public-export-plus"
-
+      - dependency-name: warframe-worldstate-data
+      - dependency-name: warframe-worldstate-parser
+      - dependency-name: warframe-public-export-plus

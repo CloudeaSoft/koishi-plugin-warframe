@@ -1,22 +1,22 @@
-import { expect } from "chai";
-import { createWfmApiClient } from "../packages/wfm-api-client/src/index";
+import { expect } from 'chai'
+import { createWfmApiClient } from '../packages/wfm-api-client/src/index'
 
-describe("wfm-api-client package", () => {
-  it("fetches item list through the injected transport", async () => {
-    const urls: string[] = [];
+describe('wfm-api-client package', () => {
+  it('fetches item list through the injected transport', async () => {
+    const urls: string[] = []
     const client = createWfmApiClient({
       cache: false,
       rateLimit: false,
       fetcher: async (url) => {
-        urls.push(url);
+        urls.push(url)
         return {
           data: [
             {
-              id: "1",
-              slug: "primed_flow",
-              gameRef: "/Lotus/Upgrades/Mods/PrimedFlow",
-              tags: ["mod"],
-              i18n: { "zh-hans": { name: "川流不息 Prime" } },
+              id: '1',
+              slug: 'primed_flow',
+              gameRef: '/Lotus/Upgrades/Mods/PrimedFlow',
+              tags: ['mod'],
+              i18n: { 'zh-hans': { name: '川流不息 Prime' } },
               maxRank: 10,
               maxCharges: 0,
               vaulted: false,
@@ -28,30 +28,30 @@ describe("wfm-api-client package", () => {
               subtypes: [],
             },
           ],
-        };
+        }
       },
-    });
+    })
 
-    const result = await client.items.getList();
+    const result = await client.items.getList()
 
-    expect(urls).to.deep.equal(["https://api.warframe.market/v2/items"]);
-    expect(result?.[0]?.slug).to.equal("primed_flow");
-  });
+    expect(urls).to.deep.equal(['https://api.warframe.market/v2/items'])
+    expect(result?.[0]?.slug).to.equal('primed_flow')
+  })
 
-  it("honors endpoint cache ttl configuration", async () => {
-    let fetchCount = 0;
+  it('honors endpoint cache ttl configuration', async () => {
+    let fetchCount = 0
     const client = createWfmApiClient({
       rateLimit: false,
       cache: { orderListTtl: 0 },
       fetcher: async () => {
-        fetchCount++;
-        return { data: [] };
+        fetchCount++
+        return { data: [] }
       },
-    });
+    })
 
-    await client.items.getOrders("primed_flow");
-    await client.items.getOrders("primed_flow");
+    await client.items.getOrders('primed_flow')
+    await client.items.getOrders('primed_flow')
 
-    expect(fetchCount).to.equal(2);
-  });
-});
+    expect(fetchCount).to.equal(2)
+  })
+})

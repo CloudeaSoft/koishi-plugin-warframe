@@ -15866,7 +15866,7 @@ export const Baro = `
 			},
 			Type = ""Weapon""
 		},
-`;
+`
 
 export const BaroParsed = `[
   {
@@ -16179,4 +16179,4 @@ export const BaroParsed = `[
     "last": "2026-06-12",
     "plats": 30
   }
-]`;
+]`

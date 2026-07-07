@@ -1,9 +1,9 @@
 interface ArbitrationShort {
-  time: number;
-  node: string;
+  time: number
+  node: string
 }
 
 interface Arbitration extends WFRegionShort {
-  time: string;
-  rewards: number;
+  time: string
+  rewards: number
 }

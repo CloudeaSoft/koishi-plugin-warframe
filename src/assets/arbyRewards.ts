@@ -7,4 +7,4 @@ export default {
   SolNode195: 350, // 赛G防
   SolNode42: 320, // 土G防
   ClanNode24: 300, // 冥i防
-};
+}

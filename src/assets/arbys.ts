@@ -1,5 +1,5 @@
-const arbys : string =
-`1727884800,SettlementNode11
+const arbys: string
+  = `1727884800,SettlementNode11
 1727888400,ClanNode10
 1727892000,SolNode64
 1727895600,SolNode305

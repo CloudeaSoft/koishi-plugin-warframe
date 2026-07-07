@@ -1,4 +1,4 @@
-import Element from "@satorijs/element";
+import type Element from '@satorijs/element'
 import type {
   ItemShort,
   OrderWithUser,
@@ -6,20 +6,17 @@ import type {
   RivenAttributeShortInternal,
   RivenItem,
   RivenOrderInternal,
-} from "../types/wfm";
+} from '../types/wfm'
 
-export const ItemOrderComponent = (
-  item: ItemShort,
-  orders: OrderWithUser[],
-): Element => {
-  const itemNameCN = item.i18n["zh-hans"]?.name;
-  const itemNameEN = item.i18n["en"]?.name;
-  let result = `物品: ${itemNameCN} / ${itemNameEN} (ID: ${item.slug})\n`;
+export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): Element {
+  const itemNameCN = item.i18n['zh-hans']?.name
+  const itemNameEN = item.i18n.en?.name
+  let result = `物品: ${itemNameCN} / ${itemNameEN} (ID: ${item.slug})\n`
   for (const order of orders) {
-    result += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`;
+    result += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`
   }
   return (
-    <div style={"display:flex; flex-direction: column;"}>
+    <div style="display:flex; flex-direction: column;">
       <style>
         {`
           th {
@@ -37,10 +34,17 @@ export const ItemOrderComponent = (
           }
           `}
       </style>
-      <h1 style={"text-align: center;"}>
-        {itemNameCN} / {itemNameEN} (ID: {item.slug})
+      <h1 style="text-align: center;">
+        {itemNameCN}
+        {' '}
+        /
+        {itemNameEN}
+        {' '}
+        (ID:
+        {item.slug}
+        )
       </h1>
-      <table style={"width:100%;"}>
+      <table style="width:100%;">
         <tr>
           <th style="width:40%;">玩家名</th>
           <th style="width:30%;">状态</th>
@@ -48,7 +52,7 @@ export const ItemOrderComponent = (
           <th style="width:10%;">数量</th>
           <th style="width:10%;">好评</th>
         </tr>
-        {orders.map((order) => (
+        {orders.map(order => (
           <tr>
             <td>{order.user.ingameName}</td>
             <td>{order.user.status}</td>
@@ -58,79 +62,78 @@ export const ItemOrderComponent = (
           </tr>
         ))}
       </table>
-      <div style={"text-align: center; margin-top: 30px; font-size: 25px;"}>
+      <div style="text-align: center; margin-top: 30px; font-size: 25px;">
         {(() => {
-          const firstOrder = orders[0];
+          const firstOrder = orders[0]
           const comment = `/w ${
             firstOrder.user.ingameName
           } Hi! I want to buy: "${itemNameEN}${
             !item.maxRank || item.maxRank === 0
-              ? ""
+              ? ''
               : ` (rank ${firstOrder.rank})`
-          }" for ${firstOrder.platinum} platinum. (warframe.market)`;
-          return comment;
+          }" for ${firstOrder.platinum} platinum. (warframe.market)`
+          return comment
         })()}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export const RivenOrderComponent = (
-  item: RivenItem,
-  orders: RivenOrderInternal[],
-): Element => {
-  const itemNameCN = item.i18n ? item.i18n["zh-hans"]?.name : undefined;
-  const itemNameEN = item.i18n ? item.i18n["en"]?.name : undefined;
-  const itemThumb = item.i18n ? item.i18n["en"]?.thumb : undefined;
+export function RivenOrderComponent(item: RivenItem, orders: RivenOrderInternal[]): Element {
+  const itemNameCN = item.i18n ? item.i18n['zh-hans']?.name : undefined
+  const itemNameEN = item.i18n ? item.i18n.en?.name : undefined
+  const itemThumb = item.i18n ? item.i18n.en?.thumb : undefined
   return (
-    <div style={"display:flex; flex-direction: column; font-size: 12px;"}>
-      <h1 style={"text-align: center;"}>
-        {itemNameCN} / {itemNameEN} (ID: {item.slug})
+    <div style="display:flex; flex-direction: column; font-size: 12px;">
+      <h1 style="text-align: center;">
+        {itemNameCN}
+        {' '}
+        /
+        {itemNameEN}
+        {' '}
+        (ID:
+        {item.slug}
+        )
       </h1>
-      <ul style={"width:100%;"}>
+      <ul style="width:100%;">
         {orders.map((order) => {
           return RivenOrderItemComponent(
             order,
             itemNameCN,
             itemNameEN,
             itemThumb,
-          );
+          )
         })}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-const RivenOrderItemComponent = (
-  order: RivenOrderInternal,
-  cnName?: string,
-  enName?: string,
-  thumb?: string,
-): Element => {
-  const itemNameCN = cnName ?? enName;
+function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enName?: string, thumb?: string): Element {
+  const itemNameCN = cnName ?? enName
   const itemIconLink = thumb
-    ? "https://warframe.market/static/assets/" + thumb
-    : undefined;
+    ? `https://warframe.market/static/assets/${thumb}`
+    : undefined
   const ownerAvatarLink = order.owner.avatar
-    ? "https://warframe.market/static/assets/" + order.owner.avatar
-    : undefined;
+    ? `https://warframe.market/static/assets/${order.owner.avatar}`
+    : undefined
 
-  const reputationColor = order.owner.reputation >= 5 ? "#00a96c" : "#739098";
-  const reputationIconLink =
-    order.owner.reputation >= 5 ? "#icon-smile" : "#icon-meh";
+  const reputationColor = order.owner.reputation >= 5 ? '#00a96c' : '#739098'
+  const reputationIconLink
+    = order.owner.reputation >= 5 ? '#icon-smile' : '#icon-meh'
 
   const statusData = {
-    ingame: ["ONLINE IN GAME", "#634b93"],
-    online: ["ONLINE", "darkgreen"],
-    offline: ["OFFLINE", "darkred"],
-    _: ["UNKNOWN", "grey"],
-  };
-  const status =
-    order.owner.status in statusData
+    ingame: ['ONLINE IN GAME', '#634b93'],
+    online: ['ONLINE', 'darkgreen'],
+    offline: ['OFFLINE', 'darkred'],
+    _: ['UNKNOWN', 'grey'],
+  }
+  const status
+    = order.owner.status in statusData
       ? (order.owner.status as keyof typeof statusData)
-      : "_";
-  const statusText = statusData[status][0];
-  const statusColor = statusData[status][1];
+      : '_'
+  const statusText = statusData[status][0]
+  const statusColor = statusData[status][1]
 
   return (
     <div style="border: 1px solid gray; margin: 20px; padding: 10px 15px 10px 11px; font-family: 'Lato', sans-serif, Helvetica, Arial; display: flex; flex-direction: column;">
@@ -143,7 +146,9 @@ const RivenOrderItemComponent = (
           id="title"
           style="margin-left: 15px; font-size: 16px; line-height: 16px; font-weight: 700; text-overflow: ellipsis; text-decoration: underline; cursor: pointer;"
         >
-          {itemNameCN} {order.item.name}
+          {itemNameCN}
+          {' '}
+          {order.item.name}
         </span>
       </div>
       <div
@@ -153,12 +158,12 @@ const RivenOrderItemComponent = (
         <div id="body-left">
           <ul style="display: flex; padding-top: 5px;">
             {order.item.attributes
-              .filter((attr) => attr.positive)
+              .filter(attr => attr.positive)
               .map(RivenAttributeComponent)}
           </ul>
           <ul style="display: flex; width: 100%; padding-top: 5px;">
             {order.item.attributes
-              .filter((attr) => !attr.positive)
+              .filter(attr => !attr.positive)
               .map(RivenAttributeComponent)}
           </ul>
           <ul style="display: flex; padding: 5px 0; font-size: 12px;">
@@ -229,7 +234,7 @@ const RivenOrderItemComponent = (
         </div>
         <div
           style={`margin-left: 10px; color:${
-            statusColor ?? "gray"
+            statusColor ?? 'gray'
           }; font-size: 12px;`}
         >
           {statusText}
@@ -238,41 +243,36 @@ const RivenOrderItemComponent = (
           {order.owner.reputation}
           <svg
             viewBox="0 0 496 512"
-            style={
-              "margin-left: 5px; margin-top: -2px; overflow:hidden; height: 1em; width: 1em; vertical-align: -.125em; fill: currentcolor;"
-            }
+            style="margin-left: 5px; margin-top: -2px; overflow:hidden; height: 1em; width: 1em; vertical-align: -.125em; fill: currentcolor;"
           >
             <use href={reputationIconLink}></use>
           </svg>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-const RivenAttributeComponent = (
-  attr: RivenAttributeShortInternal,
-  index: number,
-): Element => {
-  const attrInfo = attr.attribute;
-  const attrName = attrInfo.i18n["zh-hans"].name;
-  const attrValuePrefix = attrInfo.unit === "multiply" ? "x" : "";
+function RivenAttributeComponent(attr: RivenAttributeShortInternal, index: number): Element {
+  const attrInfo = attr.attribute
+  const attrName = attrInfo.i18n['zh-hans'].name
+  const attrValuePrefix = attrInfo.unit === 'multiply' ? 'x' : ''
   const unitSuffixMap = {
-    percent: "%",
-    second: "s",
-    multiply: "",
-  };
-  const attrValueSuffix =
-    unitSuffixMap[attrInfo.unit as keyof typeof unitSuffixMap] || "";
-  const attrValue = attrValuePrefix + attr.value + attrValueSuffix;
+    percent: '%',
+    second: 's',
+    multiply: '',
+  }
+  const attrValueSuffix
+    = unitSuffixMap[attrInfo.unit as keyof typeof unitSuffixMap] || ''
+  const attrValue = attrValuePrefix + attr.value + attrValueSuffix
   const positiveColors = [
-    "--color_rgb_attribute_background_first",
-    "--color_rgb_attribute_background_second",
-    "--color_rgb_attribute_background_third",
-  ];
+    '--color_rgb_attribute_background_first',
+    '--color_rgb_attribute_background_second',
+    '--color_rgb_attribute_background_third',
+  ]
   const color = attr.positive
     ? positiveColors[index]
-    : "--color_rgb_attribute_background_negative";
+    : '--color_rgb_attribute_background_negative'
 
   return (
     <li
@@ -287,95 +287,96 @@ const RivenAttributeComponent = (
         line-height: 1.5;`}
     >
       <b>
-        {attr.positive && !attrValuePrefix && attr.value > 0 ? "+" : ""}
-        {attrValue}{" "}
+        {attr.positive && !attrValuePrefix && attr.value > 0 ? '+' : ''}
+        {attrValue}
+        {' '}
       </b>
       <span>{attrName}</span>
     </li>
-  );
-};
+  )
+}
 
-const PMH_ITEMS_PER_COLUMN = 15;
-const PMH_GRID_GAP = 6;
+const PMH_ITEMS_PER_COLUMN = 15
+const PMH_GRID_GAP = 6
 
-const getPriceTier = (
-  plats: number,
-): {
-  borderColor: string;
-  bgColor: string;
-  label: string;
-  textGlow?: string;
-} => {
+function getPriceTier(plats: number): {
+  borderColor: string
+  bgColor: string
+  label: string
+  textGlow?: string
+} {
   if (plats > 250) {
     return {
-      borderColor: "#ff6eb4",
+      borderColor: '#ff6eb4',
       bgColor:
-        "linear-gradient(135deg, rgba(255,110,180,0.18), rgba(110,200,255,0.18), rgba(255,230,80,0.18))",
-      label: "legendary",
-      textGlow: "0 0 6px rgba(255,110,180,0.6)",
-    };
+        'linear-gradient(135deg, rgba(255,110,180,0.18), rgba(110,200,255,0.18), rgba(255,230,80,0.18))',
+      label: 'legendary',
+      textGlow: '0 0 6px rgba(255,110,180,0.6)',
+    }
   }
   if (plats > 80) {
     return {
-      borderColor: "#ff6b35",
-      bgColor: "rgba(255,107,53,0.12)",
-      label: "premium",
-    };
+      borderColor: '#ff6b35',
+      bgColor: 'rgba(255,107,53,0.12)',
+      label: 'premium',
+    }
   }
   if (plats > 60) {
     return {
-      borderColor: "#f0c040",
-      bgColor: "rgba(240,192,64,0.10)",
-      label: "high",
-    };
+      borderColor: '#f0c040',
+      bgColor: 'rgba(240,192,64,0.10)',
+      label: 'high',
+    }
   }
-  return { borderColor: "#d0d0d0", bgColor: "transparent", label: "normal" };
-};
+  return { borderColor: '#d0d0d0', bgColor: 'transparent', label: 'normal' }
+}
 
-const calcDaysAgo = (dateStr: string): number | null => {
-  if (!dateStr) return null;
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return null;
-  const now = Date.now();
-  const diff = now - d.getTime();
-  return Math.floor(diff / 86400000);
-};
+function calcDaysAgo(dateStr: string): number | null {
+  if (!dateStr)
+    return null
+  const d = new Date(dateStr)
+  if (isNaN(d.getTime()))
+    return null
+  const now = Date.now()
+  const diff = now - d.getTime()
+  return Math.floor(diff / 86400000)
+}
 
-const PMHCard = (item: PrimedModHistoryItem, index: number): Element => {
-  const pr = item.plats;
-  const tier =
-    pr !== undefined
+function PMHCard(item: PrimedModHistoryItem, index: number): Element {
+  const pr = item.plats
+  const tier
+    = pr !== undefined
       ? getPriceTier(pr)
-      : { borderColor: "#d0d0d0", bgColor: "transparent", label: "normal" };
+      : { borderColor: '#d0d0d0', bgColor: 'transparent', label: 'normal' }
 
   const dateStr = item.last
     ? (() => {
-        const d = new Date(item.last);
+        const d = new Date(item.last)
         if (!isNaN(d.getTime())) {
-          const year = d.getUTCFullYear();
-          const month = String(d.getUTCMonth() + 1).padStart(2, "0");
-          const day = String(d.getUTCDate()).padStart(2, "0");
-          return `${year}-${month}-${day}`;
+          const year = d.getUTCFullYear()
+          const month = String(d.getUTCMonth() + 1).padStart(2, '0')
+          const day = String(d.getUTCDate()).padStart(2, '0')
+          return `${year}-${month}-${day}`
         }
-        return item.last;
+        return item.last
       })()
-    : "";
+    : ''
 
-  const daysAgo = calcDaysAgo(item.last);
-  const isOld = daysAgo !== null && daysAgo > 90;
+  const daysAgo = calcDaysAgo(item.last)
+  const isOld = daysAgo !== null && daysAgo > 90
 
-  const isLegendary = pr !== undefined && pr > 300;
-  const showGlow = pr !== undefined && pr > 80;
+  const isLegendary = pr !== undefined && pr > 300
+  const showGlow = pr !== undefined && pr > 80
 
   const cardContent = (
     <div
       style={`
         border-radius: 6px;
         padding: 6px 10px;
-        background: ${isLegendary ? "linear-gradient(135deg, rgba(255,50,100,0.20), rgba(255,200,50,0.20), rgba(50,255,100,0.20), rgba(50,150,255,0.20), rgba(200,50,255,0.20))" : tier.bgColor};
+        background: ${isLegendary ? 'linear-gradient(135deg, rgba(255,50,100,0.20), rgba(255,200,50,0.20), rgba(50,255,100,0.20), rgba(50,150,255,0.20), rgba(200,50,255,0.20))' : tier.bgColor};
         border-left: 4px solid ${tier.borderColor};
-        box-shadow: ${showGlow ? (isLegendary ? "0 0 14px rgba(255,50,100,0.30), 0 0 28px rgba(200,50,255,0.20)" : `0 0 8px ${tier.borderColor}44`) : "0 1px 2px rgba(0,0,0,0.04)"};
-        ${isLegendary ? "border-image: linear-gradient(135deg, #ff3264, #ffcc33, #33ff66, #3399ff, #cc33ff) 1; border-image-slice: 1; border-left: 4px solid transparent;" : ""}
+        box-shadow: ${showGlow ? (isLegendary ? '0 0 14px rgba(255,50,100,0.30), 0 0 28px rgba(200,50,255,0.20)' : `0 0 8px ${tier.borderColor}44`) : '0 1px 2px rgba(0,0,0,0.04)'};
+        ${isLegendary ? 'border-image: linear-gradient(135deg, #ff3264, #ffcc33, #33ff66, #3399ff, #cc33ff) 1; border-image-slice: 1; border-left: 4px solid transparent;' : ''}
         display: flex;
         flex-direction: column;
         gap: 2px;
@@ -398,15 +399,19 @@ const PMHCard = (item: PrimedModHistoryItem, index: number): Element => {
         `}
       >
         <span style="overflow:hidden;text-overflow:ellipsis;">
-          {item.name ?? "未知"}
+          {item.name ?? '未知'}
         </span>
-        {daysAgo ? (
-          <span
-            style={`flex-shrink:0;margin-left:4px;background:#eee;color:${isOld ? "#e05050" : "#999"};border-radius:3px;padding:0 5px;font-size:9px;font-weight:400;line-height:1.5;`}
-          >
-            距今{daysAgo}天
-          </span>
-        ) : null}
+        {daysAgo
+          ? (
+              <span
+                style={`flex-shrink:0;margin-left:4px;background:#eee;color:${isOld ? '#e05050' : '#999'};border-radius:3px;padding:0 5px;font-size:9px;font-weight:400;line-height:1.5;`}
+              >
+                距今
+                {daysAgo}
+                天
+              </span>
+            )
+          : null}
       </div>
       <div
         style={`
@@ -416,52 +421,53 @@ const PMHCard = (item: PrimedModHistoryItem, index: number): Element => {
           font-variant-numeric: tabular-nums;
         `}
       >
-        <span style={`color: #888; font-size: 10px;`}>{dateStr || "未知"}</span>
-        {pr !== undefined ? (
-          <span
-            style={`
+        <span style="color: #888; font-size: 10px;">{dateStr || '未知'}</span>
+        {pr !== undefined
+          ? (
+              <span
+                style={`
               display: inline-flex;
               align-items: center;
               gap: 2px;
               font-weight: 700;
               font-size: 12px;
               color: #0d93b8;
-              ${isLegendary ? "text-shadow: 0 0 6px rgba(255,50,100,0.7), 0 0 12px rgba(200,50,255,0.4);" : ""}
+              ${isLegendary ? 'text-shadow: 0 0 6px rgba(255,50,100,0.7), 0 0 12px rgba(200,50,255,0.4);' : ''}
             `}
-          >
-            {pr}
-            <svg
-              viewBox="0 0 215.535 215.535"
-              style="height: 0.85em; width: 0.85em; fill: currentcolor;"
-            >
-              <use href="#icon-platinum"></use>
-            </svg>
-          </span>
-        ) : (
-          <span style="color: #bbb; font-size: 10px;">暂无</span>
-        )}
+              >
+                {pr}
+                <svg
+                  viewBox="0 0 215.535 215.535"
+                  style="height: 0.85em; width: 0.85em; fill: currentcolor;"
+                >
+                  <use href="#icon-platinum"></use>
+                </svg>
+              </span>
+            )
+          : (
+              <span style="color: #bbb; font-size: 10px;">暂无</span>
+            )}
       </div>
     </div>
-  );
+  )
 
-  return cardContent;
-};
+  return cardContent
+}
 
-export const PrimedModHistoryComponent = (
-  history: PrimedModHistoryItem[],
-): Element => {
+export function PrimedModHistoryComponent(history: PrimedModHistoryItem[]): Element {
   // 按 plats 降序排列（价格高的在前）
   const sorted = [...history].sort((a, b) => {
-    const pa = a.plats ?? 0;
-    const pb = b.plats ?? 0;
-    if (pb !== pa) return pb - pa;
-    return 0;
-  });
+    const pa = a.plats ?? 0
+    const pb = b.plats ?? 0
+    if (pb !== pa)
+      return pb - pa
+    return 0
+  })
 
   // 切分为每 15 个一列
-  const columns: PrimedModHistoryItem[][] = [];
+  const columns: PrimedModHistoryItem[][] = []
   for (let i = 0; i < sorted.length; i += PMH_ITEMS_PER_COLUMN) {
-    columns.push(sorted.slice(i, i + PMH_ITEMS_PER_COLUMN));
+    columns.push(sorted.slice(i, i + PMH_ITEMS_PER_COLUMN))
   }
 
   return (
@@ -499,7 +505,11 @@ export const PrimedModHistoryComponent = (
         >
           Prime Mod 历史记录
         </h1>
-        <span style="color: #999; font-size: 11px;">{history.length} 项</span>
+        <span style="color: #999; font-size: 11px;">
+          {history.length}
+          {' '}
+          项
+        </span>
       </div>
 
       {/* 多列网格 */}
@@ -510,7 +520,7 @@ export const PrimedModHistoryComponent = (
           align-items: flex-start;
         `}
       >
-        {columns.map((col) => (
+        {columns.map(col => (
           <div
             style={`
               flex: 1;
@@ -525,5 +535,5 @@ export const PrimedModHistoryComponent = (
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

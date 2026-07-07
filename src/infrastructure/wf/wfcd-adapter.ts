@@ -1,3 +1,6 @@
+import type {
+  TMissionType,
+} from 'warframe-public-export-plus'
 import {
   dict_zh,
   ExportBoosterPacks,
@@ -11,129 +14,127 @@ import {
   ExportUpgrades,
   ExportVirtuals,
   ExportWeapons,
-  TMissionType,
-} from "warframe-public-export-plus";
-import { dictToKeyDict, toPascalCase } from "../../utils";
-import { relicEraToTransKey } from "./wf-export-adapter";
+} from 'warframe-public-export-plus'
+import { dictToKeyDict, toPascalCase } from '../../utils'
+import { relicEraToTransKey } from './wf-export-adapter'
 
-const relicToFullNameZH = (tier: string, category: string) => {
+function relicToFullNameZH(tier: string, category: string) {
   return `${
     dict_zh[relicEraToTransKey(tier)] ?? toPascalCase(tier)
-  } ${category} 遗物`;
-};
+  } ${category} 遗物`
+}
 
-let solNodesEnDict: Record<string, string>;
+let solNodesEnDict: Record<string, string>
 
-export const getSolNodeKey = async (name: string): Promise<string> => {
-  const worldstateData = await import("warframe-worldstate-data");
+export async function getSolNodeKey(name: string): Promise<string> {
+  const worldstateData = await import('warframe-worldstate-data')
   if (!solNodesEnDict) {
-    solNodesEnDict = dictToKeyDict(worldstateData.default.solNodes, (n) => [
+    solNodesEnDict = dictToKeyDict(worldstateData.default.solNodes, n => [
       n.value,
-    ]);
+    ])
   }
-  return solNodesEnDict[name];
-};
+  return solNodesEnDict[name]
+}
 
-let missionTypeEnDict: Record<string, TMissionType>;
+let missionTypeEnDict: Record<string, TMissionType>
 
-export const getMissionTypeKey = async (
-  name: string,
-): Promise<TMissionType> => {
-  const worldstateData = await import("warframe-worldstate-data");
+export async function getMissionTypeKey(name: string): Promise<TMissionType> {
+  const worldstateData = await import('warframe-worldstate-data')
   if (!missionTypeEnDict) {
     missionTypeEnDict = dictToKeyDict(
       worldstateData.default.missionTypes,
-      (n) => [n.value],
-    ) as Record<string, TMissionType>;
+      n => [n.value],
+    ) as Record<string, TMissionType>
   }
 
-  if (name === "Disruption") return "MT_ARTIFACT";
+  if (name === 'Disruption')
+    return 'MT_ARTIFACT'
 
-  return missionTypeEnDict[name];
-};
+  return missionTypeEnDict[name]
+}
 
 export const fissureTierName = {
-  1: "/Lotus/Language/Relics/Era_LITH",
-  2: "/Lotus/Language/Relics/Era_MESO",
-  3: "/Lotus/Language/Relics/Era_NEO",
-  4: "/Lotus/Language/Relics/Era_AXI",
-  5: "/Lotus/Language/Relics/Era_REQUIEM",
-  6: "/Lotus/Language/Relics/Era_OMNI",
-  7: "/Lotus/Language/Relics/Era_VANGUARD",
-};
+  1: '/Lotus/Language/Relics/Era_LITH',
+  2: '/Lotus/Language/Relics/Era_MESO',
+  3: '/Lotus/Language/Relics/Era_NEO',
+  4: '/Lotus/Language/Relics/Era_AXI',
+  5: '/Lotus/Language/Relics/Era_REQUIEM',
+  6: '/Lotus/Language/Relics/Era_OMNI',
+  7: '/Lotus/Language/Relics/Era_VANGUARD',
+}
 
-export const fissureTierNumToNumber = (a: number | string) => {
-  return typeof a === "string" ? Number(a.charAt(5)) : a;
-};
+export function fissureTierNumToNumber(a: number | string) {
+  return typeof a === 'string' ? Number(a.charAt(5)) : a
+}
 
-export const getVoidTraderItem = (i: {
-  item: string;
-  uniqueName: string;
-  ducats: number;
-  credits: number;
-}) => {
-  const itemNameKey = getVoidTraderItemName(i.uniqueName);
+export function getVoidTraderItem(i: {
+  item: string
+  uniqueName: string
+  ducats: number
+  credits: number
+}) {
+  const itemNameKey = getVoidTraderItemName(i.uniqueName)
   const itemName = !itemNameKey
     ? i.item
-    : typeof itemNameKey === "string"
-      ? (dict_zh[itemNameKey] ??
-        (itemNameKey.includes("/") ? i.item : itemNameKey))
-      : relicToFullNameZH(itemNameKey.era, itemNameKey.category);
-  return { name: itemName, ducats: i.ducats, credits: i.credits };
-};
+    : typeof itemNameKey === 'string'
+      ? (dict_zh[itemNameKey]
+        ?? (itemNameKey.includes('/') ? i.item : itemNameKey))
+      : relicToFullNameZH(itemNameKey.era, itemNameKey.category)
+  return { name: itemName, ducats: i.ducats, credits: i.credits }
+}
 
-const getVoidTraderItemName = (sourceKey: string) => {
-  const fixedKey = sourceKey.replace("/StoreItems", "");
-  const flavour = ExportFlavour[fixedKey];
+function getVoidTraderItemName(sourceKey: string) {
+  const fixedKey = sourceKey.replace('/StoreItems', '')
+  const flavour = ExportFlavour[fixedKey]
   if (flavour) {
-    return flavour.name;
+    return flavour.name
   }
 
-  const weapon = ExportWeapons[fixedKey];
+  const weapon = ExportWeapons[fixedKey]
   if (weapon) {
-    return weapon.name;
+    return weapon.name
   }
 
-  const mod = ExportUpgrades[fixedKey];
+  const mod = ExportUpgrades[fixedKey]
   if (mod) {
-    return mod.name;
+    return mod.name
   }
 
-  const relic = ExportRelics[fixedKey]; // Return name directly
+  const relic = ExportRelics[fixedKey] // Return name directly
   if (relic) {
-    return { era: relic.era, category: relic.category };
+    return { era: relic.era, category: relic.category }
   }
 
-  const skin = ExportCustoms[fixedKey];
+  const skin = ExportCustoms[fixedKey]
   if (skin) {
-    return skin.name;
+    return skin.name
   }
 
-  const recipe = ExportRecipes[fixedKey]; // 'Sands of Inaros' Only
+  const recipe = ExportRecipes[fixedKey] // 'Sands of Inaros' Only
   if (recipe) {
-    const recipeResult = ExportKeys[recipe.resultType];
+    const recipeResult = ExportKeys[recipe.resultType]
     if (recipeResult) {
-      return recipeResult.name;
+      return recipeResult.name
     }
   }
 
-  const virtual = ExportVirtuals[fixedKey];
+  const virtual = ExportVirtuals[fixedKey]
   if (virtual) {
-    return virtual.name;
+    return virtual.name
   }
 
-  const resource = ExportResources[fixedKey];
+  const resource = ExportResources[fixedKey]
   if (resource) {
-    return resource.name;
+    return resource.name
   }
 
-  const booster = ExportBundles[sourceKey]; // Special key usage
+  const booster = ExportBundles[sourceKey] // Special key usage
   if (booster) {
-    return booster.name;
+    return booster.name
   }
 
-  const boosterPack = ExportBoosterPacks[fixedKey];
+  const boosterPack = ExportBoosterPacks[fixedKey]
   if (boosterPack) {
-    return boosterPack.name;
+    return boosterPack.name
   }
-};
+}

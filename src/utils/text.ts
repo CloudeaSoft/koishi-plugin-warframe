@@ -1,84 +1,88 @@
-export const normalizeName = (text: string) =>
-  fullWidthToHalfWidth(text)
+export function normalizeName(text: string) {
+  return fullWidthToHalfWidth(text)
     .toLowerCase() // 统一大小写
-    .replace(/[·'\-+()【】\[\]{}，。！？；：_]/g, "") // 过滤冗余符号
-    .replace(/\s+/g, ""); // 移除所有空白
+    .replace(/[·'\-+()【】[\]{}，。！？；：_]/g, '') // 过滤冗余符号
+    .replace(/\s+/g, '')
+} // 移除所有空白
 
-export const fullWidthToHalfWidth = (text: string) =>
-  text
+export function fullWidthToHalfWidth(text: string) {
+  return text
     .replace(/[\uFF01-\uFF5E]/g, (char) => {
       // 全角字符的Unicode编码 = 半角 + 0xFEE0（除空格外）
-      return String.fromCharCode(char.charCodeAt(0) - 0xfee0);
+      return String.fromCharCode(char.charCodeAt(0) - 0xFEE0)
     })
-    .replace(/\u3000/g, " "); // 全角空格（U+3000）转半角空格（U+0020）
+    .replace(/\u3000/g, ' ')
+} // 全角空格（U+3000）转半角空格（U+0020）
 
-export const removeSpace = (text: string) => text.replace(/\s/g, "");
+export const removeSpace = (text: string) => text.replace(/\s/g, '')
 
-export const pascalToSpaced = (text: string) =>
-  text.replace(/([A-Z])/g, " $1").trim();
+export function pascalToSpaced(text: string) {
+  return text.replace(/([A-Z])/g, ' $1').trim()
+}
 
-export const toPascalCase = (text: string) => {
+export function toPascalCase(text: string) {
   const tokens = text
     // Tokenize: 英文单词(包括大写缩写)、空格、非字母空格字符
-    .match(/[A-Z]+[a-z]*|[a-z]+|\s+|[^A-Za-z\s]+/g);
+    .match(/[A-Z]+[a-z]*|[a-z]+|\s+|[^A-Za-z\s]+/g)
   if (!tokens) {
-    return text;
+    return text
   }
 
   return tokens
     .map((token) => {
       // Remove spaces entirely
-      if (/^\s+$/.test(token)) return "";
+      if (/^\s+$/.test(token))
+        return ''
 
       // 处理英文单词
-      if (/^[A-Za-z]+$/.test(token)) {
+      if (/^[A-Z]+$/i.test(token)) {
         // 如果是全大写或单个字母，保持原样（如 "CRIT", "A"）
         if (/^[A-Z]+$/.test(token) || token.length === 1) {
           // 但需要首字母大写，其余小写
-          return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
+          return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase()
         }
 
         // 常规单词：首字母大写，其余小写
-        const lower = token.toLowerCase();
-        return lower[0].toUpperCase() + lower.slice(1);
+        const lower = token.toLowerCase()
+        return lower[0].toUpperCase() + lower.slice(1)
       }
 
       // 其他字符保持原样
-      return token;
+      return token
     })
-    .join("");
-};
+    .join('')
+}
 
 export function normalSimilarity(a: string, b: string) {
-  const distance = levenshtein(a, b);
-  return 1 - distance / Math.max(a.length, b.length);
+  const distance = levenshtein(a, b)
+  return 1 - distance / Math.max(a.length, b.length)
 }
 
 function levenshtein(a: string, b: string) {
-  const dp = Array.from({ length: a.length + 1 }, (): number[] => []);
-  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
-  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  const dp = Array.from({ length: a.length + 1 }, (): number[] => [])
+  for (let i = 0; i <= a.length; i++) dp[i][0] = i
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j
   for (let i = 1; i <= a.length; i++) {
     for (let j = 1; j <= b.length; j++) {
       dp[i][j] = Math.min(
         dp[i - 1][j] + 1,
         dp[i][j - 1] + 1,
         dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
-      );
+      )
     }
   }
-  return dp[a.length][b.length];
+  return dp[a.length][b.length]
 }
 
 export function tokenSimilarity(a: string, b: string) {
   const tokenize = (s: string) =>
     s
-      .replace(/[^\w\u4e00-\u9fa5]+/g, " ")
+      .replace(/[^\w\u4E00-\u9FA5]+/g, ' ')
       .split(/\s+/)
-      .filter(Boolean);
-  const A = new Set(tokenize(a));
-  const B = new Set(tokenize(b));
-  const intersection = [...A].filter((x) => B.has(x)).length;
-  const union = new Set([...A, ...B]).size;
-  return intersection / union;
+      .filter(Boolean)
+  const A = new Set(tokenize(a))
+  const B = new Set(tokenize(b))
+  const intersection = [...A].filter(x => B.has(x)).length
+  const union = new Set([...A, ...B]).size
+  return intersection / union
 }

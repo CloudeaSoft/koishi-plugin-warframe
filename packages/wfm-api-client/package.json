@@ -1,11 +1,9 @@
 {
   "name": "wfm-api-client",
-  "description": "TypeScript API client for Warframe Market",
-  "version": "0.0.0",
-  "license": "MIT",
   "type": "commonjs",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "version": "0.0.0",
+  "description": "TypeScript API client for Warframe Market",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
@@ -13,6 +11,8 @@
       "default": "./lib/index.js"
     }
   },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
