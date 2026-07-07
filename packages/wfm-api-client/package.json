@@ -1,0 +1,32 @@
+{
+  "name": "wfm-api-client",
+  "description": "TypeScript API client for Warframe Market",
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js",
+      "default": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dtsc": "tsc",
+    "test": "mocha tests/**/*.spec.ts"
+  },
+  "dependencies": {
+    "bottleneck": "^2.19.5",
+    "ofetch": "^1.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^5.9.3"
+  }
+}

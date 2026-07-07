@@ -1,3 +1,4 @@
+import { createWfmApiClient } from "wfm-api-client";
 import { Ducatnator } from "../../types/wfm/ducatnator";
 import {
   ItemShort,
@@ -6,76 +7,41 @@ import {
 } from "../../types/wfm/item";
 import { OrderWithUser } from "../../types/wfm/order";
 import { RivenAttribute, RivenOrder } from "../../types/wfm/riven";
-import { fetchAsyncData } from "../../utils";
-import { DucatnatorDTO } from "./dto/ducats.dto";
-import {
-  ItemShortDTO,
-  RivenItemDTO,
-  StatisticsCollectionDTO,
-} from "./dto/item.dto";
-import { OrderWithUserDTO } from "./dto/order.dto";
-import { WFMResponse, WFMResponseV1, Auction } from "./dto/response.dto";
-import { RivenAttributeDTO, RivenOrderDTO } from "./dto/riven.dto";
 
-const wfmApiV1Base = "https://api.warframe.market/v1/";
-const wfmApiV2Base = "https://api.warframe.market/v2/";
+const wfmClient = createWfmApiClient();
 
 export const getWFMItemList = async (): Promise<ItemShort[] | undefined> => {
-  const response = await fetchAsyncData<WFMResponse<ItemShortDTO[]>>(
-    `${wfmApiV2Base}items`,
-  );
-
-  return response?.data;
+  return wfmClient.items.getList();
 };
 
 export const getWFMItemStatistics = async (
   itemId: string,
 ): Promise<StatisticsCollection | undefined> => {
-  const response = await fetchAsyncData<WFMResponseV1<StatisticsCollectionDTO>>(
-    `${wfmApiV1Base}items/${itemId}/statistics`,
-  );
-
-  return response?.payload;
+  return wfmClient.items.getStatistics(itemId);
 };
 
 export const getWFMOrderList = async (
   itemId: string,
 ): Promise<OrderWithUser[] | undefined> => {
-  const response = await fetchAsyncData<WFMResponse<OrderWithUserDTO[]>>(
-    `${wfmApiV2Base}orders/item/${itemId}`,
-  );
-
-  return response?.data;
+  return wfmClient.items.getOrders(itemId);
 };
 
 export const getWFMRivenItemList = async (): Promise<
   RivenItem[] | undefined
 > => {
-  const response = await fetchAsyncData<WFMResponse<RivenItemDTO[]>>(
-    `${wfmApiV2Base}riven/weapons`,
-  );
-
-  return response?.data;
+  return wfmClient.rivens.getItems();
 };
 
 export const getWFMRivenOrderList = async (
   itemId: string,
 ): Promise<RivenOrder[] | undefined> => {
-  const response = await fetchAsyncData<WFMResponseV1<Auction<RivenOrderDTO>>>(
-    `${wfmApiV1Base}auctions/search?type=riven&sort_by=price_asc&weapon_url_name=${itemId}`,
-  );
-
-  return response?.payload.auctions;
+  return wfmClient.rivens.getOrders(itemId);
 };
 
 export const getWFMRivenAttributeList = async (): Promise<
   RivenAttribute[] | undefined
 > => {
-  const response = await fetchAsyncData<WFMResponse<RivenAttributeDTO[]>>(
-    `${wfmApiV2Base}riven/attributes`,
-  );
-
-  return response?.data;
+  return wfmClient.rivens.getAttributes();
 };
 
 export const getWFMDucatnator = async (): Promise<
@@ -85,19 +51,5 @@ export const getWFMDucatnator = async (): Promise<
     }
   | undefined
 > => {
-  const response = await fetchAsyncData<
-    WFMResponseV1<{
-      previous_day: DucatnatorDTO[];
-      previous_hour: DucatnatorDTO[];
-    }>
-  >(`${wfmApiV1Base}tools/ducats`);
-
-  if (!response || !response.payload) {
-    return undefined;
-  }
-
-  return {
-    day: response.payload.previous_day,
-    hour: response.payload.previous_hour,
-  };
+  return wfmClient.tools.getDucatnator();
 };

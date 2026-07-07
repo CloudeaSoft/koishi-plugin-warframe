@@ -87,11 +87,11 @@
   },
   "dependencies": {
     "async-cache-dedupe": "^3.4.0",
-    "bottleneck": "^2.19.5",
     "ofetch": "^1.5.1",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.213",
     "warframe-public-export-plus": "^0.6.2",
     "warframe-worldstate-data": "^3.16.1",
-    "warframe-worldstate-parser": "^5.4.1"
+    "warframe-worldstate-parser": "^5.4.1",
+    "wfm-api-client": "workspace:*"
   }
 }
