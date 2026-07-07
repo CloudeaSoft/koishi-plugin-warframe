@@ -15,6 +15,3 @@ tsconfig.tsbuildinfo
 *.ntvs*
 *.njsproj
 *.sln
-
-.vscode/*
-!.vscode/settings.json
