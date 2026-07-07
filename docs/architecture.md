@@ -201,7 +201,7 @@ export async function globalItemDataFactory(response?: ItemShort[]) {
 }
 
 // Default cache instance (infinite TTL)
-export let globalItemData = createAsyncCache(globalItemDataFactory, -1)
+export const globalItemData = createAsyncCache(globalItemDataFactory, -1)
 
 // Override: inject fixture data during tests
 export function overrideGlobalItemData(cache) {

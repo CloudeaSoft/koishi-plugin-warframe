@@ -594,7 +594,7 @@ export function RelicComponent(relic: OutputRelic): Element {
     COMMON: '25/23/20/17',
   }
 
-  const renderRewards = (items: OutputRelicReward[]) => {
+  const renderRewards = (items: OutputRelicReward[]): Element[] | null => {
     if (items.length === 0)
       return null
 
@@ -807,7 +807,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
     max: number,
     unit: RivenAttributeUnit,
   ): string => {
-    const format = (num: number) => {
+    const format = (num: number): string => {
       switch (unit) {
         case 'percent':
           return `${num.toFixed(1)}%`
@@ -826,7 +826,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
     return percent <= 0.1 && percent >= -0.1
   }
 
-  const getPercentColor = (percent: number) => {
+  const getPercentColor = (percent: number): string => {
     const clampedPercent = Math.max(-0.1, Math.min(0.1, percent))
     const normalized = (clampedPercent + 0.1) / 0.2
     const colors = [
@@ -861,7 +861,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
     return rgbToHex(r, g, b)
   }
 
-  const getDispositionIcon = (disposition: number) => {
+  const getDispositionIcon = (disposition: number): string => {
     if (disposition < 0.5) {
       return '◯◯◯◯◯'
     }
@@ -990,91 +990,93 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
         </div>
 
         {/* 负面词条 */}
-        {data.curses.length > 0 ? (
-          <div>
-            <h3
-              style="color: #f44336; margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;"
-            >
-              负面词条 (
-              {data.curses.length}
-              )
-            </h3>
+        {data.curses.length > 0
+          ? (
+              <div>
+                <h3
+                  style="color: #f44336; margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;"
+                >
+                  负面词条 (
+                  {data.curses.length}
+                  )
+                </h3>
 
-            <ul>
-              {data.curses.map((curse) => {
-                const inRange = isInRange(curse.percent)
-                const percentColor = getPercentColor(curse.percent)
-                return (
-                  <li
-                    style={`background-color: #eeeeee; border-radius: 6px; padding: 12px; margin-bottom: 10px; border-left: 4px solid ${percentColor};`}
-                  >
-                    <div
-                      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
-                    >
-                      <span style="font-weight: bold;">{curse.name}</span>
-                      <span style="font-size: 18px; font-weight: bold;">
-                        {formatValue(curse.value, curse.unit)}
-                      </span>
-                    </div>
-
-                    {/* 进度条 */}
-                    <div
-                      style="height: 10px; background-color: #444; border-radius: 3px; margin-bottom: 8px;"
-                    >
-                      <div
-                        style="height: 10px; position: relative; overflow: hidden;"
+                <ul>
+                  {data.curses.map((curse) => {
+                    const inRange = isInRange(curse.percent)
+                    const percentColor = getPercentColor(curse.percent)
+                    return (
+                      <li
+                        style={`background-color: #eeeeee; border-radius: 6px; padding: 12px; margin-bottom: 10px; border-left: 4px solid ${percentColor};`}
                       >
-                        <p
-                          style={`position: absolute; left: 0; top: 0; height: 100%; width: ${getProgressWidth(
-                            curse.percent * 10,
-                          )}; background-color: ${percentColor}; border-radius: 3px;`}
+                        <div
+                          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
                         >
-                        </p>
-                      </div>
-                    </div>
+                          <span style="font-weight: bold;">{curse.name}</span>
+                          <span style="font-size: 18px; font-weight: bold;">
+                            {formatValue(curse.value, curse.unit)}
+                          </span>
+                        </div>
 
-                    <div
-                      style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;"
-                    >
-                      <span>
-                        范围:
-                        {' '}
-                        {formatRange(curse.min, curse.max, curse.unit)}
-                      </span>
-                      <span style={`color: ${percentColor};`}>
-                        {curse.percent > 0 ? '+' : ''}
-                        {`${(curse.percent * 100).toFixed(2)}%`}
-                      </span>
-                    </div>
-
-                    {/* 范围警告 */}
-                    {!inRange
-                      ? (
+                        {/* 进度条 */}
+                        <div
+                          style="height: 10px; background-color: #444; border-radius: 3px; margin-bottom: 8px;"
+                        >
                           <div
-                            style="margin-top: 8px; padding: 6px; background-color: rgba(244, 67, 54, 0.2); border-radius: 4px; font-size: 12px; color: #f44336; display: flex; align-items: center;"
+                            style="height: 10px; position: relative; overflow: hidden;"
                           >
-                            <span style="margin-right: 6px;">⚠</span>
-                            数值不在正常范围内（可能未满级或倾向未更新）
+                            <p
+                              style={`position: absolute; left: 0; top: 0; height: 100%; width: ${getProgressWidth(
+                                curse.percent * 10,
+                              )}; background-color: ${percentColor}; border-radius: 3px;`}
+                            >
+                            </p>
                           </div>
-                        )
-                      : (
-                          ''
-                        )}
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        ) : (
-          ''
-        )}
+                        </div>
+
+                        <div
+                          style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;"
+                        >
+                          <span>
+                            范围:
+                            {' '}
+                            {formatRange(curse.min, curse.max, curse.unit)}
+                          </span>
+                          <span style={`color: ${percentColor};`}>
+                            {curse.percent > 0 ? '+' : ''}
+                            {`${(curse.percent * 100).toFixed(2)}%`}
+                          </span>
+                        </div>
+
+                        {/* 范围警告 */}
+                        {!inRange
+                          ? (
+                              <div
+                                style="margin-top: 8px; padding: 6px; background-color: rgba(244, 67, 54, 0.2); border-radius: 4px; font-size: 12px; color: #f44336; display: flex; align-items: center;"
+                              >
+                                <span style="margin-right: 6px;">⚠</span>
+                                数值不在正常范围内（可能未满级或倾向未更新）
+                              </div>
+                            )
+                          : (
+                              ''
+                            )}
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )
+          : (
+              ''
+            )}
       </div>
     </div>
   )
 }
 
 export function RivenStatComponent(data: RivenStatResult): Element {
-  const getValue = (value: number, unit: RivenAttributeUnit) => {
+  const getValue = (value: number, unit: RivenAttributeUnit): string => {
     switch (unit) {
       case 'multiply':
         return `x${(1 + value).toFixed(2)}`

@@ -132,7 +132,11 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
     })
 }
 
-export async function getWeekly() {
+export async function getWeekly(): Promise<string | {
+  archonHunt: ArchonHunt
+  deepArchimedea: ArchiMedea
+  temporalArchimedea: ArchiMedea
+}> {
   const { raw: worldState } = await globalWorldState.get()
   if (!worldState) {
     return '内部错误，获取最新信息失败'
@@ -300,17 +304,17 @@ export function getCircuitWeek(): {
   }
 }
 
-export async function getFissures() {
+export async function getFissures(): Promise<string | Fissure[]> {
   const { fissures } = await globalWorldState.get()
   return fissures ?? '内部错误，获取最新信息失败'
 }
 
-export async function getSteelPathFissures() {
+export async function getSteelPathFissures(): Promise<string | Fissure[]> {
   const { spFissures } = await globalWorldState.get()
   return spFissures ?? '内部错误，获取最新信息失败'
 }
 
-export async function getRailjackFissures() {
+export async function getRailjackFissures(): Promise<string | Fissure[]> {
   const { rjFissures } = await globalWorldState.get()
   return rjFissures ?? '内部错误，获取最新信息失败'
 }
@@ -407,7 +411,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
   const { globalRivenAttributeList } = await globalRivenAttribute.get()
   for (const key in rivenAttrValues) {
     const data = globalRivenAttributeList.find(
-      v => normalizeName(v.i18n.en.name) == key,
+      v => normalizeName(v.i18n.en.name) === key,
     )
     const baseValue = rivenAttrValues[key]
     const buffValue = baseValue * disposition * factor.buffFactor
@@ -434,7 +438,9 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
 
 // ================ privates ===================
 
-export function getWeaponRivenDisposition(name: string) {
+export function getWeaponRivenDisposition(
+  name: string,
+): (typeof weaponRivenDispositionDict)[string] | undefined {
   const normalizedName = normalizeName(name)
   const normalRes = weaponRivenDispositionDict[normalizedName]
   if (normalRes) {
@@ -450,7 +456,17 @@ export function getWeaponRivenDisposition(name: string) {
   return undefined
 }
 
-export async function parseOCRResult(ocrResult: string[]) {
+export async function parseOCRResult(ocrResult: string[]): Promise<
+  | {
+    name: string
+    attributes: {
+      attr: RivenAttribute
+      value: number
+      prefix: string
+    }[]
+  }
+  | undefined
+> {
   const { globalRivenAttributeList } = await globalRivenAttribute.get()
 
   const list = ocrResult
@@ -509,7 +525,7 @@ export async function parseOCRResult(ocrResult: string[]) {
 
     const prefix = /^[x+-]/.test(t) ? t[0] : ''
 
-    const attrNamePart = removeSpace(t ?? '').replace(/^[^一-龥]+/, '')
+    const attrNamePart = removeSpace(t ?? '').replace(/^[^\u4E00-\u9FA5]+/u, '')
     const attr = globalRivenAttributeList.find((a) => {
       if (!a)
         return false
@@ -535,7 +551,7 @@ export async function parseOCRResult(ocrResult: string[]) {
       const t = text.replace(/\s+/g, '')
 
       // Case 1: multiply format like "x1.07"
-      const multMatch = t.match(/x(\d+(\.\d+)?)/i)
+      const multMatch = t.match(/x(\d+(?:\.\d+)?)/i)
       if (multMatch) {
         return {
           value: Number.parseFloat(multMatch[1]),
@@ -544,7 +560,7 @@ export async function parseOCRResult(ocrResult: string[]) {
       }
 
       // Case 2: percentage format like "+15.8%" or "-12%"
-      const percentMatch = t.match(/([+-]?\d+(\.\d+)?)%/)
+      const percentMatch = t.match(/([+-]?\d+(?:\.\d+)?)%/)
       if (percentMatch) {
         return {
           value: Number.parseFloat(percentMatch[1]),
@@ -553,7 +569,7 @@ export async function parseOCRResult(ocrResult: string[]) {
       }
 
       // Case 3: plain number (rare but possible)
-      const numMatch = t.match(/([+-]?\d+(\.\d+)?)/)
+      const numMatch = t.match(/([+-]?\d+(?:\.\d+)?)/)
       if (numMatch) {
         return {
           value: Number.parseFloat(numMatch[1]),
@@ -615,7 +631,7 @@ export async function parseOCRResult(ocrResult: string[]) {
     // Step 2: merge adjacent fragments (common OCR issue)
     const merged = candidates.join('')
 
-    function removeRivenSuffix(name: string) {
+    function removeRivenSuffix(name: string): string {
       // Remove spaces
       const s = name.replace(/\s+/g, '')
 

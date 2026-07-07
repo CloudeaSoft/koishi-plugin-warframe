@@ -1,7 +1,9 @@
 import type {
   ItemShort,
+  OrderWithUser,
   PrimedModHistoryItem,
   RivenAttributeShortInternal,
+  RivenItem,
   RivenOrderInternal,
 } from '../types/wfm'
 
@@ -146,7 +148,10 @@ export async function updateCache(): Promise<string> {
   return lines.join('\n')
 }
 
-export async function getItemOrders(input: string) {
+export async function getItemOrders(input: string): Promise<{
+  item: ItemShort
+  orders: OrderWithUser[]
+} | null> {
   if (!input)
     return null
   input = normalizeName(input)
@@ -182,7 +187,7 @@ export async function getItemOrders(input: string) {
         order.user.status === 'ingame'
         && order.visible
         && order.type === 'sell'
-        && (!isFullLevel || order.rank == targetItem.maxRank),
+        && (!isFullLevel || order.rank === targetItem.maxRank),
     )
     .sort((a, b) => toTimeStamp(b.updatedAt) - toTimeStamp(a.updatedAt)) // Update Time DESC
     .sort((a, b) => a.platinum - b.platinum) // Price ASC
@@ -194,7 +199,10 @@ export async function getItemOrders(input: string) {
   }
 }
 
-export async function getRivenOrders(input: string) {
+export async function getRivenOrders(input: string): Promise<{
+  item: RivenItem
+  orders: RivenOrderInternal[]
+} | null> {
   const { globalRivenItemList } = await globalRivenItemData.get()
   const { globalRivenAttributeDict } = await globalRivenAttribute.get()
 
@@ -302,7 +310,7 @@ export const primedModHistory = createAsyncCache(async () => {
   primeModHistory.sort((a, b) => {
     const timeA = a.Last ? new Date(a.Last).getTime() : 0
     const timeB = b.Last ? new Date(b.Last).getTime() : 0
-    return (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB)
+    return (Number.isNaN(timeA) ? 0 : timeA) - (Number.isNaN(timeB) ? 0 : timeB)
   })
 
   const result: Array<PrimedModHistoryItem> = []
@@ -403,7 +411,7 @@ export async function stringToWFMItem(input: string): Promise<ItemShort | undefi
   // 6. TODO: AI?
 
   // Legacy code
-  const compareCNOrderName = (input: string, standard: string) => {
+  const compareCNOrderName = (input: string, standard: string): boolean => {
     // 1. 边界校验：空值/空字符串直接返回false（避免replace报错）
     if (
       !input
@@ -450,7 +458,7 @@ export async function stringToWFMItem(input: string): Promise<ItemShort | undefi
     )
   }
 
-  const compareENOrderName = (input: string, standard: string) => {
+  const compareENOrderName = (input: string, standard: string): boolean => {
     if (
       !input
       || !standard
@@ -599,7 +607,7 @@ async function shortHandProcess(input: string): Promise<ItemShort | undefined> {
   }
 }
 
-function compareRivenItemName(input: string, standard: string) {
+function compareRivenItemName(input: string, standard: string): boolean {
   if (
     !input
     || !standard

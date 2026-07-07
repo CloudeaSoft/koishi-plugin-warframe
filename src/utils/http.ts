@@ -48,14 +48,23 @@ async function request<T, R extends ResponseType>(
   }
 }
 
-export async function fetchAsyncText(url: string, method: HttpMethod = 'GET') {
+export async function fetchAsyncText(
+  url: string,
+  method: HttpMethod = 'GET',
+): Promise<string | undefined> {
   return request<string, 'text'>(url, method, 'text')
 }
 
-export async function fetchAsyncData<T>(url: string, method: HttpMethod = 'GET') {
+export async function fetchAsyncData<T>(
+  url: string,
+  method: HttpMethod = 'GET',
+): Promise<T | undefined> {
   return request<T, 'json'>(url, method, 'json')
 }
 
-export async function fetchAsyncImage(url: string, method: HttpMethod = 'GET') {
+export async function fetchAsyncImage(
+  url: string,
+  method: HttpMethod = 'GET',
+): Promise<Blob | undefined> {
   return request<Blob, 'blob'>(url, method, 'blob')
 }

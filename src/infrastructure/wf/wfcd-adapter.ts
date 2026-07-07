@@ -18,7 +18,7 @@ import {
 import { dictToKeyDict, toPascalCase } from '../../utils'
 import { relicEraToTransKey } from './wf-export-adapter'
 
-function relicToFullNameZH(tier: string, category: string) {
+function relicToFullNameZH(tier: string, category: string): string {
   return `${
     dict_zh[relicEraToTransKey(tier)] ?? toPascalCase(tier)
   } ${category} 遗物`
@@ -63,7 +63,7 @@ export const fissureTierName = {
   7: '/Lotus/Language/Relics/Era_VANGUARD',
 }
 
-export function fissureTierNumToNumber(a: number | string) {
+export function fissureTierNumToNumber(a: number | string): number {
   return typeof a === 'string' ? Number(a.charAt(5)) : a
 }
 
@@ -72,7 +72,7 @@ export function getVoidTraderItem(i: {
   uniqueName: string
   ducats: number
   credits: number
-}) {
+}): VoidTraderItem {
   const itemNameKey = getVoidTraderItemName(i.uniqueName)
   const itemName = !itemNameKey
     ? i.item
@@ -83,7 +83,9 @@ export function getVoidTraderItem(i: {
   return { name: itemName, ducats: i.ducats, credits: i.credits }
 }
 
-function getVoidTraderItemName(sourceKey: string) {
+function getVoidTraderItemName(
+  sourceKey: string,
+): string | { era: string, category: string } | undefined {
   const fixedKey = sourceKey.replace('/StoreItems', '')
   const flavour = ExportFlavour[fixedKey]
   if (flavour) {

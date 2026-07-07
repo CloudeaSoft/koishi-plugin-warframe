@@ -9,7 +9,7 @@ describe('rivenStatFixFactor Tests', () => {
     expect(rivenStatFixFactor).to.have.property('31')
   })
 
-  it('type '2' should have 2 buffs and 0 curses', () => {
+  it('type "2" should have 2 buffs and 0 curses', () => {
     const f = rivenStatFixFactor['2']
     expect(f.buffCount).to.equal(2)
     expect(f.curseCount).to.equal(0)
@@ -17,7 +17,7 @@ describe('rivenStatFixFactor Tests', () => {
     expect(f.curseFactor).to.equal(0)
   })
 
-  it('type '3' should have 3 buffs and 0 curses', () => {
+  it('type "3" should have 3 buffs and 0 curses', () => {
     const f = rivenStatFixFactor['3']
     expect(f.buffCount).to.equal(3)
     expect(f.curseCount).to.equal(0)
@@ -25,7 +25,7 @@ describe('rivenStatFixFactor Tests', () => {
     expect(f.curseFactor).to.equal(0)
   })
 
-  it('type '21' should have 2 buffs and 1 curse', () => {
+  it('type "21" should have 2 buffs and 1 curse', () => {
     const f = rivenStatFixFactor['21']
     expect(f.buffCount).to.equal(2)
     expect(f.curseCount).to.equal(1)
@@ -33,7 +33,7 @@ describe('rivenStatFixFactor Tests', () => {
     expect(f.curseFactor).to.equal(-0.495)
   })
 
-  it('type '31' should have 3 buffs and 1 curse', () => {
+  it('type "31" should have 3 buffs and 1 curse', () => {
     const f = rivenStatFixFactor['31']
     expect(f.buffCount).to.equal(3)
     expect(f.curseCount).to.equal(1)

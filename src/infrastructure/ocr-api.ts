@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 import crypto from 'node:crypto'
 import { createCache } from 'async-cache-dedupe'
 import { logger } from '../utils'
@@ -21,7 +22,6 @@ const ocrCache = createCache({
 /**
  * Calculate the hash value of an image Base64 string
  * @param base64 Image base64 with or without prefix
- * @param algorithm Hash algorithm: SHA-256 / SHA-1 / MD5
  * @returns Hexadecimal hash string
  */
 function getImageBase64Hash(base64: string): string {
@@ -29,9 +29,12 @@ function getImageBase64Hash(base64: string): string {
   return crypto.createHash('sha256').update(pureBase64, 'base64').digest('hex')
 }
 
-async function getTextFromTencentOCR(image: string, secret: OcrAPISecret) {
+async function getTextFromTencentOCR(
+  image: string,
+  secret: OcrAPISecret,
+): Promise<string[]> {
   const tencentcloud = await import('tencentcloud-sdk-nodejs-ocr')
-  const ocrClient = tencentcloud.ocr.v20181119.Client
+  const OcrClient = tencentcloud.ocr.v20181119.Client
   const clientConfig = {
     credential: {
       secretId: secret.id,
@@ -45,7 +48,7 @@ async function getTextFromTencentOCR(image: string, secret: OcrAPISecret) {
     },
   }
 
-  const client = new ocrClient(clientConfig)
+  const client = new OcrClient(clientConfig)
 
   const { TextDetections } = await client.GeneralAccurateOCR({
     ImageBase64: image,

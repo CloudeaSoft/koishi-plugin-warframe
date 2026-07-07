@@ -2,11 +2,13 @@ import type { PluginDependencies } from '../types/config'
 import { HotRivenComponent } from '../components/miscs'
 import { globalHotRivenWeapons } from '../data/miscs/lab'
 
-export function createMiscsCommands(deps: PluginDependencies) {
+export function createMiscsCommands(deps: PluginDependencies): {
+  hotRivenCommand: () => Promise<string>
+} {
   const { logger, render } = deps
 
   return {
-    hotRivenCommand: async () => {
+    hotRivenCommand: async (): Promise<string> => {
       try {
         const result = await globalHotRivenWeapons.get()
         if (!result || result.length === 0) {

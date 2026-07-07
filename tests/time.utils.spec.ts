@@ -24,19 +24,19 @@ describe('toTimeStamp Tests', () => {
 })
 
 describe('msToHumanReadable Tests', () => {
-  it('should return '0秒' for 0', () => {
+  it('should return "0秒" for 0', () => {
     expect(msToHumanReadable(0)).to.equal('0秒')
   })
 
-  it('should return '0秒' for negative input (clamped to 0)', () => {
+  it('should return "0秒" for negative input (clamped to 0)', () => {
     expect(msToHumanReadable(-1000)).to.equal('0秒')
   })
 
-  it('should return '0秒' for NaN input (coerced to 0)', () => {
+  it('should return "0秒" for NaN input (coerced to 0)', () => {
     expect(msToHumanReadable(NaN)).to.equal('0秒')
   })
 
-  it('should return '0秒' for non-numeric input', () => {
+  it('should return "0秒" for non-numeric input', () => {
     expect(msToHumanReadable('abc' as unknown as number)).to.equal('0秒')
   })
 

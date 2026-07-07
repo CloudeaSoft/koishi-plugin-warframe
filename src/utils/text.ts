@@ -1,11 +1,11 @@
-export function normalizeName(text: string) {
+export function normalizeName(text: string): string {
   return fullWidthToHalfWidth(text)
     .toLowerCase() // 统一大小写
     .replace(/[·'\-+()【】[\]{}，。！？；：_]/g, '') // 过滤冗余符号
     .replace(/\s+/g, '')
 } // 移除所有空白
 
-export function fullWidthToHalfWidth(text: string) {
+export function fullWidthToHalfWidth(text: string): string {
   return text
     .replace(/[\uFF01-\uFF5E]/g, (char) => {
       // 全角字符的Unicode编码 = 半角 + 0xFEE0（除空格外）
@@ -14,13 +14,13 @@ export function fullWidthToHalfWidth(text: string) {
     .replace(/\u3000/g, ' ')
 } // 全角空格（U+3000）转半角空格（U+0020）
 
-export const removeSpace = (text: string) => text.replace(/\s/g, '')
+export const removeSpace = (text: string): string => text.replace(/\s/g, '')
 
-export function pascalToSpaced(text: string) {
+export function pascalToSpaced(text: string): string {
   return text.replace(/([A-Z])/g, ' $1').trim()
 }
 
-export function toPascalCase(text: string) {
+export function toPascalCase(text: string): string {
   const tokens = text
     // Tokenize: 英文单词(包括大写缩写)、空格、非字母空格字符
     .match(/[A-Z]+[a-z]*|[a-z]+|\s+|[^A-Za-z\s]+/g)
@@ -53,12 +53,12 @@ export function toPascalCase(text: string) {
     .join('')
 }
 
-export function normalSimilarity(a: string, b: string) {
+export function normalSimilarity(a: string, b: string): number {
   const distance = levenshtein(a, b)
   return 1 - distance / Math.max(a.length, b.length)
 }
 
-function levenshtein(a: string, b: string) {
+function levenshtein(a: string, b: string): number {
   const dp = Array.from({ length: a.length + 1 }, (): number[] => [])
   for (let i = 0; i <= a.length; i++) dp[i][0] = i
   for (let j = 0; j <= b.length; j++) dp[0][j] = j
@@ -74,8 +74,8 @@ function levenshtein(a: string, b: string) {
   return dp[a.length][b.length]
 }
 
-export function tokenSimilarity(a: string, b: string) {
-  const tokenize = (s: string) =>
+export function tokenSimilarity(a: string, b: string): number {
+  const tokenize = (s: string): string[] =>
     s
       .replace(/[^\w\u4E00-\u9FA5]+/g, ' ')
       .split(/\s+/)

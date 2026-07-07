@@ -11,7 +11,15 @@ type WfmGet = <T>(url: string, ttl: number) => Promise<T | undefined>
 export function createToolEndpoints(
   get: WfmGet,
   cacheOptions: WfmCacheOptions | undefined,
-) {
+): {
+  getDucatnator: () => Promise<
+    | {
+      day: Ducatnator[]
+      hour: Ducatnator[]
+    }
+    | undefined
+  >
+} {
   return {
     getDucatnator: async () => {
       const response = await get<WFMResponseV1<{

@@ -1,5 +1,6 @@
-import type { Relic } from 'warframe-public-export-plus';
-import { expect } from 'chai';
+import type { Relic } from 'warframe-public-export-plus'
+import { expect } from 'chai'
+import { describe, it } from 'mocha'
 import { getRelic } from '../src/services'
 
 describe('getRelic Tests', function () {
@@ -56,7 +57,7 @@ describe('getRelic Tests', function () {
     expect((result as Relic).tier).to.equal('Axi')
   })
 
-  it('should strip trailing '遗物' suffix', async () => {
+  it('should strip trailing "遗物" suffix', async () => {
     const result1 = await getRelic('古纪A1')
     const result2 = await getRelic('古纪A1遗物')
     expect(result1).to.not.be.a('string')
@@ -64,7 +65,7 @@ describe('getRelic Tests', function () {
     expect((result1 as Relic).num).to.equal((result2 as Relic).num)
   })
 
-  it('should strip trailing 'relic' suffix (case-insensitive)', async () => {
+  it('should strip trailing "relic" suffix (case-insensitive)', async () => {
     const result1 = await getRelic('LithA1')
     const result2 = await getRelic('LithA1relic')
     expect(result1).to.not.be.a('string')

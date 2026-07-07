@@ -5,7 +5,10 @@ import {
   ExportFactions as factions,
 } from 'warframe-public-export-plus'
 
-export function regionToShort(region: IRegion, dict: Record<string, string>) {
+export function regionToShort(
+  region: IRegion,
+  dict: Record<string, string>,
+): WFRegionShort {
   let faction: string | undefined
   if (region.faction) {
     const name = factions[region.faction].name
@@ -44,7 +47,7 @@ export function relicQualityToName(quality: string): RelicQuality {
  * eg. "VPQ_BRONZE" => "/Lotus/Language/Relics/VoidProjectionQuality_Bronze".
  * @param quality directly provided from `IRelic.quality` expected to start with "VPQ_".
  */
-export function relicQualityToTransKey(quality: string) {
+export function relicQualityToTransKey(quality: string): string {
   if (quality.startsWith('VPQ_')) {
     const prefix = '/Lotus/Language/Relics/VoidProjectionQuality_'
     const name = quality.replace(/^VPQ_/, '')
@@ -59,11 +62,11 @@ export function relicQualityToTransKey(quality: string) {
  * eg. "Lith" => "/Lotus/Language/Relics/Era_LITH".
  * @param era directly provided from `IRelic.era`.
  */
-export function relicEraToTransKey(era: string) {
+export function relicEraToTransKey(era: string): string {
   const prefix = '/Lotus/Language/Relics/Era_'
   return prefix + era.toUpperCase()
 }
 
-export function fixRelicRewardKey(item: string) {
+export function fixRelicRewardKey(item: string): string {
   return item.replace('StoreItems/', '')
 }

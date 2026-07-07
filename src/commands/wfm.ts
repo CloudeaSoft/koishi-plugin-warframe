@@ -12,7 +12,12 @@ import {
   updateCache,
 } from '../services'
 
-export function createWfmCommands(deps: PluginDependencies) {
+export function createWfmCommands(deps: PluginDependencies): {
+  wmCommand: (_action: Argv, input: string) => Promise<string>
+  wmrCommand: (_action: Argv, input: string) => Promise<string>
+  wmuCommand: (_action: Argv, _input: string) => Promise<string>
+  pmodhistoryCommand: (_action: Argv, _input: string) => Promise<string>
+} {
   const { render } = deps
 
   return {

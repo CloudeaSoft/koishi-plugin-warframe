@@ -1,11 +1,11 @@
-import type { RivenAttribute } from '../src/types/wfm';
-import { expect } from 'chai';
+import type { RivenAttribute } from '../src/types/wfm'
+import { expect } from 'chai'
 import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
-} from '../src/data/wfm/globalRivenAttribute';
-import { getStaticRivenStats } from '../src/services';
-import { createAsyncCache } from '../src/utils';
+} from '../src/data/wfm/globalRivenAttribute'
+import { getStaticRivenStats } from '../src/services'
+import { createAsyncCache } from '../src/utils'
 
 const fixtureAttrs: RivenAttribute[] = [
   {
@@ -120,7 +120,7 @@ describe('getStaticRivenStats Tests', function () {
     }
   })
 
-  it('should include positive stats for type '2'', async () => {
+  it('should include positive stats for type "2"', async () => {
     const result = expectRivenStatResult(
       await getStaticRivenStats('步枪', '2', 1.0),
     )
@@ -128,14 +128,14 @@ describe('getStaticRivenStats Tests', function () {
     expect(Object.keys(result.positive).length).to.be.greaterThan(0)
   })
 
-  it('should not include negative stats for type '2' (no curse)', async () => {
+  it('should not include negative stats for type "2" (no curse)', async () => {
     const result = expectRivenStatResult(
       await getStaticRivenStats('步枪', '2', 1.0),
     )
     expect(result.negative).to.equal(undefined)
   })
 
-  it('should include negative stats for type '21' (1 curse)', async () => {
+  it('should include negative stats for type "21" (1 curse)', async () => {
     const result = expectRivenStatResult(
       await getStaticRivenStats('步枪', '21', 1.0),
     )
@@ -143,7 +143,7 @@ describe('getStaticRivenStats Tests', function () {
     expect(Object.keys(result.negative).length).to.be.greaterThan(0)
   })
 
-  it('should include negative stats for type '31' (1 curse)', async () => {
+  it('should include negative stats for type "31" (1 curse)', async () => {
     const result = expectRivenStatResult(
       await getStaticRivenStats('步枪', '31', 1.0),
     )

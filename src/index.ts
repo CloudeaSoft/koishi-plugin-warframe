@@ -21,7 +21,7 @@ export const Config: Schema<PluginConfig> = Schema.object({
   }).description('OCR API 密钥'),
 })
 
-export function apply(ctx: Context) {
+export function apply(ctx: Context): void {
   const deps: PluginDependencies = {
     config: ctx.config as PluginConfig,
     logger: ctx.logger('koishi-plugin-warframe'),
@@ -32,7 +32,7 @@ export function apply(ctx: Context) {
   setupCommands(ctx, deps)
 }
 
-function setupHooks(ctx: Context, deps: PluginDependencies) {
+function setupHooks(ctx: Context, deps: PluginDependencies): void {
   const { config, logger } = deps
   ctx.on('message', (session) => {
     if (config.developerMode) {
@@ -53,7 +53,7 @@ function setupHooks(ctx: Context, deps: PluginDependencies) {
   })
 }
 
-function setupCommands(ctx: Context, deps: PluginDependencies) {
+function setupCommands(ctx: Context, deps: PluginDependencies): void {
   const wf = commands.createWfCommands(deps)
   const wfm = commands.createWfmCommands(deps)
   const miscs = commands.createMiscsCommands(deps)
@@ -149,6 +149,6 @@ function setupCommands(ctx: Context, deps: PluginDependencies) {
     .action(wfm.pmodhistoryCommand)
 }
 
-function inDevelopment() {
+function inDevelopment(): string {
   return '功能暂未开放'
 }

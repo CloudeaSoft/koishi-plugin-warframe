@@ -25,7 +25,11 @@ const defaultRateLimitOptions: WfmRateLimitOptions = {
 
 export function createWfmApiClient(
   options: WfmApiClientOptions = {},
-) {
+): {
+  items: ReturnType<typeof createItemEndpoints>
+  rivens: ReturnType<typeof createRivenEndpoints>
+  tools: ReturnType<typeof createToolEndpoints>
+} {
   const fetcher = options.fetcher ?? defaultFetcher
   const cacheOptions = resolveCacheOptions(options.cache)
   const limiter = resolveLimiter(options.rateLimit)

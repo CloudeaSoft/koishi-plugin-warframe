@@ -15,7 +15,11 @@ type WfmGet = <T>(url: string, ttl: number) => Promise<T | undefined>
 export function createItemEndpoints(
   get: WfmGet,
   cacheOptions: WfmCacheOptions | undefined,
-) {
+): {
+  getList: () => Promise<ItemShort[] | undefined>
+  getStatistics: (itemId: string) => Promise<StatisticsCollection | undefined>
+  getOrders: (itemId: string) => Promise<OrderWithUser[] | undefined>
+} {
   return {
     getList: async () => {
       const response = await get<WFMResponse<ItemShort[]>>(

@@ -25,6 +25,6 @@ export function fetchWithLimiter<T>(
   url: string,
   limiter: Bottleneck | undefined,
 ): Promise<T> {
-  const run = () => fetcher<T>(url)
+  const run = (): Promise<T> => fetcher<T>(url)
   return limiter ? limiter.schedule(run) : run()
 }

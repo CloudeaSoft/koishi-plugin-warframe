@@ -15,6 +15,7 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): El
   for (const order of orders) {
     result += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`
   }
+  void result
   return (
     <div style="display:flex; flex-direction: column;">
       <style>
@@ -335,14 +336,14 @@ function calcDaysAgo(dateStr: string): number | null {
   if (!dateStr)
     return null
   const d = new Date(dateStr)
-  if (isNaN(d.getTime()))
+  if (Number.isNaN(d.getTime()))
     return null
   const now = Date.now()
   const diff = now - d.getTime()
   return Math.floor(diff / 86400000)
 }
 
-function PMHCard(item: PrimedModHistoryItem, index: number): Element {
+function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
   const pr = item.plats
   const tier
     = pr !== undefined
@@ -352,7 +353,7 @@ function PMHCard(item: PrimedModHistoryItem, index: number): Element {
   const dateStr = item.last
     ? (() => {
         const d = new Date(item.last)
-        if (!isNaN(d.getTime())) {
+        if (!Number.isNaN(d.getTime())) {
           const year = d.getUTCFullYear()
           const month = String(d.getUTCMonth() + 1).padStart(2, '0')
           const day = String(d.getUTCDate()).padStart(2, '0')

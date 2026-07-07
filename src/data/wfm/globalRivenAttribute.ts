@@ -2,7 +2,12 @@ import type { RivenAttribute } from '../../types/wfm'
 import { wfmClient } from '../../infrastructure/wfm-client'
 import { createAsyncCache, listToDict } from '../../utils'
 
-export async function globalRivenAttributeFactory(rivenAttributeData?: RivenAttribute[]) {
+export async function globalRivenAttributeFactory(
+  rivenAttributeData?: RivenAttribute[],
+): Promise<{
+  globalRivenAttributeList: RivenAttribute[]
+  globalRivenAttributeDict: Record<string, RivenAttribute>
+}> {
   rivenAttributeData ??= await wfmClient.rivens.getAttributes()
   if (!rivenAttributeData) {
     throw new Error(
@@ -32,6 +37,6 @@ export function overrideGlobalRivenAttribute(cache: AsyncCache<{
   globalRivenAttributeDict: {
     [key: string]: RivenAttribute
   }
-}>) {
+}>): void {
   globalRivenAttribute = cache
 }

@@ -2,7 +2,12 @@ import type { ItemShort } from '../../types/wfm'
 import { wfmClient } from '../../infrastructure/wfm-client'
 import { createAsyncCache, listToDict, normalizeName } from '../../utils'
 
-export async function globalItemDataFactory(response?: ItemShort[]) {
+export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
+  globalItemList: ItemShort[]
+  globalItemDict: Record<string, ItemShort>
+  globalItemNameToSlugDict: Record<string, string>
+  globalItemGameRefDict: Record<string, ItemShort>
+}> {
   response ??= await wfmClient.items.getList()
   if (!response) {
     return {
@@ -50,6 +55,6 @@ export function overrideGlobalItemData(cache: AsyncCache<{
   globalItemDict: Record<string, ItemShort>
   globalItemNameToSlugDict: Record<string, string>
   globalItemGameRefDict: Record<string, ItemShort>
-}>) {
+}>): void {
   globalItemData = cache
 }

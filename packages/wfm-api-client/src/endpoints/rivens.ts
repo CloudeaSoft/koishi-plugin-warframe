@@ -16,7 +16,11 @@ type WfmGet = <T>(url: string, ttl: number) => Promise<T | undefined>
 export function createRivenEndpoints(
   get: WfmGet,
   cacheOptions: WfmCacheOptions | undefined,
-) {
+): {
+  getItems: () => Promise<RivenItem[] | undefined>
+  getOrders: (itemId: string) => Promise<RivenOrder[] | undefined>
+  getAttributes: () => Promise<RivenAttribute[] | undefined>
+} {
   return {
     getItems: async () => {
       const response = await get<WFMResponse<RivenItem[]>>(

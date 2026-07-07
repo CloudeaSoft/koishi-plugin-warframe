@@ -25,7 +25,24 @@ import {
   getWeekly,
 } from '../services'
 
-export function createWfCommands(deps: PluginDependencies) {
+export function createWfCommands(deps: PluginDependencies): {
+  arbitrationCommand: (_action: Argv, input?: number) => Promise<string>
+  circuitCommand: (_action: Argv) => Promise<string>
+  voidtraderCommand: (_action: Argv) => Promise<string>
+  fissureCommand: (_action: Argv) => Promise<string>
+  steelPathFissureCommand: (_action: Argv) => Promise<string>
+  railjackFissureCommand: (_action: Argv) => Promise<string>
+  relicCommand: (_action: Argv, input: string) => Promise<string>
+  rivenCommand: (_action: Argv, input: Dict) => Promise<string>
+  rivenStatCommand: (
+    _action: Argv,
+    weaponType: string,
+    statType: string,
+    disposition: number,
+  ) => Promise<string>
+  weeklyCommand: (_action: Argv) => Promise<string>
+  environmentCommand: () => Promise<string>
+} {
   const { config, render } = deps
 
   return {

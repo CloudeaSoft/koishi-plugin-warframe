@@ -660,7 +660,10 @@ const htmlString = (() => {
   }
 })()
 
-export async function generateImageOutput(puppe: Puppeteer, element: Element) {
+export async function generateImageOutput(
+  puppe: Puppeteer,
+  element: Element,
+): Promise<string> {
   if (!puppe) {
     return '本功能需要启用 koishi-plugin-puppeteer 插件'
   }

@@ -42,6 +42,6 @@ export function msToHumanReadable(ms: number): string {
   return parts.join('')
 }
 
-export async function sleep(ms: number) {
+export async function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
