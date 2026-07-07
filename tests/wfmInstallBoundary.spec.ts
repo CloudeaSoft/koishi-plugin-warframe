@@ -8,7 +8,7 @@ const packageRoot = () => {
 };
 
 describe("wfm-api-client install boundary", () => {
-  it("uses a local file dev dependency before the client is published", () => {
+  it("uses a linked local dev dependency before the client is published", () => {
     const manifest = JSON.parse(
       readFileSync(resolve(packageRoot(), "package.json"), "utf8"),
     ) as {
@@ -19,7 +19,7 @@ describe("wfm-api-client install boundary", () => {
 
     expect(manifest.dependencies?.["wfm-api-client"]).to.equal(undefined);
     expect(manifest.devDependencies["wfm-api-client"]).to.equal(
-      "file:packages/wfm-api-client",
+      "link:packages/wfm-api-client",
     );
     expect(manifest.scripts.build).to.include(
       "yarn --cwd packages/wfm-api-client build",
