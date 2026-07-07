@@ -1,49 +1,46 @@
 import { Argv } from "koishi";
+import type { PluginDependencies } from "../types/config";
 import {
   getItemOrders,
   getRivenOrders,
   primedModHistory,
   updateCache,
 } from "../services";
-import { generateImageOutput } from "../components/render";
 import {
   ItemOrderComponent,
   RivenOrderComponent,
   PrimedModHistoryComponent,
 } from "../components/wfm";
 
-export const wmCommand = async (action: Argv, input: string) => {
-  const result = await getItemOrders(input);
-  if (!result) {
-    return `Item not found: ${input}`;
-  }
+export function createWfmCommands(deps: PluginDependencies) {
+  const { render } = deps;
 
-  return await generateImageOutput(
-    action.session!.app.puppeteer,
-    ItemOrderComponent(result.item, result.orders),
-  );
-};
+  return {
+    wmCommand: async (_action: Argv, input: string) => {
+      const result = await getItemOrders(input);
+      if (!result) {
+        return `Item not found: ${input}`;
+      }
 
-export const wmrCommand = async (action: Argv, input: string) => {
-  const result = await getRivenOrders(input);
-  if (!result) {
-    return `Item not found: ${input}`;
-  }
+      return await render(ItemOrderComponent(result.item, result.orders));
+    },
 
-  return await generateImageOutput(
-    action.session!.app.puppeteer,
-    RivenOrderComponent(result.item, result.orders),
-  );
-};
+    wmrCommand: async (_action: Argv, input: string) => {
+      const result = await getRivenOrders(input);
+      if (!result) {
+        return `Item not found: ${input}`;
+      }
 
-export const wmuCommand = async (action: Argv, input: string) => {
-  return await updateCache();
-};
+      return await render(RivenOrderComponent(result.item, result.orders));
+    },
 
-export const pmodhistoryCommand = async (action: Argv, input: string) => {
-  const history = await primedModHistory.get();
-  return await generateImageOutput(
-    action.session!.app.puppeteer,
-    PrimedModHistoryComponent(history),
-  );
-};
+    wmuCommand: async (_action: Argv, _input: string) => {
+      return await updateCache();
+    },
+
+    pmodhistoryCommand: async (_action: Argv, _input: string) => {
+      const history = await primedModHistory.get();
+      return await render(PrimedModHistoryComponent(history));
+    },
+  };
+}
