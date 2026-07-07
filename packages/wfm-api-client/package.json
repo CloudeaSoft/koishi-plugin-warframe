@@ -17,8 +17,8 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc",
-    "dtsc": "tsc",
+    "build": "tsc --build --force",
+    "dtsc": "tsc --build --force",
     "test": "mocha tests/**/*.spec.ts"
   },
   "dependencies": {

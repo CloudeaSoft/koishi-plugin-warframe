@@ -5,9 +5,7 @@ import type {
   WfmRateLimitOptions,
 } from "./types";
 import { WfmMemoryCache } from "./cache";
-import { createItemEndpoints } from "./endpoints/items";
-import { createRivenEndpoints } from "./endpoints/rivens";
-import { createToolEndpoints } from "./endpoints/tools";
+import { createItemEndpoints, createRivenEndpoints, createToolEndpoints } from "./endpoints";
 import { defaultFetcher, fetchWithLimiter } from "./transport";
 
 const defaultCacheOptions: WfmCacheOptions = {

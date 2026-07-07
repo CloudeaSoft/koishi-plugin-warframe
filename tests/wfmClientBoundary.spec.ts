@@ -14,6 +14,6 @@ describe("wfm client boundary", () => {
     const root = packageRoot();
 
     expect(existsSync(resolve(root, "src/infrastructure/wfm/wfm-api.ts"))).to.equal(false);
-    expect(existsSync(resolve(root, "src/infrastructure/wfm/client.ts"))).to.equal(true);
+    expect(existsSync(resolve(root, "src/infrastructure/wfm-client.ts"))).to.equal(true);
   });
 });
