@@ -20,8 +20,7 @@ import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
 } from "../src/data/wfm/globalRivenAttribute";
-import { ItemShort } from "../src/types/wfm/item";
-import { RivenAttribute } from "../src/types/wfm/riven";
+import type { ItemShort, RivenAttribute } from "../src/types/wfm";
 
 before(() => {
   overrideGlobalItemData(

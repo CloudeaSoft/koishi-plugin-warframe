@@ -1,9 +1,9 @@
-import { getWFMItemList } from "../../infrastructure/wfm/wfm-api";
-import { ItemShort } from "../../types/wfm/item";
+import { wfmClient } from "../../infrastructure/wfm-client";
+import type { ItemShort } from "../../types/wfm";
 import { createAsyncCache, listToDict, normalizeName } from "../../utils";
 
 export const globalItemDataFactory = async (response?: ItemShort[]) => {
-  response ??= await getWFMItemList();
+  response ??= await wfmClient.items.getList();
   if (!response) {
     return {
       globalItemList: [],

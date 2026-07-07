@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { globalItemDataFactory } from "../src/data/wfm/globalItem";
-import { ItemShort } from "../src/types/wfm/item";
+import type { ItemShort } from "../src/types/wfm";
 
 const fixtureItems: ItemShort[] = [
   {

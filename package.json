@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "yakumo build",
+    "build": "yarn --cwd packages/wfm-api-client build && yakumo build",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
     "dtsc": "tsc",
@@ -67,6 +67,7 @@
     "@types/node": "^25.6.0",
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.62.0",
+    "bottleneck": "^2.19.5",
     "chai": "^6.2.2",
     "conventional-changelog-conventionalcommits": "^10.2.1",
     "esbuild": "^0.28.0",
@@ -81,13 +82,13 @@
     "reflect-metadata": "^0.2.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.62.0",
+    "wfm-api-client": "link:packages/wfm-api-client",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
     "yakumo-tsc": "^1.0.0"
   },
   "dependencies": {
     "async-cache-dedupe": "^3.4.0",
-    "bottleneck": "^2.19.5",
     "ofetch": "^1.5.1",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.213",
     "warframe-public-export-plus": "^0.6.2",

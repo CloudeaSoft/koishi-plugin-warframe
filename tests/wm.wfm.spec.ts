@@ -7,7 +7,7 @@ import {
   globalItemDataFactory,
 } from "../src/data/wfm/globalItem";
 import { createAsyncCache } from "../src/utils";
-import { ItemShort } from "../src/types/wfm/item";
+import type { ItemShort } from "../src/types/wfm";
 
 before(() => {
   overrideGlobalItemData(

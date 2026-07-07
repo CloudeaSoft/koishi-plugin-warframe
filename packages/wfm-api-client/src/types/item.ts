@@ -1,4 +1,4 @@
-import { WFMLang } from "./lang";
+import type { WFMLang } from "./common";
 
 interface ItemI18N {
   name: string;
@@ -7,31 +7,6 @@ interface ItemI18N {
   icon: string;
   thumb: string;
   subIcon: string;
-}
-
-export interface Item {
-  id: string;
-  tags: string[];
-  slug: string;
-  gameRef: string;
-  tradable: boolean;
-  setRoot: boolean;
-  setParts: string[];
-  quantityInSet: number;
-  i18n: Partial<Record<WFMLang, ItemI18N>>;
-  rarity: string;
-  maxRank: number;
-  maxCharges: number;
-  bulkTradable: boolean;
-  subtypes: string[];
-  maxAmberStars: number;
-  maxCyanStars: number;
-  baseEndo: number;
-  endoMultiplier: number;
-  ducats: number;
-  reqMasteryRank: number;
-  vaulted: boolean;
-  tradingTax: number;
 }
 
 export interface ItemShort {
@@ -59,17 +34,13 @@ export interface RivenItem {
   rivenType?: string;
   disposition: number;
   reqMasteryRank: number;
-  i18n?: Record<string, RivenItemI18N | null>;
+  i18n?: Record<
+    string,
+    { name?: string; wikiLink?: string; icon: string; thumb: string } | null
+  >;
 }
 
-interface RivenItemI18N {
-  name?: string;
-  wikiLink?: string;
-  icon: string;
-  thumb: string;
-}
-
-interface ClosedStatisticsEntry {
+export interface ClosedStatisticsEntry {
   datetime: string;
   volume: number;
   min_price: number;
@@ -86,7 +57,7 @@ interface ClosedStatisticsEntry {
   mod_rank: number;
 }
 
-interface LiveStatisticsEntry {
+export interface LiveStatisticsEntry {
   datetime: string;
   volume: number;
   min_price: number;
@@ -109,10 +80,4 @@ export interface StatisticsCollection {
     "48hours": LiveStatisticsEntry[];
     "90days": LiveStatisticsEntry[];
   };
-}
-
-export interface PrimedModHistoryItem {
-  name: string | undefined;
-  last: string;
-  plats?: number;
 }

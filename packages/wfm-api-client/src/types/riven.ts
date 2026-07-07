@@ -1,12 +1,6 @@
-import { WFMLang } from "./lang";
+import type { WFMLang } from "./common";
 
 export type RivenAttributeUnit = "percent" | "multiply" | "seconds" | string;
-
-interface RivenAttributeI18N {
-  name: string;
-  icon: string;
-  thumb: string;
-}
 
 export interface RivenAttribute {
   id: string;
@@ -20,24 +14,36 @@ export interface RivenAttribute {
   positiveOnly: boolean;
   negativeOnly: boolean;
   unit: RivenAttributeUnit;
-  i18n: Record<WFMLang, RivenAttributeI18N>;
+  i18n: Record<WFMLang, { name: string; icon: string; thumb: string }>;
 }
 
 interface Riven {
   polarity: string;
   mod_rank: number;
   re_rolls: number;
-  attributes: RivenAttributeShort[];
+  attributes: Array<{
+    value: number;
+    positive: boolean;
+    url_name: string;
+  }>;
   type: string;
   name: string;
   weapon_url_name: string;
   mastery_level: number;
 }
 
-interface RivenAttributeShort {
-  value: number;
-  positive: boolean;
-  url_name: string;
+interface RivenUser {
+  reputation: number;
+  platform: string;
+  locale: string;
+  avatar: string | null;
+  last_seen: string;
+  crossplay: boolean;
+  ingame_name: string;
+  slug: string;
+  status: "offline" | "online" | "ingame" | string;
+  id: string;
+  region: string;
 }
 
 export interface RivenOrder {
@@ -61,30 +67,4 @@ export interface RivenOrder {
   winner: RivenUser | null;
   item: Riven;
   private: boolean;
-}
-
-interface RivenUser {
-  reputation: number;
-  platform: string;
-  locale: string;
-  avatar: string | null;
-  last_seen: string;
-  crossplay: boolean;
-  ingame_name: string;
-  slug: string;
-  status: "offline" | "online" | "ingame" | string;
-  id: string;
-  region: string;
-}
-
-export interface RivenAttributeShortInternal extends RivenAttributeShort {
-  attribute: RivenAttribute;
-}
-
-interface RivenInternal extends Riven {
-  attributes: RivenAttributeShortInternal[];
-}
-
-export interface RivenOrderInternal extends RivenOrder {
-  item: RivenInternal;
 }

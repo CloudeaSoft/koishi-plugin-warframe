@@ -7,8 +7,8 @@ export interface Ducatnator {
   volume: number;
   ducats_per_platinum: number;
   ducats_per_platinum_wa: number;
-  ducats: number;
   item: string;
+  ducats: number;
   median: number;
   wa_price: number;
   id: string;
