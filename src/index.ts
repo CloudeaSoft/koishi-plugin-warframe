@@ -26,7 +26,6 @@ export function apply(ctx: Context) {
   const deps: PluginDependencies = {
     config: ctx.config as PluginConfig,
     logger: ctx.logger("koishi-plugin-warframe"),
-    puppeteer: ctx.puppeteer,
     render: (e: Element) => generateImageOutput(ctx.puppeteer, e)
   }
 
