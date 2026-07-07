@@ -122,6 +122,10 @@ export function createWfCommands(deps: PluginDependencies) {
         return "未检测到图片";
       }
 
+      if (!config.ocrAPISecret?.id || !config.ocrAPISecret?.key) {
+        return "未配置 OCR API 密钥，请在插件设置中配置。";
+      }
+
       const result = await getAnalyzedRiven(
         config.ocrAPISecret,
         input.src as string,
