@@ -30,7 +30,7 @@ export function createRivenEndpoints(
         `${wfmApiV1Base}auctions/search?type=riven&sort_by=price_asc&weapon_url_name=${itemId}`,
         cacheOptions?.rivenOrderListTtl ?? 0,
       );
-      return response?.payload.auctions;
+      return response?.payload?.auctions;
     },
     getAttributes: async () => {
       const response = await get<WFMResponse<RivenAttribute[]>>(
