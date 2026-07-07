@@ -5,7 +5,6 @@ import {
   normalizeName,
   pascalToSpaced,
   createAsyncCache,
-  sleep,
 } from "../utils";
 import {
   getWFMItemStatistics,
@@ -313,11 +312,6 @@ export const primedModHistory = createAsyncCache(async () => {
   const { globalItemDict, globalItemNameToSlugDict } =
     await globalItemData.get();
 
-  // WFM API allows max 3 req/s; use 500ms interval (2 req/s) to leave
-  // headroom for other concurrent requests.
-  const minInterval = 500;
-  let lastRequestTime = 0;
-
   for (const mod of primeModHistory) {
     const name = normalizeName(mod.Name);
     const slug = globalItemNameToSlugDict[name];
@@ -332,13 +326,7 @@ export const primedModHistory = createAsyncCache(async () => {
       continue;
     }
 
-    const elapsed = Date.now() - lastRequestTime;
-    if (elapsed < minInterval) {
-      await sleep(minInterval - elapsed);
-    }
-
     const data = await getWFMItemStatistics(slug);
-    lastRequestTime = Date.now();
 
     if (data) {
       const zeroRankList = data.statistics_closed["90days"].filter(

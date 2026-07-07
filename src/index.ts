@@ -1,11 +1,14 @@
-import { } from "@koishijs/plugin-help";
+import {} from "@koishijs/plugin-help";
 import { Context, Element, Schema } from "koishi";
 
+import Bottleneck from "bottleneck";
 
 import "reflect-metadata"; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 import * as commands from "./commands";
 import { generateImageOutput } from "./components/render";
 import * as hooks from "./hooks/on-ready";
+import { registerDomainPolicy } from "./utils";
+import "reflect-metadata"; // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 import type { Config as PluginConfig, PluginDependencies } from "./types/config";
 
 export const name = "warframe";
@@ -23,6 +26,13 @@ export const Config: Schema<PluginConfig> = Schema.object({
 });
 
 export function apply(ctx: Context) {
+  registerDomainPolicy("api.warframe.market", {
+    limiter: new Bottleneck({
+      minTime: 500, // 500ms
+    }),
+    cacheTtl: 60, // 60s
+  });
+
   const deps: PluginDependencies = {
     config: ctx.config as PluginConfig,
     logger: ctx.logger("koishi-plugin-warframe"),
