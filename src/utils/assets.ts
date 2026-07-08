@@ -5,7 +5,7 @@ const jsonCache = new Map<string, unknown>()
 const textCache = new Map<string, string>()
 
 function assetRoot(): string {
-  if (basename(__dirname) === 'utils' && basename(dirname(__dirname)) === 'src') {
+  if (basename(__dirname) === 'utils') {
     return resolve(__dirname, '../assets')
   }
 
