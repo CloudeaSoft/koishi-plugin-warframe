@@ -23,4 +23,12 @@ describe('asset ownership boundary', () => {
     expect(source).to.not.include('../../assets/rivenAttrValues.json')
     expect(source).to.include('../../assets/rivenAttrValuesData')
   })
+
+  it('keeps riven calc resource loading inside the assets folder', () => {
+    const root = packageRoot()
+    const source = readFileSync(resolve(root, 'src/data/wf/rivenDisposition.ts'), 'utf8')
+
+    expect(source).to.not.include('../../assets/rivencalc.json')
+    expect(source).to.include('../../assets/rivenCalcData')
+  })
 })
