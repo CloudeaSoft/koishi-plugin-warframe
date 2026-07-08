@@ -1,3 +1,4 @@
+export * from './assets'
 export * from './cache'
 export * from './collection'
 export * from './color'

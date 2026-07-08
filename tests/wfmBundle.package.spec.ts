@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect } from 'chai'
 
@@ -12,5 +12,13 @@ describe('wfm-api-client bundle behavior', () => {
     const bundle = readFileSync(resolve(packageRoot(), 'lib/index.js'), 'utf8')
 
     expect(bundle).to.not.include('require("wfm-api-client")')
+  })
+
+  it('keeps circuit reward json outside the plugin bundle', () => {
+    const root = packageRoot()
+    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
+
+    expect(bundle).to.not.include('// src/assets/circuitRewards.json')
+    expect(existsSync(resolve(root, 'lib/assets/circuitRewards.json'))).to.equal(true)
   })
 })
