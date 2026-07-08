@@ -1,10 +1,10 @@
 interface VoidTrader {
-  expiry: string;
-  items: VoidTraderItem[];
+  expiry: string
+  items: VoidTraderItem[]
 }
 
 interface VoidTraderItem {
-  name: string;
-  ducats: number;
-  credits: number;
+  name: string
+  ducats: number
+  credits: number
 }

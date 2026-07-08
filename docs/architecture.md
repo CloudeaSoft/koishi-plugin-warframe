@@ -193,19 +193,20 @@ Subsequent calls to globalWorldState.get()
 // data/wfm/globalItem.ts
 
 // Factory: accepts optional injected data; falls back to network when omitted
-export const globalItemDataFactory = async (response?: ItemShort[]) => {
-  response ??= await getWFMItemList();  // network call
-  if (!response) return { /* empty structures */ };
+export async function globalItemDataFactory(response?: ItemShort[]) {
+  response ??= await getWFMItemList() // network call
+  if (!response)
+    return { /* empty structures */ }
   // builds 4 dicts...
-};
+}
 
 // Default cache instance (infinite TTL)
-export let globalItemData = createAsyncCache(globalItemDataFactory, -1);
+export const globalItemData = createAsyncCache(globalItemDataFactory, -1)
 
 // Override: inject fixture data during tests
-export const overrideGlobalItemData = (cache) => {
-  globalItemData = cache;
-};
+export function overrideGlobalItemData(cache) {
+  globalItemData = cache
+}
 ```
 
 Usage in tests:
@@ -214,10 +215,10 @@ Usage in tests:
 before(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
-      return await globalItemDataFactory(fixtureData);
+      return await globalItemDataFactory(fixtureData)
     }, -1)
-  );
-});
+  )
+})
 ```
 
 ## 3. Layer Details
@@ -339,11 +340,11 @@ Test files live in `tests/`, named `<feature>.<domain>.spec.ts` (domain tests) o
 ### 5.4 Logging
 
 ```typescript
-import { logger } from "../utils";  // or relative path
+import { logger } from '../utils' // or relative path
 
-logger.info("message");
-logger.warn("warning");
-logger.error("error");
+logger.info('message')
+logger.warn('warning')
+logger.error('error')
 ```
 
 **Never** use `console.log` / `console.error`.
@@ -351,11 +352,11 @@ logger.error("error");
 ### 5.5 HTTP Requests
 
 ```typescript
-import { fetchAsyncData } from "../utils";
+import { fetchAsyncData } from '../utils'
 
-const data = await fetchAsyncData<MyType>("https://api.example.com/data");
+const data = await fetchAsyncData<MyType>('https://api.example.com/data')
 if (!data) {
-  return "获取数据失败";  // handle undefined
+  return '获取数据失败' // handle undefined
 }
 ```
 

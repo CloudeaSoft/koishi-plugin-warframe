@@ -1,3 +1,3 @@
-import { createWfmApiClient } from "wfm-api-client";
+import { createWfmApiClient } from 'wfm-api-client'
 
-export const wfmClient = createWfmApiClient();
+export const wfmClient = createWfmApiClient()

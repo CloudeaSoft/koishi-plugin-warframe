@@ -1,78 +1,79 @@
-import crypto from "node:crypto";
-import { createCache } from "async-cache-dedupe";
-import { logger } from "../utils";
+import { Buffer } from 'node:buffer'
+import crypto from 'node:crypto'
+import { createCache } from 'async-cache-dedupe'
+import { logger } from '../utils'
 
 interface OcrCacheParams {
-  hash: string;
-  image: string;
-  secret: OcrAPISecret;
+  hash: string
+  image: string
+  secret: OcrAPISecret
 }
 
 const ocrCache = createCache({
-  storage: { type: "memory", options: { size: 100 } },
+  storage: { type: 'memory', options: { size: 100 } },
 }).define(
-  "extract",
+  'extract',
   { ttl: 86_400, serialize: (params: OcrCacheParams) => params.hash },
   async (params: OcrCacheParams) => {
-    return getTextFromTencentOCR(params.image, params.secret);
+    return getTextFromTencentOCR(params.image, params.secret)
   },
-);
+)
 
 /**
  * Calculate the hash value of an image Base64 string
  * @param base64 Image base64 with or without prefix
- * @param algorithm Hash algorithm: SHA-256 / SHA-1 / MD5
  * @returns Hexadecimal hash string
  */
-const getImageBase64Hash = (base64: string): string => {
-  const pureBase64 = base64.replace(/^data:image\/\w+;base64,/, "");
-  return crypto.createHash("sha256").update(pureBase64, "base64").digest("hex");
-};
+function getImageBase64Hash(base64: string): string {
+  const pureBase64 = base64.replace(/^data:image\/\w+;base64,/, '')
+  return crypto.createHash('sha256').update(pureBase64, 'base64').digest('hex')
+}
 
-const getTextFromTencentOCR = async (image: string, secret: OcrAPISecret) => {
-  const tencentcloud = await import("tencentcloud-sdk-nodejs-ocr");
-  const ocrClient = tencentcloud.ocr.v20181119.Client;
+async function getTextFromTencentOCR(
+  image: string,
+  secret: OcrAPISecret,
+): Promise<string[]> {
+  const tencentcloud = await import('tencentcloud-sdk-nodejs-ocr')
+  const OcrClient = tencentcloud.ocr.v20181119.Client
   const clientConfig = {
     credential: {
       secretId: secret.id,
       secretKey: secret.key,
     },
-    region: "",
+    region: '',
     profile: {
       httpProfile: {
-        endpoint: "ocr.tencentcloudapi.com",
+        endpoint: 'ocr.tencentcloudapi.com',
       },
     },
-  };
+  }
 
-  const client = new ocrClient(clientConfig);
+  const client = new OcrClient(clientConfig)
 
   const { TextDetections } = await client.GeneralAccurateOCR({
     ImageBase64: image,
-  });
+  })
 
-  const result = TextDetections?.map((t) => t.DetectedText).filter(
+  const result = TextDetections?.map(t => t.DetectedText).filter(
     Boolean,
-  ) as string[];
+  ) as string[]
 
-  return result;
-};
+  return result
+}
 
-export const extractTextFromImage = async (
-  image: string | Blob,
-  secret: OcrAPISecret,
-): Promise<string[] | undefined> => {
+export async function extractTextFromImage(image: string | Blob, secret: OcrAPISecret): Promise<string[] | undefined> {
   if (image instanceof Blob) {
-    const buffer = await image.arrayBuffer();
-    image = Buffer.from(buffer).toString("base64");
+    const buffer = await image.arrayBuffer()
+    image = Buffer.from(buffer).toString('base64')
   }
 
-  const hash = getImageBase64Hash(image);
+  const hash = getImageBase64Hash(image)
 
   try {
-    return await ocrCache.extract({ hash, image, secret });
-  } catch (err) {
-    logger.error("OCR request error:", err);
-    return undefined;
+    return await ocrCache.extract({ hash, image, secret })
   }
-};
+  catch (err) {
+    logger.error('OCR request error:', err)
+    return undefined
+  }
+}

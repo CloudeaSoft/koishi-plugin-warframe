@@ -1,4 +1,4 @@
 module.exports = {
-  extension: ["ts"],
-  require: ["esbuild-register"],
-};
+  extension: ['ts'],
+  require: ['esbuild-register'],
+}

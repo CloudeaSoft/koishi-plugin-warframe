@@ -1,18 +1,39 @@
+import type {
+  RivenStatAnalyzeResult,
+  RivenStatAnalyzsis,
+  RivenStatCountType,
+  RivenStatResult,
+  RivenWeaponType,
+} from '../types/wf/riven'
+
+import type { RivenAttribute } from '../types/wfm'
 import {
+  dict_zh,
   ExportMissionTypes,
   ExportRegions,
-  dict_zh,
-} from "warframe-public-export-plus";
-
-import dict_zh_ex from "../assets/zh.json";
-import dict_en_ex from "../assets/en.json";
-import arbyRewards from "../assets/arbyRewards";
+} from 'warframe-public-export-plus'
+import arbyRewards from '../assets/arbyRewards'
 
 import {
   incarnons as incarnonRewards,
   warframes as warframeRewards,
-} from "../assets/circuitRewards.json";
+} from '../assets/circuitRewards.json'
 
+import dict_en_ex from '../assets/en.json'
+import dict_zh_ex from '../assets/zh.json'
+import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
+import { globalWorldState } from '../data/wf/globalWorldState'
+import { relics } from '../data/wf/relics'
+import { rivenAttrValueDict } from '../data/wf/rivenBaseValues'
+import { weaponRivenDispositionDict } from '../data/wf/rivenDisposition'
+import { rivenStatFixFactor } from '../data/wf/rivenStatData'
+import { globalRivenAttribute } from '../data/wfm/globalRivenAttribute'
+import { extractTextFromImage } from '../infrastructure/ocr-api'
+import { regionToShort } from '../infrastructure/wf/wf-export-adapter'
+import {
+  getMissionTypeKey,
+  getVoidTraderItem,
+} from '../infrastructure/wf/wfcd-adapter'
 import {
   fetchAsyncImage,
   msToHumanReadable,
@@ -20,558 +41,549 @@ import {
   normalSimilarity,
   removeSpace,
   tokenSimilarity,
-} from "../utils";
-import { extractTextFromImage } from "../infrastructure/ocr-api";
-import { regionToShort } from "../infrastructure/wf/wf-export-adapter";
-import {
-  getMissionTypeKey,
-  getVoidTraderItem,
-} from "../infrastructure/wf/wfcd-adapter";
-import { globalRivenAttribute } from "../data/wfm/globalRivenAttribute";
-import { relics } from "../data/wf/relics";
-import { globalWorldState } from "../data/wf/globalWorldState";
-import { arbitrationSchedule } from "../data/wf/arbitrationSchedule";
-import { rivenAttrValueDict } from "../data/wf/rivenBaseValues";
-import { weaponRivenDispositionDict } from "../data/wf/rivenDisposition";
-import { rivenStatFixFactor } from "../data/wf/rivenStatData";
-import type { RivenAttribute } from "../types/wfm";
-import {
-  RivenStatAnalyzeResult,
-  RivenStatAnalyzsis,
-  RivenStatCountType,
-  RivenStatResult,
-  RivenWeaponType,
-} from "../types/wf/riven";
+} from '../utils'
 
 // ================ features ===================
 
-export const getRelic = async (input: string): Promise<Relic | string> => {
+export async function getRelic(input: string): Promise<Relic | string> {
   if (!input) {
-    return "请提供正确的遗物名称";
+    return '请提供正确的遗物名称'
   }
 
-  input = normalizeName(input);
+  input = normalizeName(input)
   if (!input) {
-    return "请提供正确的遗物名称";
+    return '请提供正确的遗物名称'
   }
 
   if (!relics) {
-    return "遗物数据未加载完成，请稍后再试";
+    return '遗物数据未加载完成，请稍后再试'
   }
 
   const tierListForMatch = [
-    "古纪",
-    "前纪",
-    "中纪",
-    "后纪",
-    "安魂",
-    "先锋",
-    "Lith",
-    "Meso",
-    "Neo",
-    "Axi",
-    "Requiem",
-    "Vanguard",
-  ].map((t) => normalizeName(t));
-  const tier = tierListForMatch.find((t) => input.startsWith(t));
+    '古纪',
+    '前纪',
+    '中纪',
+    '后纪',
+    '安魂',
+    '先锋',
+    'Lith',
+    'Meso',
+    'Neo',
+    'Axi',
+    'Requiem',
+    'Vanguard',
+  ].map(t => normalizeName(t))
+  const tier = tierListForMatch.find(t => input.startsWith(t))
   if (!tier) {
-    return "请提供正确的遗物名称";
+    return '请提供正确的遗物名称'
   }
 
   const category = input
-    .replace(new RegExp(`^${tier}`), "")
-    .replace(/遗物$|relic$/, "");
+    .replace(new RegExp(`^${tier}`), '')
+    .replace(/遗物$|relic$/, '')
 
   const zhTierMap = {
-    古纪: "Lith",
-    前纪: "Meso",
-    中纪: "Neo",
-    后纪: "Axi",
-    安魂: "Requiem",
-    先锋: "Vanguard",
-  };
-  const enTier = zhTierMap[tier as keyof typeof zhTierMap] ?? tier;
-  const key = normalizeName(enTier + category);
-  return relics[key] ?? "未找到对应遗物信息";
-};
+    古纪: 'Lith',
+    前纪: 'Meso',
+    中纪: 'Neo',
+    后纪: 'Axi',
+    安魂: 'Requiem',
+    先锋: 'Vanguard',
+  }
+  const enTier = zhTierMap[tier as keyof typeof zhTierMap] ?? tier
+  const key = normalizeName(enTier + category)
+  return relics[key] ?? '未找到对应遗物信息'
+}
 
-export const getArbitrations = (day: number = 3): Arbitration[] | string => {
+export function getArbitrations(day: number = 3): Arbitration[] | string {
   if (day > 14 || day <= 0) {
-    return "天数需小于等于14且大于0";
+    return '天数需小于等于14且大于0'
   }
 
   const currentHourTimeStamp = Math.floor(
-    new Date().setMinutes(0, 0, 0) / 1000,
-  );
+    new Date().setUTCMinutes(0, 0, 0) / 1000,
+  )
   const currentHourIndex = arbitrationSchedule.findIndex(
-    (a) => a.time === currentHourTimeStamp,
-  );
+    a => a.time === currentHourTimeStamp,
+  )
   const weekArbys = arbitrationSchedule.slice(
     currentHourIndex,
     currentHourIndex + 24 * day,
-  );
+  )
   return weekArbys
-    .filter((a) => arbyRewards[a.node as keyof typeof arbyRewards])
+    .filter(a => arbyRewards[a.node as keyof typeof arbyRewards])
     .map((a) => {
-      const obj = regionToShort(ExportRegions[a.node], dict_zh);
+      const obj = regionToShort(ExportRegions[a.node], dict_zh)
       return {
         ...obj,
-        time: new Date(a.time * 1000).toLocaleString("zh-cn", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
+        time: new Date(a.time * 1000).toLocaleString('zh-cn', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
           // minute: 'numeric', // 保持注释或删除，以去除分钟
           // second: 'numeric', // 保持注释或删除，以去除秒
           hour12: false, // 统一使用 24 小时制
           // hourCycle: 'h23' // 另一种设置 24 小时制的方法
-          timeZone: "Asia/Shanghai",
+          timeZone: 'Asia/Shanghai',
         }),
         rewards: arbyRewards[a.node as keyof typeof arbyRewards],
-      };
-    });
-};
+      }
+    })
+}
 
-export const getWeekly = async () => {
-  const { raw: worldState } = await globalWorldState.get();
+export async function getWeekly(): Promise<string | {
+  archonHunt: ArchonHunt
+  deepArchimedea: ArchiMedea
+  temporalArchimedea: ArchiMedea
+}> {
+  const { raw: worldState } = await globalWorldState.get()
   if (!worldState) {
-    return "内部错误，获取最新信息失败";
+    return '内部错误，获取最新信息失败'
   }
 
   const archon: ArchonHunt = {
     name: dict_zh[
-      "/Lotus/Language/Narmer/" + removeSpace(worldState.archonHunt.boss)
+      `/Lotus/Language/Narmer/${removeSpace(worldState.archonHunt.boss)}`
     ],
     missions: [],
-  };
+  }
 
   const stringToDebuff = (
     key: string,
     name: string,
     prefix: string,
   ): ArchiMedeaDebuff => {
-    const keyToName = dict_zh_ex[`${prefix}${key}` as keyof typeof dict_zh_ex];
+    const keyToName = dict_zh_ex[`${prefix}${key}` as keyof typeof dict_zh_ex]
 
     if (!keyToName) {
       for (const transKey in dict_en_ex) {
         if (dict_en_ex[transKey as keyof typeof dict_en_ex] === name) {
           return {
             name: dict_zh_ex[transKey as keyof typeof dict_zh_ex],
-            desc: dict_zh_ex[(transKey + "_Desc") as keyof typeof dict_zh_ex],
-          };
+            desc: dict_zh_ex[(`${transKey}_Desc`) as keyof typeof dict_zh_ex],
+          }
         }
       }
     }
 
-    const riskDesc =
-      dict_zh_ex[`${prefix}${key}_Desc` as keyof typeof dict_zh_ex];
+    const riskDesc
+      = dict_zh_ex[`${prefix}${key}_Desc` as keyof typeof dict_zh_ex]
     return {
       name: keyToName,
       desc: riskDesc,
-    };
-  };
+    }
+  }
 
-  const deepArchim = worldState.archimedeas[0];
+  const deepArchim = worldState.archimedeas[0]
   const deepArchimMissions = await Promise.all(
     deepArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
-      const receivedType = await getMissionTypeKey(m.missionType);
-      const type =
-        dict_zh[ExportMissionTypes[receivedType]?.name ?? ""] ?? m.missionType;
+      const receivedType = await getMissionTypeKey(m.missionType)
+      const type
+        = dict_zh[ExportMissionTypes[receivedType]?.name ?? ''] ?? m.missionType
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
-        "/Lotus/Language/Conquest/MissionVariant_LabConquest_",
-      );
-      const risks = m.risks.map((r) =>
-        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_"),
-      );
+        '/Lotus/Language/Conquest/MissionVariant_LabConquest_',
+      )
+      const risks = m.risks.map(r =>
+        stringToDebuff(r.key, r.name, '/Lotus/Language/Conquest/Condition_'),
+      )
 
       return {
         type,
         deviation,
         risks,
-      };
+      }
     }),
-  );
-  const deepArchimPersonalModifier = deepArchim.personalModifiers.map((p) =>
-    stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_"),
-  );
+  )
+  const deepArchimPersonalModifier = deepArchim.personalModifiers.map(p =>
+    stringToDebuff(p.key, p.name, '/Lotus/Language/Conquest/PersonalMod_'),
+  )
   const deepArchimRes: ArchiMedea = {
-    name: "深层科研",
+    name: '深层科研',
     missions: deepArchimMissions,
     peronal: deepArchimPersonalModifier,
-  };
+  }
 
-  const temporalArchim = worldState.archimedeas[1];
+  const temporalArchim = worldState.archimedeas[1]
   const temporalArchimMissions = await Promise.all(
     temporalArchim.missions.map(async (m): Promise<ArchiMedeaMission> => {
-      const receivedType = await getMissionTypeKey(m.missionType);
-      const type =
-        dict_zh[ExportMissionTypes[receivedType]?.name ?? ""] ?? receivedType;
+      const receivedType = await getMissionTypeKey(m.missionType)
+      const type
+        = dict_zh[ExportMissionTypes[receivedType]?.name ?? ''] ?? receivedType
       const deviation = stringToDebuff(
         m.deviation.key,
         m.deviation.name,
-        "/Lotus/Language/Conquest/MissionVariant_HexConquest_",
-      );
-      const risks = m.risks.map((r) =>
-        stringToDebuff(r.key, r.name, "/Lotus/Language/Conquest/Condition_"),
-      );
+        '/Lotus/Language/Conquest/MissionVariant_HexConquest_',
+      )
+      const risks = m.risks.map(r =>
+        stringToDebuff(r.key, r.name, '/Lotus/Language/Conquest/Condition_'),
+      )
 
       return {
         type,
         deviation,
         risks,
-      };
+      }
     }),
-  );
+  )
   const temporalArchimPersonalModifier = temporalArchim.personalModifiers.map(
-    (p) =>
-      stringToDebuff(p.key, p.name, "/Lotus/Language/Conquest/PersonalMod_"),
-  );
+    p =>
+      stringToDebuff(p.key, p.name, '/Lotus/Language/Conquest/PersonalMod_'),
+  )
   const temporalArchimRes: ArchiMedea = {
-    name: "时光科研",
+    name: '时光科研',
     missions: temporalArchimMissions,
     peronal: temporalArchimPersonalModifier,
-  };
+  }
 
   return {
     archonHunt: archon,
     deepArchimedea: deepArchimRes,
     temporalArchimedea: temporalArchimRes,
-  };
-};
+  }
+}
 
-export const getEnvironment = async (): Promise<string> => {
-  const { raw: worldState } = await globalWorldState.get();
+export async function getEnvironment(): Promise<string> {
+  const { raw: worldState } = await globalWorldState.get()
   if (!worldState) {
-    return "内部错误，获取最新信息失败";
+    return '内部错误，获取最新信息失败'
   }
 
-  const cetusDay = worldState.cetusCycle.isDay ? "白天" : "黑夜";
-  const cetus = `地球/夜灵平野: ${cetusDay} ${worldState.cetusCycle.timeLeft}`;
+  const cetusDay = worldState.cetusCycle.isDay ? '白天' : '黑夜'
+  const cetus = `地球/夜灵平野: ${cetusDay} ${worldState.cetusCycle.timeLeft}`
 
-  const vallisState = worldState.vallisCycle.isWarm ? "温暖" : "寒冷";
-  const vallis = `奥布山谷: ${vallisState} ${worldState.vallisCycle.timeLeft}`;
+  const vallisState = worldState.vallisCycle.isWarm ? '温暖' : '寒冷'
+  const vallis = `奥布山谷: ${vallisState} ${worldState.vallisCycle.timeLeft}`
 
   const cambionState = worldState.cambionCycle.state
-    ? worldState.cambionCycle.state.charAt(0).toUpperCase() +
-      worldState.cambionCycle.state.slice(1)
-    : "未知";
-  const cambion = `魔胎之境: ${cambionState} ${worldState.cambionCycle.timeLeft}`;
+    ? worldState.cambionCycle.state.charAt(0).toUpperCase()
+    + worldState.cambionCycle.state.slice(1)
+    : '未知'
+  const cambion = `魔胎之境: ${cambionState} ${worldState.cambionCycle.timeLeft}`
 
   const duviriStateTransDict = {
-    sorrow: "悲伤",
-    fear: "恐惧",
-    joy: "喜悦",
-    anger: "愤怒",
-    envy: "嫉妒",
-  };
-  const duviriState =
-    duviriStateTransDict[
+    sorrow: '悲伤',
+    fear: '恐惧',
+    joy: '喜悦',
+    anger: '愤怒',
+    envy: '嫉妒',
+  }
+  const duviriState
+    = duviriStateTransDict[
       worldState.duviriCycle.state as keyof typeof duviriStateTransDict
-    ] ?? worldState.duviriCycle.state;
-  const duviri = `双衍王境: ${duviriState} ${worldState.duviriCycle.endString}`;
+    ] ?? worldState.duviriCycle.state
+  const duviri = `双衍王境: ${duviriState} ${worldState.duviriCycle.endString}`
 
   const zarimanFaction = worldState.zarimanCycle.isCorpus
-    ? "Corpus"
-    : "Grineer";
-  const zariman = `扎里曼号: ${zarimanFaction} ${worldState.zarimanCycle.timeLeft}`;
+    ? 'Corpus'
+    : 'Grineer'
+  const zariman = `扎里曼号: ${zarimanFaction} ${worldState.zarimanCycle.timeLeft}`
 
-  return `当前环境:\n${cetus}\n${vallis}\n${cambion}\n${duviri}\n${zariman}`;
-};
+  return `当前环境:\n${cetus}\n${vallis}\n${cambion}\n${duviri}\n${zariman}`
+}
 
-export const getCircuitWeek = (): {
-  currentIncarnons: number;
-  currentWarframes: number;
-  allIncarnons: string[][];
-  allWarframes: string[][];
-} => {
-  const EPOCH = 1734307200 * 1000;
-  const week = Math.trunc((Date.now() - EPOCH) / 604800000);
-  const index1 = (week + 1) % incarnonRewards.length;
-  const index2 = (week + 8) % warframeRewards.length;
-  const incarnons = incarnonRewards.map((v) => v.map((i) => dict_zh[i]));
-  const warframes = warframeRewards.map((v) => v.map((i) => dict_zh[i]));
+export function getCircuitWeek(): {
+  currentIncarnons: number
+  currentWarframes: number
+  allIncarnons: string[][]
+  allWarframes: string[][]
+} {
+  const EPOCH = 1734307200 * 1000
+  const week = Math.trunc((Date.now() - EPOCH) / 604800000)
+  const index1 = (week + 1) % incarnonRewards.length
+  const index2 = (week + 8) % warframeRewards.length
+  const incarnons = incarnonRewards.map(v => v.map(i => dict_zh[i]))
+  const warframes = warframeRewards.map(v => v.map(i => dict_zh[i]))
   return {
     currentIncarnons: index1,
     currentWarframes: index2,
     allIncarnons: incarnons,
     allWarframes: warframes,
-  };
-};
+  }
+}
 
-export const getFissures = async () => {
-  const { fissures } = await globalWorldState.get();
-  return fissures ?? "内部错误，获取最新信息失败";
-};
+export async function getFissures(): Promise<string | Fissure[]> {
+  const { fissures } = await globalWorldState.get()
+  return fissures ?? '内部错误，获取最新信息失败'
+}
 
-export const getSteelPathFissures = async () => {
-  const { spFissures } = await globalWorldState.get();
-  return spFissures ?? "内部错误，获取最新信息失败";
-};
+export async function getSteelPathFissures(): Promise<string | Fissure[]> {
+  const { spFissures } = await globalWorldState.get()
+  return spFissures ?? '内部错误，获取最新信息失败'
+}
 
-export const getRailjackFissures = async () => {
-  const { rjFissures } = await globalWorldState.get();
-  return rjFissures ?? "内部错误，获取最新信息失败";
-};
+export async function getRailjackFissures(): Promise<string | Fissure[]> {
+  const { rjFissures } = await globalWorldState.get()
+  return rjFissures ?? '内部错误，获取最新信息失败'
+}
 
-export const getAnalyzedRiven = async (
-  secret: OcrAPISecret,
-  url: string,
-): Promise<string | RivenStatAnalyzeResult> => {
-  const img = await fetchAsyncImage(url);
+export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promise<string | RivenStatAnalyzeResult> {
+  const img = await fetchAsyncImage(url)
   if (!img) {
-    return "获取图片失败";
+    return '获取图片失败'
   }
 
-  const extractResult = await extractTextFromImage(img, secret);
+  const extractResult = await extractTextFromImage(img, secret)
   if (!extractResult) {
-    return "解析图片失败";
+    return '解析图片失败'
   }
 
-  const parseResult = await parseOCRResult(extractResult);
+  const parseResult = await parseOCRResult(extractResult)
   if (
-    !parseResult ||
-    parseResult.attributes.length < 2 ||
-    parseResult.attributes.length > 4
+    !parseResult
+    || parseResult.attributes.length < 2
+    || parseResult.attributes.length > 4
   ) {
-    return "解析图片失败";
+    return '解析图片失败'
   }
 
-  return analyzeRivenStat(parseResult);
-};
+  return analyzeRivenStat(parseResult)
+}
 
-export const getVoidTrader = async (): Promise<string | VoidTrader> => {
-  const { raw: worldState } = await globalWorldState.get();
+export async function getVoidTrader(): Promise<string | VoidTrader> {
+  const { raw: worldState } = await globalWorldState.get()
   if (worldState.voidTraders.length === 0) {
-    return "虚空商人仍在未知地带漂流...";
+    return '虚空商人仍在未知地带漂流...'
   }
 
-  const trader = worldState.voidTraders[0];
+  const trader = worldState.voidTraders[0]
 
   if (trader && trader.activation && trader.activation.getTime() > Date.now()) {
-    const diff = trader.activation.getTime() - Date.now();
-    return "距离虚空商人到达还有: " + msToHumanReadable(diff);
+    const diff = trader.activation.getTime() - Date.now()
+    return `距离虚空商人到达还有: ${msToHumanReadable(diff)}`
   }
 
-  const diff = trader.expiry!.getTime() - Date.now();
-  const items = trader.inventory.map(getVoidTraderItem);
+  const diff = trader.expiry!.getTime() - Date.now()
+  const items = trader.inventory.map(getVoidTraderItem)
 
-  return { expiry: msToHumanReadable(diff), items };
-};
+  return { expiry: msToHumanReadable(diff), items }
+}
 
-export const getStaticRivenStats = async (
-  weaponType: string,
-  statType: string,
-  disposition: number,
-): Promise<RivenStatResult | string> => {
+export async function getStaticRivenStats(weaponType: string, statType: string, disposition: number): Promise<RivenStatResult | string> {
   // Process inputs
   if (disposition > 1.55 || disposition < 0.5) {
-    return "裂罅倾向错误";
+    return '裂罅倾向错误'
   }
 
   const weaponTypes = [
-    "步枪",
-    "手枪",
-    "霰弹枪",
-    "Archwing枪械",
-    "近战",
-    "Rifle",
-    "Shotgun",
-    "Pistol",
-    "Archgun",
-    "Melee",
-  ];
-  const matchedWeaponType = weaponTypes.find((v) =>
+    '步枪',
+    '手枪',
+    '霰弹枪',
+    'Archwing枪械',
+    '近战',
+    'Rifle',
+    'Shotgun',
+    'Pistol',
+    'Archgun',
+    'Melee',
+  ]
+  const matchedWeaponType = weaponTypes.find(v =>
     normalizeName(v).startsWith(normalizeName(weaponType)),
-  );
+  )
   if (!matchedWeaponType) {
-    return "武器类型错误";
+    return '武器类型错误'
   }
 
   const weaponTypeKeys: Record<string, RivenWeaponType> = {
-    步枪: "Rifle",
-    手枪: "Pistol",
-    霰弹枪: "Shotgun",
-    近战: "Melee",
-    Archwing枪械: "Archgun",
-  };
-
-  const weaponTypeKey = weaponTypeKeys[matchedWeaponType] ?? matchedWeaponType;
-
-  const statTypes: RivenStatCountType[] = ["2", "3", "21", "31"];
-  if (!statTypes.includes(statType as RivenStatCountType)) {
-    return "词条类型错误";
+    步枪: 'Rifle',
+    手枪: 'Pistol',
+    霰弹枪: 'Shotgun',
+    近战: 'Melee',
+    Archwing枪械: 'Archgun',
   }
 
-  const rivenAttrValues = rivenAttrValueDict[weaponTypeKey];
-  const factor = rivenStatFixFactor[statType as RivenStatCountType];
+  const weaponTypeKey = weaponTypeKeys[matchedWeaponType] ?? matchedWeaponType
+
+  const statTypes: RivenStatCountType[] = ['2', '3', '21', '31']
+  if (!statTypes.includes(statType as RivenStatCountType)) {
+    return '词条类型错误'
+  }
+
+  const rivenAttrValues = rivenAttrValueDict[weaponTypeKey]
+  const factor = rivenStatFixFactor[statType as RivenStatCountType]
   const result: RivenStatResult = {
     positive: {},
     negative: factor.curseCount > 0 ? {} : undefined,
-  };
+  }
 
-  const { globalRivenAttributeList } = await globalRivenAttribute.get();
+  const { globalRivenAttributeList } = await globalRivenAttribute.get()
   for (const key in rivenAttrValues) {
     const data = globalRivenAttributeList.find(
-      (v) => normalizeName(v.i18n["en"].name) == key,
-    );
-    const baseValue = rivenAttrValues[key];
-    const buffValue = baseValue * disposition * factor.buffFactor;
+      v => normalizeName(v.i18n.en.name) === key,
+    )
+    const baseValue = rivenAttrValues[key]
+    const buffValue = baseValue * disposition * factor.buffFactor
     result.positive[key] = {
-      name: data?.i18n["zh-hans"].name ?? key,
+      name: data?.i18n['zh-hans'].name ?? key,
       max: buffValue * 1.1,
       min: buffValue * 0.9,
-      unit: data?.unit ?? "",
-    };
+      unit: data?.unit ?? '',
+    }
 
     if (result.negative) {
-      const curseValue = baseValue * disposition * factor.curseFactor;
+      const curseValue = baseValue * disposition * factor.curseFactor
       result.negative[key] = {
-        name: data?.i18n["zh-hans"].name ?? key,
+        name: data?.i18n['zh-hans'].name ?? key,
         max: curseValue * 0.9,
         min: curseValue * 1.1,
-        unit: data?.unit ?? "",
-      };
+        unit: data?.unit ?? '',
+      }
     }
   }
 
-  return result;
-};
+  return result
+}
 
 // ================ privates ===================
 
-export const getWeaponRivenDisposition = (name: string) => {
-  const normalizedName = normalizeName(name);
-  const normalRes = weaponRivenDispositionDict[normalizedName];
+export function getWeaponRivenDisposition(
+  name: string,
+): (typeof weaponRivenDispositionDict)[string] | undefined {
+  const normalizedName = normalizeName(name)
+  const normalRes = weaponRivenDispositionDict[normalizedName]
   if (normalRes) {
-    return normalRes;
+    return normalRes
   }
 
-  const withPrimeSuffix = normalizedName + "prime";
-  const withPrimeRes = weaponRivenDispositionDict[withPrimeSuffix];
+  const withPrimeSuffix = `${normalizedName}prime`
+  const withPrimeRes = weaponRivenDispositionDict[withPrimeSuffix]
   if (withPrimeRes) {
-    return withPrimeRes;
+    return withPrimeRes
   }
 
-  return undefined;
-};
+  return undefined
+}
 
-export const parseOCRResult = async (ocrResult: string[]) => {
-  const { globalRivenAttributeList } = await globalRivenAttribute.get();
+export async function parseOCRResult(ocrResult: string[]): Promise<
+  | {
+    name: string
+    attributes: {
+      attr: RivenAttribute
+      value: number
+      prefix: string
+    }[]
+  }
+  | undefined
+> {
+  const { globalRivenAttributeList } = await globalRivenAttribute.get()
 
-  const list = ocrResult;
+  const list = ocrResult
   if (!list.length) {
-    return;
+    return
   }
 
   function similarity(standard: string, input: string): number {
     if (!standard || !input) {
-      return 0;
+      return 0
     }
 
-    standard = normalizeName(standard);
-    input = normalizeName(input);
+    standard = normalizeName(standard)
+    input = normalizeName(input)
 
-    if (input === "伤害") {
-      return standard === "基础伤害" ? 1 : 0;
+    if (input === '伤害') {
+      return standard === '基础伤害' ? 1 : 0
     }
 
-    if (input === "弹药最大值") {
-      return standard === "弹药上限" ? 1 : 0;
+    if (input === '弹药最大值') {
+      return standard === '弹药上限' ? 1 : 0
     }
 
-    if (standard === "基础伤害" && input.match(/^伤害$|近战伤害/)) {
-      return 1;
+    if (standard === '基础伤害' && /^伤害$|近战伤害/.test(input)) {
+      return 1
     }
 
-    if (standard === "暴击率") {
-      standard = "暴击几率";
+    if (standard === '暴击率') {
+      standard = '暴击几率'
     }
 
     if (
-      standard.includes(input) ||
-      input.includes(standard) ||
-      standard.split("/").find((x) => !!x && input.includes(x))
+      standard.includes(input)
+      || input.includes(standard)
+      || standard.split('/').some(x => !!x && input.includes(x))
     ) {
-      return 1;
+      return 1
     }
 
-    const t = tokenSimilarity(standard, input);
-    const s = normalSimilarity(standard, input);
-    return Math.max(t, s);
+    const t = tokenSimilarity(standard, input)
+    const s = normalSimilarity(standard, input)
+    return Math.max(t, s)
   }
 
-  const texts = list;
+  const texts = list
   const attributes: {
-    attr: RivenAttribute;
-    value: number;
-    prefix: string;
-  }[] = [];
-  const statLines: string[] = [];
+    attr: RivenAttribute
+    value: number
+    prefix: string
+  }[] = []
+  const statLines: string[] = []
   for (const t of texts) {
-    if (!t || !t.match(/^[x+-]|^[0-9]/)) {
-      continue;
+    if (!t || !/^[x+-]|^\d/.test(t)) {
+      continue
     }
 
-    const prefix = t.match(/^[x+-]/) ? t[0] : "";
+    const prefix = /^[x+-]/.test(t) ? t[0] : ''
 
-    const attrNamePart = removeSpace(t ?? "").replace(/^[^一-龥]+/, "");
+    const attrNamePart = removeSpace(t ?? '').replace(/^[^\u4E00-\u9FA5]+/u, '')
     const attr = globalRivenAttributeList.find((a) => {
-      if (!a) return false;
+      if (!a)
+        return false
 
-      const zhName = a.i18n["zh-hans"]?.name;
-      if (!zhName) return false;
-      const sim = similarity(zhName, attrNamePart);
-      if (sim < 0.8) return false;
+      const zhName = a.i18n['zh-hans']?.name
+      if (!zhName)
+        return false
+      const sim = similarity(zhName, attrNamePart)
+      if (sim < 0.8)
+        return false
 
-      return true;
-    });
+      return true
+    })
 
     if (!attr) {
-      continue;
+      continue
     }
 
-    statLines.push(t);
+    statLines.push(t)
 
     const value = (function extractStatValue(text) {
       // Normalize
-      const t = text.replace(/\s+/g, "");
+      const t = text.replace(/\s+/g, '')
 
       // Case 1: multiply format like "x1.07"
-      const multMatch = t.match(/x(\d+(\.\d+)?)/i);
+      const multMatch = t.match(/x(\d+(?:\.\d+)?)/i)
       if (multMatch) {
         return {
-          value: parseFloat(multMatch[1]),
-          type: "multiply",
-        };
+          value: Number.parseFloat(multMatch[1]),
+          type: 'multiply',
+        }
       }
 
       // Case 2: percentage format like "+15.8%" or "-12%"
-      const percentMatch = t.match(/([+-]?\d+(\.\d+)?)%/);
+      const percentMatch = t.match(/([+-]?\d+(?:\.\d+)?)%/)
       if (percentMatch) {
         return {
-          value: parseFloat(percentMatch[1]),
-          type: "percent",
-        };
+          value: Number.parseFloat(percentMatch[1]),
+          type: 'percent',
+        }
       }
 
       // Case 3: plain number (rare but possible)
-      const numMatch = t.match(/([+-]?\d+(\.\d+)?)/);
+      const numMatch = t.match(/([+-]?\d+(?:\.\d+)?)/)
       if (numMatch) {
         return {
-          value: parseFloat(numMatch[1]),
-          type: "number",
-        };
+          value: Number.parseFloat(numMatch[1]),
+          type: 'number',
+        }
       }
 
-      return undefined;
-    })(t);
+      return undefined
+    })(t)
     if (!value) {
-      return undefined;
+      return undefined
     }
 
-    attributes.push({ attr, value: value.value, prefix });
+    attributes.push({ attr, value: value.value, prefix })
   }
 
   const weaponName = (function extractWeaponName(ocrData: string[]) {
@@ -591,130 +603,136 @@ export const parseOCRResult = async (ocrResult: string[]) => {
       /果/,
       /\)/,
       /\(/, // junk OCR fragments
-    ];
+    ]
 
     // Step 1: filter out obvious non-name items
     const candidates = ocrData.filter((str) => {
-      const s = str.trim();
+      const s = str.trim()
 
       // reject pure numbers
-      if (/^\d+$/.test(s)) return false;
+      if (/^\d+$/.test(s))
+        return false
 
       // reject lines with % or multipliers
-      if (/[+%]/.test(s)) return false;
+      if (/[+%]/.test(s))
+        return false
 
       // must contain at least some letters (Latin or Chinese)
-      if (!/[A-Za-z\u4e00-\u9fa5]/.test(s)) return false;
+      if (!/[A-Z\u4E00-\u9FA5]/i.test(s))
+        return false
 
       // reject anything containing stat words or junk
-      if (rejectPatterns.some((p) => p.test(s))) return false;
+      if (rejectPatterns.some(p => p.test(s)))
+        return false
 
-      return true;
-    });
+      return true
+    })
 
     // Step 2: merge adjacent fragments (common OCR issue)
-    const merged = candidates.join("");
+    const merged = candidates.join('')
 
-    function removeRivenSuffix(name: string) {
+    function removeRivenSuffix(name: string): string {
       // Remove spaces
-      const s = name.replace(/\s+/g, "");
+      const s = name.replace(/\s+/g, '')
 
       // Pattern: <latin>-<latin> at the end
       // Example: Pura-cronitis | Acricron | Visisaticron
-      const rivenPattern = /[A-Za-z]+-?[A-Za-z]+$/;
+      const rivenPattern = /(?:[A-Z]+-[A-Z]+|[A-Z]{2,})$/i
 
-      return s.replace(rivenPattern, "");
+      return s.replace(rivenPattern, '')
     }
 
-    return merged ? removeRivenSuffix(merged) : null;
-  })(texts.filter((t) => !statLines.some((l) => l === t)));
+    return merged ? removeRivenSuffix(merged) : null
+  })(texts.filter(t => !statLines.includes(t)))
 
   if (!weaponName || !attributes.length) {
-    return undefined;
+    return undefined
   }
 
   return {
     name: weaponName,
     attributes,
-  };
-};
+  }
+}
 
-export const analyzeRivenStat = (parseResult: {
-  name: string;
+export function analyzeRivenStat(parseResult: {
+  name: string
   attributes: {
-    attr: RivenAttribute;
-    value: number;
-    prefix: string;
-  }[];
-}): RivenStatAnalyzeResult | string => {
-  const weaponRiven = getWeaponRivenDisposition(parseResult.name);
+    attr: RivenAttribute
+    value: number
+    prefix: string
+  }[]
+}): RivenStatAnalyzeResult | string {
+  const weaponRiven = getWeaponRivenDisposition(parseResult.name)
   if (!weaponRiven) {
-    return "未找到武器: " + parseResult.name;
+    return `未找到武器: ${parseResult.name}`
   }
 
-  const disposition = weaponRiven.calc.disposition;
-  const weaponType = weaponRiven.calc.riventype;
+  const disposition = weaponRiven.calc.disposition
+  const weaponType = weaponRiven.calc.riventype
   const rivenStatCountType: RivenStatCountType = (function () {
     if (parseResult.attributes.length === 4) {
-      return "31";
-    } else if (parseResult.attributes.length === 2) {
-      return "2";
+      return '31'
+    }
+    else if (parseResult.attributes.length === 2) {
+      return '2'
     }
 
-    const firstStat = parseResult.attributes[0];
-    const firstStatBaseValue =
-      rivenAttrValueDict[weaponType][
-        normalizeName(firstStat.attr.i18n["en"].name)
-      ];
+    const firstStat = parseResult.attributes[0]
+    const firstStatBaseValue
+      = rivenAttrValueDict[weaponType][
+        normalizeName(firstStat.attr.i18n.en.name)
+      ]
 
     // Use the lowest value of 2_1 type riven to check the first stat
     if (firstStat.value >= firstStatBaseValue * 1.2375 * 0.9 * disposition) {
-      return "21";
-    } else {
-      return "3";
+      return '21'
     }
-  })();
+    else {
+      return '3'
+    }
+  })()
 
-  const { buffFactor, buffCount, curseFactor, curseCount } =
-    rivenStatFixFactor[rivenStatCountType];
+  const { buffFactor, buffCount, curseFactor, curseCount }
+    = rivenStatFixFactor[rivenStatCountType]
 
-  const buffs: RivenStatAnalyzsis[] = [];
+  const buffs: RivenStatAnalyzsis[] = []
   for (let i = 0; i < buffCount; i++) {
-    const attr = parseResult.attributes[i];
-    const baseValue =
-      rivenAttrValueDict[weaponType][normalizeName(attr.attr.i18n["en"].name)];
-    const value = attr.attr.unit === "multiply" ? attr.value - 1 : attr.value;
-    const standardValue = baseValue * buffFactor * disposition;
-    const percent = (value - standardValue) / standardValue;
+    const attr = parseResult.attributes[i]
+    const baseValue
+      = rivenAttrValueDict[weaponType][normalizeName(attr.attr.i18n.en.name)]
+    const value = attr.attr.unit === 'multiply' ? attr.value - 1 : attr.value
+    const standardValue = baseValue * buffFactor * disposition
+    const percent = (value - standardValue) / standardValue
     buffs.push({
-      name: attr.attr.i18n["zh-hans"].name,
+      name: attr.attr.i18n['zh-hans'].name,
       unit: attr.attr.unit,
       value: attr.value,
       percent,
       max: standardValue * 1.1,
       min: standardValue * 0.9,
-    });
+    })
   }
 
-  const curses: RivenStatAnalyzsis[] = [];
+  const curses: RivenStatAnalyzsis[] = []
   if (curseCount > 0) {
     for (let i = buffCount; i < buffCount + curseCount; i++) {
-      const attr = parseResult.attributes[i];
-      const baseValue =
-        rivenAttrValueDict[weaponType][
-          normalizeName(attr.attr.i18n["en"].name)
-        ];
-      const value = attr.attr.unit === "multiply" ? attr.value - 1 : attr.value;
-      const standardValue = baseValue * curseFactor * disposition;
-      const percent = ((value - standardValue) / standardValue) * -1;
+      const attr = parseResult.attributes[i]
+      const baseValue
+        = rivenAttrValueDict[weaponType][
+          normalizeName(attr.attr.i18n.en.name)
+        ]
+      const value = attr.attr.unit === 'multiply' ? attr.value - 1 : attr.value
+      const standardValue = baseValue * curseFactor * disposition
+      const percent = ((value - standardValue) / standardValue) * -1
       curses.push({
-        name: attr.attr.i18n["zh-hans"].name,
+        name: attr.attr.i18n['zh-hans'].name,
         unit: attr.attr.unit,
         value: attr.value,
         percent,
         max: standardValue * 0.9,
         min: standardValue * 1.1,
-      });
+      })
     }
   }
 
@@ -723,5 +741,5 @@ export const analyzeRivenStat = (parseResult: {
     disposition,
     buffs,
     curses,
-  };
-};
+  }
+}

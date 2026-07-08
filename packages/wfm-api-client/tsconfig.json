@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "lib",
-    "target": "es2022",
-    "module": "commonjs",
-    "declaration": true,
-    "composite": true,
     "incremental": true,
-    "skipLibCheck": true,
+    "composite": true,
+    "target": "esnext",
+    "rootDir": "src",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "declaration": true,
+    "outDir": "lib",
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "strict": true
+    "skipLibCheck": true
   },
   "include": ["src"]
 }

@@ -109,11 +109,11 @@ Detailed guidance for AI assistants and contributors lives in **[AGENTS.md](./AG
 Use the **single global logger** — never `console.log` / `console.error`:
 
 ```typescript
-import { logger } from "../utils";
+import { logger } from '../utils'
 
-logger.info("message");
-logger.warn("warning");
-logger.error("error");
+logger.info('message')
+logger.warn('warning')
+logger.error('error')
 ```
 
 ### HTTP Requests
@@ -121,11 +121,11 @@ logger.error("error");
 Always use the shared wrappers from `src/utils/http.ts`:
 
 ```typescript
-import { fetchAsyncData } from "../utils";
+import { fetchAsyncData } from '../utils'
 
-const data = await fetchAsyncData<MyType>("https://api.example.com/data");
+const data = await fetchAsyncData<MyType>('https://api.example.com/data')
 if (!data) {
-  return "获取数据失败";  // handle undefined
+  return '获取数据失败' // handle undefined
 }
 ```
 
@@ -178,25 +178,25 @@ Mocha runs root-level hooks before **all** test files in the suite, which causes
 ✅ Correct:
 
 ```typescript
-describe("My Feature", function () {
-  this.timeout(10000);
+describe('My Feature', function () {
+  this.timeout(10000)
 
   before(() => {
-    overrideGlobalItemData(/* ... */);
-  });
+    overrideGlobalItemData(/* ... */)
+  })
 
-  it("should work", () => { /* ... */ });
-});
+  it('should work', () => { /* ... */ })
+})
 ```
 
 ❌ Wrong (will break other test files):
 
 ```typescript
 before(() => {
-  overrideGlobalItemData(/* ... */);
-});
+  overrideGlobalItemData(/* ... */)
+})
 
-describe("My Feature", () => { /* ... */ });
+describe('My Feature', () => { /* ... */ })
 ```
 
 ---

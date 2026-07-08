@@ -1,41 +1,42 @@
-import { wfmClient } from "../../infrastructure/wfm-client";
-import type { RivenAttribute } from "../../types/wfm";
-import { createAsyncCache, listToDict } from "../../utils";
+import type { RivenAttribute } from '../../types/wfm'
+import { wfmClient } from '../../infrastructure/wfm-client'
+import { createAsyncCache, listToDict } from '../../utils'
 
-export const globalRivenAttributeFactory = async (
-  rivenAttributeData?: RivenAttribute[]
-) => {
-  rivenAttributeData ??= await wfmClient.rivens.getAttributes();
+export async function globalRivenAttributeFactory(
+  rivenAttributeData?: RivenAttribute[],
+): Promise<{
+  globalRivenAttributeList: RivenAttribute[]
+  globalRivenAttributeDict: Record<string, RivenAttribute>
+}> {
+  rivenAttributeData ??= await wfmClient.rivens.getAttributes()
   if (!rivenAttributeData) {
     throw new Error(
-      "Failed to fetch riven attributes from Warframe Market API."
-    );
+      'Failed to fetch riven attributes from Warframe Market API.',
+    )
   }
-  const data = rivenAttributeData;
+  const data = rivenAttributeData
 
-  const globalRivenAttributeList = data;
-  const globalRivenAttributeDict = listToDict<RivenAttribute>(data, (a) => [
+  const globalRivenAttributeList = data
+  const globalRivenAttributeDict = listToDict<RivenAttribute>(data, a => [
     a.slug,
-  ]);
+  ])
 
   return {
     globalRivenAttributeList,
     globalRivenAttributeDict,
-  };
-};
+  }
+}
 
 export let globalRivenAttribute = createAsyncCache(
   globalRivenAttributeFactory,
-  -1
-);
+  -1,
+)
 
-export const overrideGlobalRivenAttribute = (
-  cache: AsyncCache<{
-    globalRivenAttributeList: RivenAttribute[];
-    globalRivenAttributeDict: {
-      [key: string]: RivenAttribute;
-    };
-  }>
-) => {
-  globalRivenAttribute = cache;
-};
+export function overrideGlobalRivenAttribute(cache: AsyncCache<{
+  globalRivenAttributeList: RivenAttribute[]
+  globalRivenAttributeDict: {
+    [key: string]: RivenAttribute
+  }
+}>): void {
+  globalRivenAttribute = cache
+}
