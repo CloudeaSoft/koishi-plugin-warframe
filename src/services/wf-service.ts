@@ -101,7 +101,7 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
   }
 
   const currentHourTimeStamp = Math.floor(
-    new Date().setMinutes(0, 0, 0) / 1000,
+    new Date().setUTCMinutes(0, 0, 0) / 1000,
   )
   const currentHourIndex = arbitrationSchedule.findIndex(
     a => a.time === currentHourTimeStamp,
