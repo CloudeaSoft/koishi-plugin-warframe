@@ -31,4 +31,13 @@ describe('asset ownership boundary', () => {
     expect(source).to.not.include('../../assets/rivencalc.json')
     expect(source).to.include('../../assets/rivenCalcData')
   })
+
+  it('keeps extra dictionary resource loading inside the assets folder', () => {
+    const root = packageRoot()
+    const source = readFileSync(resolve(root, 'src/services/wf-service.ts'), 'utf8')
+
+    expect(source).to.not.include('../assets/en.json')
+    expect(source).to.not.include('../assets/zh.json')
+    expect(source).to.include('../assets/extraDictData')
+  })
 })

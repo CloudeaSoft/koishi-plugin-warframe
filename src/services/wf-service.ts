@@ -20,8 +20,7 @@ import {
   incarnons as incarnonRewards,
   warframes as warframeRewards,
 } from '../assets/circuitRewardsData'
-import dict_en_ex from '../assets/en.json'
-import dict_zh_ex from '../assets/zh.json'
+import { dictEnExtra, dictZhExtra } from '../assets/extraDictData'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
 import { globalWorldState } from '../data/wf/globalWorldState'
 import { relics } from '../data/wf/relics'
@@ -155,21 +154,21 @@ export async function getWeekly(): Promise<string | {
     name: string,
     prefix: string,
   ): ArchiMedeaDebuff => {
-    const keyToName = dict_zh_ex[`${prefix}${key}` as keyof typeof dict_zh_ex]
+    const keyToName = dictZhExtra[`${prefix}${key}`]
 
     if (!keyToName) {
-      for (const transKey in dict_en_ex) {
-        if (dict_en_ex[transKey as keyof typeof dict_en_ex] === name) {
+      for (const transKey in dictEnExtra) {
+        if (dictEnExtra[transKey] === name) {
           return {
-            name: dict_zh_ex[transKey as keyof typeof dict_zh_ex],
-            desc: dict_zh_ex[(`${transKey}_Desc`) as keyof typeof dict_zh_ex],
+            name: dictZhExtra[transKey],
+            desc: dictZhExtra[`${transKey}_Desc`],
           }
         }
       }
     }
 
     const riskDesc
-      = dict_zh_ex[`${prefix}${key}_Desc` as keyof typeof dict_zh_ex]
+      = dictZhExtra[`${prefix}${key}_Desc`]
     return {
       name: keyToName,
       desc: riskDesc,

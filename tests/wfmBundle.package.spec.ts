@@ -37,4 +37,14 @@ describe('wfm-api-client bundle behavior', () => {
     expect(bundle).to.not.include('// src/assets/rivencalc.json')
     expect(existsSync(resolve(root, 'lib/assets/rivencalc.json'))).to.equal(true)
   })
+
+  it('keeps extra dictionary json files outside the plugin bundle', () => {
+    const root = packageRoot()
+    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
+
+    expect(bundle).to.not.include('// src/assets/en.json')
+    expect(bundle).to.not.include('// src/assets/zh.json')
+    expect(existsSync(resolve(root, 'lib/assets/en.json'))).to.equal(true)
+    expect(existsSync(resolve(root, 'lib/assets/zh.json'))).to.equal(true)
+  })
 })
