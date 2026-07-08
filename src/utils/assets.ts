@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { basename, dirname, resolve, sep } from 'node:path'
+import { basename, resolve, sep } from 'node:path'
 
 const jsonCache = new Map<string, unknown>()
 const textCache = new Map<string, string>()
