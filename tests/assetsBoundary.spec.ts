@@ -48,4 +48,12 @@ describe('asset ownership boundary', () => {
     expect(source).to.not.include('../../assets/arbys')
     expect(source).to.include('../../assets/arbitrationScheduleData')
   })
+
+  it('keeps arbitration reward resource loading inside the assets folder', () => {
+    const root = packageRoot()
+    const source = readFileSync(resolve(root, 'src/services/wf-service.ts'), 'utf8')
+
+    expect(source).to.not.include('from \'../assets/arbyRewards\'')
+    expect(source).to.include('../assets/arbyRewardsData')
+  })
 })

@@ -65,4 +65,12 @@ describe('wfm-api-client bundle behavior', () => {
     expect(existsSync(resolve(root, 'lib/assets/baro.txt'))).to.equal(true)
     expect(existsSync(resolve(root, 'lib/assets/baroParsed.json'))).to.equal(true)
   })
+
+  it('keeps arbitration rewards outside the plugin bundle', () => {
+    const root = packageRoot()
+    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
+
+    expect(bundle).to.not.include('SolNode147: 400')
+    expect(existsSync(resolve(root, 'lib/assets/arbyRewards.json'))).to.equal(true)
+  })
 })

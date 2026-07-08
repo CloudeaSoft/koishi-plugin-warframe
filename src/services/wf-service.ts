@@ -14,7 +14,7 @@ import {
   ExportRegions,
 } from 'warframe-public-export-plus'
 
-import arbyRewards from '../assets/arbyRewards'
+import arbyRewards from '../assets/arbyRewardsData'
 
 import {
   incarnons as incarnonRewards,
@@ -111,7 +111,7 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
     currentHourIndex + 24 * day,
   )
   return weekArbys
-    .filter(a => arbyRewards[a.node as keyof typeof arbyRewards])
+    .filter(a => arbyRewards[a.node])
     .map((a) => {
       const obj = regionToShort(ExportRegions[a.node], dict_zh)
       return {
@@ -127,7 +127,7 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
           // hourCycle: 'h23' // 另一种设置 24 小时制的方法
           timeZone: 'Asia/Shanghai',
         }),
-        rewards: arbyRewards[a.node as keyof typeof arbyRewards],
+        rewards: arbyRewards[a.node],
       }
     })
 }
