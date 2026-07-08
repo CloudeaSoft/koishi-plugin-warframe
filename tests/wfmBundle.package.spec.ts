@@ -21,4 +21,12 @@ describe('wfm-api-client bundle behavior', () => {
     expect(bundle).to.not.include('// src/assets/circuitRewards.json')
     expect(existsSync(resolve(root, 'lib/assets/circuitRewards.json'))).to.equal(true)
   })
+
+  it('keeps riven attribute value json outside the plugin bundle', () => {
+    const root = packageRoot()
+    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
+
+    expect(bundle).to.not.include('// src/assets/rivenAttrValues.json')
+    expect(existsSync(resolve(root, 'lib/assets/rivenAttrValues.json'))).to.equal(true)
+  })
 })

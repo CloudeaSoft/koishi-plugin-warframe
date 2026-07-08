@@ -13,6 +13,14 @@ describe('asset ownership boundary', () => {
     const service = readFileSync(resolve(root, 'src/services/wf-service.ts'), 'utf8')
 
     expect(service).to.not.include('../assets/circuitRewards.json')
-    expect(service).to.include('../assets/circuitRewards')
+    expect(service).to.include('../assets/circuitRewardsData')
+  })
+
+  it('keeps riven attribute value resource loading inside the assets folder', () => {
+    const root = packageRoot()
+    const source = readFileSync(resolve(root, 'src/data/wf/rivenBaseValues.ts'), 'utf8')
+
+    expect(source).to.not.include('../../assets/rivenAttrValues.json')
+    expect(source).to.include('../../assets/rivenAttrValuesData')
   })
 })

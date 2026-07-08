@@ -19,7 +19,7 @@ import arbyRewards from '../assets/arbyRewards'
 import {
   incarnons as incarnonRewards,
   warframes as warframeRewards,
-} from '../assets/circuitRewards'
+} from '../assets/circuitRewardsData'
 import dict_en_ex from '../assets/en.json'
 import dict_zh_ex from '../assets/zh.json'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
