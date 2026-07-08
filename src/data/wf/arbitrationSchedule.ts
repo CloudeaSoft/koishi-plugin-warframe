@@ -1,4 +1,4 @@
-import { arbitrationScheduleText } from '../../assets/arbitrationScheduleData'
+import { arbitrationScheduleText } from '../../assets/index'
 
 export const arbitrationSchedule: ArbitrationShort[] = arbitrationScheduleText
   .split('\n')

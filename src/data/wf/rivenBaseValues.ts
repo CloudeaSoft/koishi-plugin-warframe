@@ -1,4 +1,4 @@
-import { rivenAttrValues } from '../../assets/rivenAttrValuesData'
+import { rivenAttrValues } from '../../assets/index'
 import { normalizeName } from '../../utils'
 
 export const rivenAttrValueDict: Record<

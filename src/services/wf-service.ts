@@ -14,13 +14,13 @@ import {
   ExportRegions,
 } from 'warframe-public-export-plus'
 
-import arbyRewards from '../assets/arbyRewardsData'
-
 import {
+  arbyRewards,
+  dictEnExtra,
+  dictZhExtra,
   incarnons as incarnonRewards,
   warframes as warframeRewards,
-} from '../assets/circuitRewardsData'
-import { dictEnExtra, dictZhExtra } from '../assets/extraDictData'
+} from '../assets/index'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
 import { globalWorldState } from '../data/wf/globalWorldState'
 import { relics } from '../data/wf/relics'

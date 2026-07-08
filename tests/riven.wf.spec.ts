@@ -2,7 +2,7 @@ import type { ItemShort, RivenAttribute } from '../src/types/wfm'
 
 import { expect } from 'chai'
 import { dict_en, ExportWeapons } from 'warframe-public-export-plus'
-import { rivenCalc } from '../src/assets/rivenCalcData'
+import { rivenCalc } from '../src/assets/index'
 
 import { rivenAttrValueDict } from '../src/data/wf/rivenBaseValues'
 import {

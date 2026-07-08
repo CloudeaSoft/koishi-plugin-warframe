@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Baro, BaroParsed } from '../src/assets/baro'
+import { Baro, BaroParsed } from '../src/assets/index'
 
 describe('baro static assets', () => {
   it('loads baro lua text from an asset file', () => {
