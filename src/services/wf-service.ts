@@ -14,14 +14,13 @@ import {
   ExportRegions,
 } from 'warframe-public-export-plus'
 
-import arbyRewards from '../assets/arbyRewards'
-
 import {
+  arbyRewards,
+  dictEnExtra,
+  dictZhExtra,
   incarnons as incarnonRewards,
   warframes as warframeRewards,
-} from '../assets/circuitRewards.json'
-import dict_en_ex from '../assets/en.json'
-import dict_zh_ex from '../assets/zh.json'
+} from '../assets/index'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
 import { globalWorldState } from '../data/wf/globalWorldState'
 import { relics } from '../data/wf/relics'
@@ -112,7 +111,7 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
     currentHourIndex + 24 * day,
   )
   return weekArbys
-    .filter(a => arbyRewards[a.node as keyof typeof arbyRewards])
+    .filter(a => arbyRewards[a.node])
     .map((a) => {
       const obj = regionToShort(ExportRegions[a.node], dict_zh)
       return {
@@ -128,7 +127,7 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
           // hourCycle: 'h23' // 另一种设置 24 小时制的方法
           timeZone: 'Asia/Shanghai',
         }),
-        rewards: arbyRewards[a.node as keyof typeof arbyRewards],
+        rewards: arbyRewards[a.node],
       }
     })
 }
@@ -155,21 +154,21 @@ export async function getWeekly(): Promise<string | {
     name: string,
     prefix: string,
   ): ArchiMedeaDebuff => {
-    const keyToName = dict_zh_ex[`${prefix}${key}` as keyof typeof dict_zh_ex]
+    const keyToName = dictZhExtra[`${prefix}${key}`]
 
     if (!keyToName) {
-      for (const transKey in dict_en_ex) {
-        if (dict_en_ex[transKey as keyof typeof dict_en_ex] === name) {
+      for (const transKey in dictEnExtra) {
+        if (dictEnExtra[transKey] === name) {
           return {
-            name: dict_zh_ex[transKey as keyof typeof dict_zh_ex],
-            desc: dict_zh_ex[(`${transKey}_Desc`) as keyof typeof dict_zh_ex],
+            name: dictZhExtra[transKey],
+            desc: dictZhExtra[`${transKey}_Desc`],
           }
         }
       }
     }
 
     const riskDesc
-      = dict_zh_ex[`${prefix}${key}_Desc` as keyof typeof dict_zh_ex]
+      = dictZhExtra[`${prefix}${key}_Desc`]
     return {
       name: keyToName,
       desc: riskDesc,

@@ -1,6 +1,6 @@
-import arbys from '../../assets/arbys'
+import { arbitrationScheduleText } from '../../assets/index'
 
-export const arbitrationSchedule: ArbitrationShort[] = arbys
+export const arbitrationSchedule: ArbitrationShort[] = arbitrationScheduleText
   .split('\n')
   .map(line => line.split(','))
   .filter(arr => arr.length === 2)

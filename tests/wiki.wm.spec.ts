@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Baro } from '../src/assets/baro'
+import { Baro } from '../src/assets/index'
 import { getVoidTraderHistory } from '../src/infrastructure/wf/wf-api'
 
 describe('wiki void trader history parse test', async () => {

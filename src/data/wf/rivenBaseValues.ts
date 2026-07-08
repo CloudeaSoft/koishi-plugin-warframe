@@ -1,4 +1,4 @@
-import rivenAttrValues from '../../assets/rivenAttrValues.json'
+import { rivenAttrValues } from '../../assets/index'
 import { normalizeName } from '../../utils'
 
 export const rivenAttrValueDict: Record<
@@ -7,7 +7,7 @@ export const rivenAttrValueDict: Record<
 > = (() => {
   const dict: Record<string, Record<string, number>> = {}
   for (const key in rivenAttrValues) {
-    const attrs = rivenAttrValues[key as keyof typeof rivenAttrValues]
+    const attrs = rivenAttrValues[key]
     dict[key] = {}
     for (const attrKey in attrs) {
       const removeDamageSuffix
@@ -18,7 +18,7 @@ export const rivenAttrValueDict: Record<
       const wfmKey = removeDamageSuffix
         ? normalizeName(attrKey.replace('Damage', ''))
         : normalizeName(attrKey)
-      dict[key][wfmKey] = attrs[attrKey as keyof typeof attrs]
+      dict[key][wfmKey] = attrs[attrKey]
     }
   }
   return dict
