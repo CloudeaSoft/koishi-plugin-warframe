@@ -4,7 +4,7 @@ import { cwd } from 'node:process'
 
 const sourceRoot = join(cwd(), 'src/assets')
 const targetRoot = join(cwd(), 'lib/assets')
-const copiedExtensions = new Set(['.json', '.txt'])
+const copiedExtensions = new Set(['.json', '.txt', '.css', '.html', '.svg'])
 
 function copyAssets(source, target) {
   if (!existsSync(source)) {
