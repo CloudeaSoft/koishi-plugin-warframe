@@ -1,3 +1,5 @@
+import type { OcrAPISecret } from '../types/config'
+
 import type {
   RivenStatAnalyzeResult,
   RivenStatAnalyzsis,
@@ -5,20 +7,19 @@ import type {
   RivenStatResult,
   RivenWeaponType,
 } from '../types/wf/riven'
-
 import type { RivenAttribute } from '../types/wfm'
 import {
   dict_zh,
   ExportMissionTypes,
   ExportRegions,
 } from 'warframe-public-export-plus'
+
 import arbyRewards from '../assets/arbyRewards'
 
 import {
   incarnons as incarnonRewards,
   warframes as warframeRewards,
 } from '../assets/circuitRewards.json'
-
 import dict_en_ex from '../assets/en.json'
 import dict_zh_ex from '../assets/zh.json'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'

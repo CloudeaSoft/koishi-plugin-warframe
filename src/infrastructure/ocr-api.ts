@@ -1,3 +1,4 @@
+import type { OcrAPISecret } from '../types/config'
 import { Buffer } from 'node:buffer'
 import crypto from 'node:crypto'
 import { createCache } from 'async-cache-dedupe'

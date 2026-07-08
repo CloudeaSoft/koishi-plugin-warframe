@@ -15,10 +15,3 @@ export interface PluginDependencies {
   logger: Logger
   render: (element: Element) => Promise<string>
 }
-
-declare global {
-  interface OcrAPISecret {
-    id: string
-    key: string
-  }
-}
