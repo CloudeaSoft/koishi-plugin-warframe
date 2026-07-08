@@ -55,4 +55,14 @@ describe('wfm-api-client bundle behavior', () => {
     expect(bundle).to.not.include('1727884800,SettlementNode11')
     expect(existsSync(resolve(root, 'lib/assets/arbys.txt'))).to.equal(true)
   })
+
+  it('keeps baro assets outside the plugin bundle', () => {
+    const root = packageRoot()
+    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
+
+    expect(bundle).to.not.include('10 x Ki\'Teer Fireworks')
+    expect(bundle).to.not.include('2022-06-17')
+    expect(existsSync(resolve(root, 'lib/assets/baro.txt'))).to.equal(true)
+    expect(existsSync(resolve(root, 'lib/assets/baroParsed.json'))).to.equal(true)
+  })
 })
