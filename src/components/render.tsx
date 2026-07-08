@@ -15,10 +15,10 @@ const slots = {
 
 function htmlString(htmlString: string, title: string = 'title'): string {
   return template
-    .replace(slots.body, htmlString)
-    .replace(slots.title, title)
-    .replace(slots.style, style)
-    .replace(slots.svg, svg)
+    .replace(slots.body, () => htmlString)
+    .replace(slots.title, () => title)
+    .replace(slots.style, () => style)
+    .replace(slots.svg, () => svg)
 }
 
 export async function generateImageOutput(
