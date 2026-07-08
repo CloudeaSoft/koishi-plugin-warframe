@@ -21,6 +21,25 @@ describe('render static assets', () => {
     expect(source).to.include('render.html')
   })
 
+  it('uses valid and consistently named render template slots', () => {
+    const root = packageRoot()
+    const source = readFileSync(resolve(root, 'src/components/render.tsx'), 'utf8')
+    const template = readFileSync(resolve(root, 'src/assets/render.html'), 'utf8')
+
+    expect(template).to.include('__WARFRAME_RENDER_SLOT_TITLE__')
+    expect(template).to.include('/* __WARFRAME_RENDER_SLOT_STYLE__ */')
+    expect(template).to.include('<!-- __WARFRAME_RENDER_SLOT_SVG__ -->')
+    expect(template).to.include('<!-- __WARFRAME_RENDER_SLOT_BODY__ -->')
+    expect(template).to.not.include('{{')
+    expect(template).to.not.include('}}')
+
+    expect(source).to.include('const slots = {')
+    expect(source).to.include('__WARFRAME_RENDER_SLOT_TITLE__')
+    expect(source).to.include('/* __WARFRAME_RENDER_SLOT_STYLE__ */')
+    expect(source).to.include('<!-- __WARFRAME_RENDER_SLOT_SVG__ -->')
+    expect(source).to.include('<!-- __WARFRAME_RENDER_SLOT_BODY__ -->')
+  })
+
   it('copies render static assets into the build output', () => {
     const root = packageRoot()
     const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')

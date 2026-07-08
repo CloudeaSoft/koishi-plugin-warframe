@@ -6,12 +6,19 @@ const style = loadAssetText('render.css')
 const svg = loadAssetText('render-icons.svg')
 const template = loadAssetText('render.html')
 
+const slots = {
+  body: '<!-- __WARFRAME_RENDER_SLOT_BODY__ -->',
+  title: '__WARFRAME_RENDER_SLOT_TITLE__',
+  style: '/* __WARFRAME_RENDER_SLOT_STYLE__ */',
+  svg: '<!-- __WARFRAME_RENDER_SLOT_SVG__ -->',
+} as const
+
 function htmlString(htmlString: string, title: string = 'title'): string {
   return template
-    .replace('{{htmlString}}', htmlString)
-    .replace('{{title}}', title)
-    .replace('{{style}}', style)
-    .replace('{{svg}}', svg)
+    .replace(slots.body, htmlString)
+    .replace(slots.title, title)
+    .replace(slots.style, style)
+    .replace(slots.svg, svg)
 }
 
 export async function generateImageOutput(
