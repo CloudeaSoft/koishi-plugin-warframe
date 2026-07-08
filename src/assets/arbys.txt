@@ -1,5 +1,4 @@
-const arbys: string
-  = `1727884800,SettlementNode11
+1727884800,SettlementNode11
 1727888400,ClanNode10
 1727892000,SolNode64
 1727895600,SolNode305
@@ -44055,6 +44054,3 @@ const arbys: string
 1886475600,SolNode224
 1886479200,ClanNode12
 1886482800,SolNode707
-`
-
-export default arbys

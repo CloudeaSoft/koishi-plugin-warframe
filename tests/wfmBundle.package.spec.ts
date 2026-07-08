@@ -47,4 +47,12 @@ describe('wfm-api-client bundle behavior', () => {
     expect(existsSync(resolve(root, 'lib/assets/en.json'))).to.equal(true)
     expect(existsSync(resolve(root, 'lib/assets/zh.json'))).to.equal(true)
   })
+
+  it('keeps arbitration schedule text outside the plugin bundle', () => {
+    const root = packageRoot()
+    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
+
+    expect(bundle).to.not.include('1727884800,SettlementNode11')
+    expect(existsSync(resolve(root, 'lib/assets/arbys.txt'))).to.equal(true)
+  })
 })

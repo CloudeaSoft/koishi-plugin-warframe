@@ -40,4 +40,12 @@ describe('asset ownership boundary', () => {
     expect(source).to.not.include('../assets/zh.json')
     expect(source).to.include('../assets/extraDictData')
   })
+
+  it('keeps arbitration schedule text loading inside the assets folder', () => {
+    const root = packageRoot()
+    const source = readFileSync(resolve(root, 'src/data/wf/arbitrationSchedule.ts'), 'utf8')
+
+    expect(source).to.not.include('../../assets/arbys')
+    expect(source).to.include('../../assets/arbitrationScheduleData')
+  })
 })
