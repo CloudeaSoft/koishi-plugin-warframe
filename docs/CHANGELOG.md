@@ -1,3 +1,5 @@
+## [1.5.6](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.5.5...v1.5.6) (2026-07-08)
+
 ## [1.5.5](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.5.4...v1.5.5) (2026-07-08)
 
 ## [1.5.4](https://github.com/CloudeaSoft/koishi-plugin-warframe/compare/v1.5.3...v1.5.4) (2026-07-07)
