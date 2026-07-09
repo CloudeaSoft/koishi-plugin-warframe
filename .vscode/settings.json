@@ -36,5 +36,5 @@
     "yaml"
   ],
   // Use the project's typescript version
-  "js/ts.tsdk.path": "node_modules/typescript/lib"
+  "js/ts.tsdk.path": "../../node_modules/typescript/lib"
 }
