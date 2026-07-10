@@ -9,6 +9,7 @@ import {
   RivenStatComponent,
   VoidTraderComponent,
   WeeklyComponent,
+  WeeklyRivenComponent,
 } from '../components/wf'
 import {
   applyRelicData,
@@ -23,6 +24,7 @@ import {
   getSteelPathFissures,
   getVoidTrader,
   getWeekly,
+  getWeeklyRivens,
 } from '../services'
 
 export function createWfCommands(deps: PluginDependencies): {
@@ -41,6 +43,7 @@ export function createWfCommands(deps: PluginDependencies): {
     disposition: number,
   ) => Promise<string>
   weeklyCommand: (_action: Argv) => Promise<string>
+  weeklyRivenCommand: (_action: Argv, minPrice?: number) => Promise<string>
   environmentCommand: () => Promise<string>
 } {
   const { config, render } = deps
@@ -189,6 +192,16 @@ export function createWfCommands(deps: PluginDependencies): {
           result.temporalArchimedea,
         ),
       )
+    },
+
+    weeklyRivenCommand: async (_action: Argv, minPrice?: number) => {
+      const threshold = minPrice && minPrice > 0 ? minPrice : 100
+      const result = await getWeeklyRivens(threshold)
+      if (result.length === 0) {
+        return '没有找到符合条件的紫卡参考数据'
+      }
+
+      return render(WeeklyRivenComponent(result.slice(0, 20), threshold))
     },
 
     environmentCommand: async () => {

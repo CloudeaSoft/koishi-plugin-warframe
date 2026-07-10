@@ -1,4 +1,5 @@
 import type { Element } from 'koishi'
+import type { WeeklyRiven } from 'warframe-weekly-rivens'
 import type { RivenStatAnalyzeResult, RivenStatResult } from '../types/wf/riven'
 import type { RivenAttributeUnit } from '../types/wfm'
 import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from '../utils'
@@ -348,6 +349,145 @@ export function FissureComponent(fissures: Fissure[], type: 'fissure' | 'sp-fiss
       </ul>
       <div style="margin-top: 30px; font-size: 30px;">
         注: 该功能的数据有一定延迟
+      </div>
+    </div>
+  )
+}
+
+export function WeeklyRivenComponent(
+  items: WeeklyRiven[],
+  minPrice: number,
+): Element {
+  const formatPrice = (value: number): string =>
+    Number.isInteger(value) ? value.toString() : value.toFixed(1)
+
+  return (
+    <div
+      style={`
+        color: #333333;
+        line-height: 1.5;
+        font-size: 14px;
+        background: linear-gradient(135deg, #f5f0e8 0%, #fff8f0 100%);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      `}
+    >
+      <h1
+        style={`
+          font-size: 22px;
+          font-weight: bold;
+          color: #1a1a1a;
+          margin: 0 0 16px 0;
+          padding-bottom: 12px;
+          border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+          text-align: center;
+        `}
+      >
+        每周紫卡交易参考 (零洗中位价 &ge;
+        {' '}
+        {minPrice}
+        P)
+      </h1>
+      <div
+        style={`
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        `}
+      >
+        {items.map((item, index) => {
+          const weaponName = item.compatibility
+            ? `${item.compatibility}`
+            : item.itemType.replace(' Riven Mod', '')
+          const tierNum = index + 1
+          const tierColors = ['#ffd700', '#c0c0c0', '#cd7f32']
+          const tierColor = tierNum <= 1
+            ? tierColors[0]
+            : tierNum <= 3 ? tierColors[1] : tierColors[2]
+
+          return (
+            <div
+              style={`
+                background-color: #ffffff;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                border-radius: 8px;
+                padding: 10px 14px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-left: 4px solid ${tierColor};
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+              `}
+            >
+              <div
+                style={`
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                `}
+              >
+                <span
+                  style={`
+                    font-weight: bold;
+                    color: ${tierColor};
+                    font-size: 16px;
+                    min-width: 24px;
+                  `}
+                >
+                  #
+                  {tierNum}
+                </span>
+                <span
+                  style={`
+                    font-weight: 600;
+                    font-size: 15px;
+                    color: #333333;
+                  `}
+                >
+                  {weaponName}
+                </span>
+              </div>
+              <div
+                style={`
+                  display: flex;
+                  align-items: center;
+                  gap: 16px;
+                `}
+              >
+                <span
+                  style={`
+                    color: #2e7d32;
+                    font-weight: 600;
+                    font-size: 15px;
+                  `}
+                >
+                  {formatPrice(item.median ?? item.avg)}
+                  P
+                </span>
+                <span style={{ color: '#888888', fontSize: 12 }}>
+                  {`均价:${formatPrice(item.avg)}P 交易量:${item.pop} 区间:[${item.min}-${item.max}]`}
+                </span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <div
+        style={`
+          margin-top: 16px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+          font-size: 10px;
+          color: #999999;
+          text-align: center;
+        `}
+      >
+        数据来源: warframe.com weeklyRivensPC · 按未洗卡中位价排序，均价仅作参考
       </div>
     </div>
   )
