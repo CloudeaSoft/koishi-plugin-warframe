@@ -77,12 +77,14 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('裂隙')
     .action(wf.fissureCommand)
   ctx
-    .command('spfissure', '当前钢铁之路虚空裂隙')
+    .command('fissure-sp', '当前钢铁之路虚空裂隙')
+    .alias('spfissure')
     .alias('钢铁裂缝')
     .alias('钢铁裂隙')
     .action(wf.steelPathFissureCommand)
   ctx
-    .command('rjfissure', '当前九重天虚空裂隙')
+    .command('fissure-rj', '当前九重天虚空裂隙')
+    .alias('rjfissure')
     .alias('九重天裂缝')
     .alias('九重天裂隙')
     .action(wf.railjackFissureCommand)
@@ -120,32 +122,36 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
   ctx.command('riven <img:image>', '分析紫卡截图').action(wf.rivenCommand)
   ctx
     .command(
-      'rivenstat <weaponType:string> <statType:string> <disposition:number>',
+      'riven-stat <weaponType:string> <statType:string> <disposition:number>',
       '获取紫卡数值范围',
     )
     .usage(
       '武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械\n词条类型: 2, 3, 21, 31',
     )
-    .example('rivenstat 步枪 31 0.7')
+    .example('riven-stat 步枪 31 0.7')
+    .alias('rivenstat')
     .alias('紫卡数值')
     .action(wf.rivenStatCommand)
   ctx
-    .command('voidtrader', '虚空商人')
+    .command('void-trader', '虚空商人')
+    .alias('voidtrader')
     .alias('虚空商人')
     .alias('奸商')
     .action(wf.voidtraderCommand)
 
-  ctx.command('lichc', 'c系玄骸武器', { hidden: true }).action(inDevelopment)
-  ctx.command('lichi', 'i系玄骸武器', { hidden: true }).action(inDevelopment)
+  ctx.command('lich-c', 'c系玄骸武器', { hidden: true }).alias('lichc').action(inDevelopment)
+  ctx.command('lich-i', 'i系玄骸武器', { hidden: true }).alias('lichi').action(inDevelopment)
 
   ctx
-    .command('weeklyriven [minPrice:number]', '每周高价值紫卡参考 (未洗中位价)')
+    .command('riven-weekly [minPrice:number]', '每周高价值紫卡参考 (未洗中位价)')
+    .alias('weeklyriven')
     .alias('周紫卡')
     .alias('周卡')
     .action(wf.weeklyRivenCommand)
-  ctx.command('hotriven', '热门紫卡').action(miscs.hotRivenCommand)
+  ctx.command('riven-hot', '热门紫卡').alias('hotriven').action(miscs.hotRivenCommand)
   ctx
-    .command('pmodhistory', 'Primed MOD 历史')
+    .command('pmod-history', 'Primed MOD 历史')
+    .alias('pmodhistory')
     .alias('pmod')
     .alias('P卡')
     .alias('p卡')

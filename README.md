@@ -14,16 +14,16 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 | `wm`          | `<item:text>` |                                            | **Deprecated**, use `wmi` instead.                                                     |
 | `wmr`         | `<item:text>` |                                            | Query Warframe Market riven orders.                                                    |
 | `wmu`         |               |                                            | Update Warframe Market cache.                                                          |
-| `pmodhistory` |               | `pmod`, `P卡`, `p卡`, `P卡历史`, `p卡历史` | Query Primed MOD price history.                                                        |
-| `hotriven`    |               |                                            | Query trending riven weapons ranking.                                                  |
+| `pmod-history` |               | `pmod`, `P卡`, `p卡`, `P卡历史`, `p卡历史` | Query Primed MOD price history.                                                        |
+| `riven-hot`    |               |                                            | Query trending riven weapons ranking.                                                  |
 
 ### Fissures
 
 | Command     | Arguments | Aliases                    | Description                               |
 | ----------- | --------- | -------------------------- | ----------------------------------------- |
 | `fissure`   |           | `裂缝`, `裂隙`             | List current void fissure missions.       |
-| `spfissure` |           | `钢铁裂缝`, `钢铁裂隙`     | List current steel path fissure missions. |
-| `rjfissure` |           | `九重天裂缝`, `九重天裂隙` | List current railjack fissure missions.   |
+| `fissure-sp` |           | `钢铁裂缝`, `钢铁裂隙`     | List current steel path fissure missions. |
+| `fissure-rj` |           | `九重天裂缝`, `九重天裂隙` | List current railjack fissure missions.   |
 
 ### Relics
 
@@ -49,14 +49,14 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 | Command      | Arguments | Aliases            | Description                                                             |
 | ------------ | --------- | ------------------ | ----------------------------------------------------------------------- |
-| `voidtrader` |           | `虚空商人`, `奸商` | Query Baro Ki'Teer's current inventory and arrival/departure countdown. |
+| `void-trader` |           | `虚空商人`, `奸商` | Query Baro Ki'Teer's current inventory and arrival/departure countdown. |
 
 ### Riven Mods
 
 | Command     | Arguments                                                    | Aliases    | Description                                                                                                                                                                                     |
 | ----------- | ------------------------------------------------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `riven`     | `<img:image>`                                                |            | Analyze riven stats from a screenshot using OCR.                                                                                                                                                |
-| `rivenstat` | `<weaponType:string> <statType:string> <disposition:number>` | `紫卡数值` | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun)<br>Stat types: 2, 3, 21, 31 |
+| `riven-stat` | `<weaponType:string> <statType:string> <disposition:number>` | `紫卡数值` | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun)<br>Stat types: 2, 3, 21, 31 |
 
 ### Kuva/Tenet/Coda (In Development)
 
@@ -64,8 +64,8 @@ The following commands are reserved but not yet implemented:
 
 | Command | Arguments | Aliases | Description                                    |
 | ------- | --------- | ------- | ---------------------------------------------- |
-| `lichc` |           |         | Kuva weapons (hidden, in development)          |
-| `lichi` |           |         | Infested/Coda weapons (hidden, in development) |
+| `lich-c` |           |         | Kuva weapons (hidden, in development)          |
+| `lich-i` |           |         | Infested/Coda weapons (hidden, in development) |
 
 ## Install
 
