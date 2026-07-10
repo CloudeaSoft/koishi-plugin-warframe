@@ -400,7 +400,7 @@ export async function getWeeklyRivens(
 
   const { globalRivenItemDict, globalRivenItemNameToSlugDict } = await globalRivenItemData.get()
   return result.map((e) => {
-    const slug = globalRivenItemNameToSlugDict[normalizeName(e.compatibility!)]
+    const slug = e.compatibility ? globalRivenItemNameToSlugDict[normalizeName(e.compatibility)] : undefined
     const item = slug ? globalRivenItemDict[slug] : undefined
     const compatibility = item?.i18n?.['zh-hans']?.name
 
