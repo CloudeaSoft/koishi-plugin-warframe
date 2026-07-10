@@ -405,10 +405,10 @@ export function WeeklyRivenComponent(
             ? `${item.compatibility}`
             : item.itemType.replace(' Riven Mod', '')
           const tierNum = index + 1
-          const tierColors = ['#ffd700', '#c0c0c0', '#cd7f32']
-          const tierColor = tierNum <= 1
+          const tierColors = ['#ffd700', '#c0c0c0', '#cd7f32', 'rgba(0, 0, 0, 0.08)']
+          const tierColor = tierNum === 1
             ? tierColors[0]
-            : tierNum <= 3 ? tierColors[1] : tierColors[2]
+            : tierNum === 2 ? tierColors[1] : tierNum === 3 ? tierColors[2] : tierColors[3]
 
           return (
             <div
