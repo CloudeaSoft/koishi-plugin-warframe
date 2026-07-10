@@ -368,7 +368,7 @@ export async function getVoidTrader(): Promise<string | VoidTrader> {
 export function filterWeeklyRivens(
   data: WeeklyRiven[],
   minPrice: number,
-  minPop: number,
+  minPop = 5,
 ): WeeklyRiven[] {
   const median = (item: WeeklyRiven): number => item.median ?? item.avg
 
