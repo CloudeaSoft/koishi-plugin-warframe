@@ -1,10 +1,10 @@
-import type { WeeklyRivenItem } from '../src/types/wf/weeklyRiven'
+import type { WeeklyRiven } from 'warframe-weekly-rivens'
 import { expect } from 'chai'
 import { filterWeeklyRivens } from '../src/services'
 import { weekRiven } from './assets/weeklyRivensPC'
 
 describe('weekly Riven Data Tests', () => {
-  const allItems: WeeklyRivenItem[] = weekRiven
+  const allItems: WeeklyRiven[] = weekRiven
 
   it('should load weekly riven data correctly', () => {
     expect(allItems).to.be.an('array')
@@ -43,7 +43,7 @@ describe('weekly Riven Data Tests', () => {
     }
 
     for (let i = 1; i < filtered.length; i++) {
-      expect(filtered[i - 1].median).to.be.at.least(filtered[i].median)
+      expect(filtered[i - 1].median).to.be.at.least(filtered[i].median!)
     }
   })
 
@@ -128,7 +128,7 @@ describe('weekly Riven Data Tests', () => {
   })
 
   it('should include high-median rows even with wide price spread (pop>=0)', () => {
-    const noisyOutlier: WeeklyRivenItem = {
+    const noisyOutlier: WeeklyRiven = {
       itemType: 'Melee Riven Mod',
       compatibility: 'Twin Basolk',
       rerolled: false,
