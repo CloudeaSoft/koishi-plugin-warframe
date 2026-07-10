@@ -1,0 +1,7 @@
+name: Setup Yarn
+description: Enable Corepack and activate the repository Yarn version.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: corepack enable && corepack prepare yarn@4.5.3 --activate

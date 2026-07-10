@@ -23,7 +23,8 @@
     "lib"
   ],
   "scripts": {
-    "build": "yarn --cwd packages/wfm-api-client build && yakumo build && node scripts/copy-assets.mjs",
+    "build": "yarn build:wfm-client && yakumo build && node scripts/copy-assets.mjs",
+    "build:wfm-client": "tsc --build packages/wfm-api-client/tsconfig.json --force",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
     "dtsc": "tsc",

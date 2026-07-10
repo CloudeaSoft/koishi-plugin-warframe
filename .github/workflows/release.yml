@@ -21,7 +21,8 @@ jobs:
         with:
           node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
-      - run: yarn install --frozen-lockfile
+      - uses: ./.github/actions/setup-yarn
+      - run: yarn install --no-immutable
       - run: yarn build
       - run: yarn dtsc
       - run: yarn add @semantic-release/commit-analyzer

@@ -21,14 +21,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: latest
+          node-version: 24.x
+      - name: Setup Yarn
+        uses: ./.github/actions/setup-yarn
       - name: Install
-        run: yarn
-      - name: Lint
-        run: yarn lint
+        run: yarn install --no-immutable
       - name: Build
         run: yarn build
       - name: Type
         run: yarn dtsc
+      - name: Lint
+        run: yarn lint
       - name: Test
         run: yarn test

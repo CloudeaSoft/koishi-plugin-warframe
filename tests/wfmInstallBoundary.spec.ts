@@ -21,8 +21,9 @@ describe('wfm-api-client install boundary', () => {
     expect(manifest.devDependencies['wfm-api-client']).to.equal(
       'link:packages/wfm-api-client',
     )
-    expect(manifest.scripts.build).to.include(
-      'yarn --cwd packages/wfm-api-client build',
+    expect(manifest.scripts.build).to.include('yarn build:wfm-client')
+    expect(manifest.scripts['build:wfm-client']).to.equal(
+      'tsc --build packages/wfm-api-client/tsconfig.json --force',
     )
   })
 })
