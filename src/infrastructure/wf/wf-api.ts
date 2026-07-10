@@ -1,4 +1,5 @@
 import type WorldState from 'warframe-worldstate-parser'
+
 import { Baro } from '../../assets/index'
 import { fetchAsyncText } from '../../utils'
 

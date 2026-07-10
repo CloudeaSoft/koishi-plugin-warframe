@@ -138,6 +138,11 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
   ctx.command('lichc', 'c系玄骸武器', { hidden: true }).action(inDevelopment)
   ctx.command('lichi', 'i系玄骸武器', { hidden: true }).action(inDevelopment)
 
+  ctx
+    .command('weeklyriven [minPrice:number]', '每周高价值紫卡参考 (未洗中位价)')
+    .alias('周紫卡')
+    .alias('周卡')
+    .action(wf.weeklyRivenCommand)
   ctx.command('hotriven', '热门紫卡').action(miscs.hotRivenCommand)
   ctx
     .command('pmodhistory', 'Primed MOD 历史')

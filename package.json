@@ -56,6 +56,7 @@
     "ofetch": "^1.5.1",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.213",
     "warframe-public-export-plus": "^0.6.2",
+    "warframe-weekly-rivens": "^0.0.2",
     "warframe-worldstate-data": "^3.16.1",
     "warframe-worldstate-parser": "^5.4.1"
   },

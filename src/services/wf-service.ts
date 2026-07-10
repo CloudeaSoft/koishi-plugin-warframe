@@ -1,5 +1,6 @@
-import type { OcrAPISecret } from '../types/config'
+import type { WeeklyRiven } from 'warframe-weekly-rivens'
 
+import type { OcrAPISecret } from '../types/config'
 import type {
   RivenStatAnalyzeResult,
   RivenStatAnalyzsis,
@@ -8,12 +9,13 @@ import type {
   RivenWeaponType,
 } from '../types/wf/riven'
 import type { RivenAttribute } from '../types/wfm'
+
 import {
   dict_zh,
   ExportMissionTypes,
   ExportRegions,
 } from 'warframe-public-export-plus'
-
+import { createClient } from 'warframe-weekly-rivens'
 import {
   arbyRewards,
   dictEnExtra,
@@ -27,7 +29,9 @@ import { relics } from '../data/wf/relics'
 import { rivenAttrValueDict } from '../data/wf/rivenBaseValues'
 import { weaponRivenDispositionDict } from '../data/wf/rivenDisposition'
 import { rivenStatFixFactor } from '../data/wf/rivenStatData'
+import { globalItemData } from '../data/wfm/globalItem'
 import { globalRivenAttribute } from '../data/wfm/globalRivenAttribute'
+import { globalRivenItemData } from '../data/wfm/globalRivenItem'
 import { extractTextFromImage } from '../infrastructure/ocr-api'
 import { regionToShort } from '../infrastructure/wf/wf-export-adapter'
 import {
@@ -359,6 +363,52 @@ export async function getVoidTrader(): Promise<string | VoidTrader> {
   const items = trader.inventory.map(getVoidTraderItem)
 
   return { expiry: msToHumanReadable(diff), items }
+}
+
+export function filterWeeklyRivens(
+  data: WeeklyRiven[],
+  minPrice: number,
+  minPop = 5,
+): WeeklyRiven[] {
+  const median = (item: WeeklyRiven): number => item.median ?? item.avg
+
+  return data
+    .filter(
+      (item) => {
+        return !item.rerolled
+          && median(item) >= minPrice
+          && item.pop >= minPop
+      },
+    )
+    .sort((a, b) => {
+      if (median(b) !== median(a)) {
+        return median(b) - median(a)
+      }
+      if (b.pop !== a.pop) {
+        return b.pop - a.pop
+      }
+      return b.avg - a.avg
+    })
+}
+
+export async function getWeeklyRivens(
+  minPrice: number,
+): Promise<WeeklyRiven[]> {
+  const client = createClient()
+  const data = await client.getLatestWeeklyRivens('PC')
+  const result = filterWeeklyRivens(data, minPrice, 5)
+
+  const { globalRivenItemDict, globalRivenItemNameToSlugDict } = await globalRivenItemData.get()
+  return result.map((e) => {
+    const slug = e.compatibility ? globalRivenItemNameToSlugDict[normalizeName(e.compatibility)] : undefined
+    const item = slug ? globalRivenItemDict[slug] : undefined
+    const compatibility = item?.i18n?.['zh-hans']?.name
+
+    return {
+      ...e,
+      compatibility: compatibility ?? e.compatibility,
+    }
+  })
 }
 
 export async function getStaticRivenStats(weaponType: string, statType: string, disposition: number): Promise<RivenStatResult | string> {
