@@ -15,7 +15,7 @@ import {
   ExportMissionTypes,
   ExportRegions,
 } from 'warframe-public-export-plus'
-import { createClient } from 'warframe-weekly-rivens'
+
 import {
   arbyRewards,
   dictEnExtra,
@@ -393,6 +393,7 @@ export function filterWeeklyRivens(
 export async function getWeeklyRivens(
   minPrice: number,
 ): Promise<WeeklyRiven[]> {
+  const { createClient } = await import('warframe-weekly-rivens')
   const client = createClient()
   const data = await client.getLatestWeeklyRivens('PC')
   const result = filterWeeklyRivens(data, minPrice, 5)
