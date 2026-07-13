@@ -1,28 +1,22 @@
 import type { PluginDependencies } from '../types/config'
 import { HotRivenComponent } from '../components/miscs'
-import { globalHotRivenWeapons } from '../data/miscs/lab'
+import { getHotRivenWeapons } from '../services'
 
 export function createMiscsCommands(deps: PluginDependencies): {
   hotRivenCommand: () => Promise<string>
 } {
-  const { logger, render } = deps
+  const { render } = deps
 
   return {
     hotRivenCommand: async (): Promise<string> => {
-      try {
-        const result = await globalHotRivenWeapons.get()
-        if (!result || result.length === 0) {
-          return '暂无热门紫卡数据'
-        }
+      const result = await getHotRivenWeapons()
+      if (!result.ok) {
+        return result.message
+      }
 
-        return await render(
-          HotRivenComponent(result),
-        )
-      }
-      catch (ex) {
-        logger.error(ex)
-        return '获取热门紫卡数据失败'
-      }
+      return render(
+        HotRivenComponent(result.data),
+      )
     },
   }
 }
