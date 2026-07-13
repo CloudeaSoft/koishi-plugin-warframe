@@ -1,3 +1,4 @@
+import type { ServiceResult } from '../types/result'
 import type {
   ItemShort,
   OrderWithUser,
@@ -6,11 +7,11 @@ import type {
   RivenItem,
   RivenOrderInternal,
 } from '../types/wfm'
-
 import { dict_zh } from 'warframe-public-export-plus'
-import { globalDucatnatorIDDict } from '../data/wfm/globalDucatnator'
 
+import { globalDucatnatorIDDict } from '../data/wfm/globalDucatnator'
 import { globalItemData } from '../data/wfm/globalItem'
+
 import { globalRivenAttribute } from '../data/wfm/globalRivenAttribute'
 import { globalRivenItemData } from '../data/wfm/globalRivenItem'
 import { getVoidTraderHistory } from '../infrastructure/wf/wf-api'
@@ -148,12 +149,10 @@ export async function updateCache(): Promise<string> {
   return lines.join('\n')
 }
 
-export async function getItemOrders(input: string): Promise<{
-  item: ItemShort
-  orders: OrderWithUser[]
-} | null> {
-  if (!input)
-    return null
+export async function getItemOrders(input: string): Promise<ServiceResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
+  if (!input) {
+    return { ok: false, message: '请输入物品名称' }
+  }
   input = normalizeName(input)
 
   // 1. Process global option
@@ -170,14 +169,14 @@ export async function getItemOrders(input: string): Promise<{
   // 2. Search item
   const targetItem = await stringToWFMItem(input)
   if (!targetItem) {
-    return null
+    return { ok: false, message: `未找到物品: ${input}` }
   }
 
   // 3. Fetch orders
   const itemId = targetItem.slug
   const data = await wfmClient.items.getOrders(itemId)
   if (!data) {
-    return null
+    return { ok: false, message: '订单获取失败，请稍后重试' }
   }
 
   // 4. Process result
@@ -193,16 +192,17 @@ export async function getItemOrders(input: string): Promise<{
     .sort((a, b) => a.platinum - b.platinum) // Price ASC
     .slice(0, 5) // Top 5
 
+  if (result.length === 0) {
+    return { ok: false, message: '当前没有在线游戏中的卖家' }
+  }
+
   return {
-    item: targetItem,
-    orders: result,
+    ok: true,
+    data: { item: targetItem, orders: result },
   }
 }
 
-export async function getRivenOrders(input: string): Promise<{
-  item: RivenItem
-  orders: RivenOrderInternal[]
-} | null> {
+export async function getRivenOrders(input: string): Promise<ServiceResult<{ item: RivenItem, orders: RivenOrderInternal[] }>> {
   const { globalRivenItemList } = await globalRivenItemData.get()
   const { globalRivenAttributeDict } = await globalRivenAttribute.get()
 
@@ -214,13 +214,13 @@ export async function getRivenOrders(input: string): Promise<{
       compareRivenItemName(input, item.i18n?.en?.name ?? ''),
     )
   if (!targetItem) {
-    return null
+    return { ok: false, message: `未找到紫卡武器: ${input}` }
   }
 
   const itemId = targetItem.slug
   const data = await wfmClient.rivens.getOrders(itemId)
   if (!data) {
-    return null
+    return { ok: false, message: '紫卡订单获取失败，请稍后重试' }
   }
 
   const top5 = data
@@ -236,6 +236,10 @@ export async function getRivenOrders(input: string): Promise<{
     .sort((a, b) => a.starting_price - b.starting_price) // Price ASC
     .slice(0, 5) // Top 5
 
+  if (top5.length === 0) {
+    return { ok: false, message: '当前没有在线出售的紫卡' }
+  }
+
   const orders = top5.map((e) => {
     const transformed: RivenAttributeShortInternal[] = e.item.attributes.map(
       (attr) => {
@@ -250,7 +254,7 @@ export async function getRivenOrders(input: string): Promise<{
     return e as RivenOrderInternal
   })
 
-  return { item: targetItem, orders }
+  return { ok: true, data: { item: targetItem, orders } }
 }
 
 export async function applyRelicData(relic: Relic): Promise<OutputRelic> {
