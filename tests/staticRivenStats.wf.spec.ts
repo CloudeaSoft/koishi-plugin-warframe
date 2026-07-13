@@ -1,3 +1,4 @@
+import type { RivenStatResult } from '../src/types/wf/riven'
 import type { RivenAttribute } from '../src/types/wfm'
 import { expect } from 'chai'
 import {
@@ -55,13 +56,13 @@ const fixtureAttrs: RivenAttribute[] = [
 ]
 
 function expectRivenStatResult(
-  value: unknown,
-): { positive: Record<string, unknown>, negative?: Record<string, unknown> } {
-  expect(value).to.not.be.a('string')
-  return value as {
-    positive: Record<string, unknown>
-    negative?: Record<string, unknown>
+  result: Awaited<ReturnType<typeof getStaticRivenStats>>,
+): RivenStatResult {
+  expect(result.ok).to.equal(true)
+  if (!result.ok) {
+    throw new Error(`Expected ok result but got: ${result.message}`)
   }
+  return result.data
 }
 
 describe('getStaticRivenStats Tests', function () {
@@ -77,46 +78,58 @@ describe('getStaticRivenStats Tests', function () {
 
   it('should return error for disposition > 1.55', async () => {
     const result = await getStaticRivenStats('步枪', '2', 1.6)
-    expect(result).to.equal('裂罅倾向错误')
+    expect(result.ok).to.equal(false)
+    if (!result.ok) {
+      expect(result.message).to.equal('裂罅倾向错误')
+    }
   })
 
   it('should return error for disposition < 0.5', async () => {
     const result = await getStaticRivenStats('步枪', '2', 0.4)
-    expect(result).to.equal('裂罅倾向错误')
+    expect(result.ok).to.equal(false)
+    if (!result.ok) {
+      expect(result.message).to.equal('裂罅倾向错误')
+    }
   })
 
   it('should accept disposition boundary values (0.5 and 1.55)', async () => {
     const r1 = await getStaticRivenStats('步枪', '2', 0.5)
-    expect(r1).to.not.be.a('string')
+    expect(r1.ok).to.equal(true)
 
     const r2 = await getStaticRivenStats('步枪', '2', 1.55)
-    expect(r2).to.not.be.a('string')
+    expect(r2.ok).to.equal(true)
   })
 
   it('should return error for invalid weapon type', async () => {
     const result = await getStaticRivenStats('InvalidType', '2', 1.0)
-    expect(result).to.equal('武器类型错误')
+    expect(result.ok).to.equal(false)
+    if (!result.ok) {
+      expect(result.message).to.equal('武器类型错误')
+    }
   })
 
   it('should accept Chinese weapon type names', async () => {
     const result = await getStaticRivenStats('步枪', '2', 1.0)
-    expect(result).to.not.be.a('string')
+    expect(result.ok).to.equal(true)
   })
 
   it('should accept English weapon type names', async () => {
     const result = await getStaticRivenStats('Rifle', '2', 1.0)
-    expect(result).to.not.be.a('string')
+    expect(result.ok).to.equal(true)
   })
 
   it('should return error for invalid stat type', async () => {
     const result = await getStaticRivenStats('步枪', '99', 1.0)
-    expect(result).to.equal('词条类型错误')
+    expect(result.ok).to.equal(false)
+    if (!result.ok) {
+      expect(result.message).to.equal('词条类型错误')
+    }
   })
 
   it('should accept valid stat types (2, 3, 21, 31)', async () => {
     for (const statType of ['2', '3', '21', '31']) {
       const result = await getStaticRivenStats('步枪', statType, 1.0)
-      expect(result).to.not.be.a('string')
+      expect(result.ok).to.equal(true)
     }
   })
 
@@ -140,7 +153,7 @@ describe('getStaticRivenStats Tests', function () {
       await getStaticRivenStats('步枪', '21', 1.0),
     )
     expect(result.negative).to.be.an('object')
-    expect(Object.keys(result.negative).length).to.be.greaterThan(0)
+    expect(Object.keys(result.negative!).length).to.be.greaterThan(0)
   })
 
   it('should include negative stats for type "31" (1 curse)', async () => {

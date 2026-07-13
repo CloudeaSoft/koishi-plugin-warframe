@@ -1,6 +1,8 @@
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 
 import type { OcrAPISecret } from '../types/config'
+import type { ServiceResult } from '../types/result'
+
 import type {
   RivenStatAnalyzeResult,
   RivenStatAnalyzsis,
@@ -48,18 +50,18 @@ import {
 
 // ================ features ===================
 
-export async function getRelic(input: string): Promise<Relic | string> {
+export async function getRelic(input: string): Promise<ServiceResult<Relic>> {
   if (!input) {
-    return '请提供正确的遗物名称'
+    return { ok: false, message: '请提供正确的遗物名称' }
   }
 
   input = normalizeName(input)
   if (!input) {
-    return '请提供正确的遗物名称'
+    return { ok: false, message: '请提供正确的遗物名称' }
   }
 
   if (!relics) {
-    return '遗物数据未加载完成，请稍后再试'
+    return { ok: false, message: '遗物数据未加载完成，请稍后再试' }
   }
 
   const tierListForMatch = [
@@ -78,7 +80,7 @@ export async function getRelic(input: string): Promise<Relic | string> {
   ].map(t => normalizeName(t))
   const tier = tierListForMatch.find(t => input.startsWith(t))
   if (!tier) {
-    return '请提供正确的遗物名称'
+    return { ok: false, message: '请提供正确的遗物名称' }
   }
 
   const category = input
@@ -95,12 +97,12 @@ export async function getRelic(input: string): Promise<Relic | string> {
   }
   const enTier = zhTierMap[tier as keyof typeof zhTierMap] ?? tier
   const key = normalizeName(enTier + category)
-  return relics[key] ?? '未找到对应遗物信息'
+  return relics[key] ? { ok: true, data: relics[key] } : { ok: false, message: '未找到对应遗物信息' }
 }
 
-export function getArbitrations(day: number = 3): Arbitration[] | string {
+export function getArbitrations(day: number = 3): ServiceResult<Arbitration[]> {
   if (day > 14 || day <= 0) {
-    return '天数需小于等于14且大于0'
+    return { ok: false, message: '天数需小于等于14且大于0' }
   }
 
   const currentHourTimeStamp = Math.floor(
@@ -113,36 +115,39 @@ export function getArbitrations(day: number = 3): Arbitration[] | string {
     currentHourIndex,
     currentHourIndex + 24 * day,
   )
-  return weekArbys
-    .filter(a => arbyRewards[a.node])
-    .map((a) => {
-      const obj = regionToShort(ExportRegions[a.node], dict_zh)
-      return {
-        ...obj,
-        time: new Date(a.time * 1000).toLocaleString('zh-cn', {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric',
-          hour: 'numeric',
-          // minute: 'numeric', // 保持注释或删除，以去除分钟
-          // second: 'numeric', // 保持注释或删除，以去除秒
-          hour12: false, // 统一使用 24 小时制
-          // hourCycle: 'h23' // 另一种设置 24 小时制的方法
-          timeZone: 'Asia/Shanghai',
-        }),
-        rewards: arbyRewards[a.node],
-      }
-    })
+  return {
+    ok: true,
+    data: weekArbys
+      .filter(a => arbyRewards[a.node])
+      .map((a) => {
+        const obj = regionToShort(ExportRegions[a.node], dict_zh)
+        return {
+          ...obj,
+          time: new Date(a.time * 1000).toLocaleString('zh-cn', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            // minute: 'numeric', // 保持注释或删除，以去除分钟
+            // second: 'numeric', // 保持注释或删除，以去除秒
+            hour12: false, // 统一使用 24 小时制
+            // hourCycle: 'h23' // 另一种设置 24 小时制的方法
+            timeZone: 'Asia/Shanghai',
+          }),
+          rewards: arbyRewards[a.node],
+        }
+      }),
+  }
 }
 
-export async function getWeekly(): Promise<string | {
+export async function getWeekly(): Promise<ServiceResult<{
   archonHunt: ArchonHunt
   deepArchimedea: ArchiMedea
   temporalArchimedea: ArchiMedea
-}> {
+}>> {
   const { raw: worldState } = await globalWorldState.get()
   if (!worldState) {
-    return '内部错误，获取最新信息失败'
+    return { ok: false, message: '内部错误，获取最新信息失败' }
   }
 
   const archon: ArchonHunt = {
@@ -242,9 +247,12 @@ export async function getWeekly(): Promise<string | {
   }
 
   return {
-    archonHunt: archon,
-    deepArchimedea: deepArchimRes,
-    temporalArchimedea: temporalArchimRes,
+    ok: true,
+    data: {
+      archonHunt: archon,
+      deepArchimedea: deepArchimRes,
+      temporalArchimedea: temporalArchimRes,
+    },
   }
 }
 
@@ -307,30 +315,30 @@ export function getCircuitWeek(): {
   }
 }
 
-export async function getFissures(): Promise<string | Fissure[]> {
+export async function getFissures(): Promise<ServiceResult<Fissure[]>> {
   const { fissures } = await globalWorldState.get()
-  return fissures ?? '内部错误，获取最新信息失败'
+  return fissures ? { ok: true, data: fissures } : { ok: false, message: '内部错误，获取最新信息失败' }
 }
 
-export async function getSteelPathFissures(): Promise<string | Fissure[]> {
+export async function getSteelPathFissures(): Promise<ServiceResult<Fissure[]>> {
   const { spFissures } = await globalWorldState.get()
-  return spFissures ?? '内部错误，获取最新信息失败'
+  return spFissures ? { ok: true, data: spFissures } : { ok: false, message: '内部错误，获取最新信息失败' }
 }
 
-export async function getRailjackFissures(): Promise<string | Fissure[]> {
+export async function getRailjackFissures(): Promise<ServiceResult<Fissure[]>> {
   const { rjFissures } = await globalWorldState.get()
-  return rjFissures ?? '内部错误，获取最新信息失败'
+  return rjFissures ? { ok: true, data: rjFissures } : { ok: false, message: '内部错误，获取最新信息失败' }
 }
 
-export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promise<string | RivenStatAnalyzeResult> {
+export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promise<ServiceResult<RivenStatAnalyzeResult>> {
   const img = await fetchAsyncImage(url)
   if (!img) {
-    return '获取图片失败'
+    return { ok: false, message: '获取图片失败' }
   }
 
   const extractResult = await extractTextFromImage(img, secret)
   if (!extractResult) {
-    return '解析图片失败'
+    return { ok: false, message: '解析图片失败' }
   }
 
   const parseResult = await parseOCRResult(extractResult)
@@ -339,29 +347,30 @@ export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promi
     || parseResult.attributes.length < 2
     || parseResult.attributes.length > 4
   ) {
-    return '解析图片失败'
+    return { ok: false, message: '解析图片失败' }
   }
 
-  return analyzeRivenStat(parseResult)
+  const analyzed = analyzeRivenStat(parseResult)
+  return typeof analyzed === 'string' ? { ok: false, message: analyzed } : { ok: true, data: analyzed }
 }
 
-export async function getVoidTrader(): Promise<string | VoidTrader> {
+export async function getVoidTrader(): Promise<ServiceResult<VoidTrader>> {
   const { raw: worldState } = await globalWorldState.get()
   if (worldState.voidTraders.length === 0) {
-    return '虚空商人仍在未知地带漂流...'
+    return { ok: false, message: '虚空商人仍在未知地带漂流...' }
   }
 
   const trader = worldState.voidTraders[0]
 
   if (trader && trader.activation && trader.activation.getTime() > Date.now()) {
     const diff = trader.activation.getTime() - Date.now()
-    return `距离虚空商人到达还有: ${msToHumanReadable(diff)}`
+    return { ok: false, message: `距离虚空商人到达还有: ${msToHumanReadable(diff)}` }
   }
 
   const diff = trader.expiry!.getTime() - Date.now()
   const items = trader.inventory.map(getVoidTraderItem)
 
-  return { expiry: msToHumanReadable(diff), items }
+  return { ok: true, data: { expiry: msToHumanReadable(diff), items } }
 }
 
 export function filterWeeklyRivens(
@@ -411,10 +420,10 @@ export async function getWeeklyRivens(
   })
 }
 
-export async function getStaticRivenStats(weaponType: string, statType: string, disposition: number): Promise<RivenStatResult | string> {
+export async function getStaticRivenStats(weaponType: string, statType: string, disposition: number): Promise<ServiceResult<RivenStatResult>> {
   // Process inputs
   if (disposition > 1.55 || disposition < 0.5) {
-    return '裂罅倾向错误'
+    return { ok: false, message: '裂罅倾向错误' }
   }
 
   const weaponTypes = [
@@ -433,7 +442,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
     normalizeName(v).startsWith(normalizeName(weaponType)),
   )
   if (!matchedWeaponType) {
-    return '武器类型错误'
+    return { ok: false, message: '武器类型错误' }
   }
 
   const weaponTypeKeys: Record<string, RivenWeaponType> = {
@@ -448,7 +457,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
 
   const statTypes: RivenStatCountType[] = ['2', '3', '21', '31']
   if (!statTypes.includes(statType as RivenStatCountType)) {
-    return '词条类型错误'
+    return { ok: false, message: '词条类型错误' }
   }
 
   const rivenAttrValues = rivenAttrValueDict[weaponTypeKey]
@@ -483,7 +492,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
     }
   }
 
-  return result
+  return { ok: true, data: result }
 }
 
 // ================ privates ===================

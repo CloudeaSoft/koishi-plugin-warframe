@@ -51,15 +51,11 @@ export function createWfCommands(deps: PluginDependencies): {
   return {
     arbitrationCommand: async (_action: Argv, input?: number) => {
       const result = getArbitrations(input)
-      if (!result) {
-        return '获取失败, 请稍后再试'
+      if (!result.ok) {
+        return result.message
       }
 
-      if (typeof result === 'string') {
-        return result
-      }
-
-      return render(ArbitrationComponent(result))
+      return render(ArbitrationComponent(result.data))
     },
 
     circuitCommand: async (_action: Argv) => {
@@ -76,58 +72,46 @@ export function createWfCommands(deps: PluginDependencies): {
 
     voidtraderCommand: async (_action: Argv) => {
       const result = await getVoidTrader()
-      if (typeof result === 'string') {
-        return result
+      if (!result.ok) {
+        return result.message
       }
 
-      return render(VoidTraderComponent(result))
+      return render(VoidTraderComponent(result.data))
     },
 
     fissureCommand: async (_action: Argv) => {
       const result = await getFissures()
-      if (!result) {
-        return '内部错误'
+      if (!result.ok) {
+        return result.message
       }
 
-      if (typeof result === 'string') {
-        return result
-      }
-
-      return render(FissureComponent(result, 'fissure'))
+      return render(FissureComponent(result.data, 'fissure'))
     },
 
     steelPathFissureCommand: async (_action: Argv) => {
       const result = await getSteelPathFissures()
-      if (!result) {
-        return '内部错误'
+      if (!result.ok) {
+        return result.message
       }
 
-      if (typeof result === 'string') {
-        return result
-      }
-
-      return render(FissureComponent(result, 'sp-fissure'))
+      return render(FissureComponent(result.data, 'sp-fissure'))
     },
 
     railjackFissureCommand: async (_action: Argv) => {
       const result = await getRailjackFissures()
-      if (!result) {
-        return '内部错误'
+      if (!result.ok) {
+        return result.message
       }
 
-      if (typeof result === 'string') {
-        return result
-      }
-
-      return render(FissureComponent(result, 'rj-fissure'))
+      return render(FissureComponent(result.data, 'rj-fissure'))
     },
 
     relicCommand: async (_action: Argv, input: string) => {
       const result = await getRelic(input)
-      if (typeof result === 'string') {
-        return result
+      if (!result.ok) {
+        return result.message
       }
-      const relic = await applyRelicData(result)
+      const relic = await applyRelicData(result.data)
 
       return render(RelicComponent(relic))
     },
@@ -150,11 +134,11 @@ export function createWfCommands(deps: PluginDependencies): {
         config.ocrAPISecret,
         input.src as string,
       )
-      if (typeof result === 'string') {
-        return result
+      if (!result.ok) {
+        return result.message
       }
 
-      return render(RivenComponent(result))
+      return render(RivenComponent(result.data))
     },
 
     rivenStatCommand: async (
@@ -168,28 +152,24 @@ export function createWfCommands(deps: PluginDependencies): {
       }
 
       const result = await getStaticRivenStats(weaponType, statType, disposition)
-      if (typeof result === 'string') {
-        return result
+      if (!result.ok) {
+        return result.message
       }
 
-      return render(RivenStatComponent(result))
+      return render(RivenStatComponent(result.data))
     },
 
     weeklyCommand: async (_action: Argv) => {
       const result = await getWeekly()
-      if (!result) {
-        return '内部错误'
-      }
-
-      if (typeof result === 'string') {
-        return result
+      if (!result.ok) {
+        return result.message
       }
 
       return render(
         WeeklyComponent(
-          result.archonHunt,
-          result.deepArchimedea,
-          result.temporalArchimedea,
+          result.data.archonHunt,
+          result.data.deepArchimedea,
+          result.data.temporalArchimedea,
         ),
       )
     },
