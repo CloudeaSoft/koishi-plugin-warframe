@@ -36,7 +36,7 @@ export default antfu(
     },
   },
   {
-    files: ['src/components/*.tsx'],
+    files: ['src/components/*.tsx', 'src/messages/*.tsx'],
     rules: { 'ts/no-unsafe-assignment': 'off', '@typescript-eslint/no-unsafe-return': 'off' },
   },
   {

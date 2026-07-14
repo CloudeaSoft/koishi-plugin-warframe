@@ -63,19 +63,6 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): El
           </tr>
         ))}
       </table>
-      <div style="text-align: center; margin-top: 30px; font-size: 25px;">
-        {(() => {
-          const firstOrder = orders[0]
-          const comment = `/w ${
-            firstOrder.user.ingameName
-          } Hi! I want to buy: "${itemNameEN}${
-            !item.maxRank || item.maxRank === 0
-              ? ''
-              : ` (rank ${firstOrder.rank})`
-          }" for ${firstOrder.platinum} platinum. (warframe.market)`
-          return comment
-        })()}
-      </div>
     </div>
   )
 }

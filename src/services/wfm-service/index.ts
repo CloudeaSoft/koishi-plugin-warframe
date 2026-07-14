@@ -92,7 +92,7 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
     )
     .sort((a, b) => toTimeStamp(b.updatedAt) - toTimeStamp(a.updatedAt)) // Update Time DESC
     .sort((a, b) => a.platinum - b.platinum) // Price ASC
-    .slice(0, 5) // Top 5
+    .slice(0, 8) // Top 8
 
   if (result.length === 0) {
     return { ok: false, message: 'wfm.noOnlineSeller' }

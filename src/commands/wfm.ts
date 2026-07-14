@@ -1,11 +1,13 @@
-import type { Argv } from 'koishi'
+import type { Argv, Element } from 'koishi'
 import type { PluginDependencies } from '../types/config'
+import { generateImageElementOutput } from '../components/render'
 import {
   ItemOrderComponent,
   PrimedModHistoryComponent,
   RivenOrderComponent,
 } from '../components/wfm'
 import { t } from '../messages'
+import { wmMessage } from '../messages/wfm'
 import {
   getItemOrders,
   getRivenOrders,
@@ -14,7 +16,7 @@ import {
 } from '../services'
 
 export function createWfmCommands(deps: PluginDependencies): {
-  wmCommand: (_action: Argv, input: string) => Promise<string>
+  wmCommand: (_action: Argv, input: string) => Promise<Element | string>
   wmrCommand: (_action: Argv, input: string) => Promise<string>
   wmuCommand: (_action: Argv, _input: string) => Promise<string>
   pmodhistoryCommand: (_action: Argv, _input: string) => Promise<string>
@@ -28,7 +30,13 @@ export function createWfmCommands(deps: PluginDependencies): {
         return t(result)
       }
 
-      return render(ItemOrderComponent(result.data.item, result.data.orders))
+      if (!_action.session?.app.puppeteer) {
+        return render(ItemOrderComponent(result.data.item, result.data.orders))
+      }
+
+      const component = await generateImageElementOutput(_action.session?.app.puppeteer, ItemOrderComponent(result.data.item, result.data.orders))
+
+      return wmMessage(component, result.data.item, result.data.orders)
     },
 
     wmrCommand: async (_action: Argv, input: string) => {
