@@ -80,7 +80,7 @@ describe('getStaticRivenStats Tests', function () {
     const result = await getStaticRivenStats('步枪', '2', 1.6)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('裂罅倾向错误')
+      expect(result.message).to.equal('riven.dispositionError')
     }
   })
 
@@ -88,7 +88,7 @@ describe('getStaticRivenStats Tests', function () {
     const result = await getStaticRivenStats('步枪', '2', 0.4)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('裂罅倾向错误')
+      expect(result.message).to.equal('riven.dispositionError')
     }
   })
 
@@ -104,7 +104,7 @@ describe('getStaticRivenStats Tests', function () {
     const result = await getStaticRivenStats('InvalidType', '2', 1.0)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('武器类型错误')
+      expect(result.message).to.equal('riven.weaponTypeError')
     }
   })
 
@@ -122,7 +122,7 @@ describe('getStaticRivenStats Tests', function () {
     const result = await getStaticRivenStats('步枪', '99', 1.0)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('词条类型错误')
+      expect(result.message).to.equal('riven.statTypeError')
     }
   })
 

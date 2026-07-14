@@ -11,6 +11,7 @@ import {
   WeeklyComponent,
   WeeklyRivenComponent,
 } from '../components/wf'
+import { t } from '../messages'
 import {
   applyRelicData,
   getAnalyzedRiven,
@@ -52,7 +53,7 @@ export function createWfCommands(deps: PluginDependencies): {
     arbitrationCommand: async (_action: Argv, input?: number) => {
       const result = getArbitrations(input)
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(ArbitrationComponent(result.data))
@@ -73,7 +74,7 @@ export function createWfCommands(deps: PluginDependencies): {
     voidtraderCommand: async (_action: Argv) => {
       const result = await getVoidTrader()
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(VoidTraderComponent(result.data))
@@ -82,7 +83,7 @@ export function createWfCommands(deps: PluginDependencies): {
     fissureCommand: async (_action: Argv) => {
       const result = await getFissures()
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(FissureComponent(result.data, 'fissure'))
@@ -91,7 +92,7 @@ export function createWfCommands(deps: PluginDependencies): {
     steelPathFissureCommand: async (_action: Argv) => {
       const result = await getSteelPathFissures()
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(FissureComponent(result.data, 'sp-fissure'))
@@ -100,7 +101,7 @@ export function createWfCommands(deps: PluginDependencies): {
     railjackFissureCommand: async (_action: Argv) => {
       const result = await getRailjackFissures()
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(FissureComponent(result.data, 'rj-fissure'))
@@ -109,7 +110,7 @@ export function createWfCommands(deps: PluginDependencies): {
     relicCommand: async (_action: Argv, input: string) => {
       const result = await getRelic(input)
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
       const relic = await applyRelicData(result.data)
 
@@ -123,11 +124,11 @@ export function createWfCommands(deps: PluginDependencies): {
       // }
 
       if (!input?.src) {
-        return '未检测到图片'
+        return t('riven.imageNotFound')
       }
 
       if (!config.ocrAPISecret?.id || !config.ocrAPISecret?.key) {
-        return '未配置 OCR，请在插件设置中配置。'
+        return t('riven.ocrNotConfigured')
       }
 
       const result = await getAnalyzedRiven(
@@ -135,7 +136,7 @@ export function createWfCommands(deps: PluginDependencies): {
         input.src as string,
       )
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(RivenComponent(result.data))
@@ -148,12 +149,12 @@ export function createWfCommands(deps: PluginDependencies): {
       disposition: number,
     ) => {
       if (!weaponType || !statType || !disposition) {
-        return '请输入正确参数'
+        return t('riven.invalidParams')
       }
 
       const result = await getStaticRivenStats(weaponType, statType, disposition)
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(RivenStatComponent(result.data))
@@ -162,7 +163,7 @@ export function createWfCommands(deps: PluginDependencies): {
     weeklyCommand: async (_action: Argv) => {
       const result = await getWeekly()
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(
@@ -178,7 +179,7 @@ export function createWfCommands(deps: PluginDependencies): {
       const threshold = minPrice && minPrice > 0 ? minPrice : 100
       const result = await getWeeklyRivens(threshold)
       if (result.length === 0) {
-        return '没有找到符合条件的紫卡参考数据'
+        return t('riven.noWeeklyData')
       }
 
       return render(WeeklyRivenComponent(result.slice(0, 20), threshold))

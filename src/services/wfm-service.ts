@@ -151,7 +151,7 @@ export async function updateCache(): Promise<string> {
 
 export async function getItemOrders(input: string): Promise<ServiceResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
   if (!input) {
-    return { ok: false, message: '请输入物品名称' }
+    return { ok: false, message: 'wfm.inputItemName' }
   }
   input = normalizeName(input)
 
@@ -169,14 +169,14 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
   // 2. Search item
   const targetItem = await stringToWFMItem(input)
   if (!targetItem) {
-    return { ok: false, message: `未找到物品: ${input}` }
+    return { ok: false, message: 'wfm.itemNotFound', params: { input } }
   }
 
   // 3. Fetch orders
   const itemId = targetItem.slug
   const data = await wfmClient.items.getOrders(itemId)
   if (!data) {
-    return { ok: false, message: '订单获取失败，请稍后重试' }
+    return { ok: false, message: 'wfm.orderFetchFailed' }
   }
 
   // 4. Process result
@@ -193,7 +193,7 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
     .slice(0, 5) // Top 5
 
   if (result.length === 0) {
-    return { ok: false, message: '当前没有在线游戏中的卖家' }
+    return { ok: false, message: 'wfm.noOnlineSeller' }
   }
 
   return {
@@ -214,13 +214,13 @@ export async function getRivenOrders(input: string): Promise<ServiceResult<{ ite
       compareRivenItemName(input, item.i18n?.en?.name ?? ''),
     )
   if (!targetItem) {
-    return { ok: false, message: `未找到紫卡武器: ${input}` }
+    return { ok: false, message: 'wfm.rivenWeaponNotFound', params: { input } }
   }
 
   const itemId = targetItem.slug
   const data = await wfmClient.rivens.getOrders(itemId)
   if (!data) {
-    return { ok: false, message: '紫卡订单获取失败，请稍后重试' }
+    return { ok: false, message: 'wfm.rivenOrderFetchFailed' }
   }
 
   const top5 = data
@@ -237,7 +237,7 @@ export async function getRivenOrders(input: string): Promise<ServiceResult<{ ite
     .slice(0, 5) // Top 5
 
   if (top5.length === 0) {
-    return { ok: false, message: '当前没有在线出售的紫卡' }
+    return { ok: false, message: 'wfm.noOnlineRivenSeller' }
   }
 
   const orders = top5.map((e) => {

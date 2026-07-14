@@ -6,12 +6,12 @@ export async function getHotRivenWeapons(): Promise<ServiceResult<RivenWeaponIte
   try {
     const result = await globalHotRivenWeapons.get()
     if (!result || result.length === 0) {
-      return { ok: false, message: '暂无热门紫卡数据' }
+      return { ok: false, message: 'miscs.hotRiven.noData' }
     }
 
     return { ok: true, data: result }
   }
   catch {
-    return { ok: false, message: '获取热门紫卡数据失败' }
+    return { ok: false, message: 'miscs.hotRiven.fetchFailed' }
   }
 }
