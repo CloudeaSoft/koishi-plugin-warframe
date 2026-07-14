@@ -63,8 +63,7 @@ describe('msToHumanReadable Tests', () => {
   })
 })
 
-describe('sleep Tests', function () {
-  this.timeout(5000)
+describe('sleep Tests', () => {
 
   it('should resolve after the specified duration', async () => {
     const start = Date.now()

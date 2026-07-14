@@ -1,9 +1,7 @@
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { getRelic } from '../src/services'
 
-describe('getRelic Tests', function () {
-  this.timeout(10000)
+describe('getRelic Tests', () => {
 
   it('should return error for empty input', async () => {
     const result = await getRelic('')

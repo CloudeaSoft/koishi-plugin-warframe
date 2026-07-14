@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Baro } from '../src/assets/index'
 import { getVoidTraderHistory } from '../src/infrastructure/wf/wf-api'
 
-describe('wiki void trader history parse test', async () => {
+describe('wiki void trader history parse test', () => {
   it('should not return empty', async () => {
     const result = await getVoidTraderHistory(Baro)
     expect(result).to.not.equal(undefined)

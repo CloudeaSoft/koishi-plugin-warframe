@@ -22,7 +22,7 @@ import { createAsyncCache, normalizeName } from '../src/utils'
 import testItem from './assets/test-items.json'
 import testAttr from './assets/test-riven-attrs.json'
 
-before(() => {
+beforeAll(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
       return await globalItemDataFactory(testItem.data as ItemShort[])
@@ -35,7 +35,7 @@ before(() => {
   )
 })
 
-describe('oCR Result Tests', async () => {
+describe('oCR Result Tests', () => {
   it('should extract riven stats correctly for each result', async () => {
     const results = [
       {

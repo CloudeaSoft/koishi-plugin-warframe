@@ -65,10 +65,9 @@ function expectRivenStatResult(
   return result.data
 }
 
-describe('getStaticRivenStats Tests', function () {
-  this.timeout(10000)
+describe('getStaticRivenStats Tests', () => {
 
-  before(() => {
+  beforeAll(() => {
     overrideGlobalRivenAttribute(
       createAsyncCache(async () => {
         return await globalRivenAttributeFactory(fixtureAttrs)

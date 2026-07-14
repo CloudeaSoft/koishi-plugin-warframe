@@ -4,8 +4,7 @@ import { getVoidTraderItem } from '../src/infrastructure/wf/wfcd-adapter'
 import worldStateJSON from './assets/example-world-state.json'
 import 'reflect-metadata'
 
-describe('void Trader Item Map Tests', function () {
-  this.timeout(100000)
+describe('void Trader Item Map Tests', () => {
   it('should correctly map all void trader inventory item names', async () => {
     const worldState = await getWorldState(JSON.stringify(worldStateJSON))
     const trader = worldState.voidTraders[0]

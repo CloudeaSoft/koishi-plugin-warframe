@@ -9,7 +9,7 @@ import { stringToWFMItem } from '../src/services'
 import { createAsyncCache } from '../src/utils'
 import testItems from './assets/test-items.json'
 
-before(() => {
+beforeAll(() => {
   overrideGlobalItemData(
     createAsyncCache(async () => {
       return await globalItemDataFactory(testItems.data as ItemShort[])

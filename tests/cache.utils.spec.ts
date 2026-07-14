@@ -1,8 +1,7 @@
 import { expect } from 'chai'
 import { createAsyncCache } from '../src/utils/cache'
 
-describe('createAsyncCache Tests', function () {
-  this.timeout(5000)
+describe('createAsyncCache Tests', () => {
 
   it('should call factory on first get', async () => {
     let callCount = 0

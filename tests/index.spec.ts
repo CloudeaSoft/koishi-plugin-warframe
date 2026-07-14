@@ -21,10 +21,9 @@ app.middleware(({ content }, next) => {
   }
 })
 
-before(() => app.start())
+beforeAll(() => app.start())
 
-describe('main Project', function () {
-  this.timeout(10000)
+describe('main Project', () => {
 
   it('example', async () => {
     await client.shouldReply('天王盖地虎', '宝塔镇河妖')
