@@ -51,19 +51,19 @@ export async function updateCache(): Promise<string> {
 }
 
 export async function getItemOrders(input: string): Promise<ServiceResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
+  input = input.trim()
   if (!input) {
     return { ok: false, message: 'wfm.inputItemName' }
   }
-  input = normalizeName(input)
 
   // 1. Process global option
-  const isFullLevel = /^满级|满级$/.test(input)
+  const isFullLevel = /^满级|满级$/.test(normalizeName(input))
   if (isFullLevel) {
     if (input.startsWith('满级')) {
-      input = input.slice(2, input.length)
+      input = input.slice(2, input.length).trimStart()
     }
     else if (input.endsWith('满级')) {
-      input = input.slice(0, input.length - 2)
+      input = input.slice(0, input.length - 2).trimEnd()
     }
   }
 

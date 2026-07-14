@@ -1,7 +1,8 @@
+import type { GlobalItemWordPrefixCandidate } from '../../data/wfm/globalItem'
 import type { ItemShort } from '../../types/wfm'
 import { warframeAlias } from '../../assets'
 import { globalItemData } from '../../data/wfm/globalItem'
-import { normalizeName } from '../../utils'
+import { fullWidthToHalfWidth, normalizeName } from '../../utils'
 
 interface WFMItemLookupData {
   globalItemDict: Record<string, ItemShort>
@@ -214,14 +215,83 @@ export const wfmItemMatcher = (() => {
     return undefined
   }
 
+  function normalizeWordPrefixName(input: string): string {
+    return fullWidthToHalfWidth(input)
+      .toLowerCase()
+      .replace(/[·'()+【】[\]{}，。！？；：_]/g, ' ')
+      .replace(/[-/\\]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }
+
+  function splitWordPrefixTokens(input: string): string[] {
+    const normalized = normalizeWordPrefixName(input)
+    if (!normalized) {
+      return []
+    }
+
+    return normalized.split(' ').filter(Boolean)
+  }
+
+  function compareWordPrefixCandidates(
+    left: GlobalItemWordPrefixCandidate,
+    right: GlobalItemWordPrefixCandidate,
+    inputTokens: string[],
+  ): number {
+    const leftExtraTokenCount = left.tokens.length - inputTokens.length
+    const rightExtraTokenCount = right.tokens.length - inputTokens.length
+    if (leftExtraTokenCount !== rightExtraTokenCount) {
+      return leftExtraTokenCount - rightExtraTokenCount
+    }
+
+    const leftRemainderKey = inputTokens
+      .map((token, index) => left.tokens[index].slice(token.length))
+      .join('\u0000')
+    const rightRemainderKey = inputTokens
+      .map((token, index) => right.tokens[index].slice(token.length))
+      .join('\u0000')
+    if (leftRemainderKey !== rightRemainderKey) {
+      return leftRemainderKey.localeCompare(rightRemainderKey)
+    }
+
+    return left.normalizedName.localeCompare(right.normalizedName)
+  }
+
+  function matchByWordPrefixSequence(
+    input: string,
+    lookup: WFMItemLookupData & {
+      globalItemWordPrefixCandidates: GlobalItemWordPrefixCandidate[]
+    },
+  ): ItemShort | undefined {
+    const inputTokens = splitWordPrefixTokens(input)
+    if (inputTokens.length < 2) {
+      return undefined
+    }
+
+    const matchedCandidates = lookup.globalItemWordPrefixCandidates
+      .filter((candidate) => {
+        if (candidate.tokens.length < inputTokens.length) {
+          return false
+        }
+
+        return inputTokens.every((token, index) =>
+          candidate.tokens[index].startsWith(token),
+        )
+      })
+      .sort((left, right) => compareWordPrefixCandidates(left, right, inputTokens))
+
+    return matchedCandidates[0]?.item
+  }
+
   async function stringToWFMItem(input: string): Promise<ItemShort | undefined> {
-    const { globalItemDict, globalItemNameToSlugDict }
+    const { globalItemDict, globalItemNameToSlugDict, globalItemWordPrefixCandidates }
       = await globalItemData.get()
 
     const normalizedInput = normalizeName(input)
     const lookup = {
       globalItemDict,
       globalItemNameToSlugDict,
+      globalItemWordPrefixCandidates,
     }
 
     const slugMatchedItem = matchBySlugDict(normalizedInput, lookup)
@@ -249,8 +319,9 @@ export const wfmItemMatcher = (() => {
         return aliasSuffixMatchedItem
     }
 
-    // 4. TODO: First char compare
-    // Not implemented
+    const wordPrefixMatchedItem = matchByWordPrefixSequence(input, lookup)
+    if (wordPrefixMatchedItem)
+      return wordPrefixMatchedItem
 
     // 5. TODO: Fuzzy word match
     // Not implemented
@@ -265,10 +336,13 @@ export const wfmItemMatcher = (() => {
     matchByShortHand,
     matchBySlugDict,
     matchBySuffixVariantLookup,
+    matchByWordPrefixSequence,
     removeNameSuffix,
+    splitWordPrefixTokens,
     shortHandProcess,
     stringToWFMItem,
     transformByWarframeAlias,
+    normalizeWordPrefixName,
   }
 })()
 
@@ -276,7 +350,10 @@ export const buildSuffixVariantCandidates = wfmItemMatcher.buildSuffixVariantCan
 export const matchByShortHand = wfmItemMatcher.matchByShortHand
 export const matchBySlugDict = wfmItemMatcher.matchBySlugDict
 export const matchBySuffixVariantLookup = wfmItemMatcher.matchBySuffixVariantLookup
+export const matchByWordPrefixSequence = wfmItemMatcher.matchByWordPrefixSequence
+export const normalizeWordPrefixName = wfmItemMatcher.normalizeWordPrefixName
 export const removeNameSuffix = wfmItemMatcher.removeNameSuffix
+export const splitWordPrefixTokens = wfmItemMatcher.splitWordPrefixTokens
 export const shortHandProcess = wfmItemMatcher.shortHandProcess
 export const stringToWFMItem = wfmItemMatcher.stringToWFMItem
 export const transformByWarframeAlias = wfmItemMatcher.transformByWarframeAlias

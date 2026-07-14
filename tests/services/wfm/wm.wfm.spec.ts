@@ -102,6 +102,20 @@ describe('wfm-service.inputToItem', () => {
     { input: 'DJ头', slug: 'octavia_prime_neuroptics_blueprint' },
   ]
 
+  const wordPrefixCases = [
+    { input: 'v p s', slug: 'vadarya_prime_set' },
+    { input: 'va pr s', slug: 'vadarya_prime_set' },
+    { input: 'vo pr s', slug: 'volnus_prime_set' },
+    { input: 'rh pr s', slug: 'rhino_prime_set' },
+    { input: 'oc pr s', slug: 'octavia_prime_set' },
+    { input: 'as pr s', slug: 'ash_prime_set' },
+    { input: 'em pr s', slug: 'ember_prime_set' },
+    { input: 'ma pr s', slug: 'mag_prime_set' },
+    { input: 'fr pr s', slug: 'fragor_prime_set' },
+    { input: 'ob pr s', slug: 'oberon_prime_set' },
+    { input: 'tr pr s', slug: 'trinity_prime_set' },
+  ]
+
   describe('exact matches', () => {
     for (const testCase of exactMatchCases) {
       it(`resolves ${testCase.input}`, async () => {
@@ -137,6 +151,14 @@ describe('wfm-service.inputToItem', () => {
   describe('combined variants', () => {
     for (const testCase of combinedCases) {
       it(`composes ${testCase.input}`, async () => {
+        await expectItemSlug(testCase.input, testCase.slug)
+      })
+    }
+  })
+
+  describe('word prefix variants', () => {
+    for (const testCase of wordPrefixCases) {
+      it(`matches ${testCase.input}`, async () => {
         await expectItemSlug(testCase.input, testCase.slug)
       })
     }

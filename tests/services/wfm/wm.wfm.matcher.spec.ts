@@ -2,7 +2,9 @@ import { expect } from 'chai'
 
 import {
   buildSuffixVariantCandidates,
+  normalizeWordPrefixName,
   removeNameSuffix,
+  splitWordPrefixTokens,
   transformByWarframeAlias,
 } from '../../../src/services/wfm-service/wfm-service.item-matcher'
 import { normalizeName } from '../../../src/utils'
@@ -81,6 +83,22 @@ describe('wfm-item-matcher helpers', () => {
       it(`expands ${testCase.input}`, () => {
         const result = buildSuffixVariantCandidates(normalizeName(testCase.input))
         expect(result).to.deep.equal(testCase.expected)
+      })
+    }
+  })
+
+  describe('word prefix tokenizer', () => {
+    const cases = [
+      { input: 'v p s', normalized: 'v p s', tokens: ['v', 'p', 's'] },
+      { input: 'va pr s', normalized: 'va pr s', tokens: ['va', 'pr', 's'] },
+      { input: '  Valkyr   Prime  Set  ', normalized: 'valkyr prime set', tokens: ['valkyr', 'prime', 'set'] },
+      { input: 'Valkyr-Prime/Set', normalized: 'valkyr prime set', tokens: ['valkyr', 'prime', 'set'] },
+    ]
+
+    for (const testCase of cases) {
+      it(`normalizes ${testCase.input}`, () => {
+        expect(normalizeWordPrefixName(testCase.input)).to.equal(testCase.normalized)
+        expect(splitWordPrefixTokens(testCase.input)).to.deep.equal(testCase.tokens)
       })
     }
   })

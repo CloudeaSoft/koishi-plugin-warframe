@@ -36,6 +36,7 @@ describe('globalItemDataFactory Tests', () => {
     expect(result.globalItemDict.valkyr_prime_set.id).to.equal('1')
 
     expect(result.globalItemGameRefDict['/Lotus/Weapons/Warframes/ValkyrPrime']).to.not.equal(undefined)
+    expect(result.globalItemWordPrefixCandidates).to.have.length(4)
   })
 
   it('should build name-to-slug dict with both zh and en names', async () => {
@@ -53,6 +54,11 @@ describe('globalItemDataFactory Tests', () => {
     expect(result.globalItemNameToSlugDict.nikanaprimeblueprint).to.equal(
       'nikana_prime_blueprint',
     )
+    expect(result.globalItemWordPrefixCandidates[0]).to.include.keys(
+      'item',
+      'normalizedName',
+      'tokens',
+    )
   })
 
   it('should return empty structures for empty array input', async () => {
@@ -61,6 +67,7 @@ describe('globalItemDataFactory Tests', () => {
     expect(result.globalItemDict).to.deep.equal({})
     expect(result.globalItemNameToSlugDict).to.deep.equal({})
     expect(result.globalItemGameRefDict).to.deep.equal({})
+    expect(result.globalItemWordPrefixCandidates).to.deep.equal([])
   })
 
   it('should handle items missing zh-hans name', async () => {
@@ -78,6 +85,7 @@ describe('globalItemDataFactory Tests', () => {
     const result = await globalItemDataFactory(items)
     expect(result.globalItemNameToSlugDict.testitem).to.equal('test_item')
     expect(Object.keys(result.globalItemNameToSlugDict)).to.have.length(1)
+    expect(result.globalItemWordPrefixCandidates).to.have.length(1)
   })
 
   it('should handle items missing en name', async () => {
@@ -94,11 +102,13 @@ describe('globalItemDataFactory Tests', () => {
     ] as unknown as ItemShort[]
     const result = await globalItemDataFactory(items)
     expect(result.globalItemNameToSlugDict['测试物品']).to.equal('test_item')
+    expect(result.globalItemWordPrefixCandidates).to.have.length(1)
   })
 
   it('should handle empty array input', async () => {
     const result = await globalItemDataFactory([])
     expect(result.globalItemList).to.deep.equal([])
     expect(result.globalItemDict).to.deep.equal({})
+    expect(result.globalItemWordPrefixCandidates).to.deep.equal([])
   })
 })
