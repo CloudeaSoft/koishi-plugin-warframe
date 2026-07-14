@@ -5,6 +5,7 @@ import {
   PrimedModHistoryComponent,
   RivenOrderComponent,
 } from '../components/wfm'
+import { t } from '../messages'
 import {
   getItemOrders,
   getRivenOrders,
@@ -24,7 +25,7 @@ export function createWfmCommands(deps: PluginDependencies): {
     wmCommand: async (_action: Argv, input: string) => {
       const result = await getItemOrders(input)
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(ItemOrderComponent(result.data.item, result.data.orders))
@@ -33,7 +34,7 @@ export function createWfmCommands(deps: PluginDependencies): {
     wmrCommand: async (_action: Argv, input: string) => {
       const result = await getRivenOrders(input)
       if (!result.ok) {
-        return result.message
+        return t(result)
       }
 
       return render(RivenOrderComponent(result.data.item, result.data.orders))

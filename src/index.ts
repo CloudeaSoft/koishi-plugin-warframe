@@ -139,8 +139,8 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('奸商')
     .action(wf.voidtraderCommand)
 
-  ctx.command('lich-c', 'c系玄骸武器', { hidden: true }).alias('lichc').action(inDevelopment)
-  ctx.command('lich-i', 'i系玄骸武器', { hidden: true }).alias('lichi').action(inDevelopment)
+  ctx.command('lich-c', 'c系玄骸武器', { hidden: true }).alias('lichc').action(miscs.inDevelopment)
+  ctx.command('lich-i', 'i系玄骸武器', { hidden: true }).alias('lichi').action(miscs.inDevelopment)
 
   ctx
     .command('riven-weekly [minPrice:number]', '每周高价值紫卡参考 (未洗中位价)')
@@ -158,8 +158,4 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('P卡历史')
     .alias('p卡历史')
     .action(wfm.pmodhistoryCommand)
-}
-
-function inDevelopment(): string {
-  return '功能暂未开放'
 }

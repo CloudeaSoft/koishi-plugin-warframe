@@ -9,7 +9,7 @@ describe('getRelic Tests', function () {
     const result = await getRelic('')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('请提供正确的遗物名称')
+      expect(result.message).to.equal('relic.invalidName')
     }
   })
 
@@ -17,7 +17,7 @@ describe('getRelic Tests', function () {
     const result = await getRelic('   ')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('请提供正确的遗物名称')
+      expect(result.message).to.equal('relic.invalidName')
     }
   })
 
@@ -25,7 +25,7 @@ describe('getRelic Tests', function () {
     const result = await getRelic('InvalidRelic')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('请提供正确的遗物名称')
+      expect(result.message).to.equal('relic.invalidName')
     }
   })
 
@@ -101,7 +101,7 @@ describe('getRelic Tests', function () {
     const result = await getRelic('古纪NONEXISTENT999')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('未找到对应遗物信息')
+      expect(result.message).to.equal('relic.notFound')
     }
   })
 
