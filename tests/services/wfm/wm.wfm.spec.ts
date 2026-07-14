@@ -1,13 +1,13 @@
-import type { ItemShort } from '../src/types/wfm'
+import type { ItemShort } from '../../../src/types/wfm'
 import { expect } from 'chai'
 
 import {
   globalItemDataFactory,
   overrideGlobalItemData,
-} from '../src/data/wfm/globalItem'
-import { stringToWFMItem } from '../src/services'
-import { createAsyncCache } from '../src/utils'
-import testItems from './assets/test-items.json'
+} from '../../../src/data/wfm/globalItem'
+import { stringToWFMItem } from '../../../src/services'
+import { createAsyncCache } from '../../../src/utils'
+import testItems from '../../assets/test-items.json'
 
 beforeAll(() => {
   overrideGlobalItemData(

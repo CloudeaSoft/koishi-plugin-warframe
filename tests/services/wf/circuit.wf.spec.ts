@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getCircuitWeek } from '../src/services'
+import { getCircuitWeek } from '../../../src/services'
 
 describe('getCircuitWeek Tests', () => {
   it('should return an object with correct shape', () => {

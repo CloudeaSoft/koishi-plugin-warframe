@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getRelic } from '../src/services'
+import { getRelic } from '../../../src/services'
 
 describe('getRelic Tests', () => {
 

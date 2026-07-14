@@ -1,12 +1,12 @@
-import type { RivenStatResult } from '../src/types/wf/riven'
-import type { RivenAttribute } from '../src/types/wfm'
+import type { RivenStatResult } from '../../../src/types/wf/riven'
+import type { RivenAttribute } from '../../../src/types/wfm'
 import { expect } from 'chai'
 import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
-} from '../src/data/wfm/globalRivenAttribute'
-import { getStaticRivenStats } from '../src/services'
-import { createAsyncCache } from '../src/utils'
+} from '../../../src/data/wfm/globalRivenAttribute'
+import { getStaticRivenStats } from '../../../src/services'
+import { createAsyncCache } from '../../../src/utils'
 
 const fixtureAttrs: RivenAttribute[] = [
   {
