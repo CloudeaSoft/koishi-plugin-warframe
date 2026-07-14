@@ -4,7 +4,7 @@ import {
   buildSuffixVariantCandidates,
   removeNameSuffix,
   transformByWarframeAlias,
-} from '../../../src/services/wfm-item-matcher'
+} from '../../../src/services/wfm-service/wfm-service.item-matcher'
 import { normalizeName } from '../../../src/utils'
 
 describe('wfm-item-matcher helpers', () => {

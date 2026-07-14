@@ -1,7 +1,7 @@
-import type { ItemShort } from '../types/wfm'
-import { warframeAlias } from '../assets'
-import { globalItemData } from '../data/wfm/globalItem'
-import { normalizeName } from '../utils'
+import type { ItemShort } from '../../types/wfm'
+import { warframeAlias } from '../../assets'
+import { globalItemData } from '../../data/wfm/globalItem'
+import { normalizeName } from '../../utils'
 
 interface WFMItemLookupData {
   globalItemDict: Record<string, ItemShort>
