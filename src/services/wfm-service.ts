@@ -9,9 +9,10 @@ import type {
 } from '../types/wfm'
 import { dict_zh } from 'warframe-public-export-plus'
 
+import { warframeAlias } from '../assets'
 import { globalDucatnatorIDDict } from '../data/wfm/globalDucatnator'
-import { globalItemData } from '../data/wfm/globalItem'
 
+import { globalItemData } from '../data/wfm/globalItem'
 import { globalRivenAttribute } from '../data/wfm/globalRivenAttribute'
 import { globalRivenItemData } from '../data/wfm/globalRivenItem'
 import { getVoidTraderHistory } from '../infrastructure/wf/wf-api'
@@ -25,77 +26,13 @@ import {
 
 // ================ initialization ===================
 
-const warframeAlias = {
-  'Volt': ['电', '电男', '伏特'],
-  'Trinity': ['奶妈', '奶'],
-  'Rhino': ['犀牛', '牛'],
-  'Mag': ['磁妹', '磁力'],
-  'Loki': ['洛基'],
-  'Excalibur': ['咖喱棒', '圣剑', '咖喱'],
-  'Ember': ['火鸡'],
-  'Ash': ['灰烬', '灰烬之刃'],
-  'Nyx': ['脑溢血'],
-  'Frost': ['冰男', '冰雪寒霜', '冰队', '冰'],
-  'Saryn': ['毒妈', '毒'],
-  'Banshee': ['女妖', '女高音'],
-  'Vauban': ['工程'],
-  'Nova': ['诺娃', '加速', '加速娃'],
-  'Nekros': ['摸尸', '摸'],
-  'Valkyr': ['瓦尔基里', '瓦喵', '瓦'],
-  'Oberon': ['奶爸', '龙王', '奥伯龙'],
-  'Zephyr': ['鸟姐', '鸟'],
-  'Hydroid': ['水男'],
-  'Mirage': ['小丑', '丑'],
-  'Limbo': ['小明', '李明博', '明'],
-  'Mesa': ['女枪'],
-  'Chroma': ['龙甲', '龙'],
-  'Equinox': ['阴阳', '双子'],
-  'Atlas': ['土石魔像', '土'],
-  'Wukong': ['猴子', '齐天大圣', '悟空', '猴'],
-  'Ivara': ['弓妹', '弓'],
-  'Nezha': ['哪吒', '三太子'],
-  'Inaros': ['沙'],
-  'Titania': ['蝶妹'],
-  'Nidus': ['蛆甲', '蛆'],
-  'Octavia': ['DJ', '音乐'],
-  'Harrow': ['主教'],
-  'Gara': ['玻璃'],
-  'Khora': ['猫'],
-  'Revenant': ['夜灵'],
-  'Garuda': ['血妈', '血'],
-  'Baruuk': ['武僧'],
-  'Hildryn': ['母牛'],
-  'Wisp': ['花'],
-  'Gauss': ['高斯'],
-  'Grendel': ['肥宅'],
-  'Protea': ['茶', '茶妹'],
-  'Xaku': ['骨'],
-  'Lavos': ['炼金', '药水', '药水哥', '蛇'],
-  'Sevagoth': ['鬼', '鲨鱼'],
-  'Yareli': ['水妹'],
-  'Caliban': ['卡利班'],
-  'Gyre': ['电妹'],
-  'Styanax': ['斯巴达'],
-  'Voruna': ['狼', '狼妹'],
-  'Citrine': ['水晶', '宝石'],
-  'Kullervo': ['刀哥'],
-  'Dagath': ['马', '赛马娘', '马娘'],
-  'Qorvex': ['暖气片'],
-  'Dante': ['但丁'],
-  'Jade': ['翡翠', '天使'],
-  'Koumei': [],
-  'Cyte-09': ['Cyte09', '老九', '9', '九'],
-  'Temple': ['吉他'],
-  'Nokko': ['蘑菇'],
-}
-
 const warframeAliasDict: {
   [key: string]: string
 } = ((aliasObject) => {
   const transformedObject: Record<string, string> = {}
   for (const [key, aliases] of Object.entries(aliasObject)) {
     transformedObject[key] = key
-    for (const alias of aliases as Array<string>) {
+    for (const alias of aliases) {
       if (typeof alias === 'string' && alias.length > 0) {
         transformedObject[alias] = key
         const warframeNameWithSuffix = `${alias}甲`
