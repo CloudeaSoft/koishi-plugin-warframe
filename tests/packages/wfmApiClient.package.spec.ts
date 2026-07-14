@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { createWfmApiClient } from '../packages/wfm-api-client/src/index'
+import { createWfmApiClient } from '../../packages/wfm-api-client/src/index'
 
 describe('wfm-api-client package', () => {
   it('fetches item list through the injected transport', async () => {

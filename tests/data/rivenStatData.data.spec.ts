@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { rivenStatFixFactor } from '../src/data/wf/rivenStatData'
+import { rivenStatFixFactor } from '../../src/data/wf/rivenStatData'
 
 describe('rivenStatFixFactor Tests', () => {
   it('should contain all four stat types', () => {

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { hexToRgb, lerp, rgbToHex } from '../src/utils/color'
+import { hexToRgb, lerp, rgbToHex } from '../../src/utils/color'
 
 describe('lerp Tests', () => {
   it('should return start when t=0', () => {

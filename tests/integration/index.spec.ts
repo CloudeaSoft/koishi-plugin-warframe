@@ -1,7 +1,7 @@
 import type { Plugin } from 'koishi'
 import mock from '@koishijs/plugin-mock'
 import { App } from 'koishi'
-import * as warframe from '../src/index'
+import * as warframe from '../../src/index'
 
 const app = new App()
 app.plugin(mock as Plugin.Object)

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { inDevelopment } from '../src/commands/miscs'
+import { inDevelopment } from '../../src/commands/miscs'
 
 describe('miscs commands', () => {
   it('returns the in-development message', () => {

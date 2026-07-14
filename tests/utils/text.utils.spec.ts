@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { removeSpace, toPascalCase } from '../src/utils/text'
+import { removeSpace, toPascalCase } from '../../src/utils/text'
 
 describe('removeSpace Tests', () => {
   // ---------------------------------------------------------

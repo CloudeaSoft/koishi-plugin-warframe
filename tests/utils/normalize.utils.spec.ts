@@ -3,7 +3,7 @@ import {
   fullWidthToHalfWidth,
   normalizeName,
   pascalToSpaced,
-} from '../src/utils/text'
+} from '../../src/utils/text'
 
 describe('normalizeName Tests', () => {
   it('should convert to lowercase', () => {

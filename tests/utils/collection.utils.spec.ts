@@ -3,7 +3,7 @@ import {
   dictToKeyDict,
   listToDict,
   listToDictSpec,
-} from '../src/utils/collection'
+} from '../../src/utils/collection'
 
 describe('listToDict Tests', () => {
   it('should build dict from list with single key', () => {

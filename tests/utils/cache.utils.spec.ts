@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { createAsyncCache } from '../src/utils/cache'
+import { createAsyncCache } from '../../src/utils/cache'
 
 describe('createAsyncCache Tests', () => {
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { t } from '../src/messages'
-import { analyzeRivenStat } from '../src/services'
+import { t } from '../../src/messages'
+import { analyzeRivenStat } from '../../src/services'
 
 describe('messages', () => {
   it('resolves a message key', () => {
