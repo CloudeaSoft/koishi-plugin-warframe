@@ -31,12 +31,14 @@ const warframeAliasDict: {
 } = ((aliasObject) => {
   const transformedObject: Record<string, string> = {}
   for (const [key, aliases] of Object.entries(aliasObject)) {
-    transformedObject[key] = key
+    const normalizedKey = normalizeName(key)
+    transformedObject[normalizedKey] = normalizedKey
     for (const alias of aliases) {
       if (typeof alias === 'string' && alias.length > 0) {
-        transformedObject[alias] = key
-        const warframeNameWithSuffix = `${alias}甲`
-        transformedObject[warframeNameWithSuffix] = key
+        const normalizedAlias = normalizeName(alias)
+        transformedObject[normalizedAlias] = normalizedKey
+        const warframeNameWithSuffix = normalizeName(`${alias}甲`)
+        transformedObject[warframeNameWithSuffix] = normalizedKey
       }
     }
   }
@@ -383,7 +385,7 @@ export async function stringToWFMItem(input: string): Promise<ItemShort | undefi
     )
     const normalizedStandardNoBlueprintSimplifiedPrime
       = normalizedStandardNoBlueprint.replace(/prime/g, 'p')
-    // 替换“头部神经光源”
+    // 替换“头部神经光元”
     const normalizedStandardNoNeu
       = normalizedStandardNoBlueprintSimplifiedPrime.replace(
         /头部神经光元/g,
