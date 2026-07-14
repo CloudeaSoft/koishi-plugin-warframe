@@ -23,6 +23,7 @@ import {
   toTimeStamp,
 } from '../../utils'
 import { stringToWFMItem } from './wfm-service.item-matcher'
+import { findRivenItemByName } from './wfm-service.riven-item-matcher'
 
 export { stringToWFMItem }
 
@@ -104,16 +105,9 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
 }
 
 export async function getRivenOrders(input: string): Promise<ServiceResult<{ item: RivenItem, orders: RivenOrderInternal[] }>> {
-  const { globalRivenItemList } = await globalRivenItemData.get()
   const { globalRivenAttributeDict } = await globalRivenAttribute.get()
 
-  const targetItem
-    = globalRivenItemList.find(item =>
-      compareRivenItemName(input, item.i18n?.['zh-hans']?.name ?? ''),
-    )
-    ?? globalRivenItemList.find(item =>
-      compareRivenItemName(input, item.i18n?.en?.name ?? ''),
-    )
+  const targetItem = await findRivenItemByName(input)
   if (!targetItem) {
     return { ok: false, message: 'wfm.rivenWeaponNotFound', params: { input } }
   }
@@ -262,23 +256,3 @@ export const primedModHistory = createAsyncCache(async () => {
 
   return result
 }, 43_200_000)
-
-function compareRivenItemName(input: string, standard: string): boolean {
-  if (
-    !input
-    || !standard
-    || typeof input !== 'string'
-    || typeof standard !== 'string'
-  ) {
-    return false
-  }
-
-  // 2. 标准化名称
-  const normalizedInput = normalizeName(input)
-  const normalizedStandard = normalizeName(standard)
-
-  if (!normalizedInput || !normalizedStandard)
-    return false
-
-  return normalizedInput === normalizedStandard
-}
