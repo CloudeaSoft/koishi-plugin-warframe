@@ -17,6 +17,8 @@ cycles, Riven analysis/OCR, and Void Trader information.
   rendering.
 - Package manager: Yarn. Use `yarn` commands only; do not run `npm` or `npx`
   directly. If a script internally uses another tool, run it through `yarn <script>`.
+- On Windows, prefer `pwsh` (PowerShell 7) for shell commands. Do not use
+  legacy `powershell.exe` unless a command explicitly requires it.
 - Build system: `yakumo` with `yakumo-tsc` and `yakumo-esbuild`.
 - Test stack: Mocha + Chai. Do not add `chai-as-promised`; use explicit
   `try`/`catch` assertions for rejected promises.

@@ -33,3 +33,5 @@ export const arbyRewards = loadAssetJson<ArbyRewards>('arbyRewards.json')
 
 export const Baro = loadAssetText('baro.txt')
 export const BaroParsed = loadAssetJson<BaroParsedItem[]>('baroParsed.json')
+
+export const warframeAlias = loadAssetJson<Record<string, string[]>>('warframeAlias.json')
