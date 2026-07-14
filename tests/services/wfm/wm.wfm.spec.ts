@@ -74,7 +74,21 @@ describe('wfm-service.inputToItem', () => {
     { input: '瓦喵甲', slug: 'valkyr_prime_set' },
   ]
 
-  const legacyOnlyCases = [
+  const suffixCases = [
+    { input: 'Volt Prime 系统', slug: 'volt_prime_systems_blueprint' },
+    { input: 'Volt Prime 头', slug: 'volt_prime_neuroptics_blueprint' },
+    { input: 'Volt Prime 机体', slug: 'volt_prime_chassis_blueprint' },
+    { input: 'Rhino Prime 头', slug: 'rhino_prime_neuroptics_blueprint' },
+    { input: 'Rhino Prime 机体', slug: 'rhino_prime_chassis_blueprint' },
+    { input: 'Valkyr Prime 头', slug: 'valkyr_prime_neuroptics_blueprint' },
+    { input: 'Octavia Prime 头', slug: 'octavia_prime_neuroptics_blueprint' },
+    { input: 'Ash Prime 头', slug: 'ash_prime_neuroptics_blueprint' },
+    { input: 'Mag Prime 头', slug: 'mag_prime_neuroptics_blueprint' },
+    { input: 'Frost Prime 头', slug: 'frost_prime_neuroptics_blueprint' },
+    { input: 'Ember Prime 机体', slug: 'ember_prime_chassis_blueprint' },
+  ]
+
+  const combinedCases = [
     { input: '龙头', slug: 'chroma_prime_neuroptics_blueprint' },
     { input: '电系统', slug: 'volt_prime_systems_blueprint' },
     { input: '牛头', slug: 'rhino_prime_neuroptics_blueprint' },
@@ -112,9 +126,17 @@ describe('wfm-service.inputToItem', () => {
     }
   })
 
-  describe('legacy-only variants', () => {
-    for (const testCase of legacyOnlyCases) {
+  describe('suffix variants', () => {
+    for (const testCase of suffixCases) {
       it(`normalizes ${testCase.input}`, async () => {
+        await expectItemSlug(testCase.input, testCase.slug)
+      })
+    }
+  })
+
+  describe('combined variants', () => {
+    for (const testCase of combinedCases) {
+      it(`composes ${testCase.input}`, async () => {
         await expectItemSlug(testCase.input, testCase.slug)
       })
     }
