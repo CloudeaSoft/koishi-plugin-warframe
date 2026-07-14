@@ -47,7 +47,7 @@ export default antfu(
   },
   {
     files: [
-      'test/**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}',
+      'tests/**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}',
     ],
     rules: {
       'antfu/no-top-level-await': 'off',

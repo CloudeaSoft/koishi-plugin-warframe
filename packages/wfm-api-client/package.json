@@ -19,7 +19,7 @@
   "scripts": {
     "build": "tsc --build --force",
     "dtsc": "tsc --build --force",
-    "test": "mocha tests/**/*.spec.ts"
+    "test": "vitest run"
   },
   "dependencies": {
     "bottleneck": "^2.19.5",

@@ -55,7 +55,7 @@ Open any `.ts` file, click the `{ }` item in the status bar, then select **Use W
 
 ```bash
 yarn dtsc          # Type-check (no emit)
-yarn test          # Run all tests (mocha + esbuild-register)
+yarn test          # Run all tests (vitest)
 yarn build         # Full build (yakumo)
 yarn install       # Install dependencies
 ```
@@ -63,7 +63,7 @@ yarn install       # Install dependencies
 Run a single test file:
 
 ```bash
-yarn mocha tests/<file>.spec.ts
+yarn vitest run tests/<file>.spec.ts
 ```
 
 ---
@@ -157,7 +157,7 @@ if (!data) {
 
 ```bash
 yarn test                              # all tests
-yarn mocha tests/cache.utils.spec.ts   # single file
+yarn vitest run tests/cache.utils.spec.ts   # single file
 ```
 
 ### Writing Tests
@@ -173,7 +173,7 @@ yarn mocha tests/cache.utils.spec.ts   # single file
 
 **`before()` / `after()` hooks MUST be placed inside `describe()` blocks — never at the file root.**
 
-Mocha runs root-level hooks before **all** test files in the suite, which causes cross-file interference when multiple files override the same global singleton. This was a real bug we encountered and fixed — root-level `before()` in one file overrode a cache that another file's test depended on.
+The old test runner ran root-level hooks before **all** test files in the suite, which caused cross-file interference when multiple files overrode the same global singleton. This was a real bug we encountered and fixed — root-level beforeAll() in one file overrode a cache that another file's test depended on.
 
 ✅ Correct:
 
