@@ -13,5 +13,15 @@ export default defineConfig({
     environment: 'node',
     hookTimeout: 120000,
     testTimeout: 120000,
+    coverage: {
+      provider: 'v8',
+      exclude: ['lib', 'types', 'components', 'tests'],
+      clean: true,
+      cleanOnRerun: true,
+      reportsDirectory: './coverage',
+      thresholds: {
+        functions: 50,
+      },
+    },
   },
 })
