@@ -2,7 +2,7 @@ import type { RivenAttribute } from '../../src/types/wfm'
 import { expect } from 'chai'
 import { globalRivenAttributeFactory } from '../../src/data/wfm/globalRivenAttribute'
 
-const fixtureAttrs: RivenAttribute[] = [
+const fixtureAttrs = [
   {
     slug: 'critical_chance',
     prefix: 'Cru',
@@ -25,7 +25,7 @@ const fixtureAttrs: RivenAttribute[] = [
       'en': { name: 'Damage', description: '' },
     },
   },
-]
+] as unknown as RivenAttribute[]
 
 describe('globalRivenAttributeFactory Tests', () => {
   it('should build list and dict from provided data', async () => {
@@ -47,7 +47,7 @@ describe('globalRivenAttributeFactory Tests', () => {
   })
 
   it('should handle duplicate slugs (last wins in dict)', async () => {
-    const dupes: RivenAttribute[] = [
+    const dupes = [
       {
         slug: 'damage',
         prefix: 'A',
@@ -70,7 +70,7 @@ describe('globalRivenAttributeFactory Tests', () => {
           'en': { name: 'Damage2', description: '' },
         },
       },
-    ]
+    ] as unknown as RivenAttribute[]
     const result = await globalRivenAttributeFactory(dupes)
     expect(result.globalRivenAttributeList).to.have.length(2)
     expect(result.globalRivenAttributeDict.damage.i18n['zh-hans'].name).to.equal(

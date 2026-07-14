@@ -8,7 +8,7 @@ import {
 import { getStaticRivenStats } from '../../../src/services'
 import { createAsyncCache } from '../../../src/utils'
 
-const fixtureAttrs: RivenAttribute[] = [
+const fixtureAttrs = [
   {
     slug: 'damage',
     prefix: 'Vex',
@@ -53,7 +53,7 @@ const fixtureAttrs: RivenAttribute[] = [
       'en': { name: 'Critical Damage', description: '' },
     },
   },
-]
+] as unknown as RivenAttribute[]
 
 function expectRivenStatResult(
   result: Awaited<ReturnType<typeof getStaticRivenStats>>,
@@ -66,7 +66,6 @@ function expectRivenStatResult(
 }
 
 describe('getStaticRivenStats Tests', () => {
-
   beforeAll(() => {
     overrideGlobalRivenAttribute(
       createAsyncCache(async () => {

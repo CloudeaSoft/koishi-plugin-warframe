@@ -5,7 +5,7 @@ import * as warframe from '../../src/index'
 
 const app = new App()
 app.plugin(mock as Plugin.Object)
-app.plugin(warframe, {
+app.plugin(warframe as unknown as Plugin.Object, {
   developerMode: false,
   ocrAPISecret: { id: '', key: '' },
 })
@@ -24,7 +24,6 @@ app.middleware(({ content }, next) => {
 beforeAll(() => app.start())
 
 describe('main Project', () => {
-
   it('example', async () => {
     await client.shouldReply('天王盖地虎', '宝塔镇河妖')
     await client.shouldReply('天王盖地虎')

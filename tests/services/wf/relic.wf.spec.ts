@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import { getRelic } from '../../../src/services'
 
 describe('getRelic Tests', () => {
-
   it('should return error for empty input', async () => {
     const result = await getRelic('')
     expect(result.ok).to.equal(false)

@@ -35,8 +35,11 @@ it('wfm-service.inputToItem', async () => {
     if (typeof output === 'undefined' && predict === undefined) {
       expect(output).to.be.equal(predict)
     }
+    else if (output) {
+      expect(output.i18n['zh-hans']?.name).to.be.equal(predict)
+    }
     else {
-      expect(output?.i18n['zh-hans'].name).to.be.equal(predict)
+      throw new Error(`Expected output for ${input}`)
     }
   }
 })

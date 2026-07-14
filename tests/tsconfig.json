@@ -1,21 +1,17 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "composite": true,
     "target": "es2022",
     "jsx": "react-jsx",
     "jsxImportSource": "@satorijs/element",
-    "rootDir": "src",
+    "rootDir": "..",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "types": ["node"],
+    "resolveJsonModule": true,
+    "types": ["node", "vitest/globals"],
     "strictNullChecks": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "lib",
-    "outFile": "lib/index.d.ts",
+    "noEmit": true,
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src", "src/**/*.json"]
+  "include": ["../src/**/*.ts", "../src/**/*.tsx", "../src/**/*.json", "**/*.ts", "**/*.json"]
 }

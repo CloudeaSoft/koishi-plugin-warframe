@@ -30,7 +30,7 @@ beforeAll(() => {
   )
   overrideGlobalRivenAttribute(
     createAsyncCache(async () => {
-      return await globalRivenAttributeFactory(testAttr.data as RivenAttribute[])
+      return await globalRivenAttributeFactory(testAttr.data as unknown as RivenAttribute[])
     }, -1),
   )
 })
@@ -1670,7 +1670,7 @@ describe('transform Attr Base Value Tests', () => {
         },
       ],
     },
-  ]
+  ] as unknown as Array<Parameters<typeof analyzeRivenStat>[0]>
 
   it('attr Values Multi', () => {
     inputs.forEach((input) => {

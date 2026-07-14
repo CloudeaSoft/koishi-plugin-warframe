@@ -64,7 +64,6 @@ describe('msToHumanReadable Tests', () => {
 })
 
 describe('sleep Tests', () => {
-
   it('should resolve after the specified duration', async () => {
     const start = Date.now()
     await sleep(50)

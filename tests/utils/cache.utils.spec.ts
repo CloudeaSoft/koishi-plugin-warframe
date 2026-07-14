@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import { createAsyncCache } from '../../src/utils/cache'
 
 describe('createAsyncCache Tests', () => {
-
   it('should call factory on first get', async () => {
     let callCount = 0
     const cache = createAsyncCache(async () => {

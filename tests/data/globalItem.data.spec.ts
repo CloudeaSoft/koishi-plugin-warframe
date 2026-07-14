@@ -2,15 +2,15 @@ import type { ItemShort } from '../../src/types/wfm'
 import { expect } from 'chai'
 import { globalItemDataFactory } from '../../src/data/wfm/globalItem'
 
-const fixtureItems: ItemShort[] = [
+const fixtureItems = [
   {
     id: '1',
     slug: 'valkyr_prime_set',
     gameRef: '/Lotus/Weapons/Warframes/ValkyrPrime',
     thumb: 'valkyr_prime.png',
     i18n: {
-      'zh-hans': { name: 'Valkyr Prime 一套', description: '' },
-      'en': { name: 'Valkyr Prime Set', description: '' },
+      'zh-hans': { name: 'Valkyr Prime 一套' },
+      'en': { name: 'Valkyr Prime Set' },
     },
   },
   {
@@ -19,11 +19,11 @@ const fixtureItems: ItemShort[] = [
     gameRef: '/Lotus/Weapons/Melee/NikanaPrime',
     thumb: 'nikana_prime.png',
     i18n: {
-      'zh-hans': { name: '侍刃 Prime 蓝图', description: '' },
-      'en': { name: 'Nikana Prime Blueprint', description: '' },
+      'zh-hans': { name: '侍刃 Prime 蓝图' },
+      'en': { name: 'Nikana Prime Blueprint' },
     },
   },
-]
+] as unknown as ItemShort[]
 
 describe('globalItemDataFactory Tests', () => {
   it('should build all four structures from provided data', async () => {
@@ -64,34 +64,34 @@ describe('globalItemDataFactory Tests', () => {
   })
 
   it('should handle items missing zh-hans name', async () => {
-    const items: ItemShort[] = [
+    const items = [
       {
         id: '1',
         slug: 'test_item',
         gameRef: '/Test',
         thumb: '',
         i18n: {
-          en: { name: 'Test Item', description: '' },
+          en: { name: 'Test Item' },
         },
       },
-    ]
+    ] as unknown as ItemShort[]
     const result = await globalItemDataFactory(items)
     expect(result.globalItemNameToSlugDict.testitem).to.equal('test_item')
     expect(Object.keys(result.globalItemNameToSlugDict)).to.have.length(1)
   })
 
   it('should handle items missing en name', async () => {
-    const items: ItemShort[] = [
+    const items = [
       {
         id: '1',
         slug: 'test_item',
         gameRef: '/Test',
         thumb: '',
         i18n: {
-          'zh-hans': { name: '测试物品', description: '' },
+          'zh-hans': { name: '测试物品' },
         },
       },
-    ]
+    ] as unknown as ItemShort[]
     const result = await globalItemDataFactory(items)
     expect(result.globalItemNameToSlugDict['测试物品']).to.equal('test_item')
   })
