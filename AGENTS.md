@@ -181,5 +181,5 @@ Error handling:
   Their transform logic is harder to test in isolation.
 - `relicQualityToName` and `relicQualityToTransKey` are exported and covered by
   adapter tests, but currently appear to have no runtime callers.
-- `lichc` and `lichi` are hidden placeholder commands that return an
+- `lich-c` and `lich-i` are hidden placeholder commands that return an
   in-development message.
