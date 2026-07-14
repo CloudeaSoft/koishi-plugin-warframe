@@ -8,28 +8,28 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 ### Warframe Market
 
-| Command       | Arguments     | Aliases                                    | Description                                                                            |
-| ------------- | ------------- | ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `wmi`         | `<itemId:text>`    |                                            | Query Warframe Market item orders (medians, ducat values, etc.) Displayed as an image. |
-| `wm`          | `<itemId:text>` |                                            | **Deprecated**, use `wmi` instead.                                                     |
-| `wmr`         | `<itemId:text>` |                                            | Query Warframe Market riven orders.                                                    |
-| `wmu`         |               |                                            | Update Warframe Market cache.                                                          |
+| Command        | Arguments     | Aliases                                                   | Description                                                                            |
+| -------------- | ------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `wmi`          | `<item-name:text>` |                                                           | Query Warframe Market item orders (medians, ducat values, etc.) Displayed as an image. |
+| `wm`           | `<item-name:text>` |                                                           | **Deprecated**, use `wmi` instead.                                                     |
+| `wmr`          | `<item-name:text>` |                                                           | Query Warframe Market riven orders.                                                    |
+| `wmu`          |               |                                                           | Update Warframe Market cache.                                                          |
 | `pmod-history` |               | `pmodhistory`, `pmod`, `P卡`, `p卡`, `P卡历史`, `p卡历史` | Query Primed MOD price history.                                                        |
-| `riven-hot`    |               | `hotriven`                                             | Query trending riven weapons ranking.                                                  |
+| `riven-hot`    |               | `hotriven`                                                | Query trending riven weapons ranking.                                                  |
 
 ### Fissures
 
-| Command     | Arguments | Aliases                    | Description                               |
-| ----------- | --------- | -------------------------- | ----------------------------------------- |
-| `fissure`   |           | `裂缝`, `裂隙`             | List current void fissure missions.       |
+| Command      | Arguments | Aliases                                 | Description                               |
+| ------------ | --------- | --------------------------------------- | ----------------------------------------- |
+| `fissure`    |           | `裂缝`, `裂隙`                          | List current void fissure missions.       |
 | `fissure-sp` |           | `spfissure`, `钢铁裂缝`, `钢铁裂隙`     | List current steel path fissure missions. |
 | `fissure-rj` |           | `rjfissure`, `九重天裂缝`, `九重天裂隙` | List current railjack fissure missions.   |
 
 ### Relics
 
-| Command | Arguments      | Aliases        | Description                                                                  |
-| ------- | -------------- | -------------- | ---------------------------------------------------------------------------- |
-| `relic` | `<relicName:text>` | `遗物`, `核桃` | Query relic contents with drop chances, WFM median prices, and ducat values. |
+| Command | Arguments          | Aliases        | Description                                                                  |
+| ------- | ------------------ | -------------- | ---------------------------------------------------------------------------- |
+| `relic` | `<relic-name:text>` | `遗物`, `核桃` | Query relic contents with drop chances, WFM median prices, and ducat values. |
 
 ### Weekly & Activities
 
@@ -47,26 +47,26 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 ### Void Trader
 
-| Command      | Arguments | Aliases            | Description                                                             |
-| ------------ | --------- | ------------------ | ----------------------------------------------------------------------- |
+| Command       | Arguments | Aliases                          | Description                                                             |
+| ------------- | --------- | -------------------------------- | ----------------------------------------------------------------------- |
 | `void-trader` |           | `voidtrader`, `虚空商人`, `奸商` | Query Baro Ki'Teer's current inventory and arrival/departure countdown. |
 
 ### Riven Mods
 
-| Command     | Arguments                                                    | Aliases    | Description                                                                                                                                                                                     |
-| ----------- | ------------------------------------------------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `riven`     | `<img:image>`                                                |            | Analyze riven stats from a screenshot using OCR.                                                                                                                                                |
-| `riven-weekly` | `[minPrice:number]`                                                    | `weeklyriven`, `周紫卡`, `周卡` | Query weekly high-value riven reference (unrolled median prices).                                                                                                                                                                                      |
-| `riven-stat`   | `<weaponType:string> <statType:string> <disposition:number>` | `rivenstat`, `紫卡数值` | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun)<br>Stat types: 2, 3, 21, 31 |
+| Command        | Arguments                                                    | Aliases                         | Description                                                                                                                                                                                     |
+| -------------- | ------------------------------------------------------------ | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `riven`        | `<img:image>`                                                |                                 | Analyze riven stats from a screenshot using OCR.                                                                                                                                                |
+| `riven-weekly` | `[minPrice:number]`                                          | `weeklyriven`, `周紫卡`, `周卡` | Query weekly high-value riven reference (unrolled median prices).                                                                                                                               |
+| `riven-stat`   | `<weaponType:string> <statType:string> <disposition:number>` | `rivenstat`, `紫卡数值`         | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun)<br>Stat types: 2, 3, 21, 31 |
 
 ### Kuva/Tenet/Coda (In Development)
 
 The following commands are reserved but not yet implemented:
 
-| Command | Arguments | Aliases | Description                                    |
-| ------- | --------- | ------- | ---------------------------------------------- |
-| `lich-c` |           | `lichc`  | Kuva weapons (hidden, in development)          |
-| `lich-i` |           | `lichi`  | Infested/Coda weapons (hidden, in development) |
+| Command  | Arguments | Aliases | Description                                    |
+| -------- | --------- | ------- | ---------------------------------------------- |
+| `lich-c` |           | `lichc` | Kuva weapons (hidden, in development)          |
+| `lich-i` |           | `lichi` | Infested/Coda weapons (hidden, in development) |
 
 ## Install
 

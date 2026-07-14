@@ -58,11 +58,11 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
   const wfm = commands.createWfmCommands(deps)
   const miscs = commands.createMiscsCommands(deps)
 
-  ctx.command('wm <itemId:text>', '请使用wmi替代').action(wfm.wmCommand)
+  ctx.command('wm <item-name:text>', '请使用wmi替代').action(wfm.wmCommand)
   ctx
-    .command('wmr <itemId:text>', '查询wm的紫卡价格')
+    .command('wmr <item-name:text>', '查询wm的紫卡价格')
     .action(wfm.wmrCommand)
-  ctx.command('wmi <msg:text>', '查询wm的物品价格').action(wfm.wmCommand)
+  ctx.command('wmi <item-name:text>', '查询wm的物品价格').action(wfm.wmCommand)
   ctx.command('wmu', '更新wm缓存数据').action(wfm.wmuCommand)
 
   ctx
@@ -90,7 +90,7 @@ function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .action(wf.railjackFissureCommand)
 
   ctx
-    .command('relic <input:text>', '查询遗物内容')
+    .command('relic <relic-name:text>', '查询遗物内容')
     .alias('遗物')
     .alias('核桃')
     .action(wf.relicCommand)
