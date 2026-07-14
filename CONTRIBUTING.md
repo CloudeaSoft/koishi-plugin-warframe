@@ -173,7 +173,7 @@ yarn vitest run tests/cache.utils.spec.ts   # single file
 
 **`before()` / `after()` hooks MUST be placed inside `describe()` blocks — never at the file root.**
 
-The old test runner ran root-level hooks before **all** test files in the suite, which caused cross-file interference when multiple files overrode the same global singleton. This was a real bug we encountered and fixed — root-level `before()` in one file overrode a cache that another file's test depended on.
+The old test runner ran root-level hooks before **all** test files in the suite, which caused cross-file interference when multiple files overrode the same global singleton. This was a real bug we encountered and fixed — root-level beforeAll() in one file overrode a cache that another file's test depended on.
 
 ✅ Correct:
 
