@@ -1,5 +1,4 @@
 import type {
-  FetchError,
   MappedResponseType,
   ResponseType,
 } from 'ofetch'
@@ -8,7 +7,6 @@ import {
   ofetch,
 
 } from 'ofetch'
-import { logger } from './logger'
 
 const defaultHeaders = {
   'Accept': 'text/html,application/json;q=0.9,image/*;q=0.8,*/*;q=0.8',
@@ -36,14 +34,7 @@ async function request<T, R extends ResponseType>(
       retryStatusCodes: [408, 429, 500, 502, 503, 504],
     })
   }
-  catch (err) {
-    const e = err as FetchError
-    const status = e.statusCode ?? 'network'
-    const detail
-      = e.data && typeof e.data === 'object'
-        ? JSON.stringify(e.data)
-        : ((e.data as string | undefined) ?? e.message ?? '')
-    logger.error(`[HTTP] ${method} ${url} -> ${status} ${detail}`.trimEnd())
+  catch {
     return undefined
   }
 }

@@ -1,6 +1,6 @@
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 
-import type { OcrAPISecret } from '../types/config'
+import type { OcrAPISecret } from '../types/ocr'
 import type { WarframeResult } from '../types/warframe-result'
 
 import type {
