@@ -4,8 +4,9 @@ import type { OcrAPISecret } from '../warframe'
 export type { OcrAPISecret } from '../warframe'
 
 export interface Config {
-  developerMode: boolean
+  channelIds: Record<string, string>
   ocrAPISecret: OcrAPISecret
+  developerMode: boolean
 }
 
 export interface PluginDependencies {
