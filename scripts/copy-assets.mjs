@@ -2,9 +2,17 @@ import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'no
 import { extname, join } from 'node:path'
 import { cwd } from 'node:process'
 
-const sourceRoot = join(cwd(), 'src/assets')
-const targetRoot = join(cwd(), 'lib/assets')
 const copiedExtensions = new Set(['.json', '.txt', '.css', '.html', '.svg'])
+const assetRoots = [
+  {
+    source: join(cwd(), 'src/assets'),
+    target: join(cwd(), 'lib/assets'),
+  },
+  {
+    source: join(cwd(), 'src/warframe/assets'),
+    target: join(cwd(), 'lib/warframe/assets'),
+  },
+]
 
 function copyAssets(source, target) {
   if (!existsSync(source)) {
@@ -29,5 +37,7 @@ function copyAssets(source, target) {
   }
 }
 
-rmSync(targetRoot, { recursive: true, force: true })
-copyAssets(sourceRoot, targetRoot)
+for (const { source, target } of assetRoots) {
+  rmSync(target, { recursive: true, force: true })
+  copyAssets(source, target)
+}
