@@ -1,4 +1,4 @@
-import type { ServiceResult } from '../../types/result'
+import type { WarframeResult } from '../../types/warframe-result'
 import type {
   ItemShort,
   OrderWithUser,
@@ -16,6 +16,7 @@ import { globalRivenAttribute } from '../../data/wfm/globalRivenAttribute'
 import { globalRivenItemData } from '../../data/wfm/globalRivenItem'
 import { getVoidTraderHistory } from '../../infrastructure/wf/wf-api'
 import { wfmClient } from '../../infrastructure/wfm-client'
+import { failure } from '../../types/warframe-result'
 import {
   createAsyncCache,
   normalizeName,
@@ -51,10 +52,10 @@ export async function updateCache(): Promise<string> {
   return lines.join('\n')
 }
 
-export async function getItemOrders(input: string): Promise<ServiceResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
+export async function getItemOrders(input: string): Promise<WarframeResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
   input = input.trim()
   if (!input) {
-    return { ok: false, message: 'wfm.inputItemName' }
+    return failure('wfm.inputItemName')
   }
 
   // 1. Process global option
@@ -71,14 +72,14 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
   // 2. Search item
   const targetItem = await stringToWFMItem(input)
   if (!targetItem) {
-    return { ok: false, message: 'wfm.itemNotFound', params: { input } }
+    return failure('wfm.itemNotFound', false, { input })
   }
 
   // 3. Fetch orders
   const itemId = targetItem.slug
   const data = await wfmClient.items.getOrders(itemId)
   if (!data) {
-    return { ok: false, message: 'wfm.orderFetchFailed' }
+    return failure('wfm.orderFetchFailed', true)
   }
 
   // 4. Process result
@@ -95,7 +96,7 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
     .slice(0, 8) // Top 8
 
   if (result.length === 0) {
-    return { ok: false, message: 'wfm.noOnlineSeller' }
+    return failure('wfm.noOnlineSeller')
   }
 
   return {
@@ -104,18 +105,18 @@ export async function getItemOrders(input: string): Promise<ServiceResult<{ item
   }
 }
 
-export async function getRivenOrders(input: string): Promise<ServiceResult<{ item: RivenItem, orders: RivenOrderInternal[] }>> {
+export async function getRivenOrders(input: string): Promise<WarframeResult<{ item: RivenItem, orders: RivenOrderInternal[] }>> {
   const { globalRivenAttributeDict } = await globalRivenAttribute.get()
 
   const targetItem = await findRivenItemByName(input)
   if (!targetItem) {
-    return { ok: false, message: 'wfm.rivenWeaponNotFound', params: { input } }
+    return failure('wfm.rivenWeaponNotFound', false, { input })
   }
 
   const itemId = targetItem.slug
   const data = await wfmClient.rivens.getOrders(itemId)
   if (!data) {
-    return { ok: false, message: 'wfm.rivenOrderFetchFailed' }
+    return failure('wfm.rivenOrderFetchFailed', true)
   }
 
   const top5 = data
@@ -132,7 +133,7 @@ export async function getRivenOrders(input: string): Promise<ServiceResult<{ ite
     .slice(0, 5) // Top 5
 
   if (top5.length === 0) {
-    return { ok: false, message: 'wfm.noOnlineRivenSeller' }
+    return failure('wfm.noOnlineRivenSeller')
   }
 
   const orders = top5.map((e) => {

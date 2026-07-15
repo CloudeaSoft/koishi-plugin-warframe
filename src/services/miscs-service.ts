@@ -1,17 +1,18 @@
 import type { RivenWeaponItem } from '../types/miscs/lab'
-import type { ServiceResult } from '../types/result'
+import type { WarframeResult } from '../types/warframe-result'
 import { globalHotRivenWeapons } from '../data/miscs/lab'
+import { failure } from '../types/warframe-result'
 
-export async function getHotRivenWeapons(): Promise<ServiceResult<RivenWeaponItem[]>> {
+export async function getHotRivenWeapons(): Promise<WarframeResult<RivenWeaponItem[]>> {
   try {
     const result = await globalHotRivenWeapons.get()
     if (!result || result.length === 0) {
-      return { ok: false, message: 'miscs.hotRiven.noData' }
+      return failure('miscs.hotRiven.noData')
     }
 
     return { ok: true, data: result }
   }
   catch {
-    return { ok: false, message: 'miscs.hotRiven.fetchFailed' }
+    return failure('miscs.hotRiven.fetchFailed', true)
   }
 }

@@ -17,8 +17,11 @@ describe('messages', () => {
     expect(
       t({
         ok: false,
-        message: 'wfm.itemNotFound',
-        params: { input: 'test-item' },
+        error: {
+          code: 'wfm.itemNotFound',
+          retryable: false,
+          params: { input: 'test-item' },
+        },
       }),
     ).to.equal('未找到物品: test-item')
   })
@@ -31,8 +34,10 @@ describe('messages', () => {
 
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('riven.weaponNotFound')
-      expect(result.params).to.deep.equal({ weapon: 'not-a-real-weapon' })
+      expect(result.error.code).to.equal('riven.weaponNotFound')
+      expect(result.error.params).to.deep.equal({
+        weapon: 'not-a-real-weapon',
+      })
     }
   })
 })

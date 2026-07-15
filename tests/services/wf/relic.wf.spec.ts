@@ -6,7 +6,8 @@ describe('getRelic Tests', () => {
     const result = await getRelic('')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('relic.invalidName')
+      expect(result.error.code).to.equal('relic.invalidName')
+      expect(result.error.retryable).to.equal(false)
     }
   })
 
@@ -14,7 +15,8 @@ describe('getRelic Tests', () => {
     const result = await getRelic('   ')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('relic.invalidName')
+      expect(result.error.code).to.equal('relic.invalidName')
+      expect(result.error.retryable).to.equal(false)
     }
   })
 
@@ -22,7 +24,8 @@ describe('getRelic Tests', () => {
     const result = await getRelic('InvalidRelic')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('relic.invalidName')
+      expect(result.error.code).to.equal('relic.invalidName')
+      expect(result.error.retryable).to.equal(false)
     }
   })
 
@@ -98,7 +101,8 @@ describe('getRelic Tests', () => {
     const result = await getRelic('古纪NONEXISTENT999')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('relic.notFound')
+      expect(result.error.code).to.equal('relic.notFound')
+      expect(result.error.retryable).to.equal(false)
     }
   })
 

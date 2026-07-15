@@ -1,11 +1,10 @@
-import type { MessageKey, MessageParams } from '../messages'
+export {
+  failure,
+  type WarframeError,
+  type WarframeErrorCode,
+  type WarframeErrorParams,
+  type WarframeFailure,
+  type WarframeResult,
+} from './warframe-result'
 
-export interface ServiceFailure {
-  ok: false
-  message: MessageKey
-  params?: MessageParams
-}
-
-export type ServiceResult<TData>
-  = | { ok: true, data: TData }
-    | ServiceFailure
+export type { WarframeResult as ServiceResult } from './warframe-result'
