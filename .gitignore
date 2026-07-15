@@ -17,3 +17,7 @@ tsconfig.tsbuildinfo
 *.sln
 
 coverage/
+
+.agents
+.superpowers
+docs/superpowers
