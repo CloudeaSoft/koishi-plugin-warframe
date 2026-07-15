@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { dirname, relative, resolve, sep } from 'node:path'
 import { expect } from 'chai'
 
 function packageRoot(): string {
@@ -17,34 +17,43 @@ function sourceFiles(path: string): string[] {
   return readdirSync(path).flatMap(name => sourceFiles(resolve(path, name)))
 }
 
-describe('warframe data boundary', () => {
-  it('does not import Koishi or Koishi presentation modules', () => {
+function importSpecifiers(source: string): string[] {
+  return [...source.matchAll(/(?:from\s+|import\s*)['"]([^'"]+)['"]/g)]
+    .map(match => match[1])
+}
+
+function isInside(root: string, path: string): boolean {
+  const pathFromRoot = relative(root, path)
+  return pathFromRoot === ''
+    || (!pathFromRoot.startsWith(`..${sep}`) && pathFromRoot !== '..')
+}
+
+describe('warframe source root', () => {
+  it('owns all domain implementation under src/warframe', () => {
     const root = packageRoot()
-    const candidates = [
-      'src/services',
-      'src/data',
-      'src/infrastructure',
-      'src/assets',
-      'src/utils',
-      'src/types/warframe-result.ts',
-      'src/types/ocr.ts',
-      'src/types/wf',
-      'src/types/wfm.d.ts',
-      'src/types/miscs',
-    ].flatMap(path => sourceFiles(resolve(root, path)))
+    const domainRoot = resolve(root, 'src/warframe')
+    const legacyRoots = ['services', 'data', 'infrastructure']
+      .map(name => resolve(root, 'src', name))
+      .filter(existsSync)
 
-    const forbidden = [
-      /from\s+['"]koishi['"]/,
-      /from\s+['"]koishi-plugin-puppeteer['"]/,
-      /from\s+['"][^'"]*(?:commands|components|messages)[/'"]/,
-      /from\s+['"][^'"]*types\/config['"]/,
-    ]
+    expect(existsSync(resolve(domainRoot, 'index.ts'))).to.equal(true)
+    expect(legacyRoots).to.deep.equal([])
+  })
 
-    const violations = candidates.flatMap((file) => {
+  it('does not import forbidden frameworks or escape the source root', () => {
+    const root = packageRoot()
+    const domainRoot = resolve(root, 'src/warframe')
+    const violations = sourceFiles(domainRoot).flatMap((file) => {
       const source = readFileSync(file, 'utf8')
-      return forbidden
-        .filter(pattern => pattern.test(source))
-        .map(pattern => `${file}: ${pattern}`)
+      return importSpecifiers(source).flatMap((specifier) => {
+        if (/^(?:koishi|koishi-plugin-puppeteer|@satorijs\/element)(?:\/|$)/.test(specifier)) {
+          return [`${file}: forbidden package ${specifier}`]
+        }
+        if (specifier.startsWith('.') && !isInside(domainRoot, resolve(dirname(file), specifier))) {
+          return [`${file}: escapes source root with ${specifier}`]
+        }
+        return []
+      })
     })
 
     expect(violations).to.deep.equal([])
@@ -57,26 +66,29 @@ describe('warframe data boundary', () => {
       'src/components',
       'src/messages.ts',
       'src/messages',
+      'src/types/config.d.ts',
     ].flatMap(path => sourceFiles(resolve(root, path)))
-
-    const forbidden = [
-      /from\s+['"][^'"]*\/services[/'"]/,
-      /from\s+['"][^'"]*\/data[/'"]/,
-      /from\s+['"][^'"]*\/infrastructure[/'"]/,
-      /from\s+['"][^'"]*\/types\/warframe-result['"]/,
-      /from\s+['"][^'"]*\/types\/ocr['"]/,
-      /from\s+['"][^'"]*\/types\/wf\//,
-      /from\s+['"][^'"]*\/types\/wfm['"]/,
-      /from\s+['"][^'"]*\/types\/miscs\//,
-    ]
-
     const violations = consumers.flatMap((file) => {
       const source = readFileSync(file, 'utf8')
-      return forbidden
-        .filter(pattern => pattern.test(source))
-        .map(pattern => `${file}: ${pattern}`)
+      return importSpecifiers(source)
+        .filter(specifier => /\/warframe\/(?:services|data|infrastructure|assets|types|utils)(?:\/|$)/.test(specifier))
+        .map(specifier => `${file}: deep import ${specifier}`)
     })
 
     expect(violations).to.deep.equal([])
+  })
+
+  it('does not expose private implementation from the facade', () => {
+    const root = packageRoot()
+    const facadePath = resolve(root, 'src/warframe/index.ts')
+    if (!existsSync(facadePath)) {
+      return
+    }
+    const facade = readFileSync(facadePath, 'utf8')
+
+    expect(facade).to.not.match(/from\s+['"]\.\/(?:data|infrastructure|assets)(?:\/|['"])/)
+    expect(facade).to.not.include('wfmClient')
+    expect(facade).to.not.include('fetchAsync')
+    expect(facade).to.not.include('globalWorldState')
   })
 })

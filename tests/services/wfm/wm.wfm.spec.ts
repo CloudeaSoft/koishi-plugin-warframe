@@ -1,12 +1,12 @@
-import type { ItemShort } from '../../../src/types/wfm'
+import type { ItemShort } from '../../../src/warframe/types/wfm'
 import { expect } from 'chai'
 
 import {
   globalItemDataFactory,
   overrideGlobalItemData,
-} from '../../../src/data/wfm/globalItem'
-import { stringToWFMItem } from '../../../src/services'
-import { createAsyncCache } from '../../../src/utils'
+} from '../../../src/warframe/data/wfm/globalItem'
+import { stringToWFMItem } from '../../../src/warframe/services'
+import { createAsyncCache } from '../../../src/warframe/utils'
 import testItems from '../../assets/test-items.json'
 
 describe('wfm-service.inputToItem', () => {

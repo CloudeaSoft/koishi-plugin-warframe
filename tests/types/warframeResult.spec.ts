@@ -1,6 +1,6 @@
-import type { WarframeResult } from '../../src/types/warframe-result'
+import type { WarframeResult } from '../../src/warframe/types/warframe-result'
 import { expect } from 'chai'
-import { failure } from '../../src/types/warframe-result'
+import { failure } from '../../src/warframe/types/warframe-result'
 
 describe('warframe result', () => {
   it('creates a non-retryable failure by default', () => {

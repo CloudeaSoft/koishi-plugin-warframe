@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getRelic } from '../../../src/services'
+import { getRelic } from '../../../src/warframe/services'
 
 describe('getRelic Tests', () => {
   it('should return error for empty input', async () => {

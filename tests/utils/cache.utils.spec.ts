@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { createAsyncCache } from '../../src/utils/cache'
+import { createAsyncCache } from '../../src/warframe/utils/cache'
 
 describe('createAsyncCache Tests', () => {
   it('should call factory on first get', async () => {

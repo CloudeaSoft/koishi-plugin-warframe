@@ -1,7 +1,7 @@
 import type { Element, Logger } from 'koishi'
-import type { OcrAPISecret } from './ocr'
+import type { OcrAPISecret } from '../warframe'
 
-export type { OcrAPISecret } from './ocr'
+export type { OcrAPISecret } from '../warframe'
 
 export interface Config {
   developerMode: boolean

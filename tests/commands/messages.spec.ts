@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { t } from '../../src/messages'
-import { analyzeRivenStat } from '../../src/services'
+import { analyzeRivenStat } from '../../src/warframe/services'
 
 describe('messages', () => {
   it('resolves a message key', () => {

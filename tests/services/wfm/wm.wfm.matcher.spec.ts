@@ -6,8 +6,8 @@ import {
   removeNameSuffix,
   splitWordPrefixTokens,
   transformByWarframeAlias,
-} from '../../../src/services/wfm-service/wfm-service.item-matcher'
-import { normalizeName } from '../../../src/utils'
+} from '../../../src/warframe/services/wfm-service/wfm-service.item-matcher'
+import { normalizeName } from '../../../src/warframe/utils'
 
 describe('wfm-item-matcher helpers', () => {
   describe('removeNameSuffix', () => {

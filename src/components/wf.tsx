@@ -5,7 +5,8 @@ import type {
   RivenStatAnalyzeResult,
   RivenStatResult,
 } from '../warframe'
-import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from '../utils'
+import { msToHumanReadable } from '../warframe'
+import { hexToRgb, lerp, rgbToHex } from '../utils'
 
 export function ArbitrationComponent(arbi: Arbitration[]): Element {
   return (

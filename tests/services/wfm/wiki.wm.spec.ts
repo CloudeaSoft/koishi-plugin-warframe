@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { Baro } from '../../../src/assets/index'
-import { getVoidTraderHistory } from '../../../src/infrastructure/wf/wf-api'
+import { Baro } from '../../../src/warframe/assets/index'
+import { getVoidTraderHistory } from '../../../src/warframe/infrastructure/wf/wf-api'
 
 describe('wiki void trader history parse test', () => {
   it('should not return empty', async () => {
