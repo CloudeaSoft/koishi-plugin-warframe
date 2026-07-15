@@ -1,8 +1,7 @@
-import type { OcrAPISecret } from '../types/config'
+import type { OcrAPISecret } from '../types/ocr'
 import { Buffer } from 'node:buffer'
 import crypto from 'node:crypto'
 import { createCache } from 'async-cache-dedupe'
-import { logger } from '../utils'
 
 interface OcrCacheParams {
   hash: string
@@ -73,8 +72,7 @@ export async function extractTextFromImage(image: string | Blob, secret: OcrAPIS
   try {
     return await ocrCache.extract({ hash, image, secret })
   }
-  catch (err) {
-    logger.error('OCR request error:', err)
+  catch {
     return undefined
   }
 }

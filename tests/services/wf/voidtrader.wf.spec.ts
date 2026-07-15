@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { getWorldState } from '../../../src/infrastructure/wf/wf-api'
-import { getVoidTraderItem } from '../../../src/infrastructure/wf/wfcd-adapter'
+import { getWorldState } from '../../../src/warframe/infrastructure/wf/wf-api'
+import { getVoidTraderItem } from '../../../src/warframe/infrastructure/wf/wfcd-adapter'
 import worldStateJSON from '../../assets/example-world-state.json'
 import 'reflect-metadata'
 

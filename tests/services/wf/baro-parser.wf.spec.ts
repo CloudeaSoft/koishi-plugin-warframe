@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getVoidTraderHistory } from '../../../src/infrastructure/wf/wf-api'
+import { getVoidTraderHistory } from '../../../src/warframe/infrastructure/wf/wf-api'
 
 describe('baro Lua Table Parser Tests', () => {
   it('should parse a minimal valid entry', async () => {

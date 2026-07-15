@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { normalSimilarity, tokenSimilarity } from '../../src/utils/text'
+import { normalSimilarity, tokenSimilarity } from '../../src/warframe/utils/text'
 
 describe('normalSimilarity Tests', () => {
   it('should return 1 for identical strings', () => {

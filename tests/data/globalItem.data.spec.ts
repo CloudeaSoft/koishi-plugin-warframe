@@ -1,6 +1,6 @@
-import type { ItemShort } from '../../src/types/wfm'
+import type { ItemShort } from '../../src/warframe/types/wfm'
 import { expect } from 'chai'
-import { globalItemDataFactory } from '../../src/data/wfm/globalItem'
+import { globalItemDataFactory } from '../../src/warframe/data/wfm/globalItem'
 
 const fixtureItems = [
   {

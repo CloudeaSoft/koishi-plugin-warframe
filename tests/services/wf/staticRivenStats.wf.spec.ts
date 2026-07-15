@@ -1,12 +1,12 @@
-import type { RivenStatResult } from '../../../src/types/wf/riven'
-import type { RivenAttribute } from '../../../src/types/wfm'
+import type { RivenStatResult } from '../../../src/warframe/types/wf/riven'
+import type { RivenAttribute } from '../../../src/warframe/types/wfm'
 import { expect } from 'chai'
 import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
-} from '../../../src/data/wfm/globalRivenAttribute'
-import { getStaticRivenStats } from '../../../src/services'
-import { createAsyncCache } from '../../../src/utils'
+} from '../../../src/warframe/data/wfm/globalRivenAttribute'
+import { getStaticRivenStats } from '../../../src/warframe/services'
+import { createAsyncCache } from '../../../src/warframe/utils'
 
 const fixtureAttrs = [
   {
@@ -60,7 +60,7 @@ function expectRivenStatResult(
 ): RivenStatResult {
   expect(result.ok).to.equal(true)
   if (!result.ok) {
-    throw new Error(`Expected ok result but got: ${result.message}`)
+    throw new Error(`Expected ok result but got: ${result.error.code}`)
   }
   return result.data
 }
@@ -78,7 +78,7 @@ describe('getStaticRivenStats Tests', () => {
     const result = await getStaticRivenStats('步枪', '2', 1.6)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('riven.dispositionError')
+      expect(result.error.code).to.equal('riven.dispositionError')
     }
   })
 
@@ -86,7 +86,7 @@ describe('getStaticRivenStats Tests', () => {
     const result = await getStaticRivenStats('步枪', '2', 0.4)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('riven.dispositionError')
+      expect(result.error.code).to.equal('riven.dispositionError')
     }
   })
 
@@ -102,7 +102,7 @@ describe('getStaticRivenStats Tests', () => {
     const result = await getStaticRivenStats('InvalidType', '2', 1.0)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('riven.weaponTypeError')
+      expect(result.error.code).to.equal('riven.weaponTypeError')
     }
   })
 
@@ -120,7 +120,7 @@ describe('getStaticRivenStats Tests', () => {
     const result = await getStaticRivenStats('步枪', '99', 1.0)
     expect(result.ok).to.equal(false)
     if (!result.ok) {
-      expect(result.message).to.equal('riven.statTypeError')
+      expect(result.error.code).to.equal('riven.statTypeError')
     }
   })
 

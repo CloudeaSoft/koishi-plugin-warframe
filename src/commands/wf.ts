@@ -26,7 +26,7 @@ import {
   getVoidTrader,
   getWeekly,
   getWeeklyRivens,
-} from '../services'
+} from '../warframe'
 
 export function createWfCommands(deps: PluginDependencies): {
   arbitrationCommand: (_action: Argv, input?: number) => Promise<string>

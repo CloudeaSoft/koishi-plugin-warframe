@@ -1,24 +1,24 @@
-import type { ItemShort, RivenAttribute } from '../../../src/types/wfm'
+import type { ItemShort, RivenAttribute } from '../../../src/warframe/types/wfm'
 
 import { expect } from 'chai'
 import { dict_en, ExportWeapons } from 'warframe-public-export-plus'
-import { rivenCalc } from '../../../src/assets/index'
+import { rivenCalc } from '../../../src/warframe/assets/index'
 
-import { rivenAttrValueDict } from '../../../src/data/wf/rivenBaseValues'
+import { rivenAttrValueDict } from '../../../src/warframe/data/wf/rivenBaseValues'
 import {
   globalItemDataFactory,
   overrideGlobalItemData,
-} from '../../../src/data/wfm/globalItem'
+} from '../../../src/warframe/data/wfm/globalItem'
 import {
   globalRivenAttributeFactory,
   overrideGlobalRivenAttribute,
-} from '../../../src/data/wfm/globalRivenAttribute'
+} from '../../../src/warframe/data/wfm/globalRivenAttribute'
 import {
   analyzeRivenStat,
   getWeaponRivenDisposition,
   parseOCRResult,
-} from '../../../src/services'
-import { createAsyncCache, normalizeName } from '../../../src/utils'
+} from '../../../src/warframe/services'
+import { createAsyncCache, normalizeName } from '../../../src/warframe/utils'
 import testItem from '../../assets/test-items.json'
 import testAttr from '../../assets/test-riven-attrs.json'
 

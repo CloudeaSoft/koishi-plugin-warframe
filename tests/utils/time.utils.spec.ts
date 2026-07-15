@@ -3,7 +3,7 @@ import {
   msToHumanReadable,
   sleep,
   toTimeStamp,
-} from '../../src/utils/time'
+} from '../../src/warframe/utils/time'
 
 describe('toTimeStamp Tests', () => {
   it('should convert valid ISO date string', () => {

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getWeaponRivenDisposition } from '../../../src/services'
+import { getWeaponRivenDisposition } from '../../../src/warframe/services'
 
 describe('getWeaponRivenDisposition Tests', () => {
   it('should find a known weapon by exact name', () => {

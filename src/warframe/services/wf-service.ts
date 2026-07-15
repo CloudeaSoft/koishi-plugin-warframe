@@ -1,7 +1,7 @@
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 
-import type { OcrAPISecret } from '../types/config'
-import type { ServiceResult } from '../types/result'
+import type { OcrAPISecret } from '../types/ocr'
+import type { WarframeResult } from '../types/warframe-result'
 
 import type {
   RivenStatAnalyzeResult,
@@ -39,6 +39,7 @@ import {
   getMissionTypeKey,
   getVoidTraderItem,
 } from '../infrastructure/wf/wfcd-adapter'
+import { failure } from '../types/warframe-result'
 import {
   fetchAsyncImage,
   msToHumanReadable,
@@ -50,18 +51,18 @@ import {
 
 // ================ features ===================
 
-export async function getRelic(input: string): Promise<ServiceResult<Relic>> {
+export async function getRelic(input: string): Promise<WarframeResult<Relic>> {
   if (!input) {
-    return { ok: false, message: 'relic.invalidName' }
+    return failure('relic.invalidName')
   }
 
   input = normalizeName(input)
   if (!input) {
-    return { ok: false, message: 'relic.invalidName' }
+    return failure('relic.invalidName')
   }
 
   if (!relics) {
-    return { ok: false, message: 'relic.dataLoading' }
+    return failure('relic.dataLoading', true)
   }
 
   const tierListForMatch = [
@@ -80,7 +81,7 @@ export async function getRelic(input: string): Promise<ServiceResult<Relic>> {
   ].map(t => normalizeName(t))
   const tier = tierListForMatch.find(t => input.startsWith(t))
   if (!tier) {
-    return { ok: false, message: 'relic.invalidName' }
+    return failure('relic.invalidName')
   }
 
   const category = input
@@ -97,12 +98,12 @@ export async function getRelic(input: string): Promise<ServiceResult<Relic>> {
   }
   const enTier = zhTierMap[tier as keyof typeof zhTierMap] ?? tier
   const key = normalizeName(enTier + category)
-  return relics[key] ? { ok: true, data: relics[key] } : { ok: false, message: 'relic.notFound' }
+  return relics[key] ? { ok: true, data: relics[key] } : failure('relic.notFound')
 }
 
-export function getArbitrations(day: number = 3): ServiceResult<Arbitration[]> {
+export function getArbitrations(day: number = 3): WarframeResult<Arbitration[]> {
   if (day > 14 || day <= 0) {
-    return { ok: false, message: 'arbitration.invalidDayRange' }
+    return failure('arbitration.invalidDayRange')
   }
 
   const currentHourTimeStamp = Math.floor(
@@ -140,14 +141,14 @@ export function getArbitrations(day: number = 3): ServiceResult<Arbitration[]> {
   }
 }
 
-export async function getWeekly(): Promise<ServiceResult<{
+export async function getWeekly(): Promise<WarframeResult<{
   archonHunt: ArchonHunt
   deepArchimedea: ArchiMedea
   temporalArchimedea: ArchiMedea
 }>> {
   const { raw: worldState } = await globalWorldState.get()
   if (!worldState) {
-    return { ok: false, message: 'common.fetchFailed' }
+    return failure('common.fetchFailed', true)
   }
 
   const archon: ArchonHunt = {
@@ -315,30 +316,30 @@ export function getCircuitWeek(): {
   }
 }
 
-export async function getFissures(): Promise<ServiceResult<Fissure[]>> {
+export async function getFissures(): Promise<WarframeResult<Fissure[]>> {
   const { fissures } = await globalWorldState.get()
-  return fissures ? { ok: true, data: fissures } : { ok: false, message: 'common.fetchFailed' }
+  return fissures ? { ok: true, data: fissures } : failure('common.fetchFailed', true)
 }
 
-export async function getSteelPathFissures(): Promise<ServiceResult<Fissure[]>> {
+export async function getSteelPathFissures(): Promise<WarframeResult<Fissure[]>> {
   const { spFissures } = await globalWorldState.get()
-  return spFissures ? { ok: true, data: spFissures } : { ok: false, message: 'common.fetchFailed' }
+  return spFissures ? { ok: true, data: spFissures } : failure('common.fetchFailed', true)
 }
 
-export async function getRailjackFissures(): Promise<ServiceResult<Fissure[]>> {
+export async function getRailjackFissures(): Promise<WarframeResult<Fissure[]>> {
   const { rjFissures } = await globalWorldState.get()
-  return rjFissures ? { ok: true, data: rjFissures } : { ok: false, message: 'common.fetchFailed' }
+  return rjFissures ? { ok: true, data: rjFissures } : failure('common.fetchFailed', true)
 }
 
-export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promise<ServiceResult<RivenStatAnalyzeResult>> {
+export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promise<WarframeResult<RivenStatAnalyzeResult>> {
   const img = await fetchAsyncImage(url)
   if (!img) {
-    return { ok: false, message: 'riven.imageFetchFailed' }
+    return failure('riven.imageFetchFailed', true)
   }
 
   const extractResult = await extractTextFromImage(img, secret)
   if (!extractResult) {
-    return { ok: false, message: 'riven.imageParseFailed' }
+    return failure('riven.imageParseFailed')
   }
 
   const parseResult = await parseOCRResult(extractResult)
@@ -347,23 +348,23 @@ export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promi
     || parseResult.attributes.length < 2
     || parseResult.attributes.length > 4
   ) {
-    return { ok: false, message: 'riven.imageParseFailed' }
+    return failure('riven.imageParseFailed')
   }
 
   return analyzeRivenStat(parseResult)
 }
 
-export async function getVoidTrader(): Promise<ServiceResult<VoidTrader>> {
+export async function getVoidTrader(): Promise<WarframeResult<VoidTrader>> {
   const { raw: worldState } = await globalWorldState.get()
   if (worldState.voidTraders.length === 0) {
-    return { ok: false, message: 'voidTrader.drifting' }
+    return failure('voidTrader.drifting')
   }
 
   const trader = worldState.voidTraders[0]
 
   if (trader && trader.activation && trader.activation.getTime() > Date.now()) {
     const diff = trader.activation.getTime() - Date.now()
-    return { ok: false, message: 'voidTrader.arriving', params: { time: msToHumanReadable(diff) } }
+    return failure('voidTrader.arriving', false, { time: msToHumanReadable(diff) })
   }
 
   const diff = trader.expiry!.getTime() - Date.now()
@@ -419,10 +420,10 @@ export async function getWeeklyRivens(
   })
 }
 
-export async function getStaticRivenStats(weaponType: string, statType: string, disposition: number): Promise<ServiceResult<RivenStatResult>> {
+export async function getStaticRivenStats(weaponType: string, statType: string, disposition: number): Promise<WarframeResult<RivenStatResult>> {
   // Process inputs
   if (disposition > 1.55 || disposition < 0.5) {
-    return { ok: false, message: 'riven.dispositionError' }
+    return failure('riven.dispositionError')
   }
 
   const weaponTypes = [
@@ -441,7 +442,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
     normalizeName(v).startsWith(normalizeName(weaponType)),
   )
   if (!matchedWeaponType) {
-    return { ok: false, message: 'riven.weaponTypeError' }
+    return failure('riven.weaponTypeError')
   }
 
   const weaponTypeKeys: Record<string, RivenWeaponType> = {
@@ -456,7 +457,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
 
   const statTypes: RivenStatCountType[] = ['2', '3', '21', '31']
   if (!statTypes.includes(statType as RivenStatCountType)) {
-    return { ok: false, message: 'riven.statTypeError' }
+    return failure('riven.statTypeError')
   }
 
   const rivenAttrValues = rivenAttrValueDict[weaponTypeKey]
@@ -720,14 +721,12 @@ export function analyzeRivenStat(parseResult: {
     value: number
     prefix: string
   }[]
-}): ServiceResult<RivenStatAnalyzeResult> {
+}): WarframeResult<RivenStatAnalyzeResult> {
   const weaponRiven = getWeaponRivenDisposition(parseResult.name)
   if (!weaponRiven) {
-    return {
-      ok: false,
-      message: 'riven.weaponNotFound',
-      params: { weapon: parseResult.name },
-    }
+    return failure('riven.weaponNotFound', false, {
+      weapon: parseResult.name,
+    })
   }
 
   const disposition = weaponRiven.calc.disposition

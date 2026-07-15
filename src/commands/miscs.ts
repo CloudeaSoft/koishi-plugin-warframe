@@ -1,7 +1,7 @@
 import type { PluginDependencies } from '../types/config'
 import { HotRivenComponent } from '../components/miscs'
 import { t } from '../messages'
-import { getHotRivenWeapons } from '../services'
+import { getHotRivenWeapons } from '../warframe'
 
 export function inDevelopment(): string {
   return t('miscs.inDevelopment')

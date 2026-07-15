@@ -1,18 +1,18 @@
 import type { RivenAttributeUnit } from '../wfm'
 
-type RivenWeaponType = 'Rifle' | 'Shotgun' | 'Pistol' | 'Archgun' | 'Melee'
-type RivenStatCountType = '31' | '2' | '21' | '3'
+export type RivenWeaponType = 'Rifle' | 'Shotgun' | 'Pistol' | 'Archgun' | 'Melee'
+export type RivenStatCountType = '31' | '2' | '21' | '3'
 
-interface RivenStatFixFactor {
+export interface RivenStatFixFactor {
   buffFactor: number
   buffCount: number
   curseFactor: number
   curseCount: number
 }
 
-type RivenStatFixFactorMap = Record<RivenStatCountType, RivenStatFixFactor>
+export type RivenStatFixFactorMap = Record<RivenStatCountType, RivenStatFixFactor>
 
-interface RivenStatAnalyzsis {
+export interface RivenStatAnalyzsis {
   name: string
   unit: RivenAttributeUnit
   percent: number
@@ -21,14 +21,14 @@ interface RivenStatAnalyzsis {
   min: number
 }
 
-interface RivenStatAnalyzeResult {
+export interface RivenStatAnalyzeResult {
   name: string
   disposition: number
   buffs: RivenStatAnalyzsis[]
   curses: RivenStatAnalyzsis[]
 }
 
-interface RivenWeaponDisposition {
+export interface RivenWeaponDisposition {
   name: {
     en: string
     zh: string
@@ -42,7 +42,7 @@ interface RivenWeaponDisposition {
   weapon: IWeapon
 }
 
-interface RivenStatResult {
+export interface RivenStatResult {
   positive: Record<
     string,
     { name: string, max: number, min: number, unit: RivenAttributeUnit }

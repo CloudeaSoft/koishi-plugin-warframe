@@ -4,7 +4,7 @@ import {
   relicEraToTransKey,
   relicQualityToName,
   relicQualityToTransKey,
-} from '../../src/infrastructure/wf/wf-export-adapter'
+} from '../../src/warframe/infrastructure/wf/wf-export-adapter'
 
 describe('relicQualityToName Tests', () => {
   it('should map VPQ_BRONZE to Intact', () => {

@@ -50,5 +50,8 @@ describe('render static assets', () => {
     expect(existsSync(resolve(root, 'lib/assets/render.css'))).to.equal(true)
     expect(existsSync(resolve(root, 'lib/assets/render-icons.svg'))).to.equal(true)
     expect(existsSync(resolve(root, 'lib/assets/render.html'))).to.equal(true)
+    expect(existsSync(resolve(root, 'lib/warframe/assets/zh.json'))).to.equal(true)
+    expect(existsSync(resolve(root, 'lib/warframe/assets/arbys.txt'))).to.equal(true)
+    expect(existsSync(resolve(root, 'lib/assets/zh.json'))).to.equal(false)
   })
 })

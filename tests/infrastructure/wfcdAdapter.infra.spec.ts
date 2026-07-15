@@ -3,7 +3,7 @@ import {
   fissureTierName,
   fissureTierNumToNumber,
   getVoidTraderItem,
-} from '../../src/infrastructure/wf/wfcd-adapter'
+} from '../../src/warframe/infrastructure/wf/wfcd-adapter'
 
 describe('fissureTierName Tests', () => {
   it('should contain tiers 1-7', () => {

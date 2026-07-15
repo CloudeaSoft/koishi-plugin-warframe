@@ -1,6 +1,6 @@
-import type { RivenItem } from '../../../src/types/wfm'
+import type { RivenItem } from '../../../src/warframe/types/wfm'
 import { expect } from 'chai'
-import { findRivenItemByName } from '../../../src/services/wfm-service/wfm-service.riven-item-matcher'
+import { findRivenItemByName } from '../../../src/warframe/services/wfm-service/wfm-service.riven-item-matcher'
 import testRivenItems from '../../assets/test-riven-items.json'
 
 const fixtureRivenItems = testRivenItems.data as RivenItem[]

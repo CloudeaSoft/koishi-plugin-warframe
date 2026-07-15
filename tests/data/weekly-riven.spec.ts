@@ -1,6 +1,6 @@
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 import { expect } from 'chai'
-import { filterWeeklyRivens } from '../../src/services'
+import { filterWeeklyRivens } from '../../src/warframe/services'
 import { weekRiven } from '../assets/weeklyRivensPC'
 
 describe('weekly Riven Data Tests', () => {

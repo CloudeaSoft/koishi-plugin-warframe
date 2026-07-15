@@ -1,4 +1,4 @@
-import type { ServiceFailure } from './types/result'
+import type { WarframeFailure } from './warframe'
 
 export const messages = {
   'common.fetchFailed': '内部错误，获取最新信息失败',
@@ -40,13 +40,13 @@ export type MessageKey = keyof typeof messages
 export type MessageParams = Record<string, string | number>
 
 export function t(message: MessageKey, params?: MessageParams): string
-export function t(result: ServiceFailure): string
+export function t(result: WarframeFailure): string
 export function t(
-  messageOrResult: MessageKey | ServiceFailure,
+  messageOrResult: MessageKey | WarframeFailure,
   params?: MessageParams,
 ): string {
   if (typeof messageOrResult !== 'string') {
-    return t(messageOrResult.message, messageOrResult.params)
+    return t(messageOrResult.error.code, messageOrResult.error.params)
   }
 
   let text: string = messages[messageOrResult]

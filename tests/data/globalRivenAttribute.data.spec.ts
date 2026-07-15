@@ -1,6 +1,6 @@
-import type { RivenAttribute } from '../../src/types/wfm'
+import type { RivenAttribute } from '../../src/warframe/types/wfm'
 import { expect } from 'chai'
-import { globalRivenAttributeFactory } from '../../src/data/wfm/globalRivenAttribute'
+import { globalRivenAttributeFactory } from '../../src/warframe/data/wfm/globalRivenAttribute'
 
 const fixtureAttrs = [
   {
