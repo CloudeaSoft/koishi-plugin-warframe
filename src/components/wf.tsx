@@ -1,7 +1,10 @@
 import type { Element } from 'koishi'
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
-import type { RivenStatAnalyzeResult, RivenStatResult } from '../types/wf/riven'
-import type { RivenAttributeUnit } from '../types/wfm'
+import type {
+  RivenAttributeUnit,
+  RivenStatAnalyzeResult,
+  RivenStatResult,
+} from '../warframe'
 import { hexToRgb, lerp, msToHumanReadable, rgbToHex } from '../utils'
 
 export function ArbitrationComponent(arbi: Arbitration[]): Element {

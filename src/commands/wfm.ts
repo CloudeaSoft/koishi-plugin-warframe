@@ -13,7 +13,7 @@ import {
   getRivenOrders,
   primedModHistory,
   updateCache,
-} from '../services'
+} from '../warframe'
 
 export function createWfmCommands(deps: PluginDependencies): {
   wmCommand: (_action: Argv, input: string) => Promise<Element | string>

@@ -49,4 +49,34 @@ describe('warframe data boundary', () => {
 
     expect(violations).to.deep.equal([])
   })
+
+  it('keeps Koishi consumers behind the Warframe facade', () => {
+    const root = packageRoot()
+    const consumers = [
+      'src/commands',
+      'src/components',
+      'src/messages.ts',
+      'src/messages',
+    ].flatMap(path => sourceFiles(resolve(root, path)))
+
+    const forbidden = [
+      /from\s+['"][^'"]*\/services[/'"]/,
+      /from\s+['"][^'"]*\/data[/'"]/,
+      /from\s+['"][^'"]*\/infrastructure[/'"]/,
+      /from\s+['"][^'"]*\/types\/warframe-result['"]/,
+      /from\s+['"][^'"]*\/types\/ocr['"]/,
+      /from\s+['"][^'"]*\/types\/wf\//,
+      /from\s+['"][^'"]*\/types\/wfm['"]/,
+      /from\s+['"][^'"]*\/types\/miscs\//,
+    ]
+
+    const violations = consumers.flatMap((file) => {
+      const source = readFileSync(file, 'utf8')
+      return forbidden
+        .filter(pattern => pattern.test(source))
+        .map(pattern => `${file}: ${pattern}`)
+    })
+
+    expect(violations).to.deep.equal([])
+  })
 })

@@ -1,5 +1,5 @@
 import type { Element } from 'koishi'
-import type { RivenWeaponItem } from '../types/miscs/lab'
+import type { RivenWeaponItem } from '../warframe'
 
 export function HotRivenComponent(data: RivenWeaponItem[]): Element {
   const displayData = data.slice(0, 20)

@@ -1,4 +1,4 @@
-import type { WarframeFailure } from './types/warframe-result'
+import type { WarframeFailure } from './warframe'
 
 export const messages = {
   'common.fetchFailed': '内部错误，获取最新信息失败',

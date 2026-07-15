@@ -1,5 +1,5 @@
 import type { Element } from 'koishi'
-import type { ItemShort, OrderWithUser } from '../types/wfm'
+import type { ItemShort, OrderWithUser } from '../warframe'
 
 export function wmMessage(img: Element, item: ItemShort, orders: OrderWithUser[]): Element {
   const lines = orders.slice(0, 3)

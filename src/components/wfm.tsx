@@ -6,7 +6,7 @@ import type {
   RivenAttributeShortInternal,
   RivenItem,
   RivenOrderInternal,
-} from '../types/wfm'
+} from '../warframe'
 
 export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): Element {
   const itemNameCN = item.i18n['zh-hans']?.name
