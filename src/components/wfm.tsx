@@ -48,9 +48,12 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): El
       <table style="width:100%;">
         <tr>
           <th style="width:40%;">玩家名</th>
-          <th style="width:30%;">状态</th>
+          <th style="width:20%;">状态</th>
           <th style="width:10%;">价格</th>
           <th style="width:10%;">数量</th>
+          {item.maxRank && item.maxRank > 0
+            ? <th style="width:10%;">等级</th>
+            : null}
           <th style="width:10%;">好评</th>
         </tr>
         {orders.map(order => (
@@ -59,6 +62,9 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): El
             <td>{order.user.status}</td>
             <td>{order.platinum}</td>
             <td>{order.quantity}</td>
+            {item.maxRank && item.maxRank > 0
+              ? <td>{order.rank}</td>
+              : null}
             <td>{order.user.reputation}</td>
           </tr>
         ))}
