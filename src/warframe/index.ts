@@ -1,5 +1,4 @@
 export * from './services'
-export { msToHumanReadable } from './utils/time'
 export type { RivenWeaponItem } from './types/miscs/lab'
 export type { OcrAPISecret } from './types/ocr'
 export { failure } from './types/warframe-result'
@@ -23,3 +22,4 @@ export type {
   RivenItem,
   RivenOrderInternal,
 } from './types/wfm'
+export { msToHumanReadable } from './utils/time'

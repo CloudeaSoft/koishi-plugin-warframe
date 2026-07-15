@@ -86,7 +86,8 @@ describe('warframe source root', () => {
     }
     const facade = readFileSync(facadePath, 'utf8')
 
-    expect(facade).to.not.match(/from\s+['"]\.\/(?:data|infrastructure|assets)(?:\/|['"])/)
+    expect(facade).to.not.match(/from\s+['"]\.\/(?:data|infrastructure|assets)\//)
+    expect(facade).to.not.match(/from\s+['"]\.\/(?:data|infrastructure|assets)['"]/)
     expect(facade).to.not.include('wfmClient')
     expect(facade).to.not.include('fetchAsync')
     expect(facade).to.not.include('globalWorldState')

@@ -57,37 +57,46 @@ src/
 |-- index.ts              # plugin entry; registers commands and hooks
 |-- commands/             # thin Koishi command handlers
 |-- components/           # JSX -> Koishi Element renderers and Puppeteer output
-|-- services/             # business logic and data orchestration
-|-- data/                 # cached data singletons
-|-- infrastructure/       # external API clients and package adapters
-|-- utils/                # generic primitives
-|-- types/                # ambient/domain type declarations
-|-- hooks/                # lifecycle hooks
-`-- assets/               # static JSON and TS data
+|-- messages/             # structured errors -> Koishi-facing messages
+|-- types/                # Koishi configuration and dependency types
+|-- utils/                # Koishi presentation helpers
+|-- assets/               # render HTML/CSS/SVG
+`-- warframe/             # self-contained future SDK source root
+    |-- index.ts          # sole public domain facade
+    |-- services/         # business logic and data orchestration
+    |-- data/             # cached data singletons
+    |-- infrastructure/   # external API clients and package adapters
+    |-- utils/            # private domain primitives
+    |-- types/            # domain type declarations
+    `-- assets/           # Warframe static JSON and text data
 ```
 
 Layer direction is one-way:
 
 ```text
-commands -> warframe facade -> services -> data -> infrastructure -> utils
-commands -> components -> utils
+commands -> warframe/index.ts -> services -> data -> infrastructure -> utils
+commands -> components -> presentation utils
 ```
 
 Dependency rules:
 
-- `utils/` must stay generic and domain-agnostic. It must not import Koishi.
-- `infrastructure/` may import from `utils/`.
-- `data/` may import from `infrastructure/` and `utils/`.
-- `services/` may import from `data/`, `infrastructure/`, `utils/`, `assets/`,
-  and `types/`. It must not import from `components/`.
+- `src/warframe/index.ts` is the only domain entry available to Koishi-facing
+  code.
+- `src/warframe/` must not import outside its subtree or depend on Koishi,
+  Satori Element, or Puppeteer.
+- `src/warframe/infrastructure/` may import from `src/warframe/utils/`.
+- `src/warframe/data/` may import from domain `infrastructure/` and `utils/`.
+- `src/warframe/services/` may import from domain `data/`, `infrastructure/`,
+  `utils/`, `assets/`, and `types/`. It must not import from `components/`.
 - Koishi-facing modules import Warframe queries and exported domain types through
-  `src/warframe.ts`. Internal service tests may import implementations directly.
+  `src/warframe/index.ts`. Internal service tests may import implementations
+  directly.
 - `commands/` may import from the Warframe facade, `components/`, `messages/`,
   and Koishi-specific configuration.
-- `components/` may import from `utils/` and the Warframe facade only. It must
-  not import from `services/`, `data/`, or `infrastructure/`.
-- Warframe candidate code under `services/`, `data/`, `infrastructure/`, domain
-  `types/`, `assets/`, and generic `utils/` must not import Koishi.
+- `components/` may import from presentation `utils/` and the Warframe facade
+  only. It must not import from `services/`, `data/`, or `infrastructure/`.
+- `src/assets/` contains only Koishi render resources; `src/utils/` contains
+  only presentation-side helpers.
 
 ## Layer Responsibilities
 
@@ -101,21 +110,22 @@ Dependency rules:
   adapters.
 - Components: transform service data into `Element` output. Extract non-trivial
   formatting helpers when they need focused tests.
-- Utils: reusable primitives only. If a utility imports Warframe-specific data
-  or packages, it belongs outside `utils/`.
+- Utils: presentation helpers live in `src/utils/`; reusable domain primitives
+  live in `src/warframe/utils/`.
 
 ## Important Modules
 
-- `src/infrastructure/wf/wf-export-adapter.ts` adapts
+- `src/warframe/infrastructure/wf/wf-export-adapter.ts` adapts
   `warframe-public-export-plus` data such as relics, regions, and relic quality.
-- `src/infrastructure/wf/wfcd-adapter.ts` adapts `warframe-worldstate-data`
+- `src/warframe/infrastructure/wf/wfcd-adapter.ts` adapts `warframe-worldstate-data`
   values such as nodes, mission types, fissure tiers, and Void Trader items.
   It also owns `relicToFullNameZH`.
 - `src/components/render.tsx` owns Puppeteer image output through
   `generateImageOutput(puppe, element)`.
-- `src/warframe.ts` is the public boundary for Koishi-facing data queries and
-  explicitly exported domain types.
-- `src/utils/http.ts` owns all HTTP request behavior and retry/error handling.
+- `src/warframe/index.ts` is the public boundary for Koishi-facing data queries
+  and explicitly exported domain types.
+- `src/warframe/utils/http.ts` owns all HTTP request behavior and retry/error
+  handling.
 
 ## Coding Conventions
 
@@ -123,15 +133,15 @@ Logging:
 
 - Koishi entry points, controllers, and adapters own contextual logging through
   the Koishi logger scoped to `koishi-plugin-warframe`.
-- Warframe services, data, infrastructure, domain types, assets, and generic
-  utilities must not import Koishi solely for logging.
+- Everything under `src/warframe/` must remain independent of Koishi, including
+  logging.
 - Do not use `console.log`, `console.error`, or similar console calls in source
   code.
 
 HTTP:
 
 - Use `fetchAsyncText`, `fetchAsyncData<T>`, or `fetchAsyncImage` from
-  `src/utils/http.ts`.
+  `src/warframe/utils/http.ts`.
 - Do not call raw `fetch()` or `ofetch()` outside the HTTP utility.
 - The HTTP utility owns timeout, retry, browser-like headers, and `Language:
   zh-hans` behavior.
@@ -148,9 +158,9 @@ Caching:
 
 TypeScript and types:
 
-- Keep ambient declarations in `src/types/`.
-- Domain types live under `src/types/wf/`, `src/types/wfm/`, and
-  `src/types/miscs/`.
+- Keep Koishi configuration declarations in `src/types/`.
+- Domain types live under `src/warframe/types/wf/`,
+  `src/warframe/types/wfm.d.ts`, and `src/warframe/types/miscs/`.
 - Use `declare module` only when extending external package interfaces.
 
 Error handling:

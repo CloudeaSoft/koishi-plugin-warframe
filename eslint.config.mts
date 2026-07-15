@@ -40,7 +40,7 @@ export default antfu(
     rules: { 'ts/no-unsafe-assignment': 'off', '@typescript-eslint/no-unsafe-return': 'off' },
   },
   {
-    files: ['src/data/**/*.ts'],
+    files: ['src/warframe/data/**/*.ts'],
     rules: {
       'import/no-mutable-exports': 'off',
     },
