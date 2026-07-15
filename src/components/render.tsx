@@ -1,5 +1,6 @@
 import type { Element } from 'koishi'
 import type Puppeteer from 'koishi-plugin-puppeteer'
+import { h } from 'koishi'
 import { loadAssetText } from '../utils/assets'
 
 const style = loadAssetText('render.css')
@@ -36,4 +37,19 @@ export async function generateImageOutput(
       return next(handle ?? undefined)
     },
   )
+}
+
+export async function generateImageElementOutput(
+  puppe: Puppeteer,
+  element: Element,
+): Promise<Element> {
+  return puppe.render(
+    htmlString(element.toString()),
+    async (page): Promise<any> => {
+      const handle = await page.$('#root>*')
+      const clip = (await handle?.boundingBox()) ?? undefined
+      const buffer = await page.screenshot({ clip })
+      return h.image(buffer, 'image/png')
+    },
+  ) as unknown as Promise<Element>
 }
