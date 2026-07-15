@@ -53,10 +53,10 @@ export async function updateCache(): Promise<string> {
 }
 
 export async function getItemOrders(input: string): Promise<WarframeResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
-  input = input.trim()
-  if (!input) {
+  if (!input || !input.trim()) {
     return failure('wfm.inputItemName')
   }
+  input = input.trim()
 
   // 1. Process global option
   const isFullLevel = /^满级|满级$/.test(normalizeName(input))
@@ -106,6 +106,11 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
 }
 
 export async function getRivenOrders(input: string): Promise<WarframeResult<{ item: RivenItem, orders: RivenOrderInternal[] }>> {
+  if (!input || !input.trim()) {
+    return failure('wfm.inputItemName')
+  }
+  input = input.trim()
+
   const { globalRivenAttributeDict } = await globalRivenAttribute.get()
 
   const targetItem = await findRivenItemByName(input)
