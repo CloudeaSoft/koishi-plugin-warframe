@@ -2,7 +2,7 @@ import type { WarframeResult } from '../../src/types/warframe-result'
 import { expect } from 'chai'
 import { failure } from '../../src/types/warframe-result'
 
-describe('WarframeResult', () => {
+describe('warframe result', () => {
   it('creates a non-retryable failure by default', () => {
     expect(failure('relic.notFound')).to.deep.equal({
       ok: false,

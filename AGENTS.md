@@ -69,21 +69,25 @@ src/
 Layer direction is one-way:
 
 ```text
-commands -> services -> data -> infrastructure -> utils
+commands -> warframe facade -> services -> data -> infrastructure -> utils
 commands -> components -> utils
 ```
 
 Dependency rules:
 
-- `utils/` must stay generic and domain-agnostic. The exception is
-  `utils/logger.ts`, which imports Koishi.
+- `utils/` must stay generic and domain-agnostic. It must not import Koishi.
 - `infrastructure/` may import from `utils/`.
 - `data/` may import from `infrastructure/` and `utils/`.
 - `services/` may import from `data/`, `infrastructure/`, `utils/`, `assets/`,
   and `types/`. It must not import from `components/`.
-- `commands/` may import from `services/`, `components/`, and `utils/`.
-- `components/` may import from `utils/` and `types/` only. It must not import
-  from `services/`, `data/`, or `infrastructure/`.
+- Koishi-facing modules import Warframe queries and exported domain types through
+  `src/warframe.ts`. Internal service tests may import implementations directly.
+- `commands/` may import from the Warframe facade, `components/`, `messages/`,
+  and Koishi-specific configuration.
+- `components/` may import from `utils/` and the Warframe facade only. It must
+  not import from `services/`, `data/`, or `infrastructure/`.
+- Warframe candidate code under `services/`, `data/`, `infrastructure/`, domain
+  `types/`, `assets/`, and generic `utils/` must not import Koishi.
 
 ## Layer Responsibilities
 
@@ -109,17 +113,20 @@ Dependency rules:
   It also owns `relicToFullNameZH`.
 - `src/components/render.tsx` owns Puppeteer image output through
   `generateImageOutput(puppe, element)`.
+- `src/warframe.ts` is the public boundary for Koishi-facing data queries and
+  explicitly exported domain types.
 - `src/utils/http.ts` owns all HTTP request behavior and retry/error handling.
-- `src/utils/logger.ts` defines the shared logger scope.
 
 ## Coding Conventions
 
 Logging:
 
-- Import the shared logger from `src/utils` or the appropriate relative path.
-- Logger scope is `koishi-plugin-warframe`.
+- Koishi entry points, controllers, and adapters own contextual logging through
+  the Koishi logger scoped to `koishi-plugin-warframe`.
+- Warframe services, data, infrastructure, domain types, assets, and generic
+  utilities must not import Koishi solely for logging.
 - Do not use `console.log`, `console.error`, or similar console calls in source
-  code. Use `logger` instead.
+  code.
 
 HTTP:
 
@@ -128,8 +135,8 @@ HTTP:
 - Do not call raw `fetch()` or `ofetch()` outside the HTTP utility.
 - The HTTP utility owns timeout, retry, browser-like headers, and `Language:
   zh-hans` behavior.
-- HTTP helpers log failures and return `undefined`; callers must handle
-  `T | undefined`.
+- HTTP helpers catch operational failures and return `undefined`; callers must
+  handle `T | undefined` and services translate failures into structured errors.
 
 Caching:
 
@@ -148,10 +155,11 @@ TypeScript and types:
 
 Error handling:
 
-- Infrastructure and utils should catch operational failures, log them, and
-  return `undefined`.
-- Services return either user-facing error strings or successful data.
-- User-facing error strings are in Chinese.
+- Infrastructure and utils catch operational failures and return `undefined`.
+- Warframe services return `WarframeResult<T>` with stable error codes,
+  retryability, and optional interpolation parameters.
+- `src/messages.ts` maps Warframe error codes to Chinese user-facing text.
+- Koishi controllers and adapters log runtime context at the framework boundary.
 
 ## Testing Rules
 
