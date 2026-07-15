@@ -7,8 +7,8 @@ export function wmMessage(img: Element, item: ItemShort, orders: OrderWithUser[]
       + `/w ${order.user.ingameName} Hi! I want to buy: "${item.i18n.en?.name}${!item.maxRank || item.maxRank === 0 ? '' : ` (rank ${order.rank})`}" for ${order.platinum} platinum. (warframe.market)`)
   return (
     <message>
-      <div>{lines.join('')}</div>
       {img}
+      <div>{lines.join('')}</div>
     </message>
   )
 }
