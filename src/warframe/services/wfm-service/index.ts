@@ -109,10 +109,16 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
     return failure('wfm.noOnlineSeller')
   }
 
-  // 5. Compute statistics summary (best-effort, degrades gracefully)
+  // 5. Compute statistics summary (best-effort, degrades gracefully).
+  // Any failure here must not prevent orders from being returned.
   let statistics: ItemStatisticsSummary | undefined
   if (statsData) {
-    statistics = computeItemStatistics(statsData, targetRank, result[0].platinum)
+    try {
+      statistics = computeItemStatistics(statsData, targetRank, result[0].platinum)
+    }
+    catch {
+      statistics = undefined
+    }
   }
 
   return {

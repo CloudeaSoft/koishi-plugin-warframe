@@ -4,6 +4,8 @@ import type {
 } from '../../../src/warframe/types/wfm'
 import { expect } from 'chai'
 import { computeItemStatistics } from '../../../src/warframe/services/wfm-service/wfm-service.statistics'
+import modStats from '../../assets/test-item-statistics-mod.json'
+import nonModStats from '../../assets/test-item-statistics.json'
 
 function makeEntry(
   day: number,
@@ -179,5 +181,150 @@ describe('computeItemStatistics', () => {
 
     expect(result.recentVolume).to.equal(20)
     expect(result.recentAvg).to.equal(12)
+  })
+})
+
+describe('computeItemStatistics - real fixtures', () => {
+  const nonModPayload = (nonModStats as { payload: StatisticsCollection }).payload
+  const modPayload = (modStats as { payload: StatisticsCollection }).payload
+
+  it('handles a real non-mod item whose entries omit mod_rank (targetRank = undefined)', () => {
+    const result = computeItemStatistics(nonModPayload, undefined, 65)
+
+    expect(result.onlineMin).to.equal(65)
+    expect(result.chart).to.have.length(7)
+    expect(result.recentVolume).to.equal(246)
+    expect(result.recentAvg).to.equal(67.7)
+    expect(result.baselineMedian).to.equal(68)
+    expect(result.rangeMin).to.equal(30)
+    expect(result.rangeMax).to.equal(130)
+    expect(result.trend).to.equal('flat')
+    for (const p of result.chart) {
+      expect(Number.isFinite(p.median)).to.equal(true)
+      expect(Number.isFinite(p.waPrice)).to.equal(true)
+      expect(Number.isFinite(p.donchTop)).to.equal(true)
+      expect(Number.isFinite(p.donchBot)).to.equal(true)
+    }
+  })
+
+  it('filters a real mod item by rank 0', () => {
+    const result = computeItemStatistics(modPayload, 0, 240)
+
+    expect(result.onlineMin).to.equal(240)
+    expect(result.chart).to.have.length(7)
+    expect(result.recentVolume).to.equal(374)
+    expect(result.recentAvg).to.equal(255.1)
+    expect(result.baselineMedian).to.equal(251)
+    expect(result.rangeMin).to.equal(180)
+    expect(result.rangeMax).to.equal(400)
+  })
+
+  it('filters a real mod item by rank 3', () => {
+    const result = computeItemStatistics(modPayload, 3, 260)
+
+    expect(result.onlineMin).to.equal(260)
+    expect(result.chart).to.have.length(7)
+    expect(result.recentVolume).to.equal(384)
+    expect(result.recentAvg).to.equal(262.9)
+    expect(result.baselineMedian).to.equal(262.5)
+    expect(result.rangeMin).to.equal(180)
+    expect(result.rangeMax).to.equal(425)
+  })
+})
+
+describe('computeItemStatistics - malformed data', () => {
+  it('does not throw when statistics_closed is missing', () => {
+    const broken = { statistics_live: { '48hours': [], '90days': [] } } as unknown as StatisticsCollection
+    const result = computeItemStatistics(broken, 0, 15)
+
+    expect(result.chart).to.have.length(0)
+    expect(result.recentAvg).to.equal(undefined)
+    expect(result.recentVolume).to.equal(0)
+    expect(result.baselineMedian).to.equal(undefined)
+    expect(result.rangeMin).to.equal(undefined)
+    expect(result.rangeMax).to.equal(undefined)
+    expect(result.onlineMin).to.equal(15)
+  })
+
+  it('does not throw when 90days is missing', () => {
+    const broken = {
+      statistics_closed: { '48hours': [] },
+      statistics_live: { '48hours': [], '90days': [] },
+    } as unknown as StatisticsCollection
+    const result = computeItemStatistics(broken, 0, 15)
+
+    expect(result.chart).to.have.length(0)
+    expect(result.onlineMin).to.equal(15)
+  })
+
+  it('does not throw when 90days is not an array', () => {
+    const broken = {
+      statistics_closed: { '48hours': [], '90days': null },
+      statistics_live: { '48hours': [], '90days': [] },
+    } as unknown as StatisticsCollection
+    const result = computeItemStatistics(broken, 0, 15)
+
+    expect(result.chart).to.have.length(0)
+    expect(result.onlineMin).to.equal(15)
+  })
+
+  it('does not throw when stats is null', () => {
+    const result = computeItemStatistics(null as unknown as StatisticsCollection, 0, 15)
+
+    expect(result.chart).to.have.length(0)
+    expect(result.onlineMin).to.equal(15)
+  })
+
+  it('does not throw when stats is undefined', () => {
+    const result = computeItemStatistics(undefined as unknown as StatisticsCollection, 0, 15)
+
+    expect(result.chart).to.have.length(0)
+    expect(result.onlineMin).to.equal(15)
+  })
+
+  it('defaults onlineMin to 0 when not a finite number', () => {
+    const result = computeItemStatistics(makeStats([]), 0, Number.NaN)
+
+    expect(result.onlineMin).to.equal(0)
+  })
+
+  it('skips entries with NaN numeric fields from chart and aggregates', () => {
+    const entries: ClosedStatisticsEntry[] = [
+      makeEntry(1, 20, 20, 10),
+      {
+        ...makeEntry(2, 25, 25, 10),
+        median: Number.NaN,
+      },
+      {
+        ...makeEntry(3, 30, 30, 10),
+        wa_price: Number.NaN,
+      },
+      makeEntry(4, 22, 22, 10),
+    ]
+    const result = computeItemStatistics(makeStats(entries), 0, 15)
+
+    expect(result.chart).to.have.length(2)
+    expect(result.chart[0].median).to.equal(20)
+    expect(result.chart[1].median).to.equal(22)
+  })
+
+  it('skips entries with undefined numeric fields from range computation', () => {
+    const entries: ClosedStatisticsEntry[] = [
+      { ...makeEntry(1, 20, 20, 10), min_price: undefined as unknown as number },
+      makeEntry(2, 30, 30, 10, { minPrice: 25, maxPrice: 40 }),
+    ]
+    const result = computeItemStatistics(makeStats(entries), 0, 15)
+
+    expect(result.rangeMin).to.equal(25)
+    expect(result.rangeMax).to.equal(40)
+  })
+
+  it('handles entries whose only data is zero-volume days', () => {
+    const entries = [makeEntry(1, 20, 20, 0)]
+    const result = computeItemStatistics(makeStats(entries), 0, 15)
+
+    expect(result.chart).to.have.length(0)
+    expect(result.recentVolume).to.equal(0)
+    expect(result.recentAvg).to.equal(undefined)
   })
 })
