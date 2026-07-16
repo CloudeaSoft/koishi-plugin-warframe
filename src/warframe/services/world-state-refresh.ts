@@ -78,7 +78,7 @@ function alertId(value: ParsedAlert): string {
   return value.id ?? [
     time(value.activation),
     time(value.expiry),
-    value.mission.nodeKey ?? value.mission.node,
+    value.mission?.nodeKey ?? value.mission?.node ?? '',
     value.tag ?? '',
   ].join(':')
 }
