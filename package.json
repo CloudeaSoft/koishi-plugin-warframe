@@ -40,7 +40,10 @@
       "zh": "WF Toolkit"
     },
     "preview": true,
-    "hidden": false
+    "hidden": false,
+    "service": {
+      "required": ["cron", "database", "puppeteer"]
+    }
   },
   "peerDependencies": {
     "@satorijs/element": "^3.2.0",
