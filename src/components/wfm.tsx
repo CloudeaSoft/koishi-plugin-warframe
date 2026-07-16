@@ -23,7 +23,7 @@ function trendArrow(trend: 'up' | 'down' | 'flat'): string {
 }
 
 function trendColor(trend: 'up' | 'down' | 'flat'): string {
-  return trend === 'up' ? '#e0533a' : trend === 'down' ? '#3a9e5a' : '#888'
+  return trend === 'up' ? 'var(--wf-danger)' : trend === 'down' ? 'var(--wf-success)' : 'var(--wf-text-muted)'
 }
 
 function ItemStatisticsChart(stats: ItemStatisticsSummary): Element {
@@ -70,10 +70,10 @@ function ItemStatisticsChart(stats: ItemStatisticsSummary): Element {
   const onlineY = Math.max(padT, Math.min(H - padB, onlineYRaw))
 
   return (
-    <svg width={W} height={H} style="font-family: Arial, sans-serif; background: #eee;">
+    <svg width={W} height={H} style="font-family: Arial, sans-serif; background: var(--wf-bg-subtle);">
       <polygon points={bandPoints} fill="#5a95ff" fillOpacity={0.12} stroke="none" />
-      <line x1={padL} y1={onlineY} x2={W - padR} y2={onlineY} stroke="#ff6b35" strokeWidth={1.5} strokeDasharray="6 4" />
-      <text x={W - padR} y={onlineY - 6} textAnchor="end" fontSize={12} fill="#ff6b35">
+      <line x1={padL} y1={onlineY} x2={W - padR} y2={onlineY} stroke="var(--wf-warning)" strokeWidth={1.5} strokeDasharray="6 4" />
+      <text x={W - padR} y={onlineY - 6} textAnchor="end" fontSize={12} fill="var(--wf-warning)">
         在线最低
         {stats.onlineMin}
         p
@@ -81,8 +81,8 @@ function ItemStatisticsChart(stats: ItemStatisticsSummary): Element {
       {baselineY !== null
         ? (
             <g>
-              <line x1={padL} y1={baselineY} x2={W - padR} y2={baselineY} stroke="#999" strokeWidth={1} strokeDasharray="3 3" />
-              <text x={padL + 4} y={baselineY - 5} textAnchor="start" fontSize={11} fill="#999">
+              <line x1={padL} y1={baselineY} x2={W - padR} y2={baselineY} stroke="var(--wf-text-faint)" strokeWidth={1} strokeDasharray="3 3" />
+              <text x={padL + 4} y={baselineY - 5} textAnchor="start" fontSize={11} fill="var(--wf-text-muted)">
                 7天中位
                 {stats.baselineMedian}
                 p
@@ -92,17 +92,17 @@ function ItemStatisticsChart(stats: ItemStatisticsSummary): Element {
         : null}
       <polyline points={linePoints} fill="none" stroke="#5a95ff" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
       {points.map((p, i) => (
-        <circle cx={xPos(i)} cy={yPos(p.median)} r={3.5} fill="#5a95ff" stroke="#fff" strokeWidth={1} />
+        <circle cx={xPos(i)} cy={yPos(p.median)} r={3.5} fill="#5a95ff" stroke="var(--wf-bg-card)" strokeWidth={1} />
       ))}
       {points.map((p, i) => (
-        <text x={xPos(i)} y={H - padB + 20} textAnchor="middle" fontSize={11} fill="#666">
+        <text x={xPos(i)} y={H - padB + 20} textAnchor="middle" fontSize={11} fill="var(--wf-text-secondary)">
           {formatShortDate(p.datetime)}
         </text>
       ))}
-      <text x={padL - 8} y={padT + 5} textAnchor="end" fontSize={11} fill="#666">
+      <text x={padL - 8} y={padT + 5} textAnchor="end" fontSize={11} fill="var(--wf-text-secondary)">
         {Math.round(dataMax)}
       </text>
-      <text x={padL - 8} y={H - padB} textAnchor="end" fontSize={11} fill="#666">
+      <text x={padL - 8} y={H - padB} textAnchor="end" fontSize={11} fill="var(--wf-text-secondary)">
         {Math.round(dataMin)}
       </text>
     </svg>
@@ -111,9 +111,9 @@ function ItemStatisticsChart(stats: ItemStatisticsSummary): Element {
 
 function StatCard(label: string, value: string, accent?: string): Element {
   return (
-    <div style="flex:1;min-width:0;border-radius:6px;padding:8px 10px;background:#f5f7fa;border:1px solid #e0e4e8;display:flex;flex-direction:column;align-items:center;gap:2px;">
-      <span style="font-size:0.9rem;color:#888;">{label}</span>
-      <span style={`font-size:1.4rem;font-weight:700;color:${accent ?? '#1a1a1a'};`}>{value}</span>
+    <div style="flex:1;min-width:0;border-radius:var(--wf-radius-md);padding:8px 10px;background:var(--wf-bg-subtle);border:1px solid var(--wf-border);display:flex;flex-direction:column;align-items:center;gap:2px;">
+      <span style="font-size:0.9rem;color:var(--wf-text-muted);">{label}</span>
+      <span style={`font-size:1.4rem;font-weight:700;color:${accent ?? 'var(--wf-text-primary)'};`}>{value}</span>
     </div>
   )
 }
@@ -139,7 +139,7 @@ function ItemStatisticsCards(stats: ItemStatisticsSummary): Element {
           ? `${stats.rangeMin}-${stats.rangeMax}p`
           : '—',
       )}
-      {StatCard('在线最低', `${stats.onlineMin}p`, '#ff6b35')}
+      {StatCard('在线最低', `${stats.onlineMin}p`, 'var(--wf-warning)')}
     </div>
   )
 }
@@ -151,13 +151,13 @@ function ItemStatisticsComponent(stats: ItemStatisticsSummary): Element {
       || stats.baselineMedian !== undefined
   if (!hasData) {
     return (
-      <div style="margin-top:16px;padding:12px;border-top:2px solid #e0e4e8;text-align:center;color:#999;font-size:1.2rem;">
+      <div style="margin-top:16px;padding:12px;border-top:2px solid var(--wf-divider);text-align:center;color:var(--wf-text-muted);font-size:1.2rem;">
         暂无近期成交统计数据
       </div>
     )
   }
   return (
-    <div style="margin-top:16px;padding:12px;border-top:2px solid #e0e4e8;">
+    <div style="margin-top:16px;padding:12px;border-top:2px solid var(--wf-divider);">
       {stats.chart.length >= 2 ? ItemStatisticsChart(stats) : null}
       {ItemStatisticsCards(stats)}
     </div>
@@ -168,17 +168,20 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[], sta
   const itemNameCN = item.i18n['zh-hans']?.name
   const itemNameEN = item.i18n.en?.name
   return (
-    <div style="display:flex; flex-direction: column; width: 1600px;">
+    <div style="display:flex;flex-direction:column;width:1600px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;border:1px solid var(--wf-border);box-shadow:var(--wf-shadow-card);color:var(--wf-text-body);">
       <style>
         {`
           th {
             align-items: center;
             font-size: 1.8rem;
+            color: var(--wf-text-primary);
+            border-bottom: 1px solid var(--wf-border-strong);
           }
 
           td {
             text-align: center;
             font-size: 1.5rem;
+            border-bottom: 1px solid var(--wf-border);
           }
 
           tr {
@@ -186,7 +189,7 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[], sta
           }
           `}
       </style>
-      <h1 style="text-align: center;">
+      <h1 style="text-align:center;color:var(--wf-text-primary);">
         {itemNameCN}
         {' '}
         /
@@ -211,7 +214,7 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[], sta
           <tr>
             <td>{order.user.ingameName}</td>
             <td>{order.user.status}</td>
-            <td>{order.platinum}</td>
+            <td style="color:var(--wf-platinum);font-weight:600;">{order.platinum}</td>
             <td>{order.quantity}</td>
             {item.maxRank && item.maxRank > 0
               ? <td>{order.rank}</td>
@@ -230,8 +233,8 @@ export function RivenOrderComponent(item: RivenItem, orders: RivenOrderInternal[
   const itemNameEN = item.i18n ? item.i18n.en?.name : undefined
   const itemThumb = item.i18n ? item.i18n.en?.thumb : undefined
   return (
-    <div style="display:flex; flex-direction: column; font-size: 12px;">
-      <h1 style="text-align: center;">
+    <div style="display:flex;flex-direction:column;font-size:12px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;border:1px solid var(--wf-border);box-shadow:var(--wf-shadow-card);color:var(--wf-text-body);">
+      <h1 style="text-align:center;color:var(--wf-text-primary);">
         {itemNameCN}
         {' '}
         /
@@ -264,15 +267,15 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
     ? `https://warframe.market/static/assets/${order.owner.avatar}`
     : undefined
 
-  const reputationColor = order.owner.reputation >= 5 ? '#00a96c' : '#739098'
+  const reputationColor = order.owner.reputation >= 5 ? 'var(--wf-success)' : 'var(--wf-text-muted)'
   const reputationIconLink
     = order.owner.reputation >= 5 ? '#icon-smile' : '#icon-meh'
 
   const statusData = {
-    ingame: ['ONLINE IN GAME', '#634b93'],
-    online: ['ONLINE', 'darkgreen'],
-    offline: ['OFFLINE', 'darkred'],
-    _: ['UNKNOWN', 'grey'],
+    ingame: ['ONLINE IN GAME', 'var(--wf-accent)'],
+    online: ['ONLINE', 'var(--wf-success)'],
+    offline: ['OFFLINE', 'var(--wf-danger)'],
+    _: ['UNKNOWN', 'var(--wf-text-muted)'],
   }
   const status
     = order.owner.status in statusData
@@ -282,15 +285,15 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
   const statusColor = statusData[status][1]
 
   return (
-    <div style="border: 1px solid gray; margin: 20px; padding: 10px 15px 10px 11px; font-family: 'Lato', sans-serif, Helvetica, Arial; display: flex; flex-direction: column;">
-      <div style="display: flex; align-items: center; padding-bottom: 10px; min-height: 45px;">
+    <div style="border:1px solid var(--wf-border-strong);margin:20px;padding:10px 15px 10px 11px;font-family:'Segoe UI',sans-serif,Helvetica,Arial;display:flex;flex-direction:column;background-color:var(--wf-bg-subtle);border-radius:var(--wf-radius-md);">
+      <div style="display:flex;align-items:center;padding-bottom:10px;min-height:45px;">
         <img
           src={itemIconLink}
-          style="height: 30px; width: 30px; object-fit: contain; border-radius: 50%; box-shadow: 0 0 10px 1px rgba(0, 0, 0, .15); vertical-align: middle;"
+          style="height:30px;width:30px;object-fit:contain;border-radius:50%;box-shadow:0 0 10px 1px rgba(0,0,0,.15);vertical-align:middle;"
         />
         <span
           id="title"
-          style="margin-left: 15px; font-size: 16px; line-height: 16px; font-weight: 700; text-overflow: ellipsis; text-decoration: underline; cursor: pointer;"
+          style="margin-left:15px;font-size:16px;line-height:16px;font-weight:700;text-overflow:ellipsis;color:var(--wf-text-primary);"
         >
           {itemNameCN}
           {' '}
@@ -299,33 +302,33 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
       </div>
       <div
         id="body"
-        style="display: flex; flex-wrap: wrap; justify-content: space-between;"
+        style="display:flex;flex-wrap:wrap;justify-content:space-between;"
       >
         <div id="body-left">
-          <ul style="display: flex; padding-top: 5px;">
+          <ul style="display:flex;padding-top:5px;">
             {order.item.attributes
               .filter(attr => attr.positive)
               .map(RivenAttributeComponent)}
           </ul>
-          <ul style="display: flex; width: 100%; padding-top: 5px;">
+          <ul style="display:flex;width:100%;padding-top:5px;">
             {order.item.attributes
               .filter(attr => !attr.positive)
               .map(RivenAttributeComponent)}
           </ul>
-          <ul style="display: flex; padding: 5px 0; font-size: 12px;">
-            <li style="margin-right: 10px;">
+          <ul style="display:flex;padding:5px 0;font-size:12px;color:var(--wf-text-secondary);">
+            <li style="margin-right:10px;">
               <span>段位 </span>
-              <b>{order.item.mastery_level}</b>
+              <b style="color:var(--wf-text-primary);">{order.item.mastery_level}</b>
             </li>
-            <li style="margin-right: 10px;">
+            <li style="margin-right:10px;">
               <span>等级: </span>
-              <b>{order.item.mod_rank}</b>
+              <b style="color:var(--wf-text-primary);">{order.item.mod_rank}</b>
             </li>
-            <li style="margin-right: 10px;">
+            <li style="margin-right:10px;">
               <span>循环: </span>
-              <b>{order.item.re_rolls}</b>
+              <b style="color:var(--wf-text-primary);">{order.item.re_rolls}</b>
             </li>
-            <li style="margin-right: 10px;">
+            <li style="margin-right:10px;">
               <span>极性: </span>
               <b>
                 <svg
@@ -345,17 +348,17 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
         </div>
         <div
           id="body-right"
-          style="display: flex; flex-direction: column; justify-content: center; padding-left: 10px;"
+          style="display:flex;flex-direction:column;justify-content:center;padding-left:10px;"
         >
-          <div style="display: flex; justify-content: flex-end; font-size: 16px;">
+          <div style="display:flex;justify-content:flex-end;font-size:16px;color:var(--wf-text-body);">
             <span>售价: </span>
-            <div style="padding-left: 5px; line-height: 1.5;">
-              <b>{order.starting_price}</b>
+            <div style="padding-left:5px;line-height:1.5;">
+              <b style="color:var(--wf-platinum);">{order.starting_price}</b>
               <svg
                 viewBox="0 0 215.535 215.535"
                 style="
                 margin: 0 0 0 3px;
-                color: rgb(64 64 64 / 75%);
+                color: var(--wf-platinum);
                 height: 1em;
                 width: 1em;
                 vertical-align: -.125em;
@@ -369,27 +372,25 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
       </div>
       <div
         id="footer"
-        style="display: flex; margin-top: 10px; line-height: 1.5;"
+        style="display:flex;margin-top:10px;line-height:1.5;align-items:center;"
       >
-        <div style="display: flex;">
+        <div style="display:flex;align-items:center;">
           <img
             src={ownerAvatarLink}
-            style="height: 20px; width: 20px; object-fit: contain; border-radius: 50%; box-shadow: 0 0 10px 1px rgba(0, 0, 0, .15); vertical-align: middle;"
+            style="height:20px;width:20px;object-fit:contain;border-radius:50%;box-shadow:0 0 10px 1px rgba(0,0,0,.15);vertical-align:middle;"
           />
-          <span style="margin-left: 5px;">{order.owner.ingame_name}</span>
+          <span style="margin-left:5px;color:var(--wf-text-body);">{order.owner.ingame_name}</span>
         </div>
         <div
-          style={`margin-left: 10px; color:${
-            statusColor ?? 'gray'
-          }; font-size: 12px;`}
+          style={`margin-left:10px;color:${statusColor};font-size:12px;font-weight:600;`}
         >
           {statusText}
         </div>
-        <div style={`margin-left: 10px; color:${reputationColor};`}>
+        <div style={`margin-left:10px;color:${reputationColor};display:flex;align-items:center;`}>
           {order.owner.reputation}
           <svg
             viewBox="0 0 496 512"
-            style="margin-left: 5px; margin-top: -2px; overflow:hidden; height: 1em; width: 1em; vertical-align: -.125em; fill: currentcolor;"
+            style="margin-left:5px;margin-top:-2px;overflow:hidden;height:1em;width:1em;vertical-align:-.125em;fill:currentcolor;"
           >
             <use href={reputationIconLink}></use>
           </svg>
@@ -411,23 +412,20 @@ function RivenAttributeComponent(attr: RivenAttributeShortInternal, index: numbe
   const attrValueSuffix
     = unitSuffixMap[attrInfo.unit as keyof typeof unitSuffixMap] || ''
   const attrValue = attrValuePrefix + attr.value + attrValueSuffix
-  const positiveColors = [
-    '--color_rgb_attribute_background_first',
-    '--color_rgb_attribute_background_second',
-    '--color_rgb_attribute_background_third',
-  ]
+  const positiveColors = ['#2e7d32', '#4a8c5a', '#6b9b78']
+  const negativeColor = '#e05050'
   const color = attr.positive
-    ? positiveColors[index]
-    : '--color_rgb_attribute_background_negative'
+    ? positiveColors[index] ?? positiveColors[0]
+    : negativeColor
 
   return (
     <li
       style={`
-        border: 1px solid rgb(var(${color})/50%);
-        background-color: rgb(var(${color})/10%);
-        color: rgb(var(${color}));
+        border: 1px solid ${color}80;
+        background-color: ${color}1a;
+        color: ${color};
         padding: 2px 10px;
-        border-radius: 4px;
+        border-radius: var(--wf-radius-sm);
         margin-right: 5px;
         font-size: 14px;
         line-height: 1.5;`}
@@ -462,19 +460,19 @@ function getPriceTier(plats: number): {
   }
   if (plats > 80) {
     return {
-      borderColor: '#ff6b35',
-      bgColor: 'rgba(255,107,53,0.12)',
+      borderColor: 'var(--wf-warning)',
+      bgColor: 'rgba(255,140,66,0.12)',
       label: 'premium',
     }
   }
-  if (plats > 60) {
+  if (plats > 50) {
     return {
       borderColor: '#f0c040',
       bgColor: 'rgba(240,192,64,0.10)',
       label: 'high',
     }
   }
-  return { borderColor: '#d0d0d0', bgColor: 'transparent', label: 'normal' }
+  return { borderColor: 'var(--wf-border-strong)', bgColor: 'transparent', label: 'normal' }
 }
 
 function calcDaysAgo(dateStr: string): number | null {
@@ -493,7 +491,7 @@ function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
   const tier
     = pr !== undefined
       ? getPriceTier(pr)
-      : { borderColor: '#d0d0d0', bgColor: 'transparent', label: 'normal' }
+      : { borderColor: 'var(--wf-border-strong)', bgColor: 'transparent', label: 'normal' }
 
   const dateStr = item.last
     ? (() => {
@@ -537,7 +535,7 @@ function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
           justify-content: space-between;
           align-items: center;
           font-weight: 600;
-          color: #1a1a1a;
+          color: var(--wf-text-primary);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -550,7 +548,7 @@ function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
         {daysAgo
           ? (
               <span
-                style={`flex-shrink:0;margin-left:4px;background:#eee;color:${isOld ? '#e05050' : '#999'};border-radius:3px;padding:0 5px;font-size:9px;font-weight:400;line-height:1.5;`}
+                style={`flex-shrink:0;margin-left:4px;background:var(--wf-bg-subtle);color:${isOld ? 'var(--wf-danger)' : 'var(--wf-text-muted)'};border-radius:3px;padding:0 5px;font-size:9px;font-weight:400;line-height:1.5;`}
               >
                 距今
                 {daysAgo}
@@ -567,7 +565,7 @@ function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
           font-variant-numeric: tabular-nums;
         `}
       >
-        <span style="color: #888; font-size: 10px;">{dateStr || '未知'}</span>
+        <span style="color:var(--wf-text-muted);font-size:10px;">{dateStr || '未知'}</span>
         {pr !== undefined
           ? (
               <span
@@ -577,7 +575,7 @@ function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
               gap: 2px;
               font-weight: 700;
               font-size: 12px;
-              color: #0d93b8;
+              color: var(--wf-platinum);
               ${isLegendary ? 'text-shadow: 0 0 6px rgba(255,50,100,0.7), 0 0 12px rgba(200,50,255,0.4);' : ''}
             `}
               >
@@ -591,7 +589,7 @@ function PMHCard(item: PrimedModHistoryItem, _index: number): Element {
               </span>
             )
           : (
-              <span style="color: #bbb; font-size: 10px;">暂无</span>
+              <span style="color:var(--wf-text-faint);font-size:10px;">暂无</span>
             )}
       </div>
     </div>
@@ -619,15 +617,16 @@ export function PrimedModHistoryComponent(history: PrimedModHistoryItem[]): Elem
   return (
     <div
       style={`
-        border-radius: 8px;
+        border-radius: var(--wf-radius);
         padding: 16px;
         margin: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--wf-border);
+        box-shadow: var(--wf-shadow-card);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         max-width: 100%;
         min-width: 320px;
-        background: #ffffff;
+        background: var(--wf-bg-card);
+        color: var(--wf-text-body);
       `}
     >
       {/* 标题 */}
@@ -638,7 +637,7 @@ export function PrimedModHistoryComponent(history: PrimedModHistoryItem[]): Elem
           align-items: center;
           margin-bottom: 12px;
           padding-bottom: 10px;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+          border-bottom: 1px solid var(--wf-border);
         `}
       >
         <h1
@@ -646,12 +645,12 @@ export function PrimedModHistoryComponent(history: PrimedModHistoryItem[]): Elem
             font-size: 18px;
             font-weight: bold;
             margin: 0;
-            color: #1a1a1a;
+            color: var(--wf-text-primary);
           `}
         >
           Prime Mod 历史记录
         </h1>
-        <span style="color: #999; font-size: 11px;">
+        <span style="color: var(--wf-text-muted); font-size: 11px;">
           {history.length}
           {' '}
           项
