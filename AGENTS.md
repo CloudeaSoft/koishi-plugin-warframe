@@ -15,6 +15,9 @@ cycles, Riven analysis/OCR, and Void Trader information.
 - Runtime: Node.js >= 18.
 - Framework: Koishi v4 with `@satorijs/element` JSX output and Puppeteer image
   rendering.
+- Koishi service injection: keep `database` in `inject.required`. This plugin's
+  `ctx.broadcast()` usage requires the database service; do not remove the
+  `database` injection while broadcast functionality exists.
 - Package manager: Yarn. Use `yarn` commands only; do not run `npm` or `npx`
   directly. If a script internally uses another tool, run it through `yarn <script>`.
 - On Windows, prefer `pwsh` (PowerShell 7) for shell commands. Do not use

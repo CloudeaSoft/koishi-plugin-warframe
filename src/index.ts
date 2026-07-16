@@ -11,7 +11,7 @@ import 'reflect-metadata' // Solves 'TypeError: Reflect.getMetadata is not a fun
 export const name = 'warframe'
 
 export const inject = {
-  required: ['cron', 'puppeteer'],
+  required: ['cron', 'database', 'puppeteer'],
 }
 
 export const Config: Schema<PluginConfig> = Schema.object({
