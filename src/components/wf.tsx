@@ -17,35 +17,84 @@ import { hexToRgb, lerp, rgbToHex } from '../utils'
 import { msToHumanReadable } from '../warframe'
 
 export function ArbitrationComponent(arbi: Arbitration[]): Element {
+  const rewardTier = (rewards: number): { color: string, bg: string } => {
+    if (rewards >= 400)
+      return { color: 'var(--wf-rarity-rare)', bg: 'rgba(255, 215, 0, 0.12)' }
+    if (rewards >= 380)
+      return { color: 'var(--wf-warning)', bg: 'rgba(255, 140, 66, 0.12)' }
+    if (rewards >= 350)
+      return { color: 'var(--wf-success)', bg: 'rgba(46, 125, 50, 0.12)' }
+    return { color: 'var(--wf-rarity-common)', bg: 'rgba(205, 127, 50, 0.12)' }
+  }
+
+  const formatDayLabel = (dateStr: string): string => {
+    const parts = dateStr.split('/')
+    if (parts.length >= 3) {
+      return `${Number(parts[1])}月${Number(parts[2])}日`
+    }
+    return dateStr
+  }
+
+  const groups = new Map<string, Arbitration[]>()
+  for (const a of arbi) {
+    const spaceIdx = a.time.indexOf(' ')
+    const dateKey = spaceIdx > 0 ? a.time.slice(0, spaceIdx) : a.time
+    if (!groups.has(dateKey))
+      groups.set(dateKey, [])
+    groups.get(dateKey)!.push(a)
+  }
+
   return (
     <div
-      style="width:calc(100dvw-40px);display:flex;flex-direction:column;align-items: center;"
+      style="width:600px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
     >
-      <h1>高掉落仲裁时间表</h1>
-      <div>
-        <ul style="width:100%;font-size: 30px;">
-          {arbi.map((a) => {
-            return (
-              <li>
-                <span>
-                  [
-                  <span style="color:darkgreen;">{a.time}</span>
-                  ]
-                </span>
-                <span style="margin-left:10px;">
-                  {`${a.name} ${a.system}-${a.type} (${a.faction})`.replace(
-                    /\(|\)/g,
-                    '',
-                  )}
-                </span>
-                <span style="margin-left:10px;">
-                  <span style="color:darkgreen;">{a.rewards}</span>
-                  精华/h
-                </span>
-              </li>
-            )
-          })}
-        </ul>
+      <h1 style="font-size:22px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 16px 0;padding-bottom:12px;border-bottom:1px solid var(--wf-divider);text-align:center;">
+        高掉落仲裁时间表
+      </h1>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        {[...groups.entries()].map(([dateKey, items]) => (
+          <div>
+            <div
+              style="font-size:13px;font-weight:bold;color:var(--wf-text-secondary);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--wf-border);"
+            >
+              {formatDayLabel(dateKey)}
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              {items.map((a) => {
+                const tier = rewardTier(a.rewards)
+                const timeLabel = a.time.includes(' ')
+                  ? a.time.slice(a.time.indexOf(' ') + 1)
+                  : a.time
+                return (
+                  <div
+                    style="display:flex;align-items:center;gap:10px;padding:6px 10px;background-color:var(--wf-bg-subtle);border-radius:var(--wf-radius-sm);border-left:3px solid var(--wf-border-strong);"
+                  >
+                    <span
+                      style="font-size:13px;font-weight:600;color:var(--wf-text-primary);font-family:monospace;min-width:52px;"
+                    >
+                      {timeLabel}
+                    </span>
+                    <span style="font-size:13px;color:var(--wf-text-body);flex:1;min-width:0;">
+                      {`${a.name} ${a.system}-${a.type}`}
+                    </span>
+                    <span
+                      style="font-size:13px;color:var(--wf-accent);background-color:rgba(71,181,165,0.1);padding:1px 8px;border-radius:var(--wf-radius-sm);white-space:nowrap;"
+                    >
+                      {a.faction}
+                    </span>
+                    <span
+                      style={`font-size:13px;font-weight:700;color:${tier.color};background-color:${tier.bg};padding:2px 8px;border-radius:var(--wf-radius-sm);white-space:nowrap;min-width:96px;text-align:right;`}
+                    >
+                      {a.rewards}
+                      {' '}
+                      精华/h
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -55,13 +104,14 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
   return (
     <div
       style={`
-      background: linear-gradient(135deg, #f5f0e8 0%, #fff8f0 100%);
-      border-radius: 8px;
+      background-color: var(--wf-bg-card);
+      border-radius: var(--wf-radius);
       padding: 16px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       width: 1000px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: var(--wf-shadow-card);
+      border: 1px solid var(--wf-border);
+      color: var(--wf-text-body);
     `}
     >
       {/* 标题 */}
@@ -70,14 +120,14 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
         text-align: center;
         margin-bottom: 20px;
         padding-bottom: 12px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid var(--wf-divider);
       `}
       >
         <h1
           style={`
           font-size: 22px;
           font-weight: bold;
-          color: #1a1a1a;
+          color: var(--wf-text-primary);
           margin: 0 0 8px 0;
         `}
         >
@@ -85,7 +135,7 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
         </h1>
         <p
           style={`
-          color: #666666;
+          color: var(--wf-text-secondary);
           font-size: 11px;
           margin: 0;
         `}
@@ -115,21 +165,21 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
         <div
           style={`
           flex: 1;
-          background: rgba(255, 255, 255, 0.8);
-          border-radius: 8px;
+          background-color: var(--wf-bg-subtle);
+          border-radius: var(--wf-radius);
           padding: 12px;
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+          border: 1px solid var(--wf-border);
+          box-shadow: var(--wf-shadow-inner);
         `}
         >
           <div
             style={`
             font-weight: bold;
             font-size: 15px;
-            color: #333333;
+            color: var(--wf-text-body);
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid var(--wf-border);
           `}
           >
             灵化之源
@@ -147,18 +197,18 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
               return (
                 <div
                   style={`
-                    background: ${isCurrent ? '#fff8f0' : '#ffffff'};
-                    border-radius: 4px;
+                    background-color: ${isCurrent ? 'var(--wf-bg-tint)' : 'var(--wf-bg-card)'};
+                    border-radius: var(--wf-radius-sm);
                     padding: 8px 10px;
-                    border-left: 4px solid ${isCurrent ? '#ff8c42' : '#e0e0e0'};
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+                    border-left: 4px solid ${isCurrent ? 'var(--wf-warning)' : 'var(--wf-border-strong)'};
+                    box-shadow: var(--wf-shadow-subtle);
                   `}
                 >
                   <div
                     style={`
                     font-size: 10px;
                     font-weight: bold;
-                    color: ${isCurrent ? '#ff8c42' : '#999999'};
+                    color: ${isCurrent ? 'var(--wf-warning)' : 'var(--wf-text-muted)'};
                     margin-bottom: 6px;
                   `}
                   >
@@ -178,13 +228,13 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
                     {incarnons.map(item => (
                       <span
                         style={`
-                        background: ${isCurrent ? '#fff0e0' : '#f5f5f5'};
+                        background-color: ${isCurrent ? 'var(--wf-bg-tint)' : 'var(--wf-bg-subtle)'};
                         padding: 3px 10px;
-                        border-radius: 4px;
+                        border-radius: var(--wf-radius-sm);
                         font-size: 11px;
                         font-weight: 500;
-                        color: #333333;
-                        border: 1px solid ${isCurrent ? '#ffe0b5' : '#e8e8e8'};
+                        color: var(--wf-text-body);
+                        border: 1px solid ${isCurrent ? 'var(--wf-border-strong)' : 'var(--wf-border)'};
                       `}
                       >
                         {item}
@@ -201,21 +251,21 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
         <div
           style={`
           flex: 1;
-          background: rgba(255, 255, 255, 0.8);
-          border-radius: 8px;
+          background-color: var(--wf-bg-subtle);
+          border-radius: var(--wf-radius);
           padding: 12px;
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+          border: 1px solid var(--wf-border);
+          box-shadow: var(--wf-shadow-inner);
         `}
         >
           <div
             style={`
             font-weight: bold;
             font-size: 15px;
-            color: #333333;
+            color: var(--wf-text-body);
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid var(--wf-border);
           `}
           >
             战甲
@@ -233,18 +283,18 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
               return (
                 <div
                   style={`
-                    background: ${isCurrent ? '#f0faf8' : '#ffffff'};
-                    border-radius: 4px;
+                    background-color: ${isCurrent ? 'var(--wf-bg-tint)' : 'var(--wf-bg-card)'};
+                    border-radius: var(--wf-radius-sm);
                     padding: 8px 10px;
-                    border-left: 4px solid ${isCurrent ? '#47b5a5' : '#e0e0e0'};
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+                    border-left: 4px solid ${isCurrent ? 'var(--wf-accent)' : 'var(--wf-border-strong)'};
+                    box-shadow: var(--wf-shadow-subtle);
                   `}
                 >
                   <div
                     style={`
                     font-size: 10px;
                     font-weight: bold;
-                    color: ${isCurrent ? '#47b5a5' : '#999999'};
+                    color: ${isCurrent ? 'var(--wf-accent)' : 'var(--wf-text-muted)'};
                     margin-bottom: 6px;
                   `}
                   >
@@ -264,13 +314,13 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
                     {warframes.map(item => (
                       <span
                         style={`
-                        background: ${isCurrent ? '#e0f7f2' : '#f5f5f5'};
+                        background-color: ${isCurrent ? 'var(--wf-bg-tint)' : 'var(--wf-bg-subtle)'};
                         padding: 3px 10px;
-                        border-radius: 4px;
+                        border-radius: var(--wf-radius-sm);
                         font-size: 11px;
                         font-weight: 500;
-                        color: #333333;
-                        border: 1px solid ${isCurrent ? '#c0e0d8' : '#e8e8e8'};
+                        color: var(--wf-text-body);
+                        border: 1px solid ${isCurrent ? 'var(--wf-border-strong)' : 'var(--wf-border)'};
                       `}
                       >
                         {item}
@@ -289,9 +339,9 @@ export function CircuitComponent(currentIncarnons: number, currentWarframes: num
         style={`
         margin-top: 16px;
         padding-top: 12px;
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        border-top: 1px solid var(--wf-border);
         font-size: 10px;
-        color: #999999;
+        color: var(--wf-text-muted);
         text-align: center;
       `}
       >
@@ -307,35 +357,35 @@ export function FissureComponent(fissures: Fissure[], type: 'fissure' | 'sp-fiss
     'sp-fissure': '虚空裂缝 (钢铁之路)',
     'rj-fissure': '虚空裂缝 (九重天)',
   }
-  const colors = [
-    '#B87333',
-    '#4A6F43',
-    '#B2B2B2',
-    '#D4AF37',
-    '#8B0000',
-    '#2F9E88',
+  const tierColors = [
+    'var(--wf-rarity-common)',
+    'var(--wf-success)',
+    'var(--wf-rarity-uncommon)',
+    'var(--wf-rarity-rare)',
+    'var(--wf-danger)',
+    'var(--wf-accent)',
   ]
 
   return (
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <h1 style="font-size: 50px;">{titles[type]}</h1>
-      <ul style="font-size: 30px;margin-top:30px;">
+    <div style="display:flex;flex-direction:column;align-items:center;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);">
+      <h1 style="font-size:50px;color:var(--wf-text-primary);">{titles[type]}</h1>
+      <ul style="font-size:30px;margin-top:30px;">
         {fissures
           .filter(f => f.expiry - Date.now() > 0)
           .map((f) => {
             const timeLeft = f.expiry - Date.now()
             return (
-              <li style="margin-top: 10px;">
-                <span style={`color:${colors[f.tierNum - 1]};`}>
+              <li style="margin-top:10px;color:var(--wf-text-body);">
+                <span style={`color:${tierColors[f.tierNum - 1]};`}>
                   {`${f.tier}(T${f.tierNum})`}
                 </span>
-                <span style="margin-left: 20px;">
+                <span style="margin-left:20px;">
                   {f.node.name}
                   {' '}
                   {f.node.system}
                 </span>
-                <span style="margin-left: 10px;">{f.node.type}</span>
-                <span style="margin-left: 10px;color:purple;">
+                <span style="margin-left:10px;">{f.node.type}</span>
+                <span style="margin-left:10px;color:var(--wf-accent);">
                   {f.node.faction}
                   (
                   {f.node.minLevel + 5 + (f.hard ? 100 : 0)}
@@ -344,12 +394,12 @@ export function FissureComponent(fissures: Fissure[], type: 'fissure' | 'sp-fiss
                   )
                 </span>
                 <span
-                  style={`margin-left: 10px;color:${
+                  style={`margin-left:10px;color:${
                     timeLeft > 3600000
-                      ? 'green'
+                      ? 'var(--wf-success)'
                       : timeLeft > 600000
-                        ? 'blue'
-                        : 'red'
+                        ? 'var(--wf-info)'
+                        : 'var(--wf-danger)'
                   };`}
                 >
                   剩余
@@ -359,7 +409,7 @@ export function FissureComponent(fissures: Fissure[], type: 'fissure' | 'sp-fiss
             )
           })}
       </ul>
-      <div style="margin-top: 30px; font-size: 30px;">
+      <div style="margin-top:30px;font-size:30px;color:var(--wf-text-muted);">
         注: 该功能的数据有一定延迟
       </div>
     </div>
@@ -376,27 +426,27 @@ export function WeeklyRivenComponent(
   return (
     <div
       style={`
-        color: #333333;
+        color: var(--wf-text-body);
         line-height: 1.5;
         font-size: 14px;
-        background: linear-gradient(135deg, #f5f0e8 0%, #fff8f0 100%);
+        background-color: var(--wf-bg-card);
         font-family: 'Segoe UI', system-ui, sans-serif;
         max-width: 600px;
         margin: 0 auto;
         padding: 16px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: var(--wf-radius);
+        box-shadow: var(--wf-shadow-card);
+        border: 1px solid var(--wf-border);
       `}
     >
       <h1
         style={`
           font-size: 22px;
           font-weight: bold;
-          color: #1a1a1a;
+          color: var(--wf-text-primary);
           margin: 0 0 16px 0;
           padding-bottom: 12px;
-          border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+          border-bottom: 2px solid var(--wf-divider);
           text-align: center;
         `}
       >
@@ -417,7 +467,7 @@ export function WeeklyRivenComponent(
             ? `${item.compatibility}`
             : item.itemType.replace(' Riven Mod', '')
           const tierNum = index + 1
-          const tierColors = ['#ffd700', '#c0c0c0', '#cd7f32', 'rgba(0, 0, 0, 0.08)']
+          const tierColors = ['var(--wf-rarity-rare)', 'var(--wf-rarity-uncommon)', 'var(--wf-rarity-common)', 'var(--wf-border-strong)']
           const tierColor = tierNum === 1
             ? tierColors[0]
             : tierNum === 2 ? tierColors[1] : tierNum === 3 ? tierColors[2] : tierColors[3]
@@ -425,15 +475,15 @@ export function WeeklyRivenComponent(
           return (
             <div
               style={`
-                background-color: #ffffff;
-                border: 1px solid rgba(0, 0, 0, 0.08);
-                border-radius: 8px;
+                background-color: var(--wf-bg-card);
+                border: 1px solid var(--wf-border);
+                border-radius: var(--wf-radius-md);
                 padding: 10px 14px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 border-left: 4px solid ${tierColor};
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+                box-shadow: var(--wf-shadow-subtle);
               `}
             >
               <div
@@ -458,7 +508,7 @@ export function WeeklyRivenComponent(
                   style={`
                     font-weight: 600;
                     font-size: 15px;
-                    color: #333333;
+                    color: var(--wf-text-body);
                   `}
                 >
                   {weaponName}
@@ -473,7 +523,7 @@ export function WeeklyRivenComponent(
               >
                 <span
                   style={`
-                    color: #2e7d32;
+                    color: var(--wf-success);
                     font-weight: 600;
                     font-size: 15px;
                   `}
@@ -481,7 +531,7 @@ export function WeeklyRivenComponent(
                   {formatPrice(item.median ?? item.avg)}
                   P
                 </span>
-                <span style={{ color: '#888888', fontSize: 12 }}>
+                <span style={{ color: 'var(--wf-text-muted)', fontSize: 12 }}>
                   {`均价:${formatPrice(item.avg)}P 交易量:${item.pop} 区间:[${item.min}-${item.max}]`}
                 </span>
               </div>
@@ -493,9 +543,9 @@ export function WeeklyRivenComponent(
         style={`
           margin-top: 16px;
           padding-top: 12px;
-          border-top: 1px solid rgba(0, 0, 0, 0.08);
+          border-top: 1px solid var(--wf-border);
           font-size: 10px;
-          color: #999999;
+          color: var(--wf-text-muted);
           text-align: center;
         `}
       >
@@ -506,92 +556,53 @@ export function WeeklyRivenComponent(
 }
 
 export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, temporalArchimedea: ArchiMedea): Element {
+  const sectionStyle = `
+    border-radius: var(--wf-radius);
+    border: 1px solid var(--wf-border);
+    padding: 12px 14px;
+    background-color: var(--wf-bg-subtle);
+    box-shadow: var(--wf-shadow-inner);
+    color: var(--wf-text-body);
+  `
+  const missionCardStyle = `
+    border-radius: var(--wf-radius-md);
+    border: 1px solid var(--wf-border);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    background-color: var(--wf-bg-card);
+  `
+
   const archonHuntSection = (
-    <section
-      style={`
-            border-radius: 8px;
-            border: 1px solid #1f2937;
-            padding: 12px 14px;
-            background-color: #0b0f19;
-            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-          `}
-    >
-      <div
-        style={`
-              font-size: 12px;
-              color: #9ca3af;
-              margin-bottom: 6px;
-            `}
-      >
+    <section style={sectionStyle}>
+      <div style="font-size:12px;color:var(--wf-text-muted);margin-bottom:6px;">
         Archon Hunt
       </div>
 
-      <div
-        style={`
-              font-size: 16px;
-              font-weight: 600;
-            `}
-      >
+      <div style="font-size:16px;font-weight:600;color:var(--wf-text-primary);">
         {`执行官刺杀: ${archon.name}`}
       </div>
     </section>
   )
 
   const deepArchimedeaSection = (
-    <section
-      style={`
-            border-radius: 8px;
-            border: 1px solid #1f2937;
-            padding: 12px 14px;
-            background-color: #0b0f19;
-            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-          `}
-    >
-      <div
-        style={`
-              font-size: 12px;
-              color: #6ee7b7;
-              margin-bottom: 6px;
-            `}
-      >
+    <section style={sectionStyle}>
+      <div style="font-size:12px;color:var(--wf-success);margin-bottom:6px;">
         Deep Archimedea
       </div>
 
-      <div
-        style={`
-              font-size: 16px;
-              font-weight: 600;
-              margin-bottom: 8px;
-            `}
-      >
+      <div style="font-size:16px;font-weight:600;color:var(--wf-text-primary);margin-bottom:8px;">
         {deepArchimedea.name}
       </div>
 
       {deepArchimedea.missions.map(m => (
-        <div
-          style={`
-                border-radius: 6px;
-                border: 1px solid rgba(255,255,255,0.15);
-                padding: 8px 10px;
-                margin-bottom: 8px;
-                background-color: rgba(255,255,255,0.05);
-              `}
-        >
-          <div
-            style={`
-                  font-size: 13px;
-                  font-weight: 600;
-                  margin-bottom: 4px;
-                `}
-          >
+        <div style={missionCardStyle}>
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
             {m.type}
           </div>
 
-          <div style="font-size: 12px;">
+          <div style="font-size:12px;color:var(--wf-text-secondary);">
             <div>
-              <span style="font-weight: 600; margin-right: 4px;">
+              <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
                 偏差:
               </span>
               {`${m.deviation.name}(${m.deviation.desc})`}
@@ -599,7 +610,7 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
 
             {m.risks.map(r => (
               <div>
-                <span style="font-weight: 600; margin-right: 4px;">
+                <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
                   风险:
                 </span>
                 {`${r.name}(${r.desc})`}
@@ -610,8 +621,8 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
       ))}
 
       {deepArchimedea.peronal.map(p => (
-        <div style="font-size: 12px; margin-top: 4px;">
-          <span style="font-weight: 600; margin-right: 4px;">
+        <div style="font-size:12px;margin-top:4px;color:var(--wf-text-secondary);">
+          <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
             个人变量:
           </span>
           {`${p.name}(${p.desc})`}
@@ -621,59 +632,24 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
   )
 
   const temporalArchimedeaSection = (
-    <section
-      style={`
-            border-radius: 8px;
-            border: 1px solid #1f2937;
-            padding: 12px 14px;
-            background-color: #0b0f19;
-            box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-          `}
-    >
-      <div
-        style={`
-              font-size: 12px;
-              color: #a5b4fc;
-              margin-bottom: 6px;
-            `}
-      >
+    <section style={sectionStyle}>
+      <div style="font-size:12px;color:var(--wf-info);margin-bottom:6px;">
         Temporal Archimedea
       </div>
 
-      <div
-        style={`
-              font-size: 16px;
-              font-weight: 600;
-              margin-bottom: 8px;
-            `}
-      >
+      <div style="font-size:16px;font-weight:600;color:var(--wf-text-primary);margin-bottom:8px;">
         {temporalArchimedea.name}
       </div>
 
       {temporalArchimedea.missions.map(m => (
-        <div
-          style={`
-                border-radius: 6px;
-                border: 1px solid rgba(255,255,255,0.15);
-                padding: 8px 10px;
-                margin-bottom: 8px;
-                background-color: rgba(255,255,255,0.05);
-              `}
-        >
-          <div
-            style={`
-                  font-size: 13px;
-                  font-weight: 600;
-                  margin-bottom: 4px;
-                `}
-          >
+        <div style={missionCardStyle}>
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
             {m.type}
           </div>
 
-          <div style="font-size: 12px;">
+          <div style="font-size:12px;color:var(--wf-text-secondary);">
             <div>
-              <span style="font-weight: 600; margin-right: 4px;">
+              <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
                 偏差:
               </span>
               {`${m.deviation.name}(${m.deviation.desc})`}
@@ -681,7 +657,7 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
 
             {m.risks.map(r => (
               <div>
-                <span style="font-weight: 600; margin-right: 4px;">
+                <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
                   风险:
                 </span>
                 {`${r.name}(${r.desc})`}
@@ -692,8 +668,8 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
       ))}
 
       {temporalArchimedea.peronal.map(p => (
-        <div style="font-size: 12px; margin-top: 4px;">
-          <span style="font-weight: 600; margin-right: 4px;">
+        <div style="font-size:12px;margin-top:4px;color:var(--wf-text-secondary);">
+          <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
             个人变量:
           </span>
           {`${p.name}(${p.desc})`}
@@ -705,17 +681,21 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
   return (
     <div
       style={`
-          color: #e4e7ec;
-          line-height: 1.5;
-          font-size: 14px;
-          background-color: #05060a;
-          font-family: 'Segoe UI', system-ui, sans-serif;
-          max-width: 1024px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 16px;
-        `}
+        color: var(--wf-text-body);
+        line-height: 1.5;
+        font-size: 14px;
+        background-color: var(--wf-bg-card);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 16px;
+        border-radius: var(--wf-radius);
+        border: 1px solid var(--wf-border);
+        box-shadow: var(--wf-shadow-card);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+      `}
     >
       {archonHuntSection}
       {deepArchimedeaSection}
@@ -732,12 +712,12 @@ export function RelicComponent(relic: OutputRelic): Element {
   // 辅助函数：根据掉落率获取颜色
   const getRateColor = (rarity: RelicRewardRarity): string => {
     if (rarity === 'RARE')
-      return '#ffd700' // 金色
+      return 'var(--wf-rarity-rare)'
     if (rarity === 'UNCOMMON')
-      return '#c0c0c0' // 银色
+      return 'var(--wf-rarity-uncommon)'
     if (rarity === 'COMMON')
-      return '#cd7f32' // 铜色
-    return '#000000'
+      return 'var(--wf-rarity-common)'
+    return 'var(--wf-text-primary)'
   }
 
   const relicRewardDropRate = {
@@ -754,17 +734,17 @@ export function RelicComponent(relic: OutputRelic): Element {
       <div
         style={`padding: 8px 12px;
           margin: 4px 0;
-          border-radius: 4px;
-          background-color: rgba(255, 255, 255, 0.05);
+          border-radius: var(--wf-radius-sm);
+          background-color: var(--wf-bg-subtle);
           border-left: 4px solid ${getRateColor(item.rarity)};
           display: flex;
           justify-content: space-between;
           align-items: center;
           line-height: 1;`}
       >
-        <span style="color: #000000; font-size: 14px;">{item.name}</span>
+        <span style="color: var(--wf-text-primary); font-size: 14px;">{item.name}</span>
         <span
-          style={`color: #a0a0a0;
+          style={`color: var(--wf-text-faint);
               font-size: 12px;
               font-family: monospace;
               display:flex;
@@ -774,7 +754,7 @@ export function RelicComponent(relic: OutputRelic): Element {
             ? (
                 <span
                   style="
-                color: #0d93b8;
+                color: var(--wf-platinum);
                 display:flex;
                 line-height:1;"
                 >
@@ -798,7 +778,7 @@ export function RelicComponent(relic: OutputRelic): Element {
               )}
           {item.ducats
             ? (
-                <span style="color: #a0a000;display:flex;line-height:1;">
+                <span style="color: var(--wf-ducats);display:flex;line-height:1;">
                   {item.ducats}
                   <svg
                     viewBox="0 0 18 18"
@@ -828,12 +808,13 @@ export function RelicComponent(relic: OutputRelic): Element {
   return (
     <div
       style={`
-        border-radius: 8px;
+        border-radius: var(--wf-radius);
         padding: 16px;
         margin: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        color: #000000;
+        border: 1px solid var(--wf-border);
+        box-shadow: var(--wf-shadow-card);
+        background-color: var(--wf-bg-card);
+        color: var(--wf-text-primary);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         max-width: 500px;
         min-width: 320px;`}
@@ -845,13 +826,13 @@ export function RelicComponent(relic: OutputRelic): Element {
           align-items: center;
           margin-bottom: 16px;
           padding-bottom: 12px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);`}
+          border-bottom: 1px solid var(--wf-divider);`}
       >
         <h1
           style={`font-size: 20px;
             font-weight: bold;
             margin: 0;
-            color: #000000;`}
+            color: var(--wf-text-primary);`}
         >
           {`${relic.tier} ${relic.num} 遗物`}
         </h1>
@@ -868,7 +849,7 @@ export function RelicComponent(relic: OutputRelic): Element {
             <h3
               style={`font-size: 14px;
                 font-weight: bold;
-                color: #ffd700;
+                color: var(--wf-rarity-rare);
                 margin: 0;
                 text-transform: uppercase;`}
             >
@@ -890,7 +871,7 @@ export function RelicComponent(relic: OutputRelic): Element {
             <h3
               style={`font-size: 14px;
                 font-weight: bold;
-                color: #c0c0c0;
+                color: var(--wf-rarity-uncommon);
                 margin: 0;
                 text-transform: uppercase;`}
             >
@@ -912,7 +893,7 @@ export function RelicComponent(relic: OutputRelic): Element {
             <h3
               style={`font-size: 14px;
                 font-weight: bold;
-                color: #cd7f32;
+                color: var(--wf-rarity-common);
                 margin: 0;
                 text-transform: uppercase;`}
             >
@@ -927,9 +908,9 @@ export function RelicComponent(relic: OutputRelic): Element {
       <div
         style={`margin-top: 16px;
           padding-top: 12px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-top: 1px solid var(--wf-border);
           font-size: 10px;
-          color: #888888;
+          color: var(--wf-text-muted);
           text-align: center;`}
       >
         价格数据来源于 WFM Ducanator, 约有1小时延迟
@@ -1042,15 +1023,15 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
   return (
     <div style="display: flex; gap: 20px; width: 600px;">
       <div
-        style="width: 100%; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid #444;"
+        style="width: 100%; border-radius: var(--wf-radius); padding: 20px; box-shadow: var(--wf-shadow-card); border: 1px solid var(--wf-border); background-color: var(--wf-bg-card); color: var(--wf-text-body);"
       >
         {/* 武器名称和倾向 */}
         <div
-          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #444;"
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--wf-divider);"
         >
-          <h2 style="margin: 0; font-size: 20px;">{data.name}</h2>
+          <h2 style="margin: 0; font-size: 20px; color: var(--wf-text-primary);">{data.name}</h2>
           <div
-            style="background-color: #f0f0f0; padding: 4px 12px; border-radius: 12px; font-size: 14px; line-height: 1;"
+            style="background-color: var(--wf-bg-subtle); padding: 4px 12px; border-radius: 12px; font-size: 14px; line-height: 1; color: var(--wf-text-body);"
           >
             {`倾向: ${getDispositionIcon(
               data.disposition,
@@ -1061,7 +1042,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
         {/* 正面词条 */}
         <div style="margin-bottom: 25px;">
           <h3
-            style="color: #4caf50; margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;"
+            style="color: var(--wf-success); margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;"
           >
             正面词条 (
             {data.buffs.length}
@@ -1076,8 +1057,8 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
               return (
                 <li
                   style={`
-                    background-color: #eeeeee;
-                    border-radius: 6px;
+                    background-color: var(--wf-bg-subtle);
+                    border-radius: var(--wf-radius-md);
                     padding: 12px;
                     margin-bottom: 10px;
                     border-left: 4px solid ${percentColor};
@@ -1086,15 +1067,15 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
                   <div
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
                   >
-                    <span style="font-weight: bold;">{buff.name}</span>
-                    <span style="font-size: 18px; font-weight: bold;">
+                    <span style="font-weight: bold; color: var(--wf-text-primary);">{buff.name}</span>
+                    <span style="font-size: 18px; font-weight: bold; color: var(--wf-text-primary);">
                       {formatValue(buff.value, buff.unit)}
                     </span>
                   </div>
 
                   {/* 进度条 */}
                   <div
-                    style="height: 10px; background-color: #444; border-radius: 3px; margin-bottom: 8px;"
+                    style="height: 10px; background-color: var(--wf-border-strong); border-radius: 3px; margin-bottom: 8px;"
                   >
                     <div
                       style="height: 10px; position: relative; overflow: hidden;"
@@ -1109,7 +1090,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
                   </div>
 
                   <div
-                    style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;"
+                    style="display: flex; justify-content: space-between; font-size: 12px; color: var(--wf-text-muted);"
                   >
                     <span>
                       范围:
@@ -1126,7 +1107,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
                   {!inRange
                     ? (
                         <div
-                          style="margin-top: 8px; padding: 6px; background-color: rgba(244, 67, 54, 0.2); border-radius: 4px; font-size: 12px; color: #f44336; display: flex; align-items: center;"
+                          style="margin-top: 8px; padding: 6px; background-color: rgba(224, 80, 80, 0.12); border-radius: var(--wf-radius-sm); font-size: 12px; color: var(--wf-danger); display: flex; align-items: center;"
                         >
                           <span style="margin-right: 6px;">⚠</span>
                           数值不在正常范围内（可能未满级或倾向未更新）
@@ -1146,7 +1127,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
           ? (
               <div>
                 <h3
-                  style="color: #f44336; margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;"
+                  style="color: var(--wf-danger); margin: 0 0 15px 0; font-size: 16px; display: flex; align-items: center;"
                 >
                   负面词条 (
                   {data.curses.length}
@@ -1159,20 +1140,20 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
                     const percentColor = getPercentColor(curse.percent)
                     return (
                       <li
-                        style={`background-color: #eeeeee; border-radius: 6px; padding: 12px; margin-bottom: 10px; border-left: 4px solid ${percentColor};`}
+                        style={`background-color: var(--wf-bg-subtle); border-radius: var(--wf-radius-md); padding: 12px; margin-bottom: 10px; border-left: 4px solid ${percentColor};`}
                       >
                         <div
                           style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
                         >
-                          <span style="font-weight: bold;">{curse.name}</span>
-                          <span style="font-size: 18px; font-weight: bold;">
+                          <span style="font-weight: bold; color: var(--wf-text-primary);">{curse.name}</span>
+                          <span style="font-size: 18px; font-weight: bold; color: var(--wf-text-primary);">
                             {formatValue(curse.value, curse.unit)}
                           </span>
                         </div>
 
                         {/* 进度条 */}
                         <div
-                          style="height: 10px; background-color: #444; border-radius: 3px; margin-bottom: 8px;"
+                          style="height: 10px; background-color: var(--wf-border-strong); border-radius: 3px; margin-bottom: 8px;"
                         >
                           <div
                             style="height: 10px; position: relative; overflow: hidden;"
@@ -1187,7 +1168,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
                         </div>
 
                         <div
-                          style="display: flex; justify-content: space-between; font-size: 12px; color: #aaa;"
+                          style="display: flex; justify-content: space-between; font-size: 12px; color: var(--wf-text-muted);"
                         >
                           <span>
                             范围:
@@ -1204,7 +1185,7 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
                         {!inRange
                           ? (
                               <div
-                                style="margin-top: 8px; padding: 6px; background-color: rgba(244, 67, 54, 0.2); border-radius: 4px; font-size: 12px; color: #f44336; display: flex; align-items: center;"
+                                style="margin-top: 8px; padding: 6px; background-color: rgba(224, 80, 80, 0.12); border-radius: var(--wf-radius-sm); font-size: 12px; color: var(--wf-danger); display: flex; align-items: center;"
                               >
                                 <span style="margin-right: 6px;">⚠</span>
                                 数值不在正常范围内（可能未满级或倾向未更新）
@@ -1247,9 +1228,12 @@ export function RivenStatComponent(data: RivenStatResult): Element {
         flex-direction: column;
         gap: 16px;
         padding: 16px;
-        font-family: system-ui, sans-serif;
-        background-color: #1a1a2e;
-        border-radius: 8px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background-color: var(--wf-bg-card);
+        border: 1px solid var(--wf-border);
+        border-radius: var(--wf-radius);
+        box-shadow: var(--wf-shadow-card);
+        color: var(--wf-text-body);
         max-width: 600px;
       `}
     >
@@ -1277,7 +1261,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
             <h3
               style={`
               margin: 0;
-              color: #7dd56f;
+              color: var(--wf-success);
               font-size: 16px;
               font-weight: 600;
             `}
@@ -1292,7 +1276,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
             >
               <span
                 style={`
-                color: #888;
+                color: var(--wf-text-muted);
                 font-size: 12px;
               `}
               >
@@ -1300,7 +1284,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
               </span>
               <span
                 style={`
-                color: #888;
+                color: var(--wf-text-muted);
                 font-size: 12px;
               `}
               >
@@ -1322,14 +1306,14 @@ export function RivenStatComponent(data: RivenStatResult): Element {
       justify-content: space-between;
       align-items: center;
       padding: 6px 8px;
-      background-color: #16213e;
-      border-radius: 4px;
-      border-left: 3px solid #7dd56f;
+      background-color: var(--wf-bg-subtle);
+      border-radius: var(--wf-radius-sm);
+      border-left: 3px solid var(--wf-success);
     `}
               >
                 <span
                   style={`
-      color: #e0e0e0;
+      color: var(--wf-text-body);
       font-size: 13px;
     `}
                 >
@@ -1343,7 +1327,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
                 >
                   <span
                     style={`
-        color: #7dd56f;
+        color: var(--wf-success);
         font-size: 13px;
         font-weight: 500;
         min-width: 60px;
@@ -1354,7 +1338,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
                   </span>
                   <span
                     style={`
-        color: #7dd56f;
+        color: var(--wf-success);
         font-size: 13px;
         font-weight: 500;
         min-width: 60px;
@@ -1374,46 +1358,46 @@ export function RivenStatComponent(data: RivenStatResult): Element {
           ? (
               <div
                 style={`
-          flex: 1;
+            flex: 1;
         `}
               >
                 <div
                   style={`
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              margin-bottom: 8px;
-              padding: 0 4px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+                padding: 0 4px;
             `}
                 >
                   <h3
                     style={`
-              margin: 0;
-              color: #e35f5f;
-              font-size: 16px;
-              font-weight: 600;
+                margin: 0;
+                color: var(--wf-danger);
+                font-size: 16px;
+                font-weight: 600;
             `}
                   >
                     负面属性
                   </h3>
                   <div
                     style={`
-              display: flex;
-              gap: 12px;
+                display: flex;
+                gap: 12px;
             `}
                   >
                     <span
                       style={`
-                color: #888;
-                font-size: 12px;
+                  color: var(--wf-text-muted);
+                  font-size: 12px;
               `}
                     >
                       最小
                     </span>
                     <span
                       style={`
-                color: #888;
-                font-size: 12px;
+                  color: var(--wf-text-muted);
+                  font-size: 12px;
               `}
                     >
                       最大
@@ -1422,9 +1406,9 @@ export function RivenStatComponent(data: RivenStatResult): Element {
                 </div>
                 <div
                   style={`
-              display: flex;
-              flex-direction: column;
-              gap: 4px;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
             `}
                 >
                   {Object.entries(data.negative).map(([, value]) => (
@@ -1434,14 +1418,14 @@ export function RivenStatComponent(data: RivenStatResult): Element {
       justify-content: space-between;
       align-items: center;
       padding: 6px 8px;
-      background-color: #16213e;
-      border-radius: 4px;
-      border-left: 3px solid #e35f5f;
+      background-color: var(--wf-bg-subtle);
+      border-radius: var(--wf-radius-sm);
+      border-left: 3px solid var(--wf-danger);
     `}
                     >
                       <span
                         style={`
-      color: #e0e0e0;
+      color: var(--wf-text-body);
       font-size: 13px;
     `}
                       >
@@ -1455,7 +1439,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
                       >
                         <span
                           style={`
-        color: #e35f5f;
+        color: var(--wf-danger);
         font-size: 13px;
         font-weight: 500;
         min-width: 60px;
@@ -1466,7 +1450,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
                         </span>
                         <span
                           style={`
-        color: #e35f5f;
+        color: var(--wf-danger);
         font-size: 13px;
         font-weight: 500;
         min-width: 60px;
@@ -1492,18 +1476,18 @@ export function RivenStatComponent(data: RivenStatResult): Element {
 export function VoidTraderComponent(data: VoidTrader): Element {
   return (
     <div
-      style="width: 400px; padding: 10px; font-family: sans-serif; font-size: 14px;"
+      style="width:400px;padding:16px;font-family:'Segoe UI',sans-serif;font-size:14px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);border:1px solid var(--wf-border);box-shadow:var(--wf-shadow-card);color:var(--wf-text-body);"
     >
-      <table style="width: 100%; border-collapse: collapse;">
+      <table style="width:100%;border-collapse:collapse;">
         <thead>
           <tr>
             <th
-              style="border-bottom: 1px solid #ccc; text-align: left; padding: 6px;"
+              style="border-bottom:1px solid var(--wf-border-strong);text-align:left;padding:6px;color:var(--wf-text-primary);"
             >
               名称
             </th>
             <th
-              style="border-bottom: 1px solid #ccc; text-align: left; padding: 6px;"
+              style="border-bottom:1px solid var(--wf-border-strong);text-align:left;padding:6px;color:var(--wf-text-primary);"
             >
               价格
             </th>
@@ -1512,11 +1496,11 @@ export function VoidTraderComponent(data: VoidTrader): Element {
         <tbody>
           {data.items.map(item => (
             <tr>
-              <td style="padding: 6px; border-bottom: 1px solid #eee;">
+              <td style="padding:6px;border-bottom:1px solid var(--wf-border);">
                 {item.name}
               </td>
               <td
-                style="padding: 6px; border-bottom: 1px solid #eee; text-align: center;line-height: 1;"
+                style="padding:6px;border-bottom:1px solid var(--wf-border);text-align:center;line-height:1;"
               >
                 <span>{item.ducats}</span>
                 <svg
