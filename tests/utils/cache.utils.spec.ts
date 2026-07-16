@@ -137,4 +137,29 @@ describe('createAsyncCache Tests', () => {
     expect(cached).to.equal(2)
     expect(callCount).to.equal(2)
   })
+
+  it('keeps the last successful value readable during an infinite-TTL update and after failure', async () => {
+    let rejectUpdate!: (error: Error) => void
+    let calls = 0
+    const cache = createAsyncCache(async () => {
+      calls++
+      if (calls === 1) {
+        return 'old'
+      }
+      return new Promise<string>((_resolve, reject) => {
+        rejectUpdate = reject
+      })
+    }, -1)
+
+    expect(await cache.get()).to.equal('old')
+    const updating = cache.update()
+    expect(await cache.get()).to.equal('old')
+    rejectUpdate(new Error('refresh failed'))
+    try {
+      await updating
+    }
+    catch {
+    }
+    expect(await cache.get()).to.equal('old')
+  })
 })

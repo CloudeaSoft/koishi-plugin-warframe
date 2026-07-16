@@ -2,7 +2,10 @@ import type WorldState from 'warframe-worldstate-parser'
 
 import { expect } from 'chai'
 
-import { diffWorldStates } from '../../../src/warframe/services/world-state-refresh'
+import {
+  createWorldStateRefresher,
+  diffWorldStates,
+} from '../../../src/warframe/services/world-state-refresh'
 
 type WorldStateSnapshot = Parameters<typeof diffWorldStates>[0]
 
@@ -90,6 +93,32 @@ describe('world-state change detection', () => {
         reward: 'Forma',
         expiry: new Date('2026-07-16T01:01:00Z').getTime(),
       },
+    ])
+  })
+
+  it('uses the first refresh as a silent baseline and compares later refreshes', async () => {
+    const first = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+    })
+    const second = snapshot({
+      timestamp: new Date('2026-07-16T00:05:00Z'),
+      dailyDeals: [{
+        id: 'd1',
+        item: 'Braton',
+        uniqueName: '/Lotus/Weapons/Braton',
+        originalPrice: 225,
+        salePrice: 157,
+        discount: 30,
+      }],
+    } as unknown as Partial<WorldState>)
+    const values = [first, second]
+    const refresh = createWorldStateRefresher({
+      update: async () => values.shift()!,
+    })
+
+    expect(await refresh()).to.deep.equal([])
+    expect((await refresh()).map(item => item.type)).to.deep.equal([
+      'daily-deal',
     ])
   })
 

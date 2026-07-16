@@ -50,4 +50,4 @@ export const globalWorldState = createAsyncCache(async () => {
   spFissures.sort((a, b) => a.tierNum - b.tierNum)
   rjFissures.sort((a, b) => a.tierNum - b.tierNum)
   return { raw: worldState, fissures, spFissures, rjFissures }
-}, 120_000)
+}, -1)

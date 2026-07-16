@@ -177,3 +177,27 @@ export function diffWorldStates(
 
   return notifications
 }
+
+export interface WorldStateSource {
+  update: () => Promise<WorldStateSnapshot>
+}
+
+export function createWorldStateRefresher(
+  source: WorldStateSource = globalWorldState,
+): () => Promise<WorldStateNotification[]> {
+  let previous: WorldStateSnapshot | undefined
+
+  return async () => {
+    const current = await source.update()
+    if (!previous) {
+      previous = current
+      return []
+    }
+
+    const notifications = diffWorldStates(previous, current)
+    previous = current
+    return notifications
+  }
+}
+
+export const refreshWorldState = createWorldStateRefresher()
