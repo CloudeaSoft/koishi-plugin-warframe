@@ -1,6 +1,7 @@
 import type Element from '@satorijs/element'
 import type {
   ItemShort,
+  ItemStatisticsSummary,
   OrderWithUser,
   PrimedModHistoryItem,
   RivenAttributeShortInternal,
@@ -8,16 +9,166 @@ import type {
   RivenOrderInternal,
 } from '../warframe'
 
-export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): Element {
+function formatShortDate(datetime: string): string {
+  const d = new Date(datetime)
+  if (Number.isNaN(d.getTime()))
+    return ''
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0')
+  const day = String(d.getUTCDate()).padStart(2, '0')
+  return `${month}-${day}`
+}
+
+function trendArrow(trend: 'up' | 'down' | 'flat'): string {
+  return trend === 'up' ? '↑' : trend === 'down' ? '↓' : '≈'
+}
+
+function trendColor(trend: 'up' | 'down' | 'flat'): string {
+  return trend === 'up' ? '#e0533a' : trend === 'down' ? '#3a9e5a' : '#888'
+}
+
+function ItemStatisticsChart(stats: ItemStatisticsSummary): Element {
+  const points = stats.chart
+  const W = 1600 - 2 * 12
+  const H = 240
+  const padL = 55
+  const padR = 25
+  const padT = 25
+  const padB = 45
+  const chartW = W - padL - padR
+  const chartH = H - padT - padB
+
+  let dataMin = Infinity
+  let dataMax = -Infinity
+  for (const p of points) {
+    if (p.donchBot < dataMin)
+      dataMin = p.donchBot
+    if (p.median < dataMin)
+      dataMin = p.median
+    if (p.donchTop > dataMax)
+      dataMax = p.donchTop
+    if (p.median > dataMax)
+      dataMax = p.median
+  }
+  const range = dataMax - dataMin
+  const pad = range > 0 ? range * 0.1 : 5
+  const yMin = dataMin - pad
+  const yMax = dataMax + pad
+  const yScale = yMax - yMin
+
+  const xPos = (i: number): number => padL + (points.length > 1 ? i * chartW / (points.length - 1) : 0)
+  const yPos = (v: number): number => padT + (1 - (v - yMin) / yScale) * chartH
+
+  const bandTop = points.map((p, i) => `${xPos(i)},${yPos(p.donchTop)}`)
+  const bandBot = points.map((p, i) => `${xPos(points.length - 1 - i)},${yPos(p.donchBot)}`)
+  const bandPoints = [...bandTop, ...bandBot].join(' ')
+
+  const linePoints = points.map((p, i) => `${xPos(i)},${yPos(p.median)}`).join(' ')
+
+  const baselineY = stats.baselineMedian !== undefined ? yPos(stats.baselineMedian) : null
+
+  const onlineYRaw = yPos(stats.onlineMin)
+  const onlineY = Math.max(padT, Math.min(H - padB, onlineYRaw))
+
+  return (
+    <svg width={W} height={H} style="font-family: Arial, sans-serif; background: #eee;">
+      <polygon points={bandPoints} fill="#5a95ff" fillOpacity={0.12} stroke="none" />
+      <line x1={padL} y1={onlineY} x2={W - padR} y2={onlineY} stroke="#ff6b35" strokeWidth={1.5} strokeDasharray="6 4" />
+      <text x={W - padR} y={onlineY - 6} textAnchor="end" fontSize={12} fill="#ff6b35">
+        在线最低
+        {stats.onlineMin}
+        p
+      </text>
+      {baselineY !== null
+        ? (
+            <g>
+              <line x1={padL} y1={baselineY} x2={W - padR} y2={baselineY} stroke="#999" strokeWidth={1} strokeDasharray="3 3" />
+              <text x={padL + 4} y={baselineY - 5} textAnchor="start" fontSize={11} fill="#999">
+                7天中位
+                {stats.baselineMedian}
+                p
+              </text>
+            </g>
+          )
+        : null}
+      <polyline points={linePoints} fill="none" stroke="#5a95ff" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+      {points.map((p, i) => (
+        <circle cx={xPos(i)} cy={yPos(p.median)} r={3.5} fill="#5a95ff" stroke="#fff" strokeWidth={1} />
+      ))}
+      {points.map((p, i) => (
+        <text x={xPos(i)} y={H - padB + 20} textAnchor="middle" fontSize={11} fill="#666">
+          {formatShortDate(p.datetime)}
+        </text>
+      ))}
+      <text x={padL - 8} y={padT + 5} textAnchor="end" fontSize={11} fill="#666">
+        {Math.round(dataMax)}
+      </text>
+      <text x={padL - 8} y={H - padB} textAnchor="end" fontSize={11} fill="#666">
+        {Math.round(dataMin)}
+      </text>
+    </svg>
+  )
+}
+
+function StatCard(label: string, value: string, accent?: string): Element {
+  return (
+    <div style="flex:1;min-width:0;border-radius:6px;padding:8px 10px;background:#f5f7fa;border:1px solid #e0e4e8;display:flex;flex-direction:column;align-items:center;gap:2px;">
+      <span style="font-size:0.9rem;color:#888;">{label}</span>
+      <span style={`font-size:1.4rem;font-weight:700;color:${accent ?? '#1a1a1a'};`}>{value}</span>
+    </div>
+  )
+}
+
+function ItemStatisticsCards(stats: ItemStatisticsSummary): Element {
+  const arrow = trendArrow(stats.trend)
+  const tColor = trendColor(stats.trend)
+  return (
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      {StatCard(
+        '近7天中位',
+        stats.baselineMedian !== undefined ? `${stats.baselineMedian}p` : '—',
+      )}
+      {StatCard(
+        '近3天均价',
+        stats.recentAvg !== undefined ? `${stats.recentAvg}p ${arrow}` : '—',
+        stats.recentAvg !== undefined ? tColor : undefined,
+      )}
+      {StatCard('近3天成交', `${stats.recentVolume}笔`)}
+      {StatCard(
+        '90天区间',
+        stats.rangeMin !== undefined && stats.rangeMax !== undefined
+          ? `${stats.rangeMin}-${stats.rangeMax}p`
+          : '—',
+      )}
+      {StatCard('在线最低', `${stats.onlineMin}p`, '#ff6b35')}
+    </div>
+  )
+}
+
+function ItemStatisticsComponent(stats: ItemStatisticsSummary): Element {
+  const hasData
+    = stats.chart.length > 0
+      || stats.recentAvg !== undefined
+      || stats.baselineMedian !== undefined
+  if (!hasData) {
+    return (
+      <div style="margin-top:16px;padding:12px;border-top:2px solid #e0e4e8;text-align:center;color:#999;font-size:1.2rem;">
+        暂无近期成交统计数据
+      </div>
+    )
+  }
+  return (
+    <div style="margin-top:16px;padding:12px;border-top:2px solid #e0e4e8;">
+      {stats.chart.length >= 2 ? ItemStatisticsChart(stats) : null}
+      {ItemStatisticsCards(stats)}
+    </div>
+  )
+}
+
+export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[], statistics?: ItemStatisticsSummary): Element {
   const itemNameCN = item.i18n['zh-hans']?.name
   const itemNameEN = item.i18n.en?.name
-  let result = `物品: ${itemNameCN} / ${itemNameEN} (ID: ${item.slug})\n`
-  for (const order of orders) {
-    result += `玩家: ${order.user.ingameName} 状态: ${order.user.status} 价格: ${order.platinum}\n`
-  }
-  void result
   return (
-    <div style="display:flex; flex-direction: column;">
+    <div style="display:flex; flex-direction: column; width: 1600px;">
       <style>
         {`
           th {
@@ -69,6 +220,7 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[]): El
           </tr>
         ))}
       </table>
+      {statistics ? ItemStatisticsComponent(statistics) : null}
     </div>
   )
 }

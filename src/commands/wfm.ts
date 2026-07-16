@@ -31,12 +31,12 @@ export function createWfmCommands(deps: PluginDependencies): {
       }
 
       if (!_action.session?.app.puppeteer) {
-        return render(ItemOrderComponent(result.data.item, result.data.orders))
+        return render(ItemOrderComponent(result.data.item, result.data.orders, result.data.statistics))
       }
 
-      const component = await generateImageElementOutput(_action.session?.app.puppeteer, ItemOrderComponent(result.data.item, result.data.orders))
+      const component = await generateImageElementOutput(_action.session?.app.puppeteer, ItemOrderComponent(result.data.item, result.data.orders, result.data.statistics))
 
-      return wmMessage(component, result.data.item, result.data.orders)
+      return wmMessage(component, result.data.item, result.data.orders, result.data.statistics)
     },
 
     wmrCommand: async (_action: Argv, input: string) => {

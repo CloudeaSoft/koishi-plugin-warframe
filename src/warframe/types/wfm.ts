@@ -4,8 +4,10 @@ import type {
 } from 'wfm-api-client'
 
 export type {
+  ClosedStatisticsEntry,
   Ducatnator,
   ItemShort,
+  LiveStatisticsEntry,
   OrderWithUser,
   RivenAttribute,
   RivenAttributeUnit,
@@ -19,6 +21,26 @@ export interface PrimedModHistoryItem {
   name: string | undefined
   last: string
   plats?: number
+}
+
+export interface ItemStatisticsPoint {
+  datetime: string
+  median: number
+  waPrice: number
+  volume: number
+  donchTop: number
+  donchBot: number
+}
+
+export interface ItemStatisticsSummary {
+  chart: ItemStatisticsPoint[]
+  recentAvg?: number
+  recentVolume: number
+  baselineMedian?: number
+  trend: 'up' | 'down' | 'flat'
+  rangeMin?: number
+  rangeMax?: number
+  onlineMin: number
 }
 
 export type RivenAttributeShortInternal
