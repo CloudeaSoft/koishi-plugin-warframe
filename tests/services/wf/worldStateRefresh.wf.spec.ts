@@ -26,7 +26,7 @@ function snapshot(raw: Partial<WorldState>): WorldStateSnapshot {
 }
 
 describe('world-state change detection', () => {
-  it('returns newly added fissures, daily deals, and alerts', () => {
+  it('returns newly added fissures with localized region data', async () => {
     const previous = snapshot({
       timestamp: new Date('2026-07-16T00:00:00Z'),
     })
@@ -34,7 +34,9 @@ describe('world-state change detection', () => {
       fissures: [{
         id: 'f1',
         tier: 'Lith',
+        tierNum: 1,
         node: 'E Prime',
+        nodeKey: 'E Prime (Earth)',
         missionType: 'Exterminate',
         isHard: false,
         isStorm: false,
@@ -65,13 +67,21 @@ describe('world-state change detection', () => {
       }],
     } as unknown as Partial<WorldState>)
 
-    expect(diffWorldStates(previous, current)).to.deep.equal([
+    expect(await diffWorldStates(previous, current)).to.deep.equal([
       {
         type: 'fissure',
         id: 'f1',
-        tier: 'Lith',
-        node: 'E Prime',
-        missionType: 'Exterminate',
+        tier: '古纪',
+        tierNum: 1,
+        node: {
+          name: 'E Prime',
+          system: '地球',
+          type: '歼灭',
+          faction: 'Grineer',
+          minLevel: 1,
+          maxLevel: 3,
+        },
+        hard: false,
         category: 'normal',
         expiry: new Date('2026-07-16T01:01:00Z').getTime(),
       },
@@ -122,7 +132,7 @@ describe('world-state change detection', () => {
     ])
   })
 
-  it('detects a Void Trader only when activation crosses snapshot timestamps', () => {
+  it('detects a Void Trader only when activation crosses snapshot timestamps', async () => {
     const trader = {
       id: 'v1',
       character: 'Baro Ki\'Teer',
@@ -139,7 +149,7 @@ describe('world-state change detection', () => {
       voidTraders: [trader],
     } as unknown as Partial<WorldState>)
 
-    expect(diffWorldStates(previous, current)).to.deep.equal([{
+    expect(await diffWorldStates(previous, current)).to.deep.equal([{
       type: 'void-trader',
       id: 'v1',
       character: 'Baro Ki\'Teer',
@@ -148,7 +158,7 @@ describe('world-state change detection', () => {
     }])
   })
 
-  it('does not report removals or unchanged entries', () => {
+  it('does not report removals or unchanged entries', async () => {
     const deal = {
       id: 'd1',
       item: 'Braton',
@@ -161,11 +171,11 @@ describe('world-state change detection', () => {
       dailyDeals: [deal],
     } as unknown as Partial<WorldState>)
 
-    expect(diffWorldStates(withDeal, withDeal)).to.deep.equal([])
-    expect(diffWorldStates(withDeal, snapshot({ dailyDeals: [] }))).to.deep.equal([])
+    expect(await diffWorldStates(withDeal, withDeal)).to.deep.equal([])
+    expect(await diffWorldStates(withDeal, snapshot({ dailyDeals: [] }))).to.deep.equal([])
   })
 
-  it('uses deterministic identities when parser IDs are absent', () => {
+  it('uses deterministic identities when parser IDs are absent', async () => {
     const fissure = {
       tier: 'Axi',
       node: 'Hydron',
@@ -178,6 +188,6 @@ describe('world-state change detection', () => {
     const previous = snapshot({ fissures: [fissure] } as unknown as Partial<WorldState>)
     const current = snapshot({ fissures: [{ ...fissure }] } as unknown as Partial<WorldState>)
 
-    expect(diffWorldStates(previous, current)).to.deep.equal([])
+    expect(await diffWorldStates(previous, current)).to.deep.equal([])
   })
 })

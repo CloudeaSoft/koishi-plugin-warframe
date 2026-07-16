@@ -1,6 +1,9 @@
 import type WorldState from 'warframe-worldstate-parser'
 
-import { globalWorldState } from '../data/wf/globalWorldState'
+import {
+  adaptFissure,
+  globalWorldState,
+} from '../data/wf/globalWorldState'
 
 export type WorldStateSnapshot = Awaited<
   ReturnType<typeof globalWorldState.get>
@@ -16,8 +19,9 @@ export type WorldStateNotification
     type: 'fissure'
     id: string
     tier: string
-    node: string
-    missionType: string
+    tierNum: number
+    node: WFRegionShort
+    hard: boolean
     category: 'normal' | 'steel-path' | 'railjack'
     expiry: number
   }
@@ -103,21 +107,23 @@ function alertReward(alert: ParsedAlert): string {
   return values.join('、')
 }
 
-export function diffWorldStates(
+export async function diffWorldStates(
   previous: WorldStateSnapshot,
   current: WorldStateSnapshot,
-): WorldStateNotification[] {
+): Promise<WorldStateNotification[]> {
   const notifications: WorldStateNotification[] = []
   const previousFissures = new Set(previous.raw.fissures.map(fissureId))
   for (const fissure of current.raw.fissures) {
     const id = fissureId(fissure)
     if (!previousFissures.has(id)) {
+      const mapped = await adaptFissure(fissure)
       notifications.push({
         type: 'fissure',
         id,
-        tier: String(fissure.tier),
-        node: fissure.node,
-        missionType: fissure.missionType,
+        tier: mapped.tier,
+        tierNum: mapped.tierNum,
+        node: mapped.node,
+        hard: mapped.hard,
         category: fissure.isStorm
           ? 'railjack'
           : fissure.isHard
@@ -194,7 +200,7 @@ export function createWorldStateRefresher(
       return []
     }
 
-    const notifications = diffWorldStates(previous, current)
+    const notifications = await diffWorldStates(previous, current)
     previous = current
     return notifications
   }

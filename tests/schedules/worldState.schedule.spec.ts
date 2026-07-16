@@ -1,14 +1,11 @@
-import type { Context } from 'koishi'
+import type { Context, Element } from 'koishi'
 
 import type { PluginDependencies } from '../../src/types/config'
 import type { WorldStateNotification } from '../../src/warframe'
 
 import { expect } from 'chai'
 
-import {
-  formatWorldStateNotifications,
-  setupWorldStateSchedule,
-} from '../../src/schedules/world-state'
+import { setupWorldStateSchedule } from '../../src/schedules/world-state'
 
 function createHarness(
   refresh: () => Promise<WorldStateNotification[]>,
@@ -16,14 +13,16 @@ function createHarness(
 ) {
   let expression = ''
   let callback!: () => void
-  const broadcasts: Array<{ channels: string[], message: string }> = []
+  const broadcasts: Array<{ channels: string[], message: Element | string }> = []
   const warn = vi.fn()
+  const info = vi.fn()
+  const render = vi.fn(async () => '<img src="data:image/png;base64,world-state"/>')
   const ctx = {
     cron: (value: string, handler: () => void) => {
       expression = value
       callback = handler
     },
-    broadcast: async (channels: string[], message: string) => {
+    broadcast: async (channels: string[], message: Element | string) => {
       broadcasts.push({ channels, message })
     },
   } as unknown as Context
@@ -33,8 +32,8 @@ function createHarness(
       developerMode: false,
       ocrAPISecret: { id: '', key: '' },
     },
-    logger: { warn },
-    render: async () => '',
+    logger: { info, warn },
+    render,
   } as unknown as PluginDependencies
 
   setupWorldStateSchedule(ctx, deps, refresh)
@@ -47,6 +46,8 @@ function createHarness(
       return callback
     },
     broadcasts,
+    info,
+    render,
     warn,
   }
 }
@@ -56,23 +57,39 @@ async function flushScheduledRun(): Promise<void> {
 }
 
 describe('world-state schedule', () => {
-  it('registers a five-minute cron and broadcasts grouped messages', async () => {
+  it('registers a five-minute cron and broadcasts grouped text messages', async () => {
     const refresh = vi.fn(async (): Promise<WorldStateNotification[]> => [
       {
         type: 'fissure',
         id: 'f1',
-        tier: 'Lith',
-        node: 'E Prime',
-        missionType: 'Exterminate',
+        tier: '古纪',
+        tierNum: 1,
+        node: {
+          name: 'E Prime',
+          system: '地球',
+          type: '歼灭',
+          faction: 'Grineer',
+          minLevel: 1,
+          maxLevel: 3,
+        },
+        hard: false,
         category: 'normal',
         expiry: 0,
       },
       {
         type: 'fissure',
         id: 'f2',
-        tier: 'Axi',
-        node: 'Hydron',
-        missionType: 'Defense',
+        tier: '后纪',
+        tierNum: 4,
+        node: {
+          name: 'Hydron',
+          system: '赛德娜',
+          type: '防御',
+          faction: 'Grineer',
+          minLevel: 30,
+          maxLevel: 40,
+        },
+        hard: true,
         category: 'steel-path',
         expiry: 0,
       },
@@ -82,59 +99,14 @@ describe('world-state schedule', () => {
     expect(harness.expression).to.equal('0 */5 * * * *')
     harness.callback()
     await flushScheduledRun()
-    expect(harness.broadcasts).to.deep.equal([{
+    expect(harness.render.mock.calls).to.have.length(0)
+    expect(harness.broadcasts.map(({ channels, message }) => ({
+      channels,
+      message: message.toString(),
+    }))).to.deep.equal([{
       channels: ['qq:123'],
-      message: '【新虚空裂隙】\nLith - E Prime（Exterminate）\nAxi - Hydron（Defense） [钢铁之路]',
+      message: '<message><div>新的虚空裂隙已出现:\n</div><div>[普通]古纪 - 地球 (歼灭) Grineer E Prime | \n[钢铁]后纪 - 赛德娜 (防御) Grineer Hydron | </div></message>',
     }])
-  })
-
-  it('formats one message per populated category', () => {
-    const expiry = new Date('2026-07-16T00:00:00Z').getTime()
-    const messages = formatWorldStateNotifications([
-      {
-        type: 'fissure',
-        id: 'f1',
-        tier: 'Axi',
-        node: 'Hydron',
-        missionType: 'Defense',
-        category: 'railjack',
-        expiry,
-      },
-      {
-        type: 'void-trader',
-        id: 'v1',
-        character: 'Baro Ki\'Teer',
-        location: 'Mercury Relay',
-        expiry,
-      },
-      {
-        type: 'daily-deal',
-        id: 'd1',
-        item: 'Braton',
-        originalPrice: 225,
-        salePrice: 157,
-        discount: 30,
-        expiry,
-      },
-      {
-        type: 'alert',
-        id: 'a1',
-        description: 'Lotus Gift',
-        node: 'Earth',
-        missionType: 'Defense',
-        reward: 'Forma',
-        expiry,
-      },
-    ])
-
-    expect(messages).to.have.length(4)
-    expect(messages[0]).to.include('新虚空裂隙')
-    expect(messages[0]).to.include('九重天')
-    expect(messages[1]).to.include('虚空商人到达')
-    expect(messages[1]).to.include('截止')
-    expect(messages[2]).to.include('新每日特惠')
-    expect(messages[3]).to.include('新警报')
-    expect(messages[3]).to.include('奖励：Forma')
   })
 
   it('logs refresh failures and emits no broadcasts', async () => {

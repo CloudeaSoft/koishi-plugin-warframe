@@ -25,8 +25,8 @@ app.middleware(({ content }, next) => {
 beforeAll(() => app.start())
 
 describe('main Project', () => {
-  it('requires only the cron and puppeteer services', () => {
-    expect(warframe.inject.required).to.deep.equal(['cron', 'puppeteer'])
+  it('requires only the cron, database and puppeteer services', () => {
+    expect(warframe.inject.required).to.deep.equal(['cron', 'database', 'puppeteer'])
   })
 
   it('example', async () => {
