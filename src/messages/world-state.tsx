@@ -19,7 +19,7 @@ function suffixWithExpiry(expiry: number): string {
 }
 
 function suffixWithTimeRemaining(expiry: number): string {
-  return expiry > 0
+  return expiry > Date.now()
     ? `剩余${msToHumanReadable(expiry - Date.now())}`
     : ''
 }
