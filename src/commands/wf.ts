@@ -11,7 +11,7 @@ import {
   WeeklyComponent,
   WeeklyRivenComponent,
 } from '../components/wf'
-import { t } from '../messages'
+import { t } from '../i18n'
 import {
   applyRelicData,
   getAnalyzedRiven,

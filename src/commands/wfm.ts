@@ -6,7 +6,7 @@ import {
   PrimedModHistoryComponent,
   RivenOrderComponent,
 } from '../components/wfm'
-import { t } from '../messages'
+import { t } from '../i18n'
 import { wmMessage } from '../messages/wfm'
 import {
   getItemOrders,

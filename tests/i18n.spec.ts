@@ -1,8 +1,8 @@
 import { expect } from 'chai'
-import { t } from '../../src/messages'
-import { analyzeRivenStat } from '../../src/warframe/services'
+import { t } from '../src/i18n'
+import { analyzeRivenStat } from '../src/warframe/services'
 
-describe('messages', () => {
+describe('i18n', () => {
   it('resolves a message key', () => {
     expect(t('miscs.inDevelopment')).to.equal('功能暂未开放')
   })
