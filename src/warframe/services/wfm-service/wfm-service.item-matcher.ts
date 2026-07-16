@@ -27,6 +27,17 @@ export const wfmItemMatcher = (() => {
     '圆盘',
     '连接器',
   ]
+  const arcanePrefixes = [
+    '赋能',
+    '主要',
+    '次要',
+    '近战',
+    '魔导',
+    '蜕化',
+    '弓箭',
+    '正直',
+    '神威',
+  ]
 
   const warframeAliasDict: Record<string, string> = ((aliasObject) => {
     const transformedObject: Record<string, string> = {}
@@ -150,6 +161,26 @@ export const wfmItemMatcher = (() => {
   ): ItemShort | undefined {
     const slug = lookup.globalItemNameToSlugDict[input]
     return slug ? lookup.globalItemDict[slug] : undefined
+  }
+
+  function reorderArcanePrefix(input: string): string | undefined {
+    for (const prefix of arcanePrefixes) {
+      if (input.endsWith(prefix) && input.length > prefix.length) {
+        return prefix + input.slice(0, input.length - prefix.length)
+      }
+    }
+    return undefined
+  }
+
+  function matchByArcaneReorder(
+    input: string,
+    lookup: WFMItemLookupData,
+  ): ItemShort | undefined {
+    const reordered = reorderArcanePrefix(input)
+    if (!reordered) {
+      return undefined
+    }
+    return matchBySlugDict(reordered, lookup)
   }
 
   function matchByShortHand(
@@ -302,6 +333,10 @@ export const wfmItemMatcher = (() => {
     if (shortHandMatchedItem)
       return shortHandMatchedItem
 
+    const arcaneReorderedItem = matchByArcaneReorder(normalizedInput, lookup)
+    if (arcaneReorderedItem)
+      return arcaneReorderedItem
+
     const aliasInput = transformByWarframeAlias(normalizedInput)
     if (aliasInput) {
       const aliasShortHandMatchedItem = matchByShortHand(aliasInput, lookup)
@@ -333,11 +368,13 @@ export const wfmItemMatcher = (() => {
 
   return {
     buildSuffixVariantCandidates,
+    matchByArcaneReorder,
     matchByShortHand,
     matchBySlugDict,
     matchBySuffixVariantLookup,
     matchByWordPrefixSequence,
     removeNameSuffix,
+    reorderArcanePrefix,
     splitWordPrefixTokens,
     shortHandProcess,
     stringToWFMItem,
@@ -347,12 +384,14 @@ export const wfmItemMatcher = (() => {
 })()
 
 export const buildSuffixVariantCandidates = wfmItemMatcher.buildSuffixVariantCandidates
+export const matchByArcaneReorder = wfmItemMatcher.matchByArcaneReorder
 export const matchByShortHand = wfmItemMatcher.matchByShortHand
 export const matchBySlugDict = wfmItemMatcher.matchBySlugDict
 export const matchBySuffixVariantLookup = wfmItemMatcher.matchBySuffixVariantLookup
 export const matchByWordPrefixSequence = wfmItemMatcher.matchByWordPrefixSequence
 export const normalizeWordPrefixName = wfmItemMatcher.normalizeWordPrefixName
 export const removeNameSuffix = wfmItemMatcher.removeNameSuffix
+export const reorderArcanePrefix = wfmItemMatcher.reorderArcanePrefix
 export const splitWordPrefixTokens = wfmItemMatcher.splitWordPrefixTokens
 export const shortHandProcess = wfmItemMatcher.shortHandProcess
 export const stringToWFMItem = wfmItemMatcher.stringToWFMItem

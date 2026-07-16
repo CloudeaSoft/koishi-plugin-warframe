@@ -116,6 +116,33 @@ describe('wfm-service.inputToItem', () => {
     { input: 'tr pr s', slug: 'trinity_prime_set' },
   ]
 
+  const arcaneForwardCases = [
+    { input: '赋能壁垒', slug: 'arcane_barrier' },
+    { input: '赋能·壁垒', slug: 'arcane_barrier' },
+    { input: '魔导活力', slug: 'magus_vigor' },
+    { input: '正直打击', slug: 'virtuos_strike' },
+    { input: '神威勇猛', slug: 'exodia_valor' },
+    { input: '蜕化活力', slug: 'molt_vigor' },
+    { input: '主要无情', slug: 'primary_merciless' },
+    { input: '次要无情', slug: 'secondary_merciless' },
+    { input: '近战侵染', slug: 'melee_influence' },
+    { input: '弓箭利矢', slug: 'longbow_sharpshot' },
+  ]
+
+  const arcaneReorderCases = [
+    { input: '壁垒赋能', slug: 'arcane_barrier' },
+    { input: '壁垒·赋能', slug: 'arcane_barrier' },
+    { input: '活力魔导', slug: 'magus_vigor' },
+    { input: '活力·魔导', slug: 'magus_vigor' },
+    { input: '打击正直', slug: 'virtuos_strike' },
+    { input: '勇猛神威', slug: 'exodia_valor' },
+    { input: '活力蜕化', slug: 'molt_vigor' },
+    { input: '无情主要', slug: 'primary_merciless' },
+    { input: '无情次要', slug: 'secondary_merciless' },
+    { input: '侵染近战', slug: 'melee_influence' },
+    { input: '利矢弓箭', slug: 'longbow_sharpshot' },
+  ]
+
   describe('exact matches', () => {
     for (const testCase of exactMatchCases) {
       it(`resolves ${testCase.input}`, async () => {
@@ -158,6 +185,22 @@ describe('wfm-service.inputToItem', () => {
 
   describe('word prefix variants', () => {
     for (const testCase of wordPrefixCases) {
+      it(`matches ${testCase.input}`, async () => {
+        await expectItemSlug(testCase.input, testCase.slug)
+      })
+    }
+  })
+
+  describe('arcane forward matches', () => {
+    for (const testCase of arcaneForwardCases) {
+      it(`matches ${testCase.input}`, async () => {
+        await expectItemSlug(testCase.input, testCase.slug)
+      })
+    }
+  })
+
+  describe('arcane reorder matches', () => {
+    for (const testCase of arcaneReorderCases) {
       it(`matches ${testCase.input}`, async () => {
         await expectItemSlug(testCase.input, testCase.slug)
       })
