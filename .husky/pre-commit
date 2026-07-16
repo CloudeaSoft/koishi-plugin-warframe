@@ -1,3 +1,20 @@
-yarn build
-yarn test
-yarn lint
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Get the current branch name
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# ----------------- Configuration -----------------
+# Define which branches REQUIRE validation (Whitelist Mode).
+# Keep it as is if you only want this to run on main, master, or develop:
+if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ] || [ "$current_branch" = "develop" ]; then
+
+  echo "🔍 [Husky] Current branch is $current_branch. Running full validation..."
+
+  # Run your commands (if any command fails, the commit will be blocked)
+  yarn build && yarn test && yarn lint
+
+else
+  # Other branches (e.g., your personal feat/* branches) will bypass this and commit instantly
+  echo "⏭️ [Husky] Current branch is $current_branch. Skipping build/test/lint validation."
+fi
