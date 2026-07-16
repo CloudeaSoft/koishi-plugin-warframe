@@ -17,7 +17,7 @@ export function setupPrimedModHistorySchedule(
       await refresh()
     }
     catch (error) {
-      deps.logger.warn(error, '刷新 Primed MOD 历史缓存失败')
+      deps.logger.warn('刷新 Primed MOD 历史缓存失败', error)
     }
   }
 
