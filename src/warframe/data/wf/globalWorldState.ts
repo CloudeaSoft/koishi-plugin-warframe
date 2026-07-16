@@ -1,4 +1,5 @@
 import type WorldState from 'warframe-worldstate-parser'
+import type { Fissure } from '../../types'
 
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
 import { getWorldState } from '../../infrastructure/wf/wf-api'

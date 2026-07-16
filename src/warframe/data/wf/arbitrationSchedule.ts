@@ -1,3 +1,4 @@
+import type { ArbitrationShort } from '../../types'
 import { arbitrationScheduleText } from '../../assets/index'
 
 export const arbitrationSchedule: ArbitrationShort[] = arbitrationScheduleText

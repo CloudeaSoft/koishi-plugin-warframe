@@ -1,6 +1,7 @@
 import type {
   IRegion,
 } from 'warframe-public-export-plus'
+import type { RelicQuality, WFRegionShort } from '../../types'
 import {
   ExportFactions as factions,
 } from 'warframe-public-export-plus'

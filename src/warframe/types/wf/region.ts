@@ -1,4 +1,4 @@
-interface WFRegion {
+export interface WFRegion {
   name: string
   systemIndex: number
   systemName: string
@@ -18,7 +18,7 @@ interface WFRegion {
   nextNodes: unknown[]
 }
 
-interface WFRegionShort {
+export interface WFRegionShort {
   name: string
   system: string
   type: string

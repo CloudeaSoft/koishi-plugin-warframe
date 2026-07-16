@@ -4,6 +4,8 @@
  * @param ttlMs Time-to-live in milliseconds. Defaults to 60_000 meaning 1 minute. Set to -1 for infinity duration.
  * @returns A cache instance.
  */
+import type { AsyncCache, AsyncCacheFactory } from '../types'
+
 export function createAsyncCache<T>(
   factory: AsyncCacheFactory<T>,
   ttlMs: number = 60_000,

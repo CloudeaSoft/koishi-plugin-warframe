@@ -1,9 +1,17 @@
 import type { Element } from 'koishi'
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 import type {
+  Arbitration,
+  ArchiMedea,
+  ArchonHunt,
+  Fissure,
+  OutputRelic,
+  OutputRelicReward,
+  RelicRewardRarity,
   RivenAttributeUnit,
   RivenStatAnalyzeResult,
   RivenStatResult,
+  VoidTrader,
 } from '../warframe'
 import { hexToRgb, lerp, rgbToHex } from '../utils'
 import { msToHumanReadable } from '../warframe'

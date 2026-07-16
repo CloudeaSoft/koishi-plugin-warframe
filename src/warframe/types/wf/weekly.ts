@@ -1,26 +1,28 @@
-interface ArchonHunt {
+import type { WFRegionShort } from './region'
+
+export interface ArchonHunt {
   name: string
   missions: ArchonHuntMissions[]
 }
 
-interface ArchonHuntMissions {
+export interface ArchonHuntMissions {
   type: string
   node: WFRegionShort
 }
 
-interface ArchiMedea {
+export interface ArchiMedea {
   name: string
   missions: ArchiMedeaMission[]
   peronal: ArchiMedeaDebuff[]
 }
 
-interface ArchiMedeaMission {
+export interface ArchiMedeaMission {
   type: string
   deviation: ArchiMedeaDebuff
   risks: ArchiMedeaDebuff[]
 }
 
-interface ArchiMedeaDebuff {
+export interface ArchiMedeaDebuff {
   name: string
   desc: string
 }

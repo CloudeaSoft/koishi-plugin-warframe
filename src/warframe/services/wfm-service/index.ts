@@ -1,12 +1,15 @@
-import type { WarframeResult } from '../../types/warframe-result'
 import type {
   ItemShort,
   OrderWithUser,
+  OutputRelic,
+  OutputRelicReward,
   PrimedModHistoryItem,
+  Relic,
   RivenAttributeShortInternal,
   RivenItem,
   RivenOrderInternal,
-} from '../../types/wfm'
+  WarframeResult,
+} from '../../types'
 import { dict_zh } from 'warframe-public-export-plus'
 
 import { globalDucatnatorIDDict } from '../../data/wfm/globalDucatnator'

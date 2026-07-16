@@ -1,4 +1,4 @@
-import type { RivenWeaponItem, RivenWeaponResponse } from '../../types/miscs/lab'
+import type { RivenWeaponItem, RivenWeaponResponse } from '../../types'
 import { fetchAsyncData } from '../../utils'
 
 export async function getHotRivenWeapons(num: number = 30): Promise<RivenWeaponItem[] | undefined> {

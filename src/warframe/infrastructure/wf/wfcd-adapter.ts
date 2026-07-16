@@ -1,6 +1,7 @@
 import type {
   TMissionType,
 } from 'warframe-public-export-plus'
+import type { VoidTraderItem } from '../../types'
 import {
   dict_zh,
   ExportBoosterPacks,

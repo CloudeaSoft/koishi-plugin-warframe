@@ -1,3 +1,4 @@
+import type { Relic, RelicRewardRarity } from '../../types'
 import { ExportRelics, ExportRewards } from 'warframe-public-export-plus'
 import { fixRelicRewardKey } from '../../infrastructure/wf/wf-export-adapter'
 import { normalizeName } from '../../utils'

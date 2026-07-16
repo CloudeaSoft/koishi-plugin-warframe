@@ -1,4 +1,4 @@
-import type { RivenStatFixFactorMap } from '../../types/wf/riven'
+import type { RivenStatFixFactorMap } from '../../types'
 
 export const rivenStatFixFactor: RivenStatFixFactorMap = {
   2: { buffFactor: 0.99, buffCount: 2, curseFactor: 0, curseCount: 0 },

@@ -1,5 +1,5 @@
 import type { GlobalItemWordPrefixCandidate } from '../../data/wfm/globalItem'
-import type { ItemShort } from '../../types/wfm'
+import type { ItemShort } from '../../types'
 import { warframeAlias } from '../../assets'
 import { globalItemData } from '../../data/wfm/globalItem'
 import { fullWidthToHalfWidth, normalizeName } from '../../utils'

@@ -1,4 +1,4 @@
-import type { RivenItem } from '../../types/wfm'
+import type { RivenItem } from '../../types'
 import { wfmClient } from '../../infrastructure/wfm-client'
 import { createAsyncCache, fullWidthToHalfWidth, listToDict, normalizeName } from '../../utils'
 

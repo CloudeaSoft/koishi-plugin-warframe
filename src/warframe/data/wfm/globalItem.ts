@@ -1,4 +1,4 @@
-import type { ItemShort } from '../../types/wfm'
+import type { AsyncCache, ItemShort } from '../../types'
 import { wfmClient } from '../../infrastructure/wfm-client'
 import { createAsyncCache, fullWidthToHalfWidth, listToDict, normalizeName } from '../../utils'
 

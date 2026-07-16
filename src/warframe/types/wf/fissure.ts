@@ -1,4 +1,6 @@
-interface Fissure {
+import type { WFRegionShort } from './region'
+
+export interface Fissure {
   category: string
   hard: boolean
   /** Expire time. Timestamp in miliseconds  */

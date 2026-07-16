@@ -1,5 +1,4 @@
-import type { RivenWeaponItem } from '../types/miscs/lab'
-import type { WarframeResult } from '../types/warframe-result'
+import type { RivenWeaponItem, WarframeResult } from '../types'
 import { globalHotRivenWeapons } from '../data/miscs/lab'
 import { failure } from '../types/warframe-result'
 

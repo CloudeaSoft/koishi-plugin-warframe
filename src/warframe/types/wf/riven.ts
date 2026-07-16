@@ -1,3 +1,4 @@
+import type { IWeapon } from 'warframe-public-export-plus'
 import type { RivenAttributeUnit } from '../wfm'
 
 export type RivenWeaponType = 'Rifle' | 'Shotgun' | 'Pistol' | 'Archgun' | 'Melee'

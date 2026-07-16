@@ -1,9 +1,9 @@
-interface VoidTrader {
+export interface VoidTrader {
   expiry: string
   items: VoidTraderItem[]
 }
 
-interface VoidTraderItem {
+export interface VoidTraderItem {
   name: string
   ducats: number
   credits: number

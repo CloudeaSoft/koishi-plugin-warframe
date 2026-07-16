@@ -1,4 +1,4 @@
-import type { RivenWeaponDisposition } from '../types/wf/riven'
+import type { RivenWeaponDisposition } from '../types'
 import { loadAssetJson, loadAssetText } from '../utils/assets'
 
 export interface BaroParsedItem {

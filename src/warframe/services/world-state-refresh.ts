@@ -1,4 +1,5 @@
 import type WorldState from 'warframe-worldstate-parser'
+import type { WFRegionShort } from '../types'
 
 import {
   adaptFissure,

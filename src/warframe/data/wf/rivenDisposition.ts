@@ -1,5 +1,5 @@
 import type { IWeapon } from 'warframe-public-export-plus'
-import type { RivenWeaponDisposition } from '../../types/wf/riven'
+import type { RivenWeaponDisposition } from '../../types'
 import { dict_en, dict_zh, ExportWeapons } from 'warframe-public-export-plus'
 import { rivenCalc } from '../../assets/index'
 import { listToDict, normalizeName } from '../../utils'

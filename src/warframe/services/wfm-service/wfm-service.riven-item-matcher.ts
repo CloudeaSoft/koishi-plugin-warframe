@@ -1,5 +1,5 @@
 import type { GlobalRivenItemWordPrefixCandidate } from '../../data/wfm/globalRivenItem'
-import type { RivenItem } from '../../types/wfm'
+import type { RivenItem } from '../../types'
 import { globalRivenItemData } from '../../data/wfm/globalRivenItem'
 import { fullWidthToHalfWidth, normalizeName } from '../../utils'
 

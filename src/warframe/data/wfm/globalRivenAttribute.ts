@@ -1,4 +1,4 @@
-import type { RivenAttribute } from '../../types/wfm'
+import type { AsyncCache, RivenAttribute } from '../../types'
 import { wfmClient } from '../../infrastructure/wfm-client'
 import { createAsyncCache, listToDict } from '../../utils'
 

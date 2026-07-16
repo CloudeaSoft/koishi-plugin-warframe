@@ -1,16 +1,23 @@
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 
-import type { OcrAPISecret } from '../types/ocr'
-import type { WarframeResult } from '../types/warframe-result'
-
 import type {
+  Arbitration,
+  ArchiMedea,
+  ArchiMedeaDebuff,
+  ArchiMedeaMission,
+  ArchonHunt,
+  Fissure,
+  OcrAPISecret,
+  Relic,
+  RivenAttribute,
   RivenStatAnalyzeResult,
   RivenStatAnalyzsis,
   RivenStatCountType,
   RivenStatResult,
   RivenWeaponType,
-} from '../types/wf/riven'
-import type { RivenAttribute } from '../types/wfm'
+  VoidTrader,
+  WarframeResult,
+} from '../types'
 
 import {
   dict_zh,
