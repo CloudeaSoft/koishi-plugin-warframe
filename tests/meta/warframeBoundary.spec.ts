@@ -74,7 +74,7 @@ describe('warframe source root', () => {
     const consumers = [
       'src/commands',
       'src/components',
-      'src/messages.ts',
+      'src/i18n.ts',
       'src/messages',
       'src/types/config.d.ts',
     ].flatMap(path => sourceFiles(resolve(root, path)))

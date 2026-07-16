@@ -60,7 +60,8 @@ src/
 |-- index.ts              # plugin entry; registers commands and hooks
 |-- commands/             # thin Koishi command handlers
 |-- components/           # JSX -> Koishi Element renderers and Puppeteer output
-|-- messages/             # structured errors -> Koishi-facing messages
+|-- i18n.ts               # structured errors -> Chinese user-facing text
+|-- messages/             # Koishi Element message builders
 |-- types/                # Koishi configuration and dependency types
 |-- utils/                # Koishi presentation helpers
 |-- assets/               # render HTML/CSS/SVG
@@ -94,8 +95,8 @@ Dependency rules:
 - Koishi-facing modules import Warframe queries and exported domain types through
   `src/warframe/index.ts`. Internal service tests may import implementations
   directly.
-- `commands/` may import from the Warframe facade, `components/`, `messages/`,
-  and Koishi-specific configuration.
+- `commands/` may import from the Warframe facade, `components/`, `i18n.ts`,
+  `messages/`, and Koishi-specific configuration.
 - `components/` may import from presentation `utils/` and the Warframe facade
   only. It must not import from `services/`, `data/`, or `infrastructure/`.
 - `src/assets/` contains only Koishi render resources; `src/utils/` contains
@@ -171,7 +172,7 @@ Error handling:
 - Infrastructure and utils catch operational failures and return `undefined`.
 - Warframe services return `WarframeResult<T>` with stable error codes,
   retryability, and optional interpolation parameters.
-- `src/messages.ts` maps Warframe error codes to Chinese user-facing text.
+- `src/i18n.ts` maps Warframe error codes to Chinese user-facing text.
 - Koishi controllers and adapters log runtime context at the framework boundary.
 
 ## Testing Rules
