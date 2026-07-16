@@ -29,6 +29,16 @@ function isInside(root: string, path: string): boolean {
 }
 
 describe('warframe source root', () => {
+  it('accesses world-state refresh only through the Warframe facade', () => {
+    const schedule = readFileSync(
+      resolve(packageRoot(), 'src/schedules/world-state.ts'),
+      'utf8',
+    )
+    expect(schedule).to.include('from \'../warframe\'')
+    expect(schedule).to.not.include('/data/')
+    expect(schedule).to.not.include('/services/')
+  })
+
   it('owns all domain implementation under src/warframe', () => {
     const root = packageRoot()
     const domainRoot = resolve(root, 'src/warframe')

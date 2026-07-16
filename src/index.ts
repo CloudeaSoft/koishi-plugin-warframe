@@ -5,15 +5,17 @@ import {} from '@koishijs/plugin-help'
 import { Schema } from 'koishi'
 import * as commands from './commands'
 import { generateImageOutput } from './components/render'
+import { setupSchedules } from './schedules'
 import 'reflect-metadata' // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 
 export const name = 'warframe'
 
 export const inject = {
-  required: ['puppeteer'],
+  required: ['cron', 'database', 'puppeteer'],
 }
 
 export const Config: Schema<PluginConfig> = Schema.object({
+  channelIds: Schema.dict(Schema.string()).default({}).description('用于接收推送的`channelId`列表, 需携带平台前缀, 如:`qq:123456789`'),
   developerMode: Schema.boolean().default(false),
   ocrAPISecret: Schema.object({
     id: Schema.string(),
@@ -30,6 +32,7 @@ export function apply(ctx: Context): void {
 
   setupHooks(ctx, deps)
   setupCommands(ctx, deps)
+  setupSchedules(ctx, deps)
 }
 
 function setupHooks(ctx: Context, deps: PluginDependencies): void {

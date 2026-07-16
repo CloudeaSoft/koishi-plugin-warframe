@@ -1,10 +1,23 @@
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitest/config'
 
+const require = createRequire(import.meta.url)
+const elementRuntime = require.resolve('@satorijs/element')
+
 export default defineConfig({
+  oxc: {
+    jsx: {
+      development: false,
+      importSource: '@satorijs/element',
+      runtime: 'automatic',
+    },
+  },
   resolve: {
     alias: {
-      koishi: fileURLToPath(new URL('./node_modules/koishi/lib/index.cjs', import.meta.url)),
+      '@satorijs/element/jsx-dev-runtime': elementRuntime,
+      '@satorijs/element/jsx-runtime': elementRuntime,
+      'koishi': fileURLToPath(new URL('./node_modules/koishi/lib/index.cjs', import.meta.url)),
     },
   },
   test: {

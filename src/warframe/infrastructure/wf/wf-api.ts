@@ -15,7 +15,7 @@ export async function getWorldState(json?: string): Promise<WorldState> {
   }
 
   const WorldStateParser = await import('warframe-worldstate-parser')
-  return WorldStateParser.WorldState.build(json)
+  return WorldStateParser.WorldState.build(json, { locale: 'en', logger: { debug: () => {} } })
 }
 
 export async function getVoidTraderHistory(data?: string): Promise<VoidTraderData | undefined> {
