@@ -92,7 +92,7 @@ function traderId(value: ParsedVoidTrader): string {
 }
 
 function alertReward(alert: ParsedAlert): string {
-  const reward = alert.mission.reward
+  const reward = alert.mission?.reward
   if (!reward) {
     return ''
   }
