@@ -46,8 +46,12 @@ export type {
   ArchonHuntMissions,
 } from './wf/weekly'
 export type {
+  ClosedStatisticsEntry,
   Ducatnator,
   ItemShort,
+  ItemStatisticsPoint,
+  ItemStatisticsSummary,
+  LiveStatisticsEntry,
   OrderWithUser,
   PrimedModHistoryItem,
   RivenAttribute,

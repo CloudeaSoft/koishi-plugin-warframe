@@ -1,5 +1,6 @@
 import type {
   ItemShort,
+  ItemStatisticsSummary,
   OrderWithUser,
   OutputRelic,
   OutputRelicReward,
@@ -28,6 +29,7 @@ import {
 } from '../../utils'
 import { stringToWFMItem } from './wfm-service.item-matcher'
 import { findRivenItemByName } from './wfm-service.riven-item-matcher'
+import { computeItemStatistics } from './wfm-service.statistics'
 
 export { stringToWFMItem }
 
@@ -55,7 +57,7 @@ export async function updateCache(): Promise<string> {
   return lines.join('\n')
 }
 
-export async function getItemOrders(input: string): Promise<WarframeResult<{ item: ItemShort, orders: OrderWithUser[] }>> {
+export async function getItemOrders(input: string): Promise<WarframeResult<{ item: ItemShort, orders: OrderWithUser[], statistics?: ItemStatisticsSummary }>> {
   if (!input || !input.trim()) {
     return failure('wfm.inputItemName')
   }
@@ -78,9 +80,14 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
     return failure('wfm.itemNotFound', false, { input })
   }
 
-  // 3. Fetch orders
+  // 3. Fetch orders and statistics in parallel
   const itemId = targetItem.slug
-  const data = await wfmClient.items.getOrders(itemId)
+  const targetRank = isFullLevel ? targetItem.maxRank : targetItem.maxRank === undefined ? undefined : 0
+  const [data, statsData] = await Promise.all([
+    wfmClient.items.getOrders(itemId),
+    wfmClient.items.getStatistics(itemId),
+  ])
+
   if (!data) {
     return failure('wfm.orderFetchFailed', true)
   }
@@ -102,9 +109,15 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
     return failure('wfm.noOnlineSeller')
   }
 
+  // 5. Compute statistics summary (best-effort, degrades gracefully)
+  let statistics: ItemStatisticsSummary | undefined
+  if (statsData) {
+    statistics = computeItemStatistics(statsData, targetRank, result[0].platinum)
+  }
+
   return {
     ok: true,
-    data: { item: targetItem, orders: result },
+    data: { item: targetItem, orders: result, ...(statistics ? { statistics } : {}) },
   }
 }
 
