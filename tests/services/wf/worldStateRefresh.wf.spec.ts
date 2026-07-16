@@ -125,7 +125,7 @@ describe('world-state change detection', () => {
   it('detects a Void Trader only when activation crosses snapshot timestamps', () => {
     const trader = {
       id: 'v1',
-      character: "Baro Ki'Teer",
+      character: 'Baro Ki\'Teer',
       location: 'Mercury Relay',
       activation: new Date('2026-07-16T00:03:00Z'),
       expiry: new Date('2026-07-18T00:03:00Z'),
@@ -142,7 +142,7 @@ describe('world-state change detection', () => {
     expect(diffWorldStates(previous, current)).to.deep.equal([{
       type: 'void-trader',
       id: 'v1',
-      character: "Baro Ki'Teer",
+      character: 'Baro Ki\'Teer',
       location: 'Mercury Relay',
       expiry: trader.expiry.getTime(),
     }])

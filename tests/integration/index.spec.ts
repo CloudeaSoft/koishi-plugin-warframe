@@ -1,5 +1,6 @@
 import type { Plugin } from 'koishi'
 import mock from '@koishijs/plugin-mock'
+import { expect } from 'chai'
 import { App } from 'koishi'
 import * as warframe from '../../src/index'
 
@@ -24,6 +25,10 @@ app.middleware(({ content }, next) => {
 beforeAll(() => app.start())
 
 describe('main Project', () => {
+  it('requires only the cron and puppeteer services', () => {
+    expect(warframe.inject.required).to.deep.equal(['cron', 'puppeteer'])
+  })
+
   it('example', async () => {
     await client.shouldReply('天王盖地虎', '宝塔镇河妖')
     await client.shouldReply('天王盖地虎')

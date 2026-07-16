@@ -1,9 +1,10 @@
 import type { Context } from 'koishi'
 
 import type { PluginDependencies } from '../types/config'
+import type { WorldStateNotification } from '../warframe'
 
-import { refreshWorldState, type WorldStateNotification } from '../warframe'
 import {} from 'koishi-plugin-cron'
+import { refreshWorldState } from '../warframe'
 
 type Refresh = () => Promise<WorldStateNotification[]>
 
@@ -73,7 +74,7 @@ export function setupWorldStateSchedule(
 ): void {
   let running = false
 
-  ctx.cron('0 */5 * * * *', async () => {
+  const run = async (): Promise<void> => {
     if (running) {
       return
     }
@@ -95,5 +96,9 @@ export function setupWorldStateSchedule(
     finally {
       running = false
     }
+  }
+
+  ctx.cron('0 */5 * * * *', () => {
+    void run()
   })
 }

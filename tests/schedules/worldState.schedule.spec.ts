@@ -15,11 +15,11 @@ function createHarness(
   channelIds: Record<string, string> = { qq: 'qq:123' },
 ) {
   let expression = ''
-  let callback!: () => Promise<void>
+  let callback!: () => void
   const broadcasts: Array<{ channels: string[], message: string }> = []
   const warn = vi.fn()
   const ctx = {
-    cron: (value: string, handler: () => Promise<void>) => {
+    cron: (value: string, handler: () => void) => {
       expression = value
       callback = handler
     },
@@ -51,6 +51,10 @@ function createHarness(
   }
 }
 
+async function flushScheduledRun(): Promise<void> {
+  await new Promise(resolve => setImmediate(resolve))
+}
+
 describe('world-state schedule', () => {
   it('registers a five-minute cron and broadcasts grouped messages', async () => {
     const refresh = vi.fn(async (): Promise<WorldStateNotification[]> => [
@@ -76,7 +80,8 @@ describe('world-state schedule', () => {
     const harness = createHarness(refresh)
 
     expect(harness.expression).to.equal('0 */5 * * * *')
-    await harness.callback()
+    harness.callback()
+    await flushScheduledRun()
     expect(harness.broadcasts).to.deep.equal([{
       channels: ['qq:123'],
       message: '【新虚空裂隙】\nLith - E Prime（Exterminate）\nAxi - Hydron（Defense） [钢铁之路]',
@@ -98,7 +103,7 @@ describe('world-state schedule', () => {
       {
         type: 'void-trader',
         id: 'v1',
-        character: "Baro Ki'Teer",
+        character: 'Baro Ki\'Teer',
         location: 'Mercury Relay',
         expiry,
       },
@@ -137,7 +142,8 @@ describe('world-state schedule', () => {
       throw new Error('fetch failed')
     })
 
-    await harness.callback()
+    harness.callback()
+    await flushScheduledRun()
     expect(harness.warn.mock.calls).to.have.length(1)
     expect(harness.broadcasts).to.deep.equal([])
   })
@@ -149,11 +155,11 @@ describe('world-state schedule', () => {
     }))
     const harness = createHarness(refresh)
 
-    const first = harness.callback()
-    const second = harness.callback()
+    harness.callback()
+    harness.callback()
     expect(refresh.mock.calls).to.have.length(1)
     release()
-    await Promise.all([first, second])
+    await flushScheduledRun()
   })
 
   it('refreshes without broadcasting when no channels are configured', async () => {
@@ -168,7 +174,8 @@ describe('world-state schedule', () => {
     }])
     const harness = createHarness(refresh, {})
 
-    await harness.callback()
+    harness.callback()
+    await flushScheduledRun()
     expect(refresh.mock.calls).to.have.length(1)
     expect(harness.broadcasts).to.deep.equal([])
   })
