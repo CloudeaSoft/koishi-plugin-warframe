@@ -173,8 +173,8 @@ export async function diffWorldStates(
         type: 'alert',
         id,
         description: alert.description,
-        node: alert.mission.node,
-        missionType: alert.mission.type,
+        node: alert.mission?.node ?? '',
+        missionType: alert.mission?.type ?? '',
         reward: alertReward(alert),
         expiry: time(alert.expiry),
       })
