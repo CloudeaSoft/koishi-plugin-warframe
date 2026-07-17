@@ -12,6 +12,7 @@ interface WFMItemLookupData {
 export const wfmItemMatcher = (() => {
   const setSuffix = '一套'
   const bpSuffix = '蓝图'
+  const bpAliasSuffix = '总图'
   const bpShortSuffix = '图'
   const primeSuffix = 'prime'
   const warframePartSuffix = ['系统', '头部神经光元', '机体']
@@ -62,8 +63,8 @@ export const wfmItemMatcher = (() => {
 
   function removeNameSuffix(input: string): { pure: string, suffix: string } {
     let hasBPSuffix = false
-    if (input.endsWith(bpSuffix) || input.endsWith(bpShortSuffix)) {
-      input = input.replace(new RegExp(`(?:${bpSuffix}|${bpShortSuffix})$`), '')
+    if (input.endsWith(bpSuffix) || input.endsWith(bpAliasSuffix) || input.endsWith(bpShortSuffix)) {
+      input = input.replace(new RegExp(`(?:${bpSuffix}|${bpAliasSuffix}|${bpShortSuffix})$`), '')
       hasBPSuffix = true
     }
 
@@ -71,8 +72,8 @@ export const wfmItemMatcher = (() => {
       input = input.replace(new RegExp(`${setSuffix}$`), '')
     }
 
-    if (input.endsWith(bpSuffix) || input.endsWith(bpShortSuffix)) {
-      input = input.replace(new RegExp(`(?:${bpSuffix}|${bpShortSuffix})$`), '')
+    if (input.endsWith(bpSuffix) || input.endsWith(bpAliasSuffix) || input.endsWith(bpShortSuffix)) {
+      input = input.replace(new RegExp(`(?:${bpSuffix}|${bpAliasSuffix}|${bpShortSuffix})$`), '')
       hasBPSuffix = true
     }
 

@@ -17,6 +17,8 @@ describe('wfm-item-matcher helpers', () => {
       { input: 'Rhino Prime 机体', pure: 'rhinoprime', suffix: '机体' },
       { input: 'Volt Prime 系统', pure: 'voltprime', suffix: '系统' },
       { input: 'Volt Prime 蓝图', pure: 'voltprime', suffix: '蓝图' },
+      { input: 'Volt Prime 总图', pure: 'voltprime', suffix: '蓝图' },
+      { input: '夜灵总图', pure: '夜灵', suffix: '蓝图' },
     ]
 
     for (const testCase of cases) {
@@ -37,6 +39,7 @@ describe('wfm-item-matcher helpers', () => {
       { input: '花甲', output: 'wisp' },
       { input: '龙头', output: 'chroma头部神经光元' },
       { input: '奶爸头', output: 'oberon头部神经光元' },
+      { input: '夜灵总图', output: 'revenant蓝图' },
     ]
 
     for (const testCase of cases) {
