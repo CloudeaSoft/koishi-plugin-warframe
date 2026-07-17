@@ -640,16 +640,21 @@ export function PrimedModHistoryComponent(history: PrimedModHistoryItem[]): Elem
           border-bottom: 1px solid var(--wf-border);
         `}
       >
-        <h1
-          style={`
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-            color: var(--wf-text-primary);
-          `}
-        >
-          Prime Mod 历史记录
-        </h1>
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <h1
+            style={`
+              font-size: 18px;
+              font-weight: bold;
+              margin: 0;
+              color: var(--wf-text-primary);
+            `}
+          >
+            Prime Mod 历史记录
+          </h1>
+          <span style="font-size:10px;color:var(--wf-text-faint);">
+            {new Date().toLocaleString('zh-cn', { hour12: false })}
+          </span>
+        </div>
         <span style="color: var(--wf-text-muted); font-size: 11px;">
           {history.length}
           {' '}
