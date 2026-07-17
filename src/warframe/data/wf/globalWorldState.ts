@@ -37,7 +37,21 @@ export async function adaptFissure(fissure: ParsedFissure): Promise<Fissure> {
   }
 }
 
-export const globalWorldState = createAsyncCache(async () => {
+export type WorldStateSnapshot = {
+  raw: WorldState | undefined
+  fissures: Fissure[] | undefined
+  spFissures: Fissure[] | undefined
+  rjFissures: Fissure[] | undefined
+}
+
+const unavailableWorldState: WorldStateSnapshot = {
+  raw: undefined,
+  fissures: undefined,
+  spFissures: undefined,
+  rjFissures: undefined,
+}
+
+const worldStateCache = createAsyncCache(async (): Promise<WorldStateSnapshot> => {
   const worldState = await getWorldState()
   const fissures: Fissure[] = []
   const rjFissures: Fissure[] = []
@@ -61,3 +75,22 @@ export const globalWorldState = createAsyncCache(async () => {
   rjFissures.sort((a, b) => a.tierNum - b.tierNum)
   return { raw: worldState, fissures, spFissures, rjFissures }
 }, -1)
+
+export const globalWorldState = {
+  async get(): Promise<WorldStateSnapshot> {
+    try {
+      return await worldStateCache.get()
+    }
+    catch {
+      return unavailableWorldState
+    }
+  },
+  async update(): Promise<WorldStateSnapshot> {
+    try {
+      return await worldStateCache.update()
+    }
+    catch {
+      return unavailableWorldState
+    }
+  },
+}

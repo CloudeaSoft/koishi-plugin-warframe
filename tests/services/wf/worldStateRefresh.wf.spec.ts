@@ -5,9 +5,8 @@ import { expect } from 'chai'
 import {
   createWorldStateRefresher,
   diffWorldStates,
+  type WorldStateSnapshot,
 } from '../../../src/warframe/services/world-state-refresh'
-
-type WorldStateSnapshot = Parameters<typeof diffWorldStates>[0]
 
 function snapshot(raw: Partial<WorldState>): WorldStateSnapshot {
   return {
@@ -228,5 +227,51 @@ describe('world-state change detection', () => {
     const current = snapshot({ fissures: [{ ...fissure }] } as unknown as Partial<WorldState>)
 
     expect(await diffWorldStates(previous, current)).to.deep.equal([])
+  })
+
+  it('skips diffs when a snapshot has no raw world state', async () => {
+    const previous = snapshot({})
+    const unavailable: WorldStateSnapshot = {
+      raw: undefined,
+      fissures: undefined,
+      spFissures: undefined,
+      rjFissures: undefined,
+    }
+
+    expect(await diffWorldStates(previous, unavailable)).to.deep.equal([])
+    expect(await diffWorldStates(unavailable, previous)).to.deep.equal([])
+  })
+
+  it('keeps the baseline when a refresh fails to load world state', async () => {
+    const first = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+    })
+    const unavailable: WorldStateSnapshot = {
+      raw: undefined,
+      fissures: undefined,
+      spFissures: undefined,
+      rjFissures: undefined,
+    }
+    const second = snapshot({
+      timestamp: new Date('2026-07-16T00:05:00Z'),
+      dailyDeals: [{
+        id: 'd1',
+        item: 'Braton',
+        uniqueName: '/Lotus/Weapons/Braton',
+        originalPrice: 225,
+        salePrice: 157,
+        discount: 30,
+      }],
+    } as unknown as Partial<WorldState>)
+    const values = [first, unavailable, second]
+    const refresh = createWorldStateRefresher({
+      update: async () => values.shift()!,
+    })
+
+    expect(await refresh()).to.deep.equal([])
+    expect(await refresh()).to.deep.equal([])
+    expect((await refresh()).map(item => item.type)).to.deep.equal([
+      'daily-deal',
+    ])
   })
 })

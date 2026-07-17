@@ -363,6 +363,10 @@ export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promi
 
 export async function getVoidTrader(): Promise<WarframeResult<VoidTrader>> {
   const { raw: worldState } = await globalWorldState.get()
+  if (!worldState) {
+    return failure('common.fetchFailed', true)
+  }
+
   if (worldState.voidTraders.length === 0) {
     return failure('voidTrader.drifting')
   }

@@ -11,7 +11,7 @@ export async function getWorldState(json?: string): Promise<WorldState> {
   }
 
   if (!json) {
-    throw new Error('获取游戏信息失败')
+    throw new Error('Failed to fetch world state')
   }
 
   const WorldStateParser = await import('warframe-worldstate-parser')
