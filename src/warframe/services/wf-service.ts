@@ -153,10 +153,11 @@ export async function getWeekly(): Promise<WarframeResult<{
   deepArchimedea: ArchiMedea
   temporalArchimedea: ArchiMedea
 }>> {
-  const { raw: worldState } = await globalWorldState.get()
-  if (!worldState) {
+  const snapshot = await globalWorldState.get()
+  if (!snapshot) {
     return failure('common.fetchFailed', true)
   }
+  const { raw: worldState } = snapshot
 
   const archon: ArchonHunt = {
     name: dict_zh[
@@ -265,10 +266,11 @@ export async function getWeekly(): Promise<WarframeResult<{
 }
 
 export async function getEnvironment(): Promise<string> {
-  const { raw: worldState } = await globalWorldState.get()
-  if (!worldState) {
+  const snapshot = await globalWorldState.get()
+  if (!snapshot) {
     return '内部错误，获取最新信息失败'
   }
+  const { raw: worldState } = snapshot
 
   const cetusDay = worldState.cetusCycle.isDay ? '白天' : '黑夜'
   const cetus = `地球/夜灵平野: ${cetusDay} ${worldState.cetusCycle.timeLeft}`
@@ -324,18 +326,24 @@ export function getCircuitWeek(): {
 }
 
 export async function getFissures(): Promise<WarframeResult<Fissure[]>> {
-  const { fissures } = await globalWorldState.get()
-  return fissures ? { ok: true, data: fissures } : failure('common.fetchFailed', true)
+  const snapshot = await globalWorldState.get()
+  return snapshot
+    ? { ok: true, data: snapshot.fissures }
+    : failure('common.fetchFailed', true)
 }
 
 export async function getSteelPathFissures(): Promise<WarframeResult<Fissure[]>> {
-  const { spFissures } = await globalWorldState.get()
-  return spFissures ? { ok: true, data: spFissures } : failure('common.fetchFailed', true)
+  const snapshot = await globalWorldState.get()
+  return snapshot
+    ? { ok: true, data: snapshot.spFissures }
+    : failure('common.fetchFailed', true)
 }
 
 export async function getRailjackFissures(): Promise<WarframeResult<Fissure[]>> {
-  const { rjFissures } = await globalWorldState.get()
-  return rjFissures ? { ok: true, data: rjFissures } : failure('common.fetchFailed', true)
+  const snapshot = await globalWorldState.get()
+  return snapshot
+    ? { ok: true, data: snapshot.rjFissures }
+    : failure('common.fetchFailed', true)
 }
 
 export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promise<WarframeResult<RivenStatAnalyzeResult>> {
@@ -362,10 +370,11 @@ export async function getAnalyzedRiven(secret: OcrAPISecret, url: string): Promi
 }
 
 export async function getVoidTrader(): Promise<WarframeResult<VoidTrader>> {
-  const { raw: worldState } = await globalWorldState.get()
-  if (!worldState) {
+  const snapshot = await globalWorldState.get()
+  if (!snapshot) {
     return failure('common.fetchFailed', true)
   }
+  const { raw: worldState } = snapshot
 
   if (worldState.voidTraders.length === 0) {
     return failure('voidTrader.drifting')

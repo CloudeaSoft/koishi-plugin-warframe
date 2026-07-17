@@ -37,18 +37,11 @@ export async function adaptFissure(fissure: ParsedFissure): Promise<Fissure> {
   }
 }
 
-export type WorldStateSnapshot = {
-  raw: WorldState | undefined
-  fissures: Fissure[] | undefined
-  spFissures: Fissure[] | undefined
-  rjFissures: Fissure[] | undefined
-}
-
-const unavailableWorldState: WorldStateSnapshot = {
-  raw: undefined,
-  fissures: undefined,
-  spFissures: undefined,
-  rjFissures: undefined,
+export interface WorldStateSnapshot {
+  raw: WorldState
+  fissures: Fissure[]
+  spFissures: Fissure[]
+  rjFissures: Fissure[]
 }
 
 const worldStateCache = createAsyncCache(async (): Promise<WorldStateSnapshot> => {
@@ -77,20 +70,20 @@ const worldStateCache = createAsyncCache(async (): Promise<WorldStateSnapshot> =
 }, -1)
 
 export const globalWorldState = {
-  async get(): Promise<WorldStateSnapshot> {
+  async get(): Promise<WorldStateSnapshot | undefined> {
     try {
       return await worldStateCache.get()
     }
     catch {
-      return unavailableWorldState
+      return undefined
     }
   },
-  async update(): Promise<WorldStateSnapshot> {
+  async update(): Promise<WorldStateSnapshot | undefined> {
     try {
       return await worldStateCache.update()
     }
     catch {
-      return unavailableWorldState
+      return undefined
     }
   },
 }

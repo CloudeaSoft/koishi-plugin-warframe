@@ -1,10 +1,10 @@
 import type WorldState from 'warframe-worldstate-parser'
+import type { WorldStateSnapshot } from '../data/wf/globalWorldState'
 import type { VoidTraderItem, WFRegionShort } from '../types'
 
 import {
   adaptFissure,
   globalWorldState,
-  type WorldStateSnapshot,
 } from '../data/wf/globalWorldState'
 import { getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
 
@@ -113,10 +113,6 @@ export async function diffWorldStates(
   previous: WorldStateSnapshot,
   current: WorldStateSnapshot,
 ): Promise<WorldStateNotification[]> {
-  if (!previous.raw || !current.raw) {
-    return []
-  }
-
   const notifications: WorldStateNotification[] = []
   const previousFissures = new Set(previous.raw.fissures.map(fissureId))
   for (const fissure of current.raw.fissures) {
@@ -191,7 +187,7 @@ export async function diffWorldStates(
 }
 
 export interface WorldStateSource {
-  update: () => Promise<WorldStateSnapshot>
+  update: () => Promise<WorldStateSnapshot | undefined>
 }
 
 export function createWorldStateRefresher(
@@ -201,7 +197,7 @@ export function createWorldStateRefresher(
 
   return async () => {
     const current = await source.update()
-    if (!current.raw) {
+    if (!current) {
       return []
     }
 
