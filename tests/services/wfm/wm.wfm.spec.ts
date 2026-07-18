@@ -58,6 +58,7 @@ describe('wfm-service.inputToItem', () => {
     { input: 'rhinoprime', slug: 'rhino_prime_set' },
     { input: 'octaviaprime', slug: 'octavia_prime_set' },
     { input: 'valkyrprime', slug: 'valkyr_prime_set' },
+    { input: 'wisp', slug: 'wisp_prime_set' },
   ]
 
   const aliasCases = [
@@ -100,6 +101,7 @@ describe('wfm-service.inputToItem', () => {
     { input: '瓦喵头', slug: 'valkyr_prime_neuroptics_blueprint' },
     { input: '奶爸头', slug: 'oberon_prime_neuroptics_blueprint' },
     { input: 'DJ头', slug: 'octavia_prime_neuroptics_blueprint' },
+    { input: '花图', slug: 'wisp_prime_blueprint' },
   ]
 
   const wordPrefixCases = [
