@@ -25,9 +25,12 @@ export function createAsyncCache<T>(
     inFlight = (async () => {
       try {
         const result = await factory()
-        cache = result
-        hasCache = true
-        lastUpdatedAt = Date.now()
+        // Soft failures return undefined; do not overwrite or freeze a miss as fresh.
+        if (result !== undefined) {
+          cache = result
+          hasCache = true
+          lastUpdatedAt = Date.now()
+        }
         return result
       }
       finally {
@@ -47,7 +50,12 @@ export function createAsyncCache<T>(
     }
 
     try {
-      return await update()
+      const result = await update()
+      // Prefer stale data when a soft failure refreshes to undefined.
+      if (result === undefined && hasCache) {
+        return cache
+      }
+      return result
     }
     catch (error) {
       // Prefer stale data over failing the caller when a refresh fails.

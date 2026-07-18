@@ -201,6 +201,62 @@ describe('createAsyncCache Tests', () => {
     expect(callCount).to.equal(2)
   })
 
+  it('does not treat undefined soft failures as fresh cache hits', async () => {
+    let callCount = 0
+    const cache = createAsyncCache(
+      async () => {
+        callCount++
+        if (callCount === 1) {
+          return undefined
+        }
+        return 'recovered'
+      },
+      60_000,
+    )
+
+    expect(await cache.get()).to.equal(undefined)
+    expect(await cache.get()).to.equal('recovered')
+    expect(callCount).to.equal(2)
+  })
+
+  it('keeps the last successful value when a refresh soft-fails with undefined', async () => {
+    let callCount = 0
+    const cache = createAsyncCache(
+      async () => {
+        callCount++
+        if (callCount === 1) {
+          return 'platinum'
+        }
+        return undefined
+      },
+      60_000,
+    )
+
+    expect(await cache.get()).to.equal('platinum')
+    expect(await cache.update()).to.equal(undefined)
+    expect(await cache.get()).to.equal('platinum')
+    expect(callCount).to.equal(2)
+  })
+
+  it('get() returns stale data when a soft-fail refresh returns undefined after TTL', async () => {
+    let callCount = 0
+    const cache = createAsyncCache(
+      async () => {
+        callCount++
+        if (callCount === 1) {
+          return 'platinum'
+        }
+        return undefined
+      },
+      50,
+    )
+
+    expect(await cache.get()).to.equal('platinum')
+    await new Promise(r => setTimeout(r, 80))
+    expect(await cache.get()).to.equal('platinum')
+    expect(callCount).to.equal(2)
+  })
+
   it('update() still rejects when refresh fails even if stale data exists', async () => {
     let callCount = 0
     const cache = createAsyncCache(async () => {
