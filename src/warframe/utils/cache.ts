@@ -11,6 +11,7 @@ export function createAsyncCache<T>(
   ttlMs: number = 60_000,
 ): AsyncCache<T> {
   let cache: T
+  let hasCache = false
   let lastUpdatedAt: number = 0
   let inFlight: Promise<T> | null // promise for ongoing update
 
@@ -24,9 +25,13 @@ export function createAsyncCache<T>(
     inFlight = (async () => {
       try {
         const result = await factory()
-        cache = result
-        lastUpdatedAt = Date.now()
-        return cache
+        // Soft failures return undefined; do not overwrite or freeze a miss as fresh.
+        if (result !== undefined) {
+          cache = result
+          hasCache = true
+          lastUpdatedAt = Date.now()
+        }
+        return result
       }
       finally {
         inFlight = null // clear lock
@@ -40,11 +45,25 @@ export function createAsyncCache<T>(
     const now = Date.now()
 
     // If cache is fresh, return it
-    if (cache && (ttlMs < 0 || now - lastUpdatedAt < ttlMs)) {
+    if (hasCache && (ttlMs < 0 || now - lastUpdatedAt < ttlMs)) {
       return cache
     }
 
-    return update()
+    try {
+      const result = await update()
+      // Prefer stale data when a soft failure refreshes to undefined.
+      if (result === undefined && hasCache) {
+        return cache
+      }
+      return result
+    }
+    catch (error) {
+      // Prefer stale data over failing the caller when a refresh fails.
+      if (hasCache) {
+        return cache
+      }
+      throw error
+    }
   }
 
   return { get, update }

@@ -47,11 +47,17 @@ export async function updateCache(): Promise<string> {
   const lines = updateTasks.map((task, index) => {
     const result = results[index]
     if (result.status === 'fulfilled') {
+      // Soft failures (e.g. HTTP helpers returning undefined) fulfill without throwing.
+      if (result.value == null) {
+        return `${task.name}: 失败 - 无有效数据`
+      }
       return `${task.name}: 成功`
     }
-    else {
-      return `${task.name}: 失败 - ${result.reason}`
-    }
+
+    const reason = result.reason instanceof Error
+      ? result.reason.message
+      : String(result.reason)
+    return `${task.name}: 失败 - ${reason}`
   })
 
   return lines.join('\n')
@@ -199,7 +205,8 @@ export async function applyRelicData(relic: Relic): Promise<OutputRelic> {
       return {
         ...element,
         name: quantityPrefix + name,
-        ducats: 0,
+        ducats: undefined,
+        platinum: undefined,
       }
     }
 
