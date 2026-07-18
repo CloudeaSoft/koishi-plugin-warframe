@@ -1,4 +1,4 @@
-import type { RivenItem } from '../../types'
+import type { AsyncCache, RivenItem } from '../../types'
 import { wfmClient } from '../../infrastructure/wfm-client'
 import { createAsyncCache, fullWidthToHalfWidth, listToDict, normalizeName } from '../../utils'
 
@@ -100,6 +100,17 @@ export async function globalRivenItemFactory(rivenData?: RivenItem[]): Promise<{
   }
 }
 
-export const globalRivenItemData = createAsyncCache(async () => {
+export let globalRivenItemData = createAsyncCache(async () => {
   return globalRivenItemFactory()
 }, -1)
+
+export function overrideGlobalRivenItemData(
+  cache: AsyncCache<{
+    globalRivenItemList: RivenItem[]
+    globalRivenItemDict: Record<string, RivenItem>
+    globalRivenItemNameToSlugDict: Record<string, string>
+    globalRivenItemWordPrefixCandidates: GlobalRivenItemWordPrefixCandidate[]
+  }>,
+): void {
+  globalRivenItemData = cache
+}
