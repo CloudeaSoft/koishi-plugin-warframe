@@ -162,4 +162,65 @@ describe('createAsyncCache Tests', () => {
     }
     expect(await cache.get()).to.equal('old')
   })
+
+  it('get() returns stale data when refresh fails after TTL expires', async () => {
+    let callCount = 0
+    const cache = createAsyncCache(
+      async () => {
+        callCount++
+        if (callCount === 1) {
+          return 'stale'
+        }
+        throw new Error('refresh failed')
+      },
+      50,
+    )
+
+    expect(await cache.get()).to.equal('stale')
+    await new Promise(r => setTimeout(r, 80))
+    expect(await cache.get()).to.equal('stale')
+    expect(callCount).to.equal(2)
+  })
+
+  it('get() still returns falsy cached values after a failed refresh', async () => {
+    let callCount = 0
+    const cache = createAsyncCache(
+      async () => {
+        callCount++
+        if (callCount === 1) {
+          return 0
+        }
+        throw new Error('refresh failed')
+      },
+      50,
+    )
+
+    expect(await cache.get()).to.equal(0)
+    await new Promise(r => setTimeout(r, 80))
+    expect(await cache.get()).to.equal(0)
+    expect(callCount).to.equal(2)
+  })
+
+  it('update() still rejects when refresh fails even if stale data exists', async () => {
+    let callCount = 0
+    const cache = createAsyncCache(async () => {
+      callCount++
+      if (callCount === 1) {
+        return 'old'
+      }
+      throw new Error('refresh failed')
+    }, -1)
+
+    expect(await cache.get()).to.equal('old')
+
+    let caught: Error | undefined
+    try {
+      await cache.update()
+    }
+    catch (e) {
+      caught = e as Error
+    }
+    expect(caught?.message).to.equal('refresh failed')
+    expect(await cache.get()).to.equal('old')
+  })
 })
