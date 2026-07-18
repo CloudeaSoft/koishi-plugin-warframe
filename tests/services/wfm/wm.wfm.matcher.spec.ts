@@ -34,6 +34,7 @@ describe('wfm-item-matcher helpers', () => {
     const cases = [
       { input: '电男', output: 'volt' },
       { input: 'DJ', output: 'octavia' },
+      { input: '花甲', output: 'wisp' },
       { input: '龙头', output: 'chroma头部神经光元' },
       { input: '奶爸头', output: 'oberon头部神经光元' },
     ]

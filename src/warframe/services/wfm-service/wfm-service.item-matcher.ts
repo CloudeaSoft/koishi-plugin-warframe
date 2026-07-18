@@ -12,6 +12,7 @@ interface WFMItemLookupData {
 export const wfmItemMatcher = (() => {
   const setSuffix = '一套'
   const bpSuffix = '蓝图'
+  const bpShortSuffix = '图'
   const primeSuffix = 'prime'
   const warframePartSuffix = ['系统', '头部神经光元', '机体']
   const weaponPartSuffix = [
@@ -61,8 +62,8 @@ export const wfmItemMatcher = (() => {
 
   function removeNameSuffix(input: string): { pure: string, suffix: string } {
     let hasBPSuffix = false
-    if (input.endsWith(bpSuffix)) {
-      input = input.replace(new RegExp(`${bpSuffix}$`), '')
+    if (input.endsWith(bpSuffix) || input.endsWith(bpShortSuffix)) {
+      input = input.replace(new RegExp(`(?:${bpSuffix}|${bpShortSuffix})$`), '')
       hasBPSuffix = true
     }
 
@@ -70,8 +71,8 @@ export const wfmItemMatcher = (() => {
       input = input.replace(new RegExp(`${setSuffix}$`), '')
     }
 
-    if (input.endsWith(bpSuffix)) {
-      input = input.replace(new RegExp(`${bpSuffix}$`), '')
+    if (input.endsWith(bpSuffix) || input.endsWith(bpShortSuffix)) {
+      input = input.replace(new RegExp(`(?:${bpSuffix}|${bpShortSuffix})$`), '')
       hasBPSuffix = true
     }
 
@@ -98,6 +99,19 @@ export const wfmItemMatcher = (() => {
     }
   }
 
+  function buildPrimeNameCandidates(input: string): string[] {
+    if (input.endsWith(primeSuffix)) {
+      return [input]
+    }
+
+    const candidates = [input + primeSuffix]
+    if (input.endsWith('p')) {
+      candidates.push(input.slice(0, input.length - 1) + primeSuffix)
+    }
+
+    return candidates
+  }
+
   function shortHandProcess(
     input: string,
     lookup: Pick<WFMItemLookupData, 'globalItemDict' | 'globalItemNameToSlugDict'>,
@@ -109,29 +123,29 @@ export const wfmItemMatcher = (() => {
       if (fixSetRes)
         return lookup.globalItemDict[fixSetRes]
 
-      const fixPrime = input.endsWith(primeSuffix)
-        ? input
-        : input.endsWith('p')
-          ? input.slice(0, input.length - 1) + primeSuffix
-          : input + primeSuffix
-      const fixPrimeRes = lookup.globalItemNameToSlugDict[fixPrime]
-      if (fixPrimeRes)
-        return lookup.globalItemDict[fixPrimeRes]
+      const fixPrimeCandidates = buildPrimeNameCandidates(input)
+      for (const fixPrime of fixPrimeCandidates) {
+        const fixPrimeRes = lookup.globalItemNameToSlugDict[fixPrime]
+        if (fixPrimeRes)
+          return lookup.globalItemDict[fixPrimeRes]
 
-      const fixPrimeSet = fixPrime + setSuffix
-      const fixPrimeSetRes = lookup.globalItemNameToSlugDict[fixPrimeSet]
-      if (fixPrimeSetRes)
-        return lookup.globalItemDict[fixPrimeSetRes]
+        const fixPrimeSet = fixPrime + setSuffix
+        const fixPrimeSetRes = lookup.globalItemNameToSlugDict[fixPrimeSet]
+        if (fixPrimeSetRes)
+          return lookup.globalItemDict[fixPrimeSetRes]
+      }
 
       const fixBP = input + bpSuffix
       const fixBPRes = lookup.globalItemNameToSlugDict[fixBP]
       if (fixBPRes)
         return lookup.globalItemDict[fixBPRes]
 
-      const fixPrimeBP = fixPrime + bpSuffix
-      const fixPrimeBPRes = lookup.globalItemNameToSlugDict[fixPrimeBP]
-      if (fixPrimeBPRes)
-        return lookup.globalItemDict[fixPrimeBPRes]
+      for (const fixPrime of fixPrimeCandidates) {
+        const fixPrimeBP = fixPrime + bpSuffix
+        const fixPrimeBPRes = lookup.globalItemNameToSlugDict[fixPrimeBP]
+        if (fixPrimeBPRes)
+          return lookup.globalItemDict[fixPrimeBPRes]
+      }
     }
     else {
       const fixBP = inputNoSuffix + suffix + bpSuffix
@@ -139,19 +153,17 @@ export const wfmItemMatcher = (() => {
       if (fixBPRes)
         return lookup.globalItemDict[fixBPRes]
 
-      const fixPrime = inputNoSuffix.endsWith(primeSuffix)
-        ? inputNoSuffix
-        : inputNoSuffix.endsWith('p')
-          ? inputNoSuffix.slice(0, inputNoSuffix.length - 1) + primeSuffix
-          : inputNoSuffix + primeSuffix
-      const fixPrimeRes = lookup.globalItemNameToSlugDict[fixPrime + suffix]
-      if (fixPrimeRes)
-        return lookup.globalItemDict[fixPrimeRes]
+      const fixPrimeCandidates = buildPrimeNameCandidates(inputNoSuffix)
+      for (const fixPrime of fixPrimeCandidates) {
+        const fixPrimeRes = lookup.globalItemNameToSlugDict[fixPrime + suffix]
+        if (fixPrimeRes)
+          return lookup.globalItemDict[fixPrimeRes]
 
-      const fixPrimeBP = fixPrime + suffix + bpSuffix
-      const fixPrimeBPRes = lookup.globalItemNameToSlugDict[fixPrimeBP]
-      if (fixPrimeBPRes)
-        return lookup.globalItemDict[fixPrimeBPRes]
+        const fixPrimeBP = fixPrime + suffix + bpSuffix
+        const fixPrimeBPRes = lookup.globalItemNameToSlugDict[fixPrimeBP]
+        if (fixPrimeBPRes)
+          return lookup.globalItemDict[fixPrimeBPRes]
+      }
     }
   }
 
