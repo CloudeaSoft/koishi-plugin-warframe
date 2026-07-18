@@ -34,6 +34,6 @@ export interface OutputRelic {
 }
 
 export interface OutputRelicReward extends RelicReward {
-  ducats: number
+  ducats?: number
   platinum?: number
 }

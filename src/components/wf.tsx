@@ -750,52 +750,40 @@ export function RelicComponent(relic: OutputRelic): Element {
               display:flex;
               gap:10px;`}
         >
-          {item.platinum
-            ? (
-                <span
-                  style="
+          <span
+            style="
                 color: var(--wf-platinum);
                 display:flex;
                 line-height:1;"
-                >
-                  {item.platinum}
-                  <svg
-                    viewBox="0 0 18 18"
-                    style="
+          >
+            {item.platinum ?? '??'}
+            <svg
+              viewBox="0 0 18 18"
+              style="
                   color: rgb(64 64 64 / 75%);
                   height: 1em;
                   width: 1em;
                   vertical-align: -.125em;
                   fill: currentcolor;
                   margin-left:2px;"
-                  >
-                    <use href="#icon-platinum"></use>
-                  </svg>
-                </span>
-              )
-            : (
-                ''
-              )}
-          {item.ducats
-            ? (
-                <span style="color: var(--wf-ducats);display:flex;line-height:1;">
-                  {item.ducats}
-                  <svg
-                    viewBox="0 0 18 18"
-                    style="
+            >
+              <use href="#icon-platinum"></use>
+            </svg>
+          </span>
+          <span style="color: var(--wf-ducats);display:flex;line-height:1;">
+            {item.ducats ?? '??'}
+            <svg
+              viewBox="0 0 18 18"
+              style="
                 color: rgb(64 64 64 / 75%);
                 height: 1em;
                 width: 1em;
                 vertical-align: -.125em;
                 fill: currentcolor;"
-                  >
-                    <use href="#icon-ducats"></use>
-                  </svg>
-                </span>
-              )
-            : (
-                ''
-              )}
+            >
+              <use href="#icon-ducats"></use>
+            </svg>
+          </span>
           <span>
             {relicRewardDropRate[item.rarity]}
             %

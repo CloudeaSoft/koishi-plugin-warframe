@@ -205,7 +205,8 @@ export async function applyRelicData(relic: Relic): Promise<OutputRelic> {
       return {
         ...element,
         name: quantityPrefix + name,
-        ducats: 0,
+        ducats: undefined,
+        platinum: undefined,
       }
     }
 
