@@ -1,10 +1,11 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { WFRegionShort } from '../types'
+import type { VoidTraderItem, WFRegionShort } from '../types'
 
 import {
   adaptFissure,
   globalWorldState,
 } from '../data/wf/globalWorldState'
+import { getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
 
 export type WorldStateSnapshot = Awaited<
   ReturnType<typeof globalWorldState.get>
@@ -32,6 +33,7 @@ export type WorldStateNotification
     character: string
     location: string
     expiry: number
+    items: VoidTraderItem[]
   }
   | {
     type: 'daily-deal'
@@ -146,17 +148,17 @@ export async function diffWorldStates(
         character: trader.character,
         location: trader.location,
         expiry: time(trader.expiry),
+        items: trader.inventory.map(getVoidTraderItem),
       })
     }
   }
 
-  const previousDeals = new Set(previous.raw.dailyDeals.map(dailyDealId))
   for (const deal of current.raw.dailyDeals) {
-    const id = dailyDealId(deal)
-    if (!previousDeals.has(id)) {
+    const activation = time(deal.activation)
+    if (activation > previousTimestamp && activation <= currentTimestamp) {
       notifications.push({
         type: 'daily-deal',
-        id,
+        id: dailyDealId(deal),
         item: deal.item,
         originalPrice: deal.originalPrice,
         salePrice: deal.salePrice,

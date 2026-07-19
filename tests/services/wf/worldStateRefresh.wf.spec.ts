@@ -119,6 +119,8 @@ describe('world-state change detection', () => {
         originalPrice: 225,
         salePrice: 157,
         discount: 30,
+        activation: new Date('2026-07-16T00:03:00Z'),
+        expiry: new Date('2026-07-17T00:03:00Z'),
       }],
     } as unknown as Partial<WorldState>)
     const values = [first, second]
@@ -139,6 +141,9 @@ describe('world-state change detection', () => {
       location: 'Mercury Relay',
       activation: new Date('2026-07-16T00:03:00Z'),
       expiry: new Date('2026-07-18T00:03:00Z'),
+      inventory: [
+        { uniqueName: '/Lotus/StoreItems/Weapons/VoidTrader/PrismaGrakata', item: 'Prisma Grakata', ducats: 150, credits: 100000 },
+      ],
     }
     const previous = snapshot({
       timestamp: new Date('2026-07-16T00:00:00Z'),
@@ -155,6 +160,38 @@ describe('world-state change detection', () => {
       character: 'Baro Ki\'Teer',
       location: 'Mercury Relay',
       expiry: trader.expiry.getTime(),
+      items: [{ name: '棱晶·葛拉卡达', ducats: 150, credits: 100000 }],
+    }])
+  })
+
+  it('detects a daily deal only when activation crosses snapshot timestamps', async () => {
+    const deal = {
+      id: 'd1',
+      item: 'Braton',
+      uniqueName: '/Lotus/Weapons/Braton',
+      originalPrice: 225,
+      salePrice: 157,
+      discount: 30,
+      activation: new Date('2026-07-16T00:03:00Z'),
+      expiry: new Date('2026-07-17T00:03:00Z'),
+    }
+    const previous = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+      dailyDeals: [deal],
+    } as unknown as Partial<WorldState>)
+    const current = snapshot({
+      timestamp: new Date('2026-07-16T00:05:00Z'),
+      dailyDeals: [deal],
+    } as unknown as Partial<WorldState>)
+
+    expect(await diffWorldStates(previous, current)).to.deep.equal([{
+      type: 'daily-deal',
+      id: 'd1',
+      item: 'Braton',
+      originalPrice: 225,
+      salePrice: 157,
+      discount: 30,
+      expiry: deal.expiry.getTime(),
     }])
   })
 
@@ -166,6 +203,8 @@ describe('world-state change detection', () => {
       originalPrice: 225,
       salePrice: 157,
       discount: 30,
+      activation: new Date('2026-07-16T00:03:00Z'),
+      expiry: new Date('2026-07-17T00:03:00Z'),
     }
     const withDeal = snapshot({
       dailyDeals: [deal],
