@@ -79,4 +79,37 @@ describe('world-state messages', () => {
     expect(await createWorldStateMessages([], render)).to.deep.equal([])
     expect(render.mock.calls).to.have.length(0)
   })
+
+  it('keeps text categories when void-trader image rendering fails', async () => {
+    const expiry = new Date('2026-07-16T00:00:00Z').getTime()
+    const items: WorldStateNotification[] = [
+      {
+        type: 'void-trader',
+        id: 'v1',
+        character: 'Baro Ki\'Teer',
+        location: 'Mercury Relay',
+        expiry,
+        items: [{ name: 'Prisma Grakata', ducats: 150, credits: 100000 }],
+      },
+      {
+        type: 'daily-deal',
+        id: 'd1',
+        item: 'Braton',
+        originalPrice: 225,
+        salePrice: 157,
+        discount: 30,
+        expiry,
+      },
+    ]
+    const render = vi.fn(async () => {
+      throw new Error('puppeteer unavailable')
+    })
+
+    const messages = await createWorldStateMessages(items, render)
+
+    expect(messages.map(message => message.toString())).to.deep.equal([
+      '<message><div>虚空商人到达\nBaro Ki\'Teer 已到达 Mercury Relay，截止 2026/7/16 08:00:00</div></message>',
+      '<message><div>新每日特惠\n</div><div>Braton：157 白金（-30%，原价 225），截止 2026/7/16 08:00:00</div></message>',
+    ])
+  })
 })
