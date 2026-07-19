@@ -1,6 +1,7 @@
 import type { Element } from 'koishi'
 import type { WorldStateNotification } from '../warframe'
 
+import { VoidTraderComponent } from '../components/wf'
 import { msToHumanReadable } from '../warframe'
 
 function formatExpiry(expiry: number): string {
@@ -26,6 +27,7 @@ function suffixWithTimeRemaining(expiry: number): string {
 
 export async function createWorldStateMessages(
   items: WorldStateNotification[],
+  render: (element: Element) => Promise<string>,
 ): Promise<Element[]> {
   const messages: Element[] = []
   const push = async (title: string, lines: string[]): Promise<void> => {
@@ -51,9 +53,18 @@ export async function createWorldStateMessages(
       return `${category}${item.tier} - ${item.node.system} (${item.node.type}) ${faction} ${item.node.name} | ${suffixWithTimeRemaining(item.expiry)}`
     }))
 
-  await push('虚空商人到达', items
-    .filter(item => item.type === 'void-trader')
-    .map(item => `${item.character} 已到达 ${item.location}${suffixWithExpiry(item.expiry)}`))
+  const voidTraders = items.filter(item => item.type === 'void-trader')
+  for (const item of voidTraders) {
+    const img = await render(
+      VoidTraderComponent({ expiry: '', items: item.items }),
+    )
+    messages.push((
+      <message>
+        <div>{`虚空商人到达\n${item.character} 已到达 ${item.location}${suffixWithExpiry(item.expiry)}`}</div>
+        {img ? <img src={img} /> : <></>}
+      </message>
+    ) as Element)
+  }
 
   await push('新每日特惠', items
     .filter(item => item.type === 'daily-deal')

@@ -38,6 +38,10 @@ describe('world-state messages', () => {
         character: 'Baro Ki\'Teer',
         location: 'Mercury Relay',
         expiry,
+        items: [
+          { name: 'Prisma Grakata', ducats: 150, credits: 100000 },
+          { name: 'Primed Continuity', ducats: 350, credits: 200000 },
+        ],
       },
       {
         type: 'daily-deal',
@@ -58,17 +62,21 @@ describe('world-state messages', () => {
         expiry,
       },
     ]
-    const messages = await createWorldStateMessages(items)
+    const render = vi.fn(async () => 'data:image/png;base64,baro')
+    const messages = await createWorldStateMessages(items, render)
 
+    expect(render.mock.calls).to.have.length(1)
     expect(messages.map(message => message.toString())).to.deep.equal([
       '<message><div>新的虚空裂隙已出现:\n</div><div>[九重天]后纪 - 赛德娜 (防御) Grineer Hydron | 剩余1小时1分钟2秒</div></message>',
-      '<message><div>虚空商人到达\n</div><div>Baro Ki\'Teer 已到达 Mercury Relay，截止 2026/7/16 08:00:00</div></message>',
+      '<message><div>虚空商人到达\nBaro Ki\'Teer 已到达 Mercury Relay，截止 2026/7/16 08:00:00</div><img src="data:image/png;base64,baro"/></message>',
       '<message><div>新每日特惠\n</div><div>Braton：157 白金（-30%，原价 225），截止 2026/7/16 08:00:00</div></message>',
       '<message><div>新警报\n</div><div>Lotus Gift | Earth Defense | 奖励：Forma，截止 2026/7/16 08:00:00</div></message>',
     ])
   })
 
   it('does not create a message for empty notifications', async () => {
-    expect(await createWorldStateMessages([])).to.deep.equal([])
+    const render = vi.fn(async () => 'data:image/png;base64,baro')
+    expect(await createWorldStateMessages([], render)).to.deep.equal([])
+    expect(render.mock.calls).to.have.length(0)
   })
 })

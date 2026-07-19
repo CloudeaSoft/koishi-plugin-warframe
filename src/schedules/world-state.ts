@@ -23,7 +23,7 @@ export function setupWorldStateSchedule(
     running = true
 
     try {
-      const messages = await createWorldStateMessages(await refresh())
+      const messages = await createWorldStateMessages(await refresh(), deps.render)
       const channels = Object.values(deps.config.channelIds)
 
       if (!channels.length) {

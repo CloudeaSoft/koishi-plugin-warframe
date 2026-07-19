@@ -141,6 +141,9 @@ describe('world-state change detection', () => {
       location: 'Mercury Relay',
       activation: new Date('2026-07-16T00:03:00Z'),
       expiry: new Date('2026-07-18T00:03:00Z'),
+      inventory: [
+        { uniqueName: '/Lotus/StoreItems/Weapons/VoidTrader/PrismaGrakata', item: 'Prisma Grakata', ducats: 150, credits: 100000 },
+      ],
     }
     const previous = snapshot({
       timestamp: new Date('2026-07-16T00:00:00Z'),
@@ -157,6 +160,7 @@ describe('world-state change detection', () => {
       character: 'Baro Ki\'Teer',
       location: 'Mercury Relay',
       expiry: trader.expiry.getTime(),
+      items: [{ name: '棱晶·葛拉卡达', ducats: 150, credits: 100000 }],
     }])
   })
 
