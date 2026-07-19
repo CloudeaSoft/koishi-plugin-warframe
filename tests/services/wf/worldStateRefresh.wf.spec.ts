@@ -119,6 +119,8 @@ describe('world-state change detection', () => {
         originalPrice: 225,
         salePrice: 157,
         discount: 30,
+        activation: new Date('2026-07-16T00:03:00Z'),
+        expiry: new Date('2026-07-17T00:03:00Z'),
       }],
     } as unknown as Partial<WorldState>)
     const values = [first, second]
@@ -166,6 +168,8 @@ describe('world-state change detection', () => {
       originalPrice: 225,
       salePrice: 157,
       discount: 30,
+      activation: new Date('2026-07-16T00:03:00Z'),
+      expiry: new Date('2026-07-17T00:03:00Z'),
     }
     const withDeal = snapshot({
       dailyDeals: [deal],

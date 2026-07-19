@@ -150,13 +150,12 @@ export async function diffWorldStates(
     }
   }
 
-  const previousDeals = new Set(previous.raw.dailyDeals.map(dailyDealId))
   for (const deal of current.raw.dailyDeals) {
-    const id = dailyDealId(deal)
-    if (!previousDeals.has(id)) {
+    const activation = time(deal.activation)
+    if (activation > previousTimestamp && activation <= currentTimestamp) {
       notifications.push({
         type: 'daily-deal',
-        id,
+        id: dailyDealId(deal),
         item: deal.item,
         originalPrice: deal.originalPrice,
         salePrice: deal.salePrice,
