@@ -164,6 +164,37 @@ describe('world-state change detection', () => {
     }])
   })
 
+  it('detects a daily deal only when activation crosses snapshot timestamps', async () => {
+    const deal = {
+      id: 'd1',
+      item: 'Braton',
+      uniqueName: '/Lotus/Weapons/Braton',
+      originalPrice: 225,
+      salePrice: 157,
+      discount: 30,
+      activation: new Date('2026-07-16T00:03:00Z'),
+      expiry: new Date('2026-07-17T00:03:00Z'),
+    }
+    const previous = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+      dailyDeals: [deal],
+    } as unknown as Partial<WorldState>)
+    const current = snapshot({
+      timestamp: new Date('2026-07-16T00:05:00Z'),
+      dailyDeals: [deal],
+    } as unknown as Partial<WorldState>)
+
+    expect(await diffWorldStates(previous, current)).to.deep.equal([{
+      type: 'daily-deal',
+      id: 'd1',
+      item: 'Braton',
+      originalPrice: 225,
+      salePrice: 157,
+      discount: 30,
+      expiry: deal.expiry.getTime(),
+    }])
+  })
+
   it('does not report removals or unchanged entries', async () => {
     const deal = {
       id: 'd1',
