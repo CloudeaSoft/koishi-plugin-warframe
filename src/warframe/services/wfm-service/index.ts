@@ -47,7 +47,7 @@ export async function updateCache(): Promise<string> {
   const lines = updateTasks.map((task, index) => {
     const result = results[index]
     if (result.status === 'fulfilled') {
-      // Soft failures (e.g. HTTP helpers returning undefined) fulfill without throwing.
+      // Soft failures may fulfill with empty/undefined payloads.
       if (result.value == null) {
         return `${task.name}: 失败 - 无有效数据`
       }

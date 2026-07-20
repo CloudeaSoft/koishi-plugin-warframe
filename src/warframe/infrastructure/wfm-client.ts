@@ -1,128 +1,48 @@
 import type {
-  Ducatnator,
-  RivenItem,
-  RivenOrder,
-  StatisticsCollection,
+  WfmApiClient,
   WfmFetcher,
-  WfmFetchInput,
-  WFMLang,
+  WfmPlugin,
+  WfmRequestNext,
 } from 'wfm-api-client'
-import type {
-  ItemShort,
-  OrderWithUser,
-  RivenAttribute,
-} from '../types/wfm'
-import Bottleneck from 'bottleneck'
-import { createWfmApiClient } from 'wfm-api-client'
-import { WfmMemoryCache } from './wfm-cache'
+import {
+  createWfmApiClient,
+  memoryCachePlugin,
+  rateLimitPlugin,
+} from 'wfm-api-client'
 
-export interface PluginWfmClientOptions {
-  fetcher?: WfmFetcher
-  rateLimit?: false | { minTime: number }
-  cache?: false | { maxSize?: number }
-  language?: 'zh-hans' | string
-}
-
-function createDefaultFetcher(): WfmFetcher {
-  return async (input) => {
-    const response = await fetch(input.url, {
-      method: input.method,
-      headers: input.headers,
-      body: input.body,
-      signal: input.signal ?? AbortSignal.timeout(10_000),
-    })
-
-    return {
-      status: response.status,
-      ok: response.ok,
-      json: async () => await response.json() as unknown,
-      text: async () => response.text(),
-    }
-  }
-}
-
-export function createPluginWfmClient(options?: PluginWfmClientOptions): {
-  items: {
-    list: () => Promise<ItemShort[] | undefined>
-    getStatistics: (slug: string) => Promise<StatisticsCollection | undefined>
-  }
-  orders: {
-    listByItem: (ref: { slug: string }) => Promise<OrderWithUser[] | undefined>
-  }
-  rivens: {
-    listWeapons: () => Promise<RivenItem[] | undefined>
-    listAttributes: () => Promise<RivenAttribute[] | undefined>
-    getOrders: (slug: string) => Promise<RivenOrder[] | undefined>
-  }
-  tools: {
-    getDucatnator: () => Promise<{ day: Ducatnator[], hour: Ducatnator[] } | undefined>
-  }
-} {
-  const baseFetcher = options?.fetcher ?? createDefaultFetcher()
-  const fetcher = options?.rateLimit === false
-    ? baseFetcher
-    : (() => {
-        const limiter = new Bottleneck({
-          minTime: options?.rateLimit?.minTime ?? 500,
-        })
-        return async (input: WfmFetchInput) => limiter.schedule(async () => baseFetcher(input))
-      })()
-  const raw = createWfmApiClient({
-    fetcher,
-    language: (options?.language ?? 'zh-hans') as WFMLang,
-    timeoutMs: 10_000,
-  })
-  const cache = options?.cache === false
-    ? undefined
-    : new WfmMemoryCache(options?.cache?.maxSize ?? 1024)
-
-  async function safeCall<T>(fn: () => Promise<T>): Promise<T | undefined> {
-    try {
-      return await fn()
-    }
-    catch {
-      return undefined
-    }
-  }
-
-  async function cachedSafe<T>(
-    key: string,
-    ttlSeconds: number,
-    fn: () => Promise<T>,
-  ): Promise<T | undefined> {
-    try {
-      if (!cache)
-        return await safeCall(fn)
-      return await cache.get(key, ttlSeconds, fn)
-    }
-    catch {
-      return undefined
-    }
-  }
-
+/** Warframe-local: map request failures to `undefined` (not part of upstream client). */
+export function softFailPlugin(): WfmPlugin {
   return {
-    items: {
-      list: async () => cachedSafe('items.list', 3600, async () => raw.items.list()),
-      getStatistics: async slug =>
-        cachedSafe(`items.getStatistics:${slug}`, 60, async () => raw.items.getStatistics(slug)),
-    },
-    orders: {
-      listByItem: async ref =>
-        cachedSafe(`orders.listByItem:${ref.slug}`, 30, async () => raw.orders.listByItem(ref)),
-    },
-    rivens: {
-      listWeapons: async () =>
-        cachedSafe('rivens.listWeapons', 3600, async () => raw.rivens.listWeapons()),
-      listAttributes: async () =>
-        cachedSafe('rivens.listAttributes', 3600, async () => raw.rivens.listAttributes()),
-      getOrders: async slug =>
-        cachedSafe(`rivens.getOrders:${slug}`, 30, async () => raw.rivens.getOrders(slug)),
-    },
-    tools: {
-      getDucatnator: async () =>
-        cachedSafe('tools.getDucatnator', 60, async () => raw.tools.getDucatnator()),
+    wrap: (next: WfmRequestNext): WfmRequestNext => {
+      return async (ctx) => {
+        try {
+          return await next(ctx)
+        }
+        catch {
+          return undefined
+        }
+      }
     },
   }
+}
+
+/** `fetcher` is a test injection seam only; production uses the client default. */
+export function createPluginWfmClient(fetcher?: WfmFetcher): WfmApiClient {
+  const plugins: WfmPlugin[] = [
+    softFailPlugin(),
+    memoryCachePlugin({ maxSize: 1024, ttl: 60 }),
+  ]
+
+  // Skip rate limiting when a mock fetcher is injected so unit tests stay fast.
+  if (!fetcher)
+    plugins.push(rateLimitPlugin({ minTime: 400 }))
+
+  return createWfmApiClient({
+    fetcher,
+    language: 'zh-hans',
+    timeoutMs: 10_000,
+    plugins,
+  })
 }
 
 export const wfmClient = createPluginWfmClient()

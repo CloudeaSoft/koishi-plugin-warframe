@@ -8,7 +8,7 @@ function packageRoot() {
 }
 
 describe('wfm-api-client install boundary', () => {
-  it('depends on the published npm package at runtime', () => {
+  it('depends on wfm-api-client at runtime (npm or local portal for pre-release)', () => {
     const manifest = JSON.parse(
       readFileSync(resolve(packageRoot(), 'package.json'), 'utf8'),
     ) as {
@@ -17,11 +17,12 @@ describe('wfm-api-client install boundary', () => {
       devDependencies?: Record<string, string>
     }
 
-    expect(manifest.dependencies['wfm-api-client']).to.match(/^\^?0\.0\.\d+/)
-    expect(manifest.dependencies.bottleneck).to.be.a('string')
+    const dep = manifest.dependencies['wfm-api-client']
+    expect(dep).to.match(/^(\^?0\.0\.\d+|portal:.*wfm-api-client)$/)
+    expect(dep).to.not.include('link:')
+    expect(manifest.dependencies.bottleneck).to.equal(undefined)
     expect(manifest.devDependencies?.['wfm-api-client']).to.equal(undefined)
     expect(manifest.scripts['build:wfm-client']).to.equal(undefined)
     expect(manifest.scripts.build).to.not.include('build:wfm-client')
-    expect(manifest.dependencies['wfm-api-client']).to.not.include('link:')
   })
 })

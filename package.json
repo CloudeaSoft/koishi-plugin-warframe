@@ -61,14 +61,13 @@
   },
   "dependencies": {
     "async-cache-dedupe": "^3.4.0",
-    "bottleneck": "^2.19.5",
     "ofetch": "^1.5.1",
     "tencentcloud-sdk-nodejs-ocr": "^4.1.267",
     "warframe-public-export-plus": "^0.6.5",
     "warframe-weekly-rivens": "^0.0.2",
     "warframe-worldstate-data": "^3.16.3",
     "warframe-worldstate-parser": "^5.4.3",
-    "wfm-api-client": "^0.0.2"
+    "wfm-api-client": "^0.0.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "9.1.0",

@@ -28,10 +28,7 @@ describe('createPluginWfmClient', () => {
       })
     }
 
-    const client = createPluginWfmClient({
-      fetcher,
-      rateLimit: false,
-    })
+    const client = createPluginWfmClient(fetcher)
 
     const first = await client.items.list()
     const second = await client.items.list()
@@ -41,17 +38,12 @@ describe('createPluginWfmClient', () => {
     expect(calls).to.equal(1)
   })
 
-  it('returns undefined when upstream throws / fails', async () => {
+  it('maps upstream failures to undefined via softFailPlugin', async () => {
     const fetcher: WfmFetcher = async () => {
       throw new Error('network down')
     }
 
-    const client = createPluginWfmClient({
-      fetcher,
-      rateLimit: false,
-      cache: false,
-    })
-
+    const client = createPluginWfmClient(fetcher)
     const result = await client.items.list()
     expect(result).to.equal(undefined)
   })
@@ -63,12 +55,7 @@ describe('createPluginWfmClient', () => {
       return jsonResult({ data: [] })
     }
 
-    const client = createPluginWfmClient({
-      fetcher,
-      rateLimit: false,
-      cache: false,
-    })
-
+    const client = createPluginWfmClient(fetcher)
     await client.orders.listByItem({ slug: 'primed_flow' })
     expect(urls.some(url => url.includes('primed_flow'))).to.equal(true)
   })
@@ -98,11 +85,7 @@ describe('createPluginWfmClient', () => {
         }],
       })
     }
-    const client = createPluginWfmClient({
-      fetcher,
-      rateLimit: false,
-      cache: false,
-    })
+    const client = createPluginWfmClient(fetcher)
 
     const items = await client.items.list()
     const orders = await client.orders.listByItem({ slug: 'primed_flow' })
