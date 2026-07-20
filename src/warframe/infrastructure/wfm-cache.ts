@@ -39,7 +39,7 @@ export class WfmMemoryCache {
 
     while (this.storage.size > this.maxSize) {
       const oldest = this.storage.keys().next().value
-      if (!oldest)
+      if (oldest === undefined)
         break
       this.storage.delete(oldest)
     }

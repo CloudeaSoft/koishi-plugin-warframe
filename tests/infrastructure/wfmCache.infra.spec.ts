@@ -46,4 +46,29 @@ describe('WfmMemoryCache', () => {
 
     expect(calls).to.equal(2)
   })
+
+  it('evicts entries including empty-string keys when over maxSize', async () => {
+    const cache = new WfmMemoryCache(1)
+    let callsA = 0
+    let callsB = 0
+
+    await cache.get('', 60, async () => {
+      callsA++
+      return 'empty'
+    })
+    await cache.get('second', 60, async () => {
+      callsB++
+      return 'second'
+    })
+
+    expect(callsA).to.equal(1)
+    expect(callsB).to.equal(1)
+
+    await cache.get('', 60, async () => {
+      callsA++
+      return 'empty-again'
+    })
+
+    expect(callsA).to.equal(2)
+  })
 })
