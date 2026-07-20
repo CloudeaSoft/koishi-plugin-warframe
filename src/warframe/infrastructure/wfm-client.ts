@@ -16,7 +16,7 @@ function createDefaultFetcher(): WfmFetcher {
       method: input.method,
       headers: input.headers,
       body: input.body,
-      signal: input.signal,
+      signal: input.signal ?? AbortSignal.timeout(10_000),
     })
 
     return {
