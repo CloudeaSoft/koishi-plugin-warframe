@@ -236,6 +236,31 @@ describe('world-state change detection', () => {
     })
   })
 
+  it('does not re-broadcast a disallowed fissure that persists between refreshes', async () => {
+    const fissure = {
+      id: 'f-filtered',
+      tier: 'Lith',
+      tierNum: 1,
+      node: 'Apollodorus',
+      nodeKey: 'Apollodorus (Mercury)',
+      missionType: 'Survival',
+      isHard: false,
+      isStorm: false,
+      activation: new Date('2026-07-16T00:01:00Z'),
+      expiry: new Date('2026-07-16T01:01:00Z'),
+    }
+    const previous = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+      fissures: [fissure],
+    } as unknown as Partial<WorldState>)
+    const current = snapshot({
+      timestamp: new Date('2026-07-16T00:05:00Z'),
+      fissures: [fissure],
+    } as unknown as Partial<WorldState>)
+
+    expect(await diffWorldStates(previous, current)).to.deep.equal([])
+  })
+
   it('does not report removals or unchanged entries', async () => {
     const deal = {
       id: 'd1',
