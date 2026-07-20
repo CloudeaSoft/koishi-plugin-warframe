@@ -1,16 +1,6 @@
+import type { Ducatnator, ItemShort, OrderWithUser, RivenAttribute, RivenItem, RivenOrder, StatisticsCollection, WfmFetcher, WfmFetchInput, WFMLang } from 'wfm-api-client'
 import Bottleneck from 'bottleneck'
-import {
-  createWfmApiClient,
-  type Ducatnator,
-  type ItemShort,
-  type OrderWithUser,
-  type RivenAttribute,
-  type RivenItem,
-  type RivenOrder,
-  type StatisticsCollection,
-  type WfmFetcher,
-  type WFMLang,
-} from 'wfm-api-client'
+import { createWfmApiClient } from 'wfm-api-client'
 import { WfmMemoryCache } from './wfm-cache'
 
 export interface PluginWfmClientOptions {
@@ -21,7 +11,7 @@ export interface PluginWfmClientOptions {
 }
 
 function createDefaultFetcher(): WfmFetcher {
-  return async input => {
+  return async (input) => {
     const response = await fetch(input.url, {
       method: input.method,
       headers: input.headers,
@@ -32,7 +22,7 @@ function createDefaultFetcher(): WfmFetcher {
     return {
       status: response.status,
       ok: response.ok,
-      json: async () => response.json(),
+      json: async () => await response.json() as unknown,
       text: async () => response.text(),
     }
   }
@@ -62,7 +52,7 @@ export function createPluginWfmClient(options?: PluginWfmClientOptions): {
         const limiter = new Bottleneck({
           minTime: options?.rateLimit?.minTime ?? 500,
         })
-        return input => limiter.schedule(() => baseFetcher(input))
+        return async (input: WfmFetchInput) => limiter.schedule(async () => baseFetcher(input))
       })()
   const raw = createWfmApiClient({
     fetcher,
@@ -99,25 +89,25 @@ export function createPluginWfmClient(options?: PluginWfmClientOptions): {
 
   return {
     items: {
-      list: () => cachedSafe('items.list', 3600, () => raw.items.list()),
-      getStatistics: slug =>
-        cachedSafe(`items.getStatistics:${slug}`, 60, () => raw.items.getStatistics(slug)),
+      list: async () => cachedSafe('items.list', 3600, async () => raw.items.list()),
+      getStatistics: async slug =>
+        cachedSafe(`items.getStatistics:${slug}`, 60, async () => raw.items.getStatistics(slug)),
     },
     orders: {
-      listByItem: ref =>
-        cachedSafe(`orders.listByItem:${ref.slug}`, 30, () => raw.orders.listByItem(ref)),
+      listByItem: async ref =>
+        cachedSafe(`orders.listByItem:${ref.slug}`, 30, async () => raw.orders.listByItem(ref)),
     },
     rivens: {
-      listWeapons: () =>
-        cachedSafe('rivens.listWeapons', 3600, () => raw.rivens.listWeapons()),
-      listAttributes: () =>
-        cachedSafe('rivens.listAttributes', 3600, () => raw.rivens.listAttributes()),
-      getOrders: slug =>
-        cachedSafe(`rivens.getOrders:${slug}`, 30, () => raw.rivens.getOrders(slug)),
+      listWeapons: async () =>
+        cachedSafe('rivens.listWeapons', 3600, async () => raw.rivens.listWeapons()),
+      listAttributes: async () =>
+        cachedSafe('rivens.listAttributes', 3600, async () => raw.rivens.listAttributes()),
+      getOrders: async slug =>
+        cachedSafe(`rivens.getOrders:${slug}`, 30, async () => raw.rivens.getOrders(slug)),
     },
     tools: {
-      getDucatnator: () =>
-        cachedSafe('tools.getDucatnator', 60, () => raw.tools.getDucatnator()),
+      getDucatnator: async () =>
+        cachedSafe('tools.getDucatnator', 60, async () => raw.tools.getDucatnator()),
     },
   }
 }

@@ -1,4 +1,4 @@
-import type { WfmFetchInput, WfmFetchResult, WfmFetcher } from 'wfm-api-client'
+import type { WfmFetcher, WfmFetchInput, WfmFetchResult } from 'wfm-api-client'
 import { expect } from 'chai'
 import { createPluginWfmClient } from '../../src/warframe/infrastructure/wfm-client'
 
