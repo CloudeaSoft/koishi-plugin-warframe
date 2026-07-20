@@ -195,6 +195,72 @@ describe('world-state change detection', () => {
     }])
   })
 
+  it('filters fissures whose mission type is not 歼灭/防御/中断', async () => {
+    const previous = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+    })
+    const current = snapshot({
+      fissures: [
+        {
+          id: 'f-allowed',
+          tier: 'Lith',
+          tierNum: 1,
+          node: 'E Prime',
+          nodeKey: 'E Prime (Earth)',
+          missionType: 'Exterminate',
+          isHard: false,
+          isStorm: false,
+          activation: new Date('2026-07-16T00:01:00Z'),
+          expiry: new Date('2026-07-16T01:01:00Z'),
+        },
+        {
+          id: 'f-filtered',
+          tier: 'Lith',
+          tierNum: 1,
+          node: 'Apollodorus',
+          nodeKey: 'Apollodorus (Mercury)',
+          missionType: 'Survival',
+          isHard: false,
+          isStorm: false,
+          activation: new Date('2026-07-16T00:01:00Z'),
+          expiry: new Date('2026-07-16T01:01:00Z'),
+        },
+      ],
+    } as unknown as Partial<WorldState>)
+
+    const notifications = await diffWorldStates(previous, current)
+    expect(notifications).to.have.length(1)
+    expect(notifications[0]).to.deep.include({
+      type: 'fissure',
+      id: 'f-allowed',
+    })
+  })
+
+  it('does not re-broadcast a disallowed fissure that persists between refreshes', async () => {
+    const fissure = {
+      id: 'f-filtered',
+      tier: 'Lith',
+      tierNum: 1,
+      node: 'Apollodorus',
+      nodeKey: 'Apollodorus (Mercury)',
+      missionType: 'Survival',
+      isHard: false,
+      isStorm: false,
+      activation: new Date('2026-07-16T00:01:00Z'),
+      expiry: new Date('2026-07-16T01:01:00Z'),
+    }
+    const previous = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+      fissures: [fissure],
+    } as unknown as Partial<WorldState>)
+    const current = snapshot({
+      timestamp: new Date('2026-07-16T00:05:00Z'),
+      fissures: [fissure],
+    } as unknown as Partial<WorldState>)
+
+    expect(await diffWorldStates(previous, current)).to.deep.equal([])
+  })
+
   it('does not report removals or unchanged entries', async () => {
     const deal = {
       id: 'd1',

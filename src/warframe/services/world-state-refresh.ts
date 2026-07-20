@@ -1,11 +1,13 @@
+import type { TMissionType } from 'warframe-public-export-plus'
 import type WorldState from 'warframe-worldstate-parser'
-import type { VoidTraderItem, WFRegionShort } from '../types'
 
+import type { VoidTraderItem, WFRegionShort } from '../types'
+import { ExportRegions } from 'warframe-public-export-plus'
 import {
   adaptFissure,
   globalWorldState,
 } from '../data/wf/globalWorldState'
-import { getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
+import { getSolNodeKey, getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
 
 export type WorldStateSnapshot = Awaited<
   ReturnType<typeof globalWorldState.get>
@@ -15,6 +17,8 @@ type ParsedFissure = WorldState['fissures'][number]
 type ParsedVoidTrader = WorldState['voidTraders'][number]
 type ParsedDailyDeal = WorldState['dailyDeals'][number]
 type ParsedAlert = WorldState['alerts'][number]
+
+const ALLOWED_FISSURE_MISSION_TYPES = new Set<TMissionType>(['MT_EXTERMINATION', 'MT_DEFENSE', 'MT_ARTIFACT'])
 
 export type WorldStateNotification
   = | {
@@ -69,6 +73,11 @@ function fissureId(value: ParsedFissure): string {
   ].join(':')
 }
 
+async function fissureMissionType(fissure: ParsedFissure): Promise<TMissionType | undefined> {
+  const nodeKey = await getSolNodeKey(fissure.nodeKey)
+  return ExportRegions[nodeKey]?.missionType
+}
+
 function dailyDealId(value: ParsedDailyDeal): string {
   return value.id ?? [
     time(value.activation),
@@ -118,23 +127,30 @@ export async function diffWorldStates(
   const previousFissures = new Set(previous.raw.fissures.map(fissureId))
   for (const fissure of current.raw.fissures) {
     const id = fissureId(fissure)
-    if (!previousFissures.has(id)) {
-      const mapped = await adaptFissure(fissure)
-      notifications.push({
-        type: 'fissure',
-        id,
-        tier: mapped.tier,
-        tierNum: mapped.tierNum,
-        node: mapped.node,
-        hard: mapped.hard,
-        category: fissure.isStorm
-          ? 'railjack'
-          : fissure.isHard
-            ? 'steel-path'
-            : 'normal',
-        expiry: time(fissure.expiry),
-      })
+    if (previousFissures.has(id)) {
+      continue
     }
+
+    const missionType = await fissureMissionType(fissure)
+    if (!missionType || !ALLOWED_FISSURE_MISSION_TYPES.has(missionType)) {
+      continue
+    }
+
+    const mapped = await adaptFissure(fissure)
+    notifications.push({
+      type: 'fissure',
+      id,
+      tier: mapped.tier,
+      tierNum: mapped.tierNum,
+      node: mapped.node,
+      hard: mapped.hard,
+      category: fissure.isStorm
+        ? 'railjack'
+        : fissure.isHard
+          ? 'steel-path'
+          : 'normal',
+      expiry: time(fissure.expiry),
+    })
   }
 
   const previousTimestamp = previous.raw.timestamp.getTime()
