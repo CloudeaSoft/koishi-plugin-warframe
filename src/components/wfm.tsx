@@ -403,8 +403,8 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
 function RivenAttributeComponent(attr: RivenAttributeShortInternal, index: number): Element {
   const attrInfo = attr.attribute
   const attrName
-    = attrInfo.i18n?.['zh-hans']?.name ?? attrInfo.i18n?.en?.name ?? attr.url_name
-  const unit = attrInfo.unit ?? ''
+    = attrInfo?.i18n?.['zh-hans']?.name ?? attrInfo?.i18n?.en?.name ?? attr.url_name
+  const unit = attrInfo?.unit ?? ''
   const attrValuePrefix = unit === 'multiply' ? 'x' : ''
   const attrValueSuffix = unit === 'percent' ? '%' : unit === 'second' ? 's' : ''
   const attrValue = attrValuePrefix + attr.value + attrValueSuffix

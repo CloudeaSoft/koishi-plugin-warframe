@@ -28,6 +28,8 @@ export function softFailPlugin(): WfmPlugin {
 
 /** `fetcher` is a test injection seam only; production uses the client default. */
 export function createPluginWfmClient(fetcher?: WfmFetcher): WfmApiClient {
+  // Plugin array order is outer -> inner (client uses reduceRight).
+  // softFail must stay outermost so failures are not stored by memoryCache.
   const plugins: WfmPlugin[] = [
     softFailPlugin(),
     memoryCachePlugin({ maxSize: 1024, ttl: 60 }),

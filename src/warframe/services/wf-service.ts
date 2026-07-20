@@ -738,84 +738,90 @@ export function analyzeRivenStat(parseResult: {
 
   const disposition = weaponRiven.calc.disposition
   const weaponType = weaponRiven.calc.riventype
+
+  const lookupBaseValue = (enName: string): number | undefined =>
+    rivenAttrValueDict[weaponType]?.[normalizeName(enName)]
+
+  const buildStat = (
+    entry: { attr: RivenAttribute, value: number },
+    factor: number,
+    invertPercent: boolean,
+  ): WarframeResult<RivenStatAnalyzsis> => {
+    const enName = entry.attr.i18n?.en?.name
+    if (!enName) {
+      return failure('riven.statTypeError')
+    }
+
+    const baseValue = lookupBaseValue(enName)
+    if (baseValue === undefined) {
+      return failure('riven.statTypeError')
+    }
+
+    const unit = entry.attr.unit ?? ''
+    const value = unit === 'multiply' ? entry.value - 1 : entry.value
+    const standardValue = baseValue * factor * disposition
+    const percent = invertPercent
+      ? ((value - standardValue) / standardValue) * -1
+      : (value - standardValue) / standardValue
+
+    return {
+      ok: true,
+      data: {
+        name: entry.attr.i18n?.['zh-hans']?.name ?? enName,
+        unit,
+        value: entry.value,
+        percent,
+        max: invertPercent ? standardValue * 0.9 : standardValue * 1.1,
+        min: invertPercent ? standardValue * 1.1 : standardValue * 0.9,
+      },
+    }
+  }
+
   const firstStatName = parseResult.attributes[0]?.attr.i18n?.en?.name
   if (!firstStatName) {
     return failure('riven.statTypeError')
   }
-  const rivenStatCountType: RivenStatCountType = (function () {
-    if (parseResult.attributes.length === 4) {
-      return '31'
-    }
-    else if (parseResult.attributes.length === 2) {
-      return '2'
-    }
 
+  let rivenStatCountType: RivenStatCountType
+  if (parseResult.attributes.length === 4) {
+    rivenStatCountType = '31'
+  }
+  else if (parseResult.attributes.length === 2) {
+    rivenStatCountType = '2'
+  }
+  else {
     const firstStat = parseResult.attributes[0]
-    const firstStatBaseValue
-      = rivenAttrValueDict[weaponType][
-        normalizeName(firstStatName)
-      ]
+    const firstStatBaseValue = lookupBaseValue(firstStatName)
+    if (firstStatBaseValue === undefined) {
+      return failure('riven.statTypeError')
+    }
 
     // Use the lowest value of 2_1 type riven to check the first stat
-    if (firstStat.value >= firstStatBaseValue * 1.2375 * 0.9 * disposition) {
-      return '21'
-    }
-    else {
-      return '3'
-    }
-  })()
+    rivenStatCountType = firstStat.value
+      >= firstStatBaseValue * 1.2375 * 0.9 * disposition
+      ? '21'
+      : '3'
+  }
 
   const { buffFactor, buffCount, curseFactor, curseCount }
     = rivenStatFixFactor[rivenStatCountType]
 
   const buffs: RivenStatAnalyzsis[] = []
   for (let i = 0; i < buffCount; i++) {
-    const attr = parseResult.attributes[i]
-    const enName = attr.attr.i18n?.en?.name
-    if (!enName) {
-      return failure('riven.statTypeError')
+    const result = buildStat(parseResult.attributes[i], buffFactor, false)
+    if (!result.ok) {
+      return result
     }
-    const unit = attr.attr.unit ?? ''
-    const baseValue
-      = rivenAttrValueDict[weaponType][normalizeName(enName)]
-    const value = unit === 'multiply' ? attr.value - 1 : attr.value
-    const standardValue = baseValue * buffFactor * disposition
-    const percent = (value - standardValue) / standardValue
-    buffs.push({
-      name: attr.attr.i18n?.['zh-hans']?.name ?? enName,
-      unit,
-      value: attr.value,
-      percent,
-      max: standardValue * 1.1,
-      min: standardValue * 0.9,
-    })
+    buffs.push(result.data)
   }
 
   const curses: RivenStatAnalyzsis[] = []
-  if (curseCount > 0) {
-    for (let i = buffCount; i < buffCount + curseCount; i++) {
-      const attr = parseResult.attributes[i]
-      const enName = attr.attr.i18n?.en?.name
-      if (!enName) {
-        return failure('riven.statTypeError')
-      }
-      const unit = attr.attr.unit ?? ''
-      const baseValue
-        = rivenAttrValueDict[weaponType][
-          normalizeName(enName)
-        ]
-      const value = unit === 'multiply' ? attr.value - 1 : attr.value
-      const standardValue = baseValue * curseFactor * disposition
-      const percent = ((value - standardValue) / standardValue) * -1
-      curses.push({
-        name: attr.attr.i18n?.['zh-hans']?.name ?? enName,
-        unit,
-        value: attr.value,
-        percent,
-        max: standardValue * 0.9,
-        min: standardValue * 1.1,
-      })
+  for (let i = buffCount; i < buffCount + curseCount; i++) {
+    const result = buildStat(parseResult.attributes[i], curseFactor, true)
+    if (!result.ok) {
+      return result
     }
+    curses.push(result.data)
   }
 
   return {

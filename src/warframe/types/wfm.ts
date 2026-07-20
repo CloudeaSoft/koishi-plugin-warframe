@@ -42,7 +42,7 @@ export interface ItemStatisticsSummary {
 
 export type RivenAttributeShortInternal
   = RivenOrder['item']['attributes'][number] & {
-    attribute: RivenAttribute
+    attribute?: RivenAttribute
   }
 
 export type RivenOrderInternal = Omit<RivenOrder, 'item'> & {

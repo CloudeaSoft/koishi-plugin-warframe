@@ -155,7 +155,7 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
   const top5 = data
     .filter(
       order =>
-        order.owner.status === 'ingame'
+        order.owner?.status === 'ingame'
         && order.visible
         && !order.private
         && !order.closed
@@ -180,7 +180,7 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
     )
 
     e.item.attributes = transformed
-    return e as RivenOrderInternal
+    return e
   })
 
   return { ok: true, data: { item: targetItem, orders } }
