@@ -1,6 +1,19 @@
-import type { Ducatnator, ItemShort, OrderWithUser, RivenAttribute, RivenItem, RivenOrder, StatisticsCollection, WfmFetcher, WfmFetchInput, WFMLang } from 'wfm-api-client'
+import type {
+  Ducatnator,
+  RivenItem,
+  RivenOrder,
+  StatisticsCollection,
+  WfmFetcher,
+  WfmFetchInput,
+  WFMLang,
+} from 'wfm-api-client'
 import Bottleneck from 'bottleneck'
 import { createWfmApiClient } from 'wfm-api-client'
+import type {
+  ItemShort,
+  OrderWithUser,
+  RivenAttribute,
+} from '../types/wfm'
 import { WfmMemoryCache } from './wfm-cache'
 
 export interface PluginWfmClientOptions {
@@ -89,19 +102,22 @@ export function createPluginWfmClient(options?: PluginWfmClientOptions): {
 
   return {
     items: {
-      list: async () => cachedSafe('items.list', 3600, async () => raw.items.list()),
+      list: async () => cachedSafe('items.list', 3600, async () =>
+        raw.items.list() as Promise<ItemShort[]>),
       getStatistics: async slug =>
         cachedSafe(`items.getStatistics:${slug}`, 60, async () => raw.items.getStatistics(slug)),
     },
     orders: {
       listByItem: async ref =>
-        cachedSafe(`orders.listByItem:${ref.slug}`, 30, async () => raw.orders.listByItem(ref)),
+        cachedSafe(`orders.listByItem:${ref.slug}`, 30, async () =>
+          raw.orders.listByItem(ref) as Promise<OrderWithUser[]>),
     },
     rivens: {
       listWeapons: async () =>
         cachedSafe('rivens.listWeapons', 3600, async () => raw.rivens.listWeapons()),
       listAttributes: async () =>
-        cachedSafe('rivens.listAttributes', 3600, async () => raw.rivens.listAttributes()),
+        cachedSafe('rivens.listAttributes', 3600, async () =>
+          raw.rivens.listAttributes() as Promise<RivenAttribute[]>),
       getOrders: async slug =>
         cachedSafe(`rivens.getOrders:${slug}`, 30, async () => raw.rivens.getOrders(slug)),
     },
