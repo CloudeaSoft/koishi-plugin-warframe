@@ -23,8 +23,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "yarn build:wfm-client && yakumo build && node scripts/copy-assets.mjs",
-    "build:wfm-client": "tsc --build packages/wfm-api-client/tsconfig.json --force",
+    "build": "yakumo build && node scripts/copy-assets.mjs",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
     "dtsc": "tsc",
@@ -67,7 +66,8 @@
     "warframe-public-export-plus": "^0.6.5",
     "warframe-weekly-rivens": "^0.0.2",
     "warframe-worldstate-data": "^3.16.3",
-    "warframe-worldstate-parser": "^5.4.3"
+    "warframe-worldstate-parser": "^5.4.3",
+    "wfm-api-client": "^0.0.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "9.1.0",
@@ -87,7 +87,6 @@
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.62.0",
     "@vitest/coverage-v8": "4.1.10",
-    "bottleneck": "^2.19.5",
     "chai": "^6.2.2",
     "conventional-changelog-conventionalcommits": "^10.2.1",
     "esbuild": "^0.28.1",
@@ -102,7 +101,6 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.62.0",
     "vitest": "4.1.10",
-    "wfm-api-client": "link:packages/wfm-api-client",
     "yakumo": "^1.0.0",
     "yakumo-esbuild": "^1.0.0",
     "yakumo-tsc": "^1.0.0"

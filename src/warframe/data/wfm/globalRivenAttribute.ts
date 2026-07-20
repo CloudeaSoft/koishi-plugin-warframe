@@ -8,7 +8,7 @@ export async function globalRivenAttributeFactory(
   globalRivenAttributeList: RivenAttribute[]
   globalRivenAttributeDict: Record<string, RivenAttribute>
 }> {
-  rivenAttributeData ??= await wfmClient.rivens.getAttributes()
+  rivenAttributeData ??= await wfmClient.rivens.listAttributes()
   if (!rivenAttributeData) {
     throw new Error(
       'Failed to fetch riven attributes from Warframe Market API.',

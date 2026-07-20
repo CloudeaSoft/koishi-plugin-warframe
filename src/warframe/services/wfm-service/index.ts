@@ -47,7 +47,7 @@ export async function updateCache(): Promise<string> {
   const lines = updateTasks.map((task, index) => {
     const result = results[index]
     if (result.status === 'fulfilled') {
-      // Soft failures (e.g. HTTP helpers returning undefined) fulfill without throwing.
+      // Soft failures may fulfill with empty/undefined payloads.
       if (result.value == null) {
         return `${task.name}: 失败 - 无有效数据`
       }
@@ -90,7 +90,7 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
   const itemId = targetItem.slug
   const targetRank = isFullLevel ? targetItem.maxRank : targetItem.maxRank === undefined ? undefined : 0
   const [data, statsData] = await Promise.all([
-    wfmClient.items.getOrders(itemId),
+    wfmClient.orders.listByItem({ slug: itemId }),
     wfmClient.items.getStatistics(itemId),
   ])
 
@@ -102,7 +102,7 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
   const result = data
     .filter(
       order =>
-        order.user.status === 'ingame'
+        order.user?.status === 'ingame'
         && order.visible
         && order.type === 'sell'
         && (!isFullLevel || order.rank === targetItem.maxRank),
@@ -155,7 +155,7 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
   const top5 = data
     .filter(
       order =>
-        order.owner.status === 'ingame'
+        order.owner?.status === 'ingame'
         && order.visible
         && !order.private
         && !order.closed
@@ -180,7 +180,7 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
     )
 
     e.item.attributes = transformed
-    return e as RivenOrderInternal
+    return e
   })
 
   return { ok: true, data: { item: targetItem, orders } }
@@ -276,14 +276,14 @@ export const primedModHistory = createAsyncCache(async () => {
         ? Math.round((lastThree.reduce((acc, e) => acc + e.median, 0) / lastThree.length) * 10) / 10
         : undefined
       result.push({
-        name: item.i18n['zh-hans']?.name,
+        name: item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name,
         last: mod.Last,
         plats: avg,
       })
     }
     else {
       result.push({
-        name: item.i18n['zh-hans']?.name,
+        name: item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name,
         last: mod.Last,
       })
     }

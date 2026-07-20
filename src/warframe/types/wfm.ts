@@ -1,7 +1,4 @@
-import type {
-  RivenAttribute,
-  RivenOrder,
-} from 'wfm-api-client'
+import type { RivenAttribute, RivenOrder } from 'wfm-api-client'
 
 export type {
   ClosedStatisticsEntry,
@@ -45,7 +42,7 @@ export interface ItemStatisticsSummary {
 
 export type RivenAttributeShortInternal
   = RivenOrder['item']['attributes'][number] & {
-    attribute: RivenAttribute
+    attribute?: RivenAttribute
   }
 
 export type RivenOrderInternal = Omit<RivenOrder, 'item'> & {

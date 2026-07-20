@@ -8,22 +8,21 @@ function packageRoot() {
 }
 
 describe('wfm-api-client install boundary', () => {
-  it('uses a linked local dev dependency before the client is published', () => {
+  it('depends on wfm-api-client at runtime (npm or local portal for pre-release)', () => {
     const manifest = JSON.parse(
       readFileSync(resolve(packageRoot(), 'package.json'), 'utf8'),
     ) as {
       scripts: Record<string, string>
-      devDependencies: Record<string, string>
-      dependencies?: Record<string, string>
+      dependencies: Record<string, string>
+      devDependencies?: Record<string, string>
     }
 
-    expect(manifest.dependencies?.['wfm-api-client']).to.equal(undefined)
-    expect(manifest.devDependencies['wfm-api-client']).to.equal(
-      'link:packages/wfm-api-client',
-    )
-    expect(manifest.scripts.build).to.include('yarn build:wfm-client')
-    expect(manifest.scripts['build:wfm-client']).to.equal(
-      'tsc --build packages/wfm-api-client/tsconfig.json --force',
-    )
+    const dep = manifest.dependencies['wfm-api-client']
+    expect(dep).to.match(/^(\^?0\.0\.\d+|portal:.*wfm-api-client)$/)
+    expect(dep).to.not.include('link:')
+    expect(manifest.dependencies.bottleneck).to.equal(undefined)
+    expect(manifest.devDependencies?.['wfm-api-client']).to.equal(undefined)
+    expect(manifest.scripts['build:wfm-client']).to.equal(undefined)
+    expect(manifest.scripts.build).to.not.include('build:wfm-client')
   })
 })

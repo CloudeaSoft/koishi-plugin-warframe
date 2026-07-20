@@ -67,7 +67,7 @@ export async function globalRivenItemFactory(rivenData?: RivenItem[]): Promise<{
   globalRivenItemNameToSlugDict: Record<string, string>
   globalRivenItemWordPrefixCandidates: GlobalRivenItemWordPrefixCandidate[]
 }> {
-  rivenData ??= await wfmClient.rivens.getItems()
+  rivenData ??= await wfmClient.rivens.listWeapons()
   if (!rivenData) {
     throw new Error('Failed to fetch riven items from Warframe Market API.')
   }

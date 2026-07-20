@@ -477,12 +477,12 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
   const { globalRivenAttributeList } = await globalRivenAttribute.get()
   for (const key in rivenAttrValues) {
     const data = globalRivenAttributeList.find(
-      v => normalizeName(v.i18n.en.name) === key,
+      v => v.i18n?.en?.name !== undefined && normalizeName(v.i18n.en.name) === key,
     )
     const baseValue = rivenAttrValues[key]
     const buffValue = baseValue * disposition * factor.buffFactor
     result.positive[key] = {
-      name: data?.i18n['zh-hans'].name ?? key,
+      name: data?.i18n?.['zh-hans']?.name ?? data?.i18n?.en?.name ?? key,
       max: buffValue * 1.1,
       min: buffValue * 0.9,
       unit: data?.unit ?? '',
@@ -491,7 +491,7 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
     if (result.negative) {
       const curseValue = baseValue * disposition * factor.curseFactor
       result.negative[key] = {
-        name: data?.i18n['zh-hans'].name ?? key,
+        name: data?.i18n?.['zh-hans']?.name ?? data?.i18n?.en?.name ?? key,
         max: curseValue * 0.9,
         min: curseValue * 1.1,
         unit: data?.unit ?? '',
@@ -596,7 +596,7 @@ export async function parseOCRResult(ocrResult: string[]): Promise<
       if (!a)
         return false
 
-      const zhName = a.i18n['zh-hans']?.name
+      const zhName = a.i18n?.['zh-hans']?.name
       if (!zhName)
         return false
       const sim = similarity(zhName, attrNamePart)
@@ -738,70 +738,90 @@ export function analyzeRivenStat(parseResult: {
 
   const disposition = weaponRiven.calc.disposition
   const weaponType = weaponRiven.calc.riventype
-  const rivenStatCountType: RivenStatCountType = (function () {
-    if (parseResult.attributes.length === 4) {
-      return '31'
-    }
-    else if (parseResult.attributes.length === 2) {
-      return '2'
+
+  const lookupBaseValue = (enName: string): number | undefined =>
+    rivenAttrValueDict[weaponType]?.[normalizeName(enName)]
+
+  const buildStat = (
+    entry: { attr: RivenAttribute, value: number },
+    factor: number,
+    invertPercent: boolean,
+  ): WarframeResult<RivenStatAnalyzsis> => {
+    const enName = entry.attr.i18n?.en?.name
+    if (!enName) {
+      return failure('riven.statTypeError')
     }
 
+    const baseValue = lookupBaseValue(enName)
+    if (baseValue === undefined) {
+      return failure('riven.statTypeError')
+    }
+
+    const unit = entry.attr.unit ?? ''
+    const value = unit === 'multiply' ? entry.value - 1 : entry.value
+    const standardValue = baseValue * factor * disposition
+    const percent = invertPercent
+      ? ((value - standardValue) / standardValue) * -1
+      : (value - standardValue) / standardValue
+
+    return {
+      ok: true,
+      data: {
+        name: entry.attr.i18n?.['zh-hans']?.name ?? enName,
+        unit,
+        value: entry.value,
+        percent,
+        max: invertPercent ? standardValue * 0.9 : standardValue * 1.1,
+        min: invertPercent ? standardValue * 1.1 : standardValue * 0.9,
+      },
+    }
+  }
+
+  const firstStatName = parseResult.attributes[0]?.attr.i18n?.en?.name
+  if (!firstStatName) {
+    return failure('riven.statTypeError')
+  }
+
+  let rivenStatCountType: RivenStatCountType
+  if (parseResult.attributes.length === 4) {
+    rivenStatCountType = '31'
+  }
+  else if (parseResult.attributes.length === 2) {
+    rivenStatCountType = '2'
+  }
+  else {
     const firstStat = parseResult.attributes[0]
-    const firstStatBaseValue
-      = rivenAttrValueDict[weaponType][
-        normalizeName(firstStat.attr.i18n.en.name)
-      ]
+    const firstStatBaseValue = lookupBaseValue(firstStatName)
+    if (firstStatBaseValue === undefined) {
+      return failure('riven.statTypeError')
+    }
 
     // Use the lowest value of 2_1 type riven to check the first stat
-    if (firstStat.value >= firstStatBaseValue * 1.2375 * 0.9 * disposition) {
-      return '21'
-    }
-    else {
-      return '3'
-    }
-  })()
+    rivenStatCountType = firstStat.value
+      >= firstStatBaseValue * 1.2375 * 0.9 * disposition
+      ? '21'
+      : '3'
+  }
 
   const { buffFactor, buffCount, curseFactor, curseCount }
     = rivenStatFixFactor[rivenStatCountType]
 
   const buffs: RivenStatAnalyzsis[] = []
   for (let i = 0; i < buffCount; i++) {
-    const attr = parseResult.attributes[i]
-    const baseValue
-      = rivenAttrValueDict[weaponType][normalizeName(attr.attr.i18n.en.name)]
-    const value = attr.attr.unit === 'multiply' ? attr.value - 1 : attr.value
-    const standardValue = baseValue * buffFactor * disposition
-    const percent = (value - standardValue) / standardValue
-    buffs.push({
-      name: attr.attr.i18n['zh-hans'].name,
-      unit: attr.attr.unit,
-      value: attr.value,
-      percent,
-      max: standardValue * 1.1,
-      min: standardValue * 0.9,
-    })
+    const result = buildStat(parseResult.attributes[i], buffFactor, false)
+    if (!result.ok) {
+      return result
+    }
+    buffs.push(result.data)
   }
 
   const curses: RivenStatAnalyzsis[] = []
-  if (curseCount > 0) {
-    for (let i = buffCount; i < buffCount + curseCount; i++) {
-      const attr = parseResult.attributes[i]
-      const baseValue
-        = rivenAttrValueDict[weaponType][
-          normalizeName(attr.attr.i18n.en.name)
-        ]
-      const value = attr.attr.unit === 'multiply' ? attr.value - 1 : attr.value
-      const standardValue = baseValue * curseFactor * disposition
-      const percent = ((value - standardValue) / standardValue) * -1
-      curses.push({
-        name: attr.attr.i18n['zh-hans'].name,
-        unit: attr.attr.unit,
-        value: attr.value,
-        percent,
-        max: standardValue * 0.9,
-        min: standardValue * 1.1,
-      })
+  for (let i = buffCount; i < buffCount + curseCount; i++) {
+    const result = buildStat(parseResult.attributes[i], curseFactor, true)
+    if (!result.ok) {
+      return result
     }
+    curses.push(result.data)
   }
 
   return {
