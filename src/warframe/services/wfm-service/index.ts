@@ -90,7 +90,7 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
   const itemId = targetItem.slug
   const targetRank = isFullLevel ? targetItem.maxRank : targetItem.maxRank === undefined ? undefined : 0
   const [data, statsData] = await Promise.all([
-    wfmClient.items.getOrders(itemId),
+    wfmClient.orders.listByItem({ slug: itemId }),
     wfmClient.items.getStatistics(itemId),
   ])
 
@@ -102,7 +102,7 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
   const result = data
     .filter(
       order =>
-        order.user.status === 'ingame'
+        order.user?.status === 'ingame'
         && order.visible
         && order.type === 'sell'
         && (!isFullLevel || order.rank === targetItem.maxRank),

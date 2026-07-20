@@ -68,7 +68,7 @@ export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
   globalItemGameRefDict: Record<string, ItemShort>
   globalItemWordPrefixCandidates: GlobalItemWordPrefixCandidate[]
 }> {
-  response ??= await wfmClient.items.getList()
+  response ??= await wfmClient.items.list()
   if (!response) {
     return {
       globalItemList: [],
