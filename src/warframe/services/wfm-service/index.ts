@@ -276,14 +276,14 @@ export const primedModHistory = createAsyncCache(async () => {
         ? Math.round((lastThree.reduce((acc, e) => acc + e.median, 0) / lastThree.length) * 10) / 10
         : undefined
       result.push({
-        name: item.i18n['zh-hans']?.name,
+        name: item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name,
         last: mod.Last,
         plats: avg,
       })
     }
     else {
       result.push({
-        name: item.i18n['zh-hans']?.name,
+        name: item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name,
         last: mod.Last,
       })
     }

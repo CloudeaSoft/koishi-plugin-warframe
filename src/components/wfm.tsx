@@ -165,8 +165,8 @@ function ItemStatisticsComponent(stats: ItemStatisticsSummary): Element {
 }
 
 export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[], statistics?: ItemStatisticsSummary): Element {
-  const itemNameCN = item.i18n['zh-hans']?.name
-  const itemNameEN = item.i18n.en?.name
+  const itemNameCN = item.i18n?.['zh-hans']?.name
+  const itemNameEN = item.i18n?.en?.name
   return (
     <div style="display:flex;flex-direction:column;width:1600px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;border:1px solid var(--wf-border);box-shadow:var(--wf-shadow-card);color:var(--wf-text-body);">
       <style>
@@ -212,14 +212,14 @@ export function ItemOrderComponent(item: ItemShort, orders: OrderWithUser[], sta
         </tr>
         {orders.map(order => (
           <tr>
-            <td>{order.user.ingameName}</td>
-            <td>{order.user.status}</td>
+            <td>{order.user?.ingameName ?? '未知'}</td>
+            <td>{order.user?.status ?? '未知'}</td>
             <td style="color:var(--wf-platinum);font-weight:600;">{order.platinum}</td>
             <td>{order.quantity}</td>
             {item.maxRank && item.maxRank > 0
               ? <td>{order.rank}</td>
               : null}
-            <td>{order.user.reputation}</td>
+            <td>{order.user?.reputation ?? '未知'}</td>
           </tr>
         ))}
       </table>
@@ -402,15 +402,11 @@ function RivenOrderItemComponent(order: RivenOrderInternal, cnName?: string, enN
 
 function RivenAttributeComponent(attr: RivenAttributeShortInternal, index: number): Element {
   const attrInfo = attr.attribute
-  const attrName = attrInfo.i18n['zh-hans'].name
-  const attrValuePrefix = attrInfo.unit === 'multiply' ? 'x' : ''
-  const unitSuffixMap = {
-    percent: '%',
-    second: 's',
-    multiply: '',
-  }
-  const attrValueSuffix
-    = unitSuffixMap[attrInfo.unit as keyof typeof unitSuffixMap] || ''
+  const attrName
+    = attrInfo.i18n?.['zh-hans']?.name ?? attrInfo.i18n?.en?.name ?? attr.url_name
+  const unit = attrInfo.unit ?? ''
+  const attrValuePrefix = unit === 'multiply' ? 'x' : ''
+  const attrValueSuffix = unit === 'percent' ? '%' : unit === 'second' ? 's' : ''
   const attrValue = attrValuePrefix + attr.value + attrValueSuffix
   const positiveColors = ['#2e7d32', '#4a8c5a', '#6b9b78']
   const negativeColor = '#e05050'

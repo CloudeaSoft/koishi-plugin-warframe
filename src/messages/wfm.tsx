@@ -28,7 +28,7 @@ export function wmMessage(
 ): Element {
   const lines = orders.slice(0, 3)
     .map(order => '\n'
-      + `/w ${order.user.ingameName} Hi! I want to buy: "${item.i18n.en?.name}${!item.maxRank || item.maxRank === 0 ? '' : ` (rank ${order.rank})`}" for ${order.platinum} platinum. (warframe.market)`)
+      + `/w ${order.user?.ingameName ?? 'Unknown'} Hi! I want to buy: "${item.i18n?.en?.name ?? item.i18n?.['zh-hans']?.name ?? item.slug}${!item.maxRank || item.maxRank === 0 ? '' : ` (rank ${order.rank})`}" for ${order.platinum} platinum. (warframe.market)`)
   const statLine = statistics ? buildStatisticsTextLine(statistics) : ''
   return (
     <message>

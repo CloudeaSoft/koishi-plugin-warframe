@@ -6,7 +6,7 @@ export class WfmMemoryCache {
 
   constructor(private readonly maxSize: number) { }
 
-  get<T>(
+  async get<T>(
     key: string,
     ttlSeconds: number,
     factory: () => Promise<T>,
@@ -24,12 +24,12 @@ export class WfmMemoryCache {
       this.storage.delete(key)
     }
 
-    const promise = factory().catch((err) => {
+    const promise = factory().catch((error: unknown) => {
       const current = this.storage.get(key)
       if (current && current.promise === promise) {
         this.storage.delete(key)
       }
-      throw err
+      throw error
     })
 
     this.storage.set(key, {
@@ -38,10 +38,10 @@ export class WfmMemoryCache {
     })
 
     while (this.storage.size > this.maxSize) {
-      const oldest = this.storage.keys().next().value
-      if (oldest === undefined)
+      const oldest = this.storage.keys().next()
+      if (oldest.done)
         break
-      this.storage.delete(oldest)
+      this.storage.delete(oldest.value)
     }
 
     return promise

@@ -1,42 +1,18 @@
-import type {
-  ItemShort as WfmItemShort,
-  OrderWithUser as WfmOrderWithUser,
-  RivenAttribute as WfmRivenAttribute,
-  RivenAttributeI18N,
-  RivenOrder,
-  WFMLang,
-} from 'wfm-api-client'
+import type { RivenAttribute, RivenOrder } from 'wfm-api-client'
 
 export type {
   ClosedStatisticsEntry,
   Ducatnator,
+  ItemShort,
   LiveStatisticsEntry,
+  OrderWithUser,
+  RivenAttribute,
   RivenAttributeUnit,
   RivenItem,
   RivenOrder,
   StatisticsCollection,
   WFMLang,
 } from 'wfm-api-client'
-
-export type ItemShort = Omit<WfmItemShort, 'i18n'> & {
-  i18n: NonNullable<WfmItemShort['i18n']>
-}
-
-export type OrderWithUser = Omit<WfmOrderWithUser, 'user'> & {
-  user: NonNullable<WfmOrderWithUser['user']>
-}
-
-type RequiredRivenAttributeI18N = RivenAttributeI18N & {
-  name: string
-}
-
-export type RivenAttribute = Omit<WfmRivenAttribute, 'i18n' | 'unit'> & {
-  i18n: Partial<Record<WFMLang, RequiredRivenAttributeI18N>> & {
-    en: RequiredRivenAttributeI18N
-    'zh-hans': RequiredRivenAttributeI18N
-  }
-  unit: string
-}
 
 export interface PrimedModHistoryItem {
   name: string | undefined

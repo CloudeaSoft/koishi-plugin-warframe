@@ -89,11 +89,13 @@ export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
   const globalItemNameToSlugDict: Record<string, string> = ((list) => {
     const result: Record<string, string> = {}
     for (const item of list) {
-      if (item.i18n['zh-hans']?.name) {
-        result[normalizeName(item.i18n['zh-hans'].name)] = item.slug
+      const zhName = item.i18n?.['zh-hans']?.name
+      if (zhName) {
+        result[normalizeName(zhName)] = item.slug
       }
-      if (item.i18n.en?.name) {
-        result[normalizeName(item.i18n.en.name)] = item.slug
+      const enName = item.i18n?.en?.name
+      if (enName) {
+        result[normalizeName(enName)] = item.slug
       }
     }
     return result

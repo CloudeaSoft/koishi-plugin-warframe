@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { WfmMemoryCache } from '../../src/warframe/infrastructure/wfm-cache'
 
-describe('WfmMemoryCache', () => {
+describe('wfm memory cache', () => {
   it('reuses in-flight / cached promises within ttl', async () => {
     const cache = new WfmMemoryCache(16)
     let calls = 0

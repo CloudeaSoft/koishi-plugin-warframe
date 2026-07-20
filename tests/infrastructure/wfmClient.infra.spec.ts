@@ -1,5 +1,6 @@
 import type { WfmFetcher, WfmFetchInput, WfmFetchResult } from 'wfm-api-client'
 import { expect } from 'chai'
+import { ItemOrderComponent } from '../../src/components/wfm'
 import { createPluginWfmClient } from '../../src/warframe/infrastructure/wfm-client'
 
 function jsonResult(data: unknown, status = 200): WfmFetchResult {
@@ -70,5 +71,42 @@ describe('createPluginWfmClient', () => {
 
     await client.orders.listByItem({ slug: 'primed_flow' })
     expect(urls.some(url => url.includes('primed_flow'))).to.equal(true)
+  })
+
+  it('accepts item and order responses without optional market fields', async () => {
+    const fetcher: WfmFetcher = async (input) => {
+      if (input.url.includes('/orders/item/')) {
+        return jsonResult({
+          data: [{
+            id: 'order-1',
+            platinum: 10,
+            quantity: 1,
+            rank: 0,
+            type: 'sell',
+            visible: true,
+            updated_at: '2026-01-01T00:00:00.000Z',
+          }],
+        })
+      }
+
+      return jsonResult({
+        data: [{
+          id: 'item-1',
+          slug: 'primed_flow',
+          gameRef: '/Lotus/Upgrades/Mods/PrimedFlow',
+          tags: ['mod'],
+        }],
+      })
+    }
+    const client = createPluginWfmClient({
+      fetcher,
+      rateLimit: false,
+      cache: false,
+    })
+
+    const items = await client.items.list()
+    const orders = await client.orders.listByItem({ slug: 'primed_flow' })
+
+    expect(() => ItemOrderComponent(items![0]!, orders!)).not.to.throw()
   })
 })
