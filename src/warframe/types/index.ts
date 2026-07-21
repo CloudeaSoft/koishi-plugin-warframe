@@ -14,6 +14,18 @@ export type {
   WarframeResult,
 } from './warframe-result'
 export type { Arbitration, ArbitrationShort } from './wf/arbitration'
+export type {
+  BountyBoard,
+  BountyJob,
+  BountyLocation,
+  BountyReward,
+  BountyRewardRarity,
+  BountyStandingUnit,
+  OracleBountyCycle,
+  OracleBountyEntry,
+  RawSyndicateJob,
+  RawSyndicateMission,
+} from './wf/bounty'
 export type { Fissure } from './wf/fissure'
 export type { WFRegion, WFRegionShort } from './wf/region'
 export type {

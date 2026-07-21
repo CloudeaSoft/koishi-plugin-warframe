@@ -9,6 +9,8 @@ export const messages = {
 
   'arbitration.invalidDayRange': '天数需小于等于14且大于0',
 
+  'bounty.unavailable': '当前该地点暂无可用赏金',
+
   'voidTrader.drifting': '虚空商人仍在未知地带漂流...',
   'voidTrader.arriving': '距离虚空商人到达还有: {time}',
 

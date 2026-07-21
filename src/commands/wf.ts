@@ -2,6 +2,7 @@ import type { Argv, Dict } from 'koishi'
 import type { PluginDependencies } from '../types/config'
 import {
   ArbitrationComponent,
+  BountyComponent,
   CircuitComponent,
   FissureComponent,
   RelicComponent,
@@ -16,6 +17,7 @@ import {
   applyRelicData,
   getAnalyzedRiven,
   getArbitrations,
+  getBounty,
   getCircuitWeek,
   getEnvironment,
   getFissures,
@@ -46,8 +48,24 @@ export function createWfCommands(deps: PluginDependencies): {
   weeklyCommand: (_action: Argv) => Promise<string>
   weeklyRivenCommand: (_action: Argv, minPrice?: number) => Promise<string>
   environmentCommand: () => Promise<string>
+  bountyCetusCommand: () => Promise<string>
+  bountyFortunaCommand: () => Promise<string>
+  bountyDeimosCommand: () => Promise<string>
+  bountyZarimanCommand: () => Promise<string>
+  bountyCaviaCommand: () => Promise<string>
+  bountyHexCommand: () => Promise<string>
 } {
   const { config, render } = deps
+
+  const bountyCommand = async (
+    location: 'cetus' | 'fortuna' | 'deimos' | 'zariman' | 'cavia' | 'hex',
+  ): Promise<string> => {
+    const result = await getBounty(location)
+    if (!result.ok) {
+      return t(result)
+    }
+    return render(BountyComponent(result.data))
+  }
 
   return {
     arbitrationCommand: async (_action: Argv, input?: number) => {
@@ -188,5 +206,12 @@ export function createWfCommands(deps: PluginDependencies): {
     environmentCommand: async () => {
       return getEnvironment()
     },
+
+    bountyCetusCommand: async () => bountyCommand('cetus'),
+    bountyFortunaCommand: async () => bountyCommand('fortuna'),
+    bountyDeimosCommand: async () => bountyCommand('deimos'),
+    bountyZarimanCommand: async () => bountyCommand('zariman'),
+    bountyCaviaCommand: async () => bountyCommand('cavia'),
+    bountyHexCommand: async () => bountyCommand('hex'),
   }
 }

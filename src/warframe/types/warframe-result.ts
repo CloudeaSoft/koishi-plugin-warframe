@@ -4,6 +4,7 @@ export const warframeErrorCodes = [
   'relic.dataLoading',
   'relic.notFound',
   'arbitration.invalidDayRange',
+  'bounty.unavailable',
   'voidTrader.drifting',
   'voidTrader.arriving',
   'riven.imageFetchFailed',
