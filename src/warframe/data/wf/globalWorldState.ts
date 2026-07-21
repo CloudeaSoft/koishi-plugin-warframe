@@ -1,8 +1,12 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { Fissure } from '../../types'
+import type { Fissure, RawSyndicateMission } from '../../types'
 
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
-import { getWorldState } from '../../infrastructure/wf/wf-api'
+import {
+  extractSyndicateMissionsRaw,
+  fetchWorldStateJson,
+  getWorldState,
+} from '../../infrastructure/wf/wf-api'
 import { regionToShort } from '../../infrastructure/wf/wf-export-adapter'
 import {
   fissureTierName,
@@ -38,7 +42,13 @@ export async function adaptFissure(fissure: ParsedFissure): Promise<Fissure> {
 }
 
 export const globalWorldState = createAsyncCache(async () => {
-  const worldState = await getWorldState()
+  const json = await fetchWorldStateJson()
+  if (!json) {
+    throw new Error('获取游戏信息失败')
+  }
+
+  const syndicateMissionsRaw: RawSyndicateMission[] = extractSyndicateMissionsRaw(json)
+  const worldState = await getWorldState(json)
   const fissures: Fissure[] = []
   const rjFissures: Fissure[] = []
   const spFissures: Fissure[] = []
@@ -59,5 +69,11 @@ export const globalWorldState = createAsyncCache(async () => {
   fissures.sort((a, b) => a.tierNum - b.tierNum)
   spFissures.sort((a, b) => a.tierNum - b.tierNum)
   rjFissures.sort((a, b) => a.tierNum - b.tierNum)
-  return { raw: worldState, fissures, spFissures, rjFissures }
+  return {
+    raw: worldState,
+    syndicateMissionsRaw,
+    fissures,
+    spFissures,
+    rjFissures,
+  }
 }, -1)

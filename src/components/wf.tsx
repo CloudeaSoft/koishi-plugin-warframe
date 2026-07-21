@@ -4,6 +4,7 @@ import type {
   Arbitration,
   ArchiMedea,
   ArchonHunt,
+  BountyBoard,
   Fissure,
   OutputRelic,
   OutputRelicReward,
@@ -412,6 +413,140 @@ export function FissureComponent(fissures: Fissure[], type: 'fissure' | 'sp-fiss
       <div style="margin-top:30px;font-size:30px;color:var(--wf-text-muted);">
         注: 该功能的数据有一定延迟
       </div>
+    </div>
+  )
+}
+
+export function BountyComponent(board: BountyBoard): Element {
+  const timeLeft = board.expiry - Date.now()
+  const timeColor
+    = timeLeft > 3600000
+      ? 'var(--wf-success)'
+      : timeLeft > 600000
+        ? 'var(--wf-info)'
+        : 'var(--wf-danger)'
+
+  const rarityColor = {
+    bronze: 'var(--wf-rarity-common)',
+    silver: 'var(--wf-rarity-uncommon)',
+    gold: 'var(--wf-rarity-rare)',
+  } as const
+
+  const isOracle = board.source === 'oracle'
+  const metaParts: string[] = []
+  if (board.zarimanFaction) {
+    metaParts.push(`阵营 ${board.zarimanFaction}`)
+  }
+  if (board.rotation) {
+    metaParts.push(`轮换 ${board.rotation}`)
+  }
+  if (board.vaultRotation) {
+    metaParts.push(`隔离库 ${board.vaultRotation}`)
+  }
+
+  return (
+    <div
+      style="width:640px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <h1 style="font-size:22px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 8px 0;text-align:center;">
+        {board.title}
+      </h1>
+      <div style={`text-align:center;font-size:13px;margin-bottom:8px;color:${timeColor};`}>
+        剩余
+        {msToHumanReadable(Math.max(timeLeft, 0))}
+      </div>
+      {metaParts.length > 0
+        ? (
+            <div style="text-align:center;font-size:12px;color:var(--wf-text-secondary);margin-bottom:12px;">
+              {metaParts.join(' · ')}
+            </div>
+          )
+        : null}
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        {board.jobs.map((job) => {
+          const tags: string[] = []
+          if (job.isVault)
+            tags.push('隔离库')
+          if (job.isNarmer)
+            tags.push('合一众')
+          if (job.ally)
+            tags.push(job.ally)
+          const hasRewards = job.stages.some(stage => stage.length > 0)
+          const standingLabel = job.standingUnit === 'vq' ? 'VQ' : '声望'
+          const metaLine = [
+            `等级 ${job.enemyLevels[0]}-${job.enemyLevels[1]}`,
+            job.minMR > 0 ? `段位 ${job.minMR}+` : undefined,
+            job.standingStages.length > 0
+              ? `${standingLabel} ${job.standingStages.join('/')}`
+              : undefined,
+          ].filter(Boolean).join(' · ')
+
+          return (
+            <div
+              style="padding:10px 12px;background-color:var(--wf-bg-subtle);border-radius:var(--wf-radius-sm);border-left:3px solid var(--wf-accent);"
+            >
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                <span style="font-size:15px;font-weight:700;color:var(--wf-text-primary);">
+                  {job.name}
+                </span>
+                {tags.map(tag => (
+                  <span
+                    style="font-size:11px;color:var(--wf-accent);background-color:rgba(71,181,165,0.12);padding:1px 6px;border-radius:var(--wf-radius-sm);"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              {metaLine
+                ? (
+                    <div style="font-size:12px;color:var(--wf-text-secondary);margin-bottom:6px;">
+                      {metaLine}
+                    </div>
+                  )
+                : null}
+              {job.challenge
+                ? (
+                    <div style="font-size:12px;line-height:1.45;color:var(--wf-text-body);margin-bottom:4px;">
+                      {job.challenge}
+                    </div>
+                  )
+                : null}
+              {hasRewards
+                ? (
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                      {job.stages.map((stage, index) => (
+                        <div style="font-size:12px;line-height:1.45;">
+                          <span style="color:var(--wf-text-secondary);margin-right:6px;">
+                            {`阶段${index + 1}`}
+                          </span>
+                          {stage.map((reward, rewardIndex) => (
+                            <span>
+                              {rewardIndex > 0 ? '、' : ''}
+                              <span style={`color:${rarityColor[reward.rarity]};`}>
+                                {reward.name}
+                              </span>
+                            </span>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )
+                : (!isOracle
+                    ? (
+                        <div style="font-size:12px;color:var(--wf-text-body);">奖励未知</div>
+                      )
+                    : null)}
+            </div>
+          )
+        })}
+      </div>
+      {isOracle
+        ? (
+            <div style="margin-top:12px;font-size:11px;color:var(--wf-text-muted);text-align:right;">
+              数据来源: browse.wf
+            </div>
+          )
+        : null}
     </div>
   )
 }

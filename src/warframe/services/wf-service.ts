@@ -6,6 +6,8 @@ import type {
   ArchiMedeaDebuff,
   ArchiMedeaMission,
   ArchonHunt,
+  BountyBoard,
+  BountyLocation,
   Fissure,
   OcrAPISecret,
   Relic,
@@ -33,6 +35,7 @@ import {
   warframes as warframeRewards,
 } from '../assets/index'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
+import { globalOracleBountyCycle } from '../data/wf/globalOracleBountyCycle'
 import { globalWorldState } from '../data/wf/globalWorldState'
 import { relics } from '../data/wf/relics'
 import { rivenAttrValueDict } from '../data/wf/rivenBaseValues'
@@ -41,6 +44,12 @@ import { rivenStatFixFactor } from '../data/wf/rivenStatData'
 import { globalRivenAttribute } from '../data/wfm/globalRivenAttribute'
 import { globalRivenItemData } from '../data/wfm/globalRivenItem'
 import { extractTextFromImage } from '../infrastructure/ocr-api'
+import {
+  adaptBountyBoard,
+  adaptOracleBountyBoard,
+  findRawSyndicateMission,
+  oracleBountyLocations,
+} from '../infrastructure/wf/bounty-adapter'
 import { regionToShort } from '../infrastructure/wf/wf-export-adapter'
 import {
   getMissionTypeKey,
@@ -301,6 +310,43 @@ export async function getEnvironment(): Promise<string> {
   const zariman = `扎里曼号: ${zarimanFaction} ${worldState.zarimanCycle.timeLeft}`
 
   return `当前环境:\n${cetus}\n${vallis}\n${cambion}\n${duviri}\n${zariman}`
+}
+
+export async function getBounty(
+  location: BountyLocation,
+): Promise<WarframeResult<BountyBoard>> {
+  if (oracleBountyLocations.has(location)) {
+    const cycle = await globalOracleBountyCycle.get()
+    if (!cycle) {
+      return failure('common.fetchFailed', true)
+    }
+
+    const board = adaptOracleBountyBoard(
+      location as 'zariman' | 'cavia' | 'hex',
+      cycle,
+    )
+    if (!board) {
+      return failure('bounty.unavailable')
+    }
+    return { ok: true, data: board }
+  }
+
+  const { syndicateMissionsRaw } = await globalWorldState.get()
+  if (!syndicateMissionsRaw) {
+    return failure('common.fetchFailed', true)
+  }
+
+  const mission = findRawSyndicateMission(syndicateMissionsRaw, location)
+  if (!mission) {
+    return failure('common.fetchFailed', true)
+  }
+
+  const board = adaptBountyBoard(location, mission)
+  if (!board) {
+    return failure('bounty.unavailable')
+  }
+
+  return { ok: true, data: board }
 }
 
 export function getCircuitWeek(): {

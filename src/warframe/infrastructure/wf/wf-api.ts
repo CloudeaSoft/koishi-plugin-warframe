@@ -1,13 +1,34 @@
 import type WorldState from 'warframe-worldstate-parser'
+import type { OracleBountyCycle, RawSyndicateMission } from '../../types'
 
 import { Baro } from '../../assets/index'
-import { fetchAsyncText } from '../../utils'
+import { fetchAsyncData, fetchAsyncText } from '../../utils'
 
 const apiBase = 'https://api.warframe.com/cdn/'
+const oracleBountyCycleUrl = 'https://oracle.browse.wf/bounty-cycle'
+
+export function extractSyndicateMissionsRaw(json: string): RawSyndicateMission[] {
+  try {
+    const data = JSON.parse(json) as { SyndicateMissions?: RawSyndicateMission[] }
+    return Array.isArray(data.SyndicateMissions) ? data.SyndicateMissions : []
+  }
+  catch {
+    return []
+  }
+}
+
+export async function fetchWorldStateJson(): Promise<string | undefined> {
+  return fetchAsyncText(`${apiBase}worldState.php`)
+}
+
+/** browse.wf Oracle bounty cycle (Zariman / Cavia / Hex). */
+export async function fetchOracleBountyCycle(): Promise<OracleBountyCycle | undefined> {
+  return fetchAsyncData<OracleBountyCycle>(oracleBountyCycleUrl)
+}
 
 export async function getWorldState(json?: string): Promise<WorldState> {
   if (!json) {
-    json = await fetchAsyncText(`${apiBase}worldState.php`)
+    json = await fetchWorldStateJson()
   }
 
   if (!json) {

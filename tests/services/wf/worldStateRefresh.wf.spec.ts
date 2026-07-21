@@ -22,6 +22,7 @@ function snapshot(raw: Partial<WorldState>): WorldStateSnapshot {
     fissures: [],
     spFissures: [],
     rjFissures: [],
+    syndicateMissionsRaw: [],
   }
 }
 
