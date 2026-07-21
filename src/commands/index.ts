@@ -63,6 +63,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('希图斯')
     .alias('希图斯赏金')
     .alias('赏金希图斯')
+    .alias('地球赏金')
     .alias('cetus')
     .alias('ostron')
     .action(wf.bountyCetusCommand)
@@ -71,6 +72,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('福尔图娜')
     .alias('福尔图娜赏金')
     .alias('赏金福尔图娜')
+    .alias('金星赏金')
     .alias('fortuna')
     .alias('solaris')
     .action(wf.bountyFortunaCommand)
@@ -101,6 +103,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('六人组')
     .alias('六人组赏金')
     .alias('赏金六人组')
+    .alias('1999赏金')
     .alias('hex')
     .action(wf.bountyHexCommand)
   ctx
