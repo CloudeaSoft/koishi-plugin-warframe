@@ -202,11 +202,13 @@ export async function applyRelicData(relic: Relic): Promise<OutputRelic> {
       )
       const quantityPrefix
         = element.quantity > 1 ? `${element.quantity} X ` : ''
+      const isFormaBlueprint
+        = element.name === '/Lotus/Types/Recipes/Components/FormaBlueprint'
       return {
         ...element,
         name: quantityPrefix + name,
-        ducats: undefined,
-        platinum: undefined,
+        ducats: isFormaBlueprint ? null : undefined,
+        platinum: isFormaBlueprint ? null : undefined,
       }
     }
 

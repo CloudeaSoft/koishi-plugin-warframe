@@ -37,6 +37,11 @@ const baseRelic: Relic = {
       rarity: 'RARE',
       quantity: 1,
     },
+    {
+      name: '/Lotus/Types/Recipes/Components/FormaBlueprint',
+      rarity: 'COMMON',
+      quantity: 1,
+    },
   ],
 }
 
@@ -80,6 +85,14 @@ describe('applyRelicData', () => {
 
     expect(unknown?.ducats).to.equal(undefined)
     expect(unknown?.platinum).to.equal(undefined)
+  })
+
+  it('marks ordinary Forma blueprint prices as not applicable', async () => {
+    const result = await applyRelicData(baseRelic)
+    const forma = result.items.find(i => i.name === 'Forma 蓝图')
+
+    expect(forma?.ducats).to.equal(null)
+    expect(forma?.platinum).to.equal(null)
   })
 
   it('uses undefined platinum when ducatnator data is missing', async () => {
