@@ -24,10 +24,15 @@ function renderReward(
 describe('relic component price rendering', () => {
   it('omits prices and icons when they are not applicable', () => {
     const output = renderReward(null, null)
+    const rewardRow = output.slice(
+      output.indexOf('Forma 蓝图'),
+      output.indexOf('25/23/20/17%') + '25/23/20/17%'.length,
+    )
 
     expect(output).to.not.include('??')
     expect(output).to.not.include('#icon-platinum')
     expect(output).to.not.include('#icon-ducats')
+    expect(rewardRow).to.not.include('false')
     expect(output).to.include('25/23/20/17%')
   })
 
