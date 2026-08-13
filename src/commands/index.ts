@@ -17,7 +17,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .command('wmr <item-name:text>', '查询wm的紫卡价格')
     .action(wfm.wmrCommand)
   ctx.command('wmi <item-name:text>', '查询wm的物品价格').action(wfm.wmCommand)
-  ctx.command('wmu', '更新wm缓存数据').action(wfm.wmuCommand)
+  ctx.command('wmu', '更新wm缓存数据', { hidden: true }).action(wfm.wmuCommand)
 
   ctx
     .command('arbitration [day:number]', '近期高价值仲裁任务')
