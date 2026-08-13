@@ -88,7 +88,7 @@
     "@typescript-eslint/parser": "^8.62.0",
     "@vitest/coverage-v8": "4.1.10",
     "chai": "^6.2.2",
-    "conventional-changelog-conventionalcommits": "^10.2.1",
+    "conventional-changelog-conventionalcommits": "^10.3.0",
     "esbuild": "^0.28.1",
     "eslint": "^10.7.0",
     "globals": "^17.7.0",
