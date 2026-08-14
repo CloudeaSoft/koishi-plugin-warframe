@@ -6,15 +6,35 @@ This document describes how to set up your environment, follow project conventio
 
 ## Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [Development Environment](#development-environment)
-- [Project Structure](#project-structure)
-- [Code Conventions](#code-conventions)
-- [Testing](#testing)
-- [Commit Message Convention](#commit-message-convention)
-- [Pull Request Process](#pull-request-process)
-- [Reporting Issues](#reporting-issues)
-- [License](#license)
+- [Contributing to koishi-plugin-warframe](#contributing-to-koishi-plugin-warframe)
+  - [Table of Contents](#table-of-contents)
+  - [Code of Conduct](#code-of-conduct)
+  - [Development Environment](#development-environment)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [VS Code TypeScript Version](#vs-code-typescript-version)
+    - [Common Commands](#common-commands)
+  - [Project Structure](#project-structure)
+  - [Code Conventions](#code-conventions)
+    - [Logging](#logging)
+    - [HTTP Requests](#http-requests)
+    - [Error Handling](#error-handling)
+    - [TypeScript](#typescript)
+    - [File Placement](#file-placement)
+  - [Testing](#testing)
+    - [Running Tests](#running-tests)
+    - [Writing Tests](#writing-tests)
+    - [⚠️ Test Isolation (Critical)](#️-test-isolation-critical)
+  - [Commit Message Convention](#commit-message-convention)
+    - [Types](#types)
+    - [Scopes](#scopes)
+    - [Examples](#examples)
+  - [Pull Request Process](#pull-request-process)
+    - [Before Submitting](#before-submitting)
+    - [Submitting](#submitting)
+    - [Review Criteria](#review-criteria)
+  - [Reporting Issues](#reporting-issues)
+  - [License](#license)
 
 ---
 
@@ -241,7 +261,6 @@ feat(wfm): add pmodhistory command
 fix(wf): resolve possible runtime error, remove unused dependencies
 refactor: re-organize utils folder
 docs(readme): add new command descriptions
-chore(release): 1.5.1 [skip ci]
 ```
 
 If your change relates to an issue or PR, reference it in the description or body:
@@ -271,11 +290,9 @@ fix(wf): new incarnon genesis (#42)
    yarn build   # build must succeed
    ```
 
-3. **Follow code conventions** — see [AGENTS.md](./AGENTS.md) and [docs/architecture.md](./docs/architecture.md). Respect the layer dependency rules; do not introduce imports that violate the one-directional flow.
+3. **Write tests** for new features or bug fixes. Use the Factory+Override pattern to inject fixture data and avoid live network calls in unit tests. Place `before()`/`after()` hooks inside `describe()` blocks.
 
-4. **Write tests** for new features or bug fixes. Use the Factory+Override pattern to inject fixture data and avoid live network calls in unit tests. Place `before()`/`after()` hooks inside `describe()` blocks.
-
-5. **Commit using Conventional Commits** (see above). Keep commits focused — one logical change per commit is ideal.
+4. **Commit using Conventional Commits** (see above). Keep commits focused — one logical change per commit is ideal.
 
 ### Submitting
 

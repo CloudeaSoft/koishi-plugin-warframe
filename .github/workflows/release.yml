@@ -27,8 +27,6 @@ jobs:
       - run: yarn dtsc
       - run: yarn add @semantic-release/commit-analyzer
       - run: yarn add @semantic-release/release-notes-generator
-      - run: yarn add @semantic-release/changelog
-      - run: yarn add @semantic-release/git
       - run: yarn add @semantic-release/github
       - run: yarn add @semantic-release/npm
       - run: yarn add conventional-changelog-conventionalcommits

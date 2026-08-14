@@ -74,6 +74,10 @@ Search `koishi-plugin-warframe` in Koishi dependency manager (not plugin market)
 
 It is recommended to set the npm registry to `https://registry.npmjs.com` before installing, because the dependency `warframe-public-export-plus` is unavailable on some mirrors.
 
+## Changelog
+
+Release notes for every version are published on the [GitHub Releases page](https://github.com/CloudeaSoft/koishi-plugin-warframe/releases).
+
 ## Develop
 
 ### Step 1: Setup koishi development environment
