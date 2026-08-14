@@ -32,7 +32,7 @@ export function wmMessage(
       + `/w ${order.user?.ingameName ?? 'Unknown'} Hi! I want to buy: "${item.i18n?.en?.name ?? item.i18n?.['zh-hans']?.name ?? item.slug}${!item.maxRank || item.maxRank === 0 ? '' : ` (rank ${order.rank})`}" for ${order.platinum} platinum. (warframe.market)`)
     : []
   const statLine = statistics ? buildStatisticsTextLine(statistics) : ''
-  const text = `${statLine ? `\n${statLine}\n` : ''}${lines.join('')}`
+  const text = `${statLine ? `\n${statLine}` : ''}${lines.join('')}`
   if (!text) {
     return img
   }

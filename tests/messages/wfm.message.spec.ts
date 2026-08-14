@@ -79,6 +79,20 @@ describe('wm messages', () => {
     expect(output).to.include('成交12笔')
   })
 
+  it('does not leave a trailing blank line on wm output', () => {
+    const output = wmMessage(
+      img,
+      item(),
+      [order('SellerOne', 50), order('SellerTwo', 55)],
+      statistics,
+      false,
+    ).toString()
+
+    expect(output).to.equal(
+      '<message><img src="data:image/png;base64,test"/><div>\n近3天均价 100p | ↑7天95p | 成交12笔</div></message>',
+    )
+  })
+
   it('returns the image unchanged when there is no statistics text and no whispers', () => {
     expect(wmMessage(img, item(), [order('SellerOne', 50)], undefined, false)).to.equal(img)
   })
