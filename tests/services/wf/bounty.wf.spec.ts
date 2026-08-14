@@ -5,6 +5,10 @@ import type {
 import { expect } from 'chai'
 import { dict_zh, ExportBounties } from 'warframe-public-export-plus'
 import {
+  globalOracleBountyCycle,
+  overrideGlobalOracleBountyCycle,
+} from '../../../src/warframe/data/wf/globalOracleBountyCycle'
+import {
   adaptBountyBoard,
   adaptOracleBountyBoard,
   bountyLocationTag,
@@ -12,8 +16,12 @@ import {
   rarityFromStageProbabilities,
   resolveExportItemNameZh,
 } from '../../../src/warframe/infrastructure/wf/bounty-adapter'
+import { getBounty } from '../../../src/warframe/services'
+import { createAsyncCache } from '../../../src/warframe/utils'
 import oracleCycleJSON from '../../assets/example-oracle-bounty-cycle.json'
 import worldStateJSON from '../../assets/example-world-state.json'
+
+const originalOracleBountyCycle = globalOracleBountyCycle
 
 function missionByTag(tag: string): RawSyndicateMission {
   const mission = (worldStateJSON.SyndicateMissions as RawSyndicateMission[])
@@ -21,6 +29,58 @@ function missionByTag(tag: string): RawSyndicateMission {
   expect(mission, `missing SyndicateMissions entry ${tag}`).to.not.equal(undefined)
   return mission!
 }
+
+function stubOracleCycle(cycle: OracleBountyCycle | undefined): void {
+  overrideGlobalOracleBountyCycle(
+    createAsyncCache<OracleBountyCycle | undefined>(async () => cycle, -1),
+  )
+}
+
+describe('bounty service', () => {
+  afterEach(() => {
+    overrideGlobalOracleBountyCycle(originalOracleBountyCycle)
+  })
+
+  it('routes Oracle-backed locations through the Oracle cycle cache', async () => {
+    stubOracleCycle(oracleCycleJSON as OracleBountyCycle)
+
+    const result = await getBounty('zariman')
+
+    expect(result.ok).to.equal(true)
+    if (result.ok) {
+      expect(result.data.location).to.equal('zariman')
+      expect(result.data.source).to.equal('oracle')
+      expect(result.data.jobs).to.have.length(5)
+    }
+  })
+
+  it('reports Oracle fetch failures as retryable', async () => {
+    stubOracleCycle(undefined)
+
+    expect(await getBounty('cavia')).to.deep.equal({
+      ok: false,
+      error: {
+        code: 'common.fetchFailed',
+        retryable: true,
+      },
+    })
+  })
+
+  it('distinguishes a missing Oracle board from a fetch failure', async () => {
+    stubOracleCycle({
+      ...(oracleCycleJSON as OracleBountyCycle),
+      bounties: {},
+    })
+
+    expect(await getBounty('hex')).to.deep.equal({
+      ok: false,
+      error: {
+        code: 'bounty.unavailable',
+        retryable: false,
+      },
+    })
+  })
+})
 
 describe('bounty adapter', () => {
   it('resolves arcane store items via ExportArcanes', () => {
