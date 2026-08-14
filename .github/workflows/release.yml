@@ -5,9 +5,22 @@ on:
     branches:
       - master
 
+# A newer master release supersedes an older queued run, but does not cancel
+# an in-progress publish.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
+  build-and-test:
+    name: Build and Test
+    uses: ./.github/workflows/build-and-test.yml
+    permissions:
+      contents: read
+
   release:
     name: Release
+    needs: build-and-test
     runs-on: ubuntu-latest
     permissions:
       id-token: write
