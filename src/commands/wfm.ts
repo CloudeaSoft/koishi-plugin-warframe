@@ -17,26 +17,39 @@ import {
 
 export function createWfmCommands(deps: PluginDependencies): {
   wmCommand: (_action: Argv, input: string) => Promise<Element | string>
+  wmiCommand: (_action: Argv, input: string) => Promise<Element | string>
   wmrCommand: (_action: Argv, input: string) => Promise<string>
   wmuCommand: (_action: Argv, _input: string) => Promise<string>
   pmodhistoryCommand: (_action: Argv, _input: string) => Promise<string>
 } {
   const { render } = deps
 
+  async function itemOrdersCommand(
+    _action: Argv,
+    input: string,
+    includeWhispers: boolean,
+  ): Promise<Element | string> {
+    const result = await getItemOrders(input)
+    if (!result.ok) {
+      return t(result)
+    }
+
+    if (!_action.session?.app.puppeteer) {
+      return render(ItemOrderComponent(result.data.item, result.data.orders, result.data.statistics))
+    }
+
+    const component = await generateImageElementOutput(_action.session?.app.puppeteer, ItemOrderComponent(result.data.item, result.data.orders, result.data.statistics))
+
+    return wmMessage(component, result.data.item, result.data.orders, result.data.statistics, includeWhispers)
+  }
+
   return {
     wmCommand: async (_action: Argv, input: string) => {
-      const result = await getItemOrders(input)
-      if (!result.ok) {
-        return t(result)
-      }
+      return itemOrdersCommand(_action, input, false)
+    },
 
-      if (!_action.session?.app.puppeteer) {
-        return render(ItemOrderComponent(result.data.item, result.data.orders, result.data.statistics))
-      }
-
-      const component = await generateImageElementOutput(_action.session?.app.puppeteer, ItemOrderComponent(result.data.item, result.data.orders, result.data.statistics))
-
-      return wmMessage(component, result.data.item, result.data.orders, result.data.statistics)
+    wmiCommand: async (_action: Argv, input: string) => {
+      return itemOrdersCommand(_action, input, true)
     },
 
     wmrCommand: async (_action: Argv, input: string) => {

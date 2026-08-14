@@ -24,18 +24,23 @@ export function wmMessage(
   img: Element,
   item: ItemShort,
   orders: OrderWithUser[],
-  statistics?: ItemStatisticsSummary,
+  statistics: ItemStatisticsSummary | undefined,
+  includeWhispers: boolean,
 ): Element {
-  const lines = orders.slice(0, 3)
-    .map(order => '\n'
+  const lines = includeWhispers
+    ? orders.slice(0, 3).map(order => '\n'
       + `/w ${order.user?.ingameName ?? 'Unknown'} Hi! I want to buy: "${item.i18n?.en?.name ?? item.i18n?.['zh-hans']?.name ?? item.slug}${!item.maxRank || item.maxRank === 0 ? '' : ` (rank ${order.rank})`}" for ${order.platinum} platinum. (warframe.market)`)
+    : []
   const statLine = statistics ? buildStatisticsTextLine(statistics) : ''
+  const text = `${statLine ? `\n${statLine}\n` : ''}${lines.join('')}`
+  if (!text) {
+    return img
+  }
   return (
     <message>
       {img}
       <div>
-        {statLine ? `\n${statLine}\n` : ''}
-        {lines.join('')}
+        {text}
       </div>
     </message>
   )
