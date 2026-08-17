@@ -2,9 +2,9 @@ import { expect } from 'chai'
 
 import {
   buildSuffixVariantCandidates,
+  matchByArcaneShorthand,
   normalizeWordPrefixName,
   removeNameSuffix,
-  reorderArcanePrefix,
   splitWordPrefixTokens,
   transformByWarframeAlias,
 } from '../../../src/warframe/services/wfm-service/wfm-service.item-matcher'
@@ -108,38 +108,46 @@ describe('wfm-item-matcher helpers', () => {
     }
   })
 
-  describe('reorderArcanePrefix', () => {
-    const reorderCases = [
-      { input: '壁垒赋能', output: '赋能壁垒' },
-      { input: '活力魔导', output: '魔导活力' },
-      { input: '打击正直', output: '正直打击' },
-      { input: '勇猛神威', output: '神威勇猛' },
-      { input: '活力蜕化', output: '蜕化活力' },
-      { input: '无情主要', output: '主要无情' },
-      { input: '无情次要', output: '次要无情' },
-      { input: '侵染近战', output: '近战侵染' },
-      { input: '利矢弓箭', output: '弓箭利矢' },
-    ]
-
-    for (const testCase of reorderCases) {
-      it(`reorders ${testCase.input} -> ${testCase.output}`, () => {
-        expect(reorderArcanePrefix(testCase.input)).to.equal(testCase.output)
+  describe('arcane shorthand candidate ordering', () => {
+    it('breaks equal display-name ties by slug', () => {
+      const result = matchByArcaneShorthand('同名', {
+        globalItemDict: {},
+        globalItemNameToSlugDict: {},
+        globalItemArcaneShorthandDict: {
+          同名: [
+            {
+              id: 'zulu',
+              slug: 'arcane_zulu',
+              gameRef: '/Arcane/Zulu',
+              i18n: { 'zh-hans': { name: '主要·同名' } },
+            },
+            {
+              id: 'alpha',
+              slug: 'arcane_alpha',
+              gameRef: '/Arcane/Alpha',
+              i18n: { 'zh-hans': { name: '主要·同名' } },
+            },
+          ],
+        },
       })
-    }
 
-    const noReorderCases = [
-      '赋能壁垒',
-      '魔导活力',
-      '赋能',
-      '主要',
-      '壁垒',
-      '',
-    ]
-
-    for (const input of noReorderCases) {
-      it(`does not reorder ${input || '(empty)'}`, () => {
-        expect(reorderArcanePrefix(input)).to.equal(undefined)
+      expect(result).to.deep.equal({
+        type: 'ambiguous',
+        candidates: [
+          {
+            id: 'alpha',
+            slug: 'arcane_alpha',
+            gameRef: '/Arcane/Alpha',
+            i18n: { 'zh-hans': { name: '主要·同名' } },
+          },
+          {
+            id: 'zulu',
+            slug: 'arcane_zulu',
+            gameRef: '/Arcane/Zulu',
+            i18n: { 'zh-hans': { name: '主要·同名' } },
+          },
+        ],
       })
-    }
+    })
   })
 })

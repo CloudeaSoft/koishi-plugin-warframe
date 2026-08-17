@@ -15,6 +15,7 @@ export const warframeErrorCodes = [
   'riven.statTypeError',
   'wfm.inputItemName',
   'wfm.itemNotFound',
+  'wfm.itemAmbiguous',
   'wfm.orderFetchFailed',
   'wfm.noOnlineSeller',
   'wfm.rivenWeaponNotFound',

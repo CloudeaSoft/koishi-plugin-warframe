@@ -5,17 +5,42 @@ import {
   globalItemDataFactory,
   overrideGlobalItemData,
 } from '../../../src/warframe/data/wfm/globalItem'
-import { stringToWFMItem } from '../../../src/warframe/services'
+import { wfmClient } from '../../../src/warframe/infrastructure/wfm-client'
+import { matchWFMItem, stringToWFMItem } from '../../../src/warframe/services'
+import { getItemOrders } from '../../../src/warframe/services/wfm-service'
 import { createAsyncCache } from '../../../src/warframe/utils'
 import testItems from '../../assets/test-items.json'
 
+const fixtureItems = testItems.data as ItemShort[]
+
+function overrideItemData(items: ItemShort[] = fixtureItems): void {
+  overrideGlobalItemData(
+    createAsyncCache(async () => {
+      return await globalItemDataFactory(items)
+    }, -1),
+  )
+}
+
+function getItemsWithMercilessCandidatesInReverseDisplayOrder(): ItemShort[] {
+  const mercilessSlugs = ['primary_merciless', 'secondary_merciless']
+  const itemBySlug = new Map(fixtureItems.map(item => [item.slug, item]))
+  const mercilessItems = mercilessSlugs.map((slug) => {
+    const item = itemBySlug.get(slug)
+    if (!item) {
+      throw new Error(`Missing ${slug} from item fixture`)
+    }
+    return item
+  })
+
+  return [
+    ...fixtureItems.filter(item => !mercilessSlugs.includes(item.slug)),
+    ...mercilessItems,
+  ]
+}
+
 describe('wfm-service.inputToItem', () => {
   beforeAll(() => {
-    overrideGlobalItemData(
-      createAsyncCache(async () => {
-        return await globalItemDataFactory(testItems.data as ItemShort[])
-      }, -1),
-    )
+    overrideItemData()
   })
 
   async function expectItemSlug(
@@ -143,6 +168,13 @@ describe('wfm-service.inputToItem', () => {
     { input: '无情次要', slug: 'secondary_merciless' },
     { input: '侵染近战', slug: 'melee_influence' },
     { input: '利矢弓箭', slug: 'longbow_sharpshot' },
+    { input: '耀炎瀑流', slug: 'cascadia_flare' },
+  ]
+
+  const arcaneCategoryFreeCases = [
+    { input: '壁垒', slug: 'arcane_barrier' },
+    { input: '充沛', slug: 'arcane_energize' },
+    { input: '耀炎', slug: 'cascadia_flare' },
   ]
 
   describe('exact matches', () => {
@@ -209,6 +241,45 @@ describe('wfm-service.inputToItem', () => {
     }
   })
 
+  describe('category-free arcane matches', () => {
+    for (const testCase of arcaneCategoryFreeCases) {
+      it(`matches ${testCase.input}`, async () => {
+        await expectItemSlug(testCase.input, testCase.slug)
+      })
+    }
+  })
+
+  describe('ambiguous category-free arcane matches', () => {
+    it('orders candidates independently from the source list', async () => {
+      overrideItemData(getItemsWithMercilessCandidatesInReverseDisplayOrder())
+
+      try {
+        const result = await matchWFMItem('无情')
+        expect(result.type).to.equal('ambiguous')
+        if (result.type === 'ambiguous') {
+          expect(result.candidates.map(item => item.slug)).to.deep.equal([
+            'primary_merciless',
+            'secondary_merciless',
+          ])
+        }
+      }
+      finally {
+        overrideItemData()
+      }
+    })
+  })
+
+  describe('exact item name priority', () => {
+    it('matches 活力 as the exact item', async () => {
+      const result = await matchWFMItem('活力')
+
+      expect(result.type).to.equal('matched')
+      if (result.type === 'matched') {
+        expect(result.item.slug).to.equal('vigor')
+      }
+    })
+  })
+
   describe('unmatched inputs', () => {
     const cases = [
       'abc',
@@ -227,6 +298,83 @@ describe('wfm-service.inputToItem', () => {
       it(`returns undefined for ${input}`, async () => {
         await expectItemSlug(input)
       })
+    }
+  })
+})
+
+describe('ambiguous wm item input', () => {
+  it('returns deterministically ordered candidates without requesting market data', async () => {
+    const originalListByItem = wfmClient.orders.listByItem
+    const originalGetStatistics = wfmClient.items.getStatistics
+    let marketRequestCount = 0
+
+    wfmClient.orders.listByItem = async () => {
+      marketRequestCount += 1
+      return []
+    }
+    wfmClient.items.getStatistics = async () => {
+      marketRequestCount += 1
+      return undefined
+    }
+
+    try {
+      overrideItemData(getItemsWithMercilessCandidatesInReverseDisplayOrder())
+      const result = await getItemOrders('无情')
+
+      expect(result).to.deep.equal({
+        ok: false,
+        error: {
+          code: 'wfm.itemAmbiguous',
+          retryable: false,
+          params: {
+            input: '无情',
+            candidates: '主要·无情、次要·无情',
+          },
+        },
+      })
+      expect(marketRequestCount).to.equal(0)
+    }
+    finally {
+      wfmClient.orders.listByItem = originalListByItem
+      wfmClient.items.getStatistics = originalGetStatistics
+      overrideItemData()
+    }
+  })
+})
+
+describe('missing wm item input', () => {
+  it('returns itemNotFound without requesting market data', async () => {
+    const originalListByItem = wfmClient.orders.listByItem
+    const originalGetStatistics = wfmClient.items.getStatistics
+    let marketRequestCount = 0
+
+    wfmClient.orders.listByItem = async () => {
+      marketRequestCount += 1
+      return []
+    }
+    wfmClient.items.getStatistics = async () => {
+      marketRequestCount += 1
+      return undefined
+    }
+
+    try {
+      overrideItemData()
+      const result = await getItemOrders('unrelated missing item')
+
+      expect(result).to.deep.equal({
+        ok: false,
+        error: {
+          code: 'wfm.itemNotFound',
+          retryable: false,
+          params: { input: 'unrelated missing item' },
+        },
+      })
+      expect(marketRequestCount).to.equal(0)
+    }
+    finally {
+      wfmClient.orders.listByItem = originalListByItem
+      wfmClient.items.getStatistics = originalGetStatistics
+      overrideItemData()
     }
   })
 })

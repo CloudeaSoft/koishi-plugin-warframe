@@ -11,6 +11,7 @@ import type {
   RivenOrderInternal,
   WarframeResult,
 } from '../../types'
+import type { WFMItemMatchResult } from './wfm-service.item-matcher'
 import { dict_zh } from 'warframe-public-export-plus'
 
 import { globalDucatnatorIDDict } from '../../data/wfm/globalDucatnator'
@@ -27,11 +28,12 @@ import {
   pascalToSpaced,
   toTimeStamp,
 } from '../../utils'
-import { stringToWFMItem } from './wfm-service.item-matcher'
+import { matchWFMItem, stringToWFMItem } from './wfm-service.item-matcher'
 import { findRivenItemByName } from './wfm-service.riven-item-matcher'
 import { computeItemStatistics } from './wfm-service.statistics'
 
-export { stringToWFMItem }
+export { matchWFMItem, stringToWFMItem }
+export type { WFMItemMatchResult }
 
 // ================ features ===================
 export async function updateCache(): Promise<string> {
@@ -81,10 +83,17 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
   }
 
   // 2. Search item
-  const targetItem = await stringToWFMItem(input)
-  if (!targetItem) {
+  const itemMatch = await matchWFMItem(input)
+  if (itemMatch.type === 'ambiguous') {
+    const candidates = itemMatch.candidates
+      .map(item => item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name ?? item.slug)
+      .join('、')
+    return failure('wfm.itemAmbiguous', false, { input, candidates })
+  }
+  if (itemMatch.type === 'not-found') {
     return failure('wfm.itemNotFound', false, { input })
   }
+  const targetItem = itemMatch.item
 
   // 3. Fetch orders and statistics in parallel
   const itemId = targetItem.slug

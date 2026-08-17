@@ -27,6 +27,7 @@ export const messages = {
 
   'wfm.inputItemName': '请输入物品名称',
   'wfm.itemNotFound': '未找到物品: {input}',
+  'wfm.itemAmbiguous': '物品名称“{input}”存在歧义，请补充类别：{candidates}',
   'wfm.orderFetchFailed': '订单获取失败，请稍后重试',
   'wfm.noOnlineSeller': '当前没有在线游戏中的卖家',
   'wfm.rivenWeaponNotFound': '未找到紫卡武器: {input}',
