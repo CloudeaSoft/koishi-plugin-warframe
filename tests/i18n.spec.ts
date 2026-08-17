@@ -26,6 +26,22 @@ describe('i18n', () => {
     ).to.equal('未找到物品: test-item')
   })
 
+  it('renders ambiguous wm candidates', () => {
+    expect(
+      t({
+        ok: false,
+        error: {
+          code: 'wfm.itemAmbiguous',
+          retryable: false,
+          params: {
+            input: '无情',
+            candidates: '次要·无情、主要·无情',
+          },
+        },
+      }),
+    ).to.equal('物品名称“无情”存在歧义，请补充类别：次要·无情、主要·无情')
+  })
+
   it('returns a failed service result for an unknown riven weapon', () => {
     const result = analyzeRivenStat({
       name: 'not-a-real-weapon',
