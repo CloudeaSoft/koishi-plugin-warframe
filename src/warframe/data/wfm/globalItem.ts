@@ -8,6 +8,15 @@ export interface GlobalItemWordPrefixCandidate {
   tokens: string[]
 }
 
+export interface GlobalItemData {
+  globalItemList: ItemShort[]
+  globalItemDict: Record<string, ItemShort>
+  globalItemNameToSlugDict: Record<string, string>
+  globalItemGameRefDict: Record<string, ItemShort>
+  globalItemWordPrefixCandidates: GlobalItemWordPrefixCandidate[]
+  globalItemArcaneShorthandDict: Record<string, ItemShort[]>
+}
+
 function normalizeWordPrefixName(input: string): string {
   return fullWidthToHalfWidth(input)
     .toLowerCase()
@@ -61,13 +70,42 @@ function buildGlobalItemWordPrefixCandidates(
   return candidates
 }
 
-export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
-  globalItemList: ItemShort[]
-  globalItemDict: Record<string, ItemShort>
-  globalItemNameToSlugDict: Record<string, string>
-  globalItemGameRefDict: Record<string, ItemShort>
-  globalItemWordPrefixCandidates: GlobalItemWordPrefixCandidate[]
-}> {
+function buildGlobalItemArcaneShorthandDict(
+  globalItemList: ItemShort[],
+  globalItemNameToSlugDict: Record<string, string>,
+): Record<string, ItemShort[]> {
+  const result: Record<string, ItemShort[]> = {}
+
+  for (const item of globalItemList) {
+    if (!item.tags?.includes('arcane_enhancement')) {
+      continue
+    }
+
+    const zhName = item.i18n?.['zh-hans']?.name
+    if (!zhName) {
+      continue
+    }
+
+    const separatorIndex = zhName.indexOf('·')
+    if (separatorIndex <= 0 || separatorIndex === zhName.length - 1) {
+      continue
+    }
+
+    const category = normalizeName(zhName.slice(0, separatorIndex))
+    const shorthand = normalizeName(zhName.slice(separatorIndex + 1))
+    if (!category || !shorthand) {
+      continue
+    }
+
+    const suffixAlias = shorthand + category
+    globalItemNameToSlugDict[suffixAlias] ??= item.slug
+    ;(result[shorthand] ??= []).push(item)
+  }
+
+  return result
+}
+
+export async function globalItemDataFactory(response?: ItemShort[]): Promise<GlobalItemData> {
   response ??= await wfmClient.items.list()
   if (!response) {
     return {
@@ -76,6 +114,7 @@ export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
       globalItemNameToSlugDict: {},
       globalItemGameRefDict: {},
       globalItemWordPrefixCandidates: [],
+      globalItemArcaneShorthandDict: {},
     }
   }
 
@@ -105,6 +144,10 @@ export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
   const globalItemWordPrefixCandidates = buildGlobalItemWordPrefixCandidates(
     globalItemList,
   )
+  const globalItemArcaneShorthandDict = buildGlobalItemArcaneShorthandDict(
+    globalItemList,
+    globalItemNameToSlugDict,
+  )
 
   return {
     globalItemList,
@@ -112,17 +155,12 @@ export async function globalItemDataFactory(response?: ItemShort[]): Promise<{
     globalItemNameToSlugDict,
     globalItemGameRefDict,
     globalItemWordPrefixCandidates,
+    globalItemArcaneShorthandDict,
   }
 }
 
 export let globalItemData = createAsyncCache(globalItemDataFactory, -1)
 
-export function overrideGlobalItemData(cache: AsyncCache<{
-  globalItemList: ItemShort[]
-  globalItemDict: Record<string, ItemShort>
-  globalItemNameToSlugDict: Record<string, string>
-  globalItemGameRefDict: Record<string, ItemShort>
-  globalItemWordPrefixCandidates: GlobalItemWordPrefixCandidate[]
-}>): void {
+export function overrideGlobalItemData(cache: AsyncCache<GlobalItemData>): void {
   globalItemData = cache
 }

@@ -25,6 +25,59 @@ const fixtureItems = [
   },
 ] as unknown as ItemShort[]
 
+const arcaneItems = [
+  {
+    id: 'arcane-energize',
+    slug: 'arcane_energize',
+    gameRef: '/Arcane/Energize',
+    tags: ['arcane_enhancement'],
+    i18n: {
+      'zh-hans': { name: '赋能·充沛' },
+      'en': { name: 'Arcane Energize' },
+    },
+  },
+  {
+    id: 'magus-vigor',
+    slug: 'magus_vigor',
+    gameRef: '/Arcane/MagusVigor',
+    tags: ['arcane_enhancement'],
+    i18n: {
+      'zh-hans': { name: '魔导·活力' },
+      'en': { name: 'Magus Vigor' },
+    },
+  },
+  {
+    id: 'molt-vigor',
+    slug: 'molt_vigor',
+    gameRef: '/Arcane/MoltVigor',
+    tags: ['arcane_enhancement'],
+    i18n: {
+      'zh-hans': { name: '蜕化·活力' },
+      'en': { name: 'Molt Vigor' },
+    },
+  },
+  {
+    id: 'cascadia-flare',
+    slug: 'cascadia_flare',
+    gameRef: '/Arcane/CascadiaFlare',
+    tags: ['arcane_enhancement'],
+    i18n: {
+      'zh-hans': { name: '瀑流·耀炎' },
+      'en': { name: 'Cascadia Flare' },
+    },
+  },
+  {
+    id: 'ordinary-item',
+    slug: 'ordinary_item',
+    gameRef: '/Item/Ordinary',
+    tags: ['misc'],
+    i18n: {
+      'zh-hans': { name: '赋能·测试物品' },
+      'en': { name: 'Ordinary Item' },
+    },
+  },
+] as unknown as ItemShort[]
+
 describe('globalItemDataFactory Tests', () => {
   it('should build all four structures from provided data', async () => {
     const result = await globalItemDataFactory(fixtureItems)
@@ -61,6 +114,39 @@ describe('globalItemDataFactory Tests', () => {
     )
   })
 
+  it('indexes a unique category-free arcane shorthand', async () => {
+    const result = await globalItemDataFactory(arcaneItems)
+
+    expect(
+      result.globalItemArcaneShorthandDict['充沛'].map(item => item.slug),
+    ).to.deep.equal(['arcane_energize'])
+  })
+
+  it('keeps every candidate for an ambiguous arcane shorthand', async () => {
+    const result = await globalItemDataFactory(arcaneItems)
+
+    expect(
+      result.globalItemArcaneShorthandDict['活力'].map(item => item.slug),
+    ).to.deep.equal(['magus_vigor', 'molt_vigor'])
+  })
+
+  it('derives shorthand and suffix aliases from the display name category', async () => {
+    const result = await globalItemDataFactory(arcaneItems)
+
+    expect(
+      result.globalItemArcaneShorthandDict['耀炎'].map(item => item.slug),
+    ).to.deep.equal(['cascadia_flare'])
+    expect(result.globalItemNameToSlugDict['耀炎瀑流']).to.equal(
+      'cascadia_flare',
+    )
+  })
+
+  it('does not index non-arcane items with category-like names', async () => {
+    const result = await globalItemDataFactory(arcaneItems)
+
+    expect(result.globalItemArcaneShorthandDict['测试物品']).to.equal(undefined)
+  })
+
   it('should return empty structures for empty array input', async () => {
     const result = await globalItemDataFactory([])
     expect(result.globalItemList).to.deep.equal([])
@@ -68,6 +154,7 @@ describe('globalItemDataFactory Tests', () => {
     expect(result.globalItemNameToSlugDict).to.deep.equal({})
     expect(result.globalItemGameRefDict).to.deep.equal({})
     expect(result.globalItemWordPrefixCandidates).to.deep.equal([])
+    expect(result.globalItemArcaneShorthandDict).to.deep.equal({})
   })
 
   it('should handle items missing zh-hans name', async () => {
