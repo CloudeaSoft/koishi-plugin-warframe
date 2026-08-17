@@ -258,8 +258,8 @@ describe('wfm-service.inputToItem', () => {
         expect(result.type).to.equal('ambiguous')
         if (result.type === 'ambiguous') {
           expect(result.candidates.map(item => item.slug)).to.deep.equal([
-            'secondary_merciless',
             'primary_merciless',
+            'secondary_merciless',
           ])
         }
       }
@@ -328,7 +328,7 @@ describe('ambiguous wm item input', () => {
           retryable: false,
           params: {
             input: '无情',
-            candidates: '次要·无情、主要·无情',
+            candidates: '主要·无情、次要·无情',
           },
         },
       })

@@ -184,9 +184,15 @@ export const wfmItemMatcher = (() => {
   }
 
   function compareItemDisplayName(left: ItemShort, right: ItemShort): number {
-    const displayNameComparison = normalizeName(getItemDisplayName(left))
-      .localeCompare(normalizeName(getItemDisplayName(right)))
-    return displayNameComparison || normalizeName(left.slug).localeCompare(normalizeName(right.slug))
+    const leftDisplayName = normalizeName(getItemDisplayName(left))
+    const rightDisplayName = normalizeName(getItemDisplayName(right))
+    if (leftDisplayName !== rightDisplayName) {
+      return leftDisplayName < rightDisplayName ? -1 : 1
+    }
+
+    const leftSlug = normalizeName(left.slug)
+    const rightSlug = normalizeName(right.slug)
+    return leftSlug < rightSlug ? -1 : leftSlug > rightSlug ? 1 : 0
   }
 
   function matchByArcaneShorthand(
