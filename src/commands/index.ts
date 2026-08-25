@@ -120,8 +120,9 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('午夜电波')
     .action(wf.nightwaveCommand)
   ctx
-    .command('sortie', '当前突击')
+    .command('sortie', '每日突击')
     .alias('突击')
+    .alias('每日突击')
     .action(wf.sortieCommand)
   ctx
     .command('circuit', '本周回廊战甲及灵化之源')
