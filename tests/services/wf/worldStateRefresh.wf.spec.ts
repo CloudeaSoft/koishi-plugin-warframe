@@ -23,6 +23,7 @@ function snapshot(raw: Partial<WorldState>): WorldStateSnapshot {
     spFissures: [],
     rjFissures: [],
     syndicateMissionsRaw: [],
+    seasonInfoRaw: undefined,
   }
 }
 

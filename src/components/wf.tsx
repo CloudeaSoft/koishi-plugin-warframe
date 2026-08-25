@@ -6,6 +6,7 @@ import type {
   ArchonHunt,
   BountyBoard,
   Fissure,
+  NightwaveBoard,
   OutputRelic,
   OutputRelicReward,
   RelicRewardRarity,
@@ -859,6 +860,65 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
       {archonHuntSection}
       {deepArchimedeaSection}
       {temporalArchimedeaSection}
+    </div>
+  )
+}
+
+export function NightwaveComponent(board: NightwaveBoard): Element {
+  const kindLabel = {
+    daily: '每日',
+    weekly: '每周',
+    elite: '精英',
+    permanent: '精选',
+  } as const
+
+  return (
+    <div
+      style="width:560px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px 12px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <h1 style="font-size:18px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 2px 0;text-align:center;">
+        {board.title}
+      </h1>
+      <div style="text-align:center;font-size:12px;color:var(--wf-text-secondary);margin-bottom:2px;">
+        {`第${board.season + 1}季 · 剩余${board.remaining}`}
+      </div>
+      <div style="text-align:center;font-size:10px;color:var(--wf-text-muted);margin-bottom:8px;">
+        剩余时间不准确，最多可能偏差数月
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        {board.challenges.map(challenge => (
+          <div
+            style="padding:6px 8px;background-color:var(--wf-bg-subtle);border-radius:var(--wf-radius-sm);"
+          >
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:11px;color:var(--wf-accent);">
+                {kindLabel[challenge.kind]}
+              </span>
+              <span style="font-size:13px;font-weight:700;color:var(--wf-text-primary);flex:1;">
+                {challenge.name}
+              </span>
+              {challenge.standing === undefined
+                ? null
+                : (
+                    <span style="font-size:11px;color:var(--wf-accent);">
+                      {`${challenge.standing} 声望`}
+                    </span>
+                  )}
+              <span style="font-size:11px;color:var(--wf-text-muted);">
+                剩余
+                {challenge.remaining}
+              </span>
+            </div>
+            {challenge.description
+              ? (
+                  <div style="font-size:11px;line-height:1.35;color:var(--wf-text-body);margin-top:2px;">
+                    {challenge.description}
+                  </div>
+                )
+              : null}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

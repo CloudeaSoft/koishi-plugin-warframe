@@ -27,6 +27,14 @@ export type {
   RawSyndicateMission,
 } from './wf/bounty'
 export type { Fissure } from './wf/fissure'
+export type {
+  NightwaveBoard,
+  NightwaveChallengeInfo,
+  NightwaveChallengeKind,
+  RawMongoDate,
+  RawNightwaveActiveChallenge,
+  RawSeasonInfo,
+} from './wf/nightwave'
 export type { WFRegion, WFRegionShort } from './wf/region'
 export type {
   ExternalRelic,

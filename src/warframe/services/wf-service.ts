@@ -10,7 +10,9 @@ import type {
   BountyBoard,
   BountyLocation,
   Fissure,
+  NightwaveBoard,
   OcrAPISecret,
+  RawSeasonInfo,
   Relic,
   RivenAttribute,
   RivenStatAnalyzeResult,
@@ -55,6 +57,7 @@ import {
   findRawSyndicateMission,
   oracleBountyLocations,
 } from '../infrastructure/wf/bounty-adapter'
+import { adaptNightwave } from '../infrastructure/wf/nightwave-adapter'
 import { regionToShort } from '../infrastructure/wf/wf-export-adapter'
 import {
   getMissionTypeKey,
@@ -320,6 +323,27 @@ export async function getWeekly(): Promise<WarframeResult<{
       deepArchimedea: deepArchimRes,
       temporalArchimedea: temporalArchimRes,
     },
+  }
+}
+
+export function resolveNightwave(
+  raw: RawSeasonInfo | undefined,
+  now: number = Date.now(),
+): WarframeResult<NightwaveBoard> {
+  if (!raw) {
+    return failure('nightwave.unavailable')
+  }
+
+  return { ok: true, data: adaptNightwave(raw, now) }
+}
+
+export async function getNightwave(): Promise<WarframeResult<NightwaveBoard>> {
+  try {
+    const { seasonInfoRaw } = await globalWorldState.get()
+    return resolveNightwave(seasonInfoRaw)
+  }
+  catch {
+    return failure('common.fetchFailed', true)
   }
 }
 

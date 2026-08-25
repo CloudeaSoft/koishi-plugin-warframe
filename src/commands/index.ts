@@ -115,6 +115,11 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('执行官')
     .action(wf.weeklyCommand)
   ctx
+    .command('nightwave', '当前午夜电波')
+    .alias('电波')
+    .alias('午夜电波')
+    .action(wf.nightwaveCommand)
+  ctx
     .command('circuit', '本周回廊战甲及灵化之源')
     .alias('灵化之源')
     .alias('灵化')

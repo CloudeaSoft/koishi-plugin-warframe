@@ -9,7 +9,7 @@ type WorldStateSnapshot = Parameters<typeof diffWorldStates>[0]
 
 async function snapshotFrom(json: unknown): Promise<WorldStateSnapshot> {
   const raw = await getWorldState(JSON.stringify(json))
-  return { raw, fissures: [], spFissures: [], rjFissures: [], syndicateMissionsRaw: [] }
+  return { raw, fissures: [], spFissures: [], rjFissures: [], syndicateMissionsRaw: [], seasonInfoRaw: undefined }
 }
 
 describe('world-state fixture comparison', () => {

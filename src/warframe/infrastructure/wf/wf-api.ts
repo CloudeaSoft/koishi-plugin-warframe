@@ -1,5 +1,5 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { OracleBountyCycle, RawSyndicateMission } from '../../types'
+import type { OracleBountyCycle, RawSeasonInfo, RawSyndicateMission } from '../../types'
 
 import { Baro } from '../../assets/index'
 import { fetchAsyncData, fetchAsyncText } from '../../utils'
@@ -14,6 +14,23 @@ export function extractSyndicateMissionsRaw(json: string): RawSyndicateMission[]
   }
   catch {
     return []
+  }
+}
+
+export function extractSeasonInfoRaw(json: string): RawSeasonInfo | undefined {
+  try {
+    const data = JSON.parse(json) as { SeasonInfo?: RawSeasonInfo }
+    const info = data.SeasonInfo
+    if (!info || typeof info !== 'object') {
+      return undefined
+    }
+    return {
+      ...info,
+      ActiveChallenges: Array.isArray(info.ActiveChallenges) ? info.ActiveChallenges : [],
+    }
+  }
+  catch {
+    return undefined
   }
 }
 
