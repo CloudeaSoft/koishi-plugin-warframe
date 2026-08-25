@@ -11,6 +11,7 @@ export const messages = {
 
   'bounty.unavailable': '当前该地点暂无可用赏金',
   'invasion.unavailable': '当前没有入侵',
+  'alert.unavailable': '当前没有警报',
   'nightwave.unavailable': '当前没有午夜电波',
 
   'sortie.unavailable': '当前没有突击',

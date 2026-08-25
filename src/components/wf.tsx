@@ -1,6 +1,7 @@
 import type { Element } from 'koishi'
 import type { WeeklyRiven } from 'warframe-weekly-rivens'
 import type {
+  AlertBoard,
   Arbitration,
   ArchiMedea,
   ArchonHunt,
@@ -1982,6 +1983,84 @@ export function VoidTraderComponent(data: VoidTrader): Element {
           ))}
         </tbody>
       </table>
+    </div>
+  )
+}
+
+export function AlertComponent(board: AlertBoard): Element {
+  const missionCardStyle = `
+    border-radius: var(--wf-radius-md);
+    border: 1px solid var(--wf-border);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    background-color: var(--wf-bg-card);
+  `
+
+  return (
+    <div
+      style="width:360px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <h1 style="font-size:18px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 8px 0;text-align:center;">
+        {board.title}
+      </h1>
+      {board.alerts.map((entry) => {
+        const location = [entry.node.system, entry.node.name, entry.node.faction]
+          .filter(Boolean)
+          .join(' · ')
+        const levels = entry.node.minLevel && entry.node.maxLevel
+          ? `Lv.${entry.node.minLevel}-${entry.node.maxLevel}`
+          : ''
+        const rewardText = entry.rewards
+          .map(reward => reward.count > 1 ? `${reward.count}×${reward.name}` : reward.name)
+          .join(' · ')
+        const timeLeft = entry.expiry - Date.now()
+        const timeColor
+          = timeLeft > 3600000
+            ? 'var(--wf-success)'
+            : timeLeft > 600000
+              ? 'var(--wf-info)'
+              : 'var(--wf-danger)'
+
+        return (
+          <div style={missionCardStyle}>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
+              {entry.type}
+              {entry.nightmare
+                ? (
+                    <span style="margin-left:8px;font-size:12px;color:var(--wf-accent);">
+                      {entry.nightmare}
+                    </span>
+                  )
+                : null}
+            </div>
+            {location
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {location}
+                  </div>
+                )
+              : null}
+            {levels
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {levels}
+                  </div>
+                )
+              : null}
+            {rewardText
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {rewardText}
+                  </div>
+                )
+              : null}
+            <div style={`font-size:12px;color:${timeColor};`}>
+              剩余
+              {entry.remaining}
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }

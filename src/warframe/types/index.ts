@@ -13,6 +13,7 @@ export type {
   WarframeFailure,
   WarframeResult,
 } from './warframe-result'
+export type { AlertBoard, AlertInfo, AlertReward } from './wf/alert'
 export type { Arbitration, ArbitrationShort } from './wf/arbitration'
 export type {
   BountyBoard,

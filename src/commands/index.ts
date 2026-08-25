@@ -35,6 +35,10 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('入侵')
     .action(wf.invasionCommand)
   ctx
+    .command('alert', '当前警报')
+    .alias('警报')
+    .action(wf.alertCommand)
+  ctx
     .command('fissure-sp', '当前钢铁之路虚空裂隙')
     .alias('spfissure')
     .alias('钢铁裂缝')
