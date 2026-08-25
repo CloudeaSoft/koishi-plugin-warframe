@@ -57,6 +57,12 @@ export type {
   RivenWeaponDisposition,
   RivenWeaponType,
 } from './wf/riven'
+export type {
+  RawSortie,
+  RawSortieVariant,
+  Sortie,
+  SortieMission,
+} from './wf/sortie'
 export type { VoidTrader, VoidTraderItem } from './wf/voidtrader'
 export type {
   ArchiMedea,

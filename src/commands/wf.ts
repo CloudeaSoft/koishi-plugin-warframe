@@ -9,6 +9,7 @@ import {
   RelicComponent,
   RivenComponent,
   RivenStatComponent,
+  SortieComponent,
   VoidTraderComponent,
   WeeklyComponent,
   WeeklyRivenComponent,
@@ -25,6 +26,7 @@ import {
   getNightwave,
   getRailjackFissures,
   getRelic,
+  getSortie,
   getStaticRivenStats,
   getSteelPathFissures,
   getVoidTrader,
@@ -49,6 +51,7 @@ export function createWfCommands(deps: PluginDependencies): {
   ) => Promise<string>
   weeklyCommand: (_action: Argv) => Promise<string>
   nightwaveCommand: (_action: Argv) => Promise<string>
+  sortieCommand: (_action: Argv) => Promise<string>
   weeklyRivenCommand: (_action: Argv, minPrice?: number) => Promise<string>
   environmentCommand: () => Promise<string>
   bountyCetusCommand: () => Promise<string>
@@ -203,6 +206,15 @@ export function createWfCommands(deps: PluginDependencies): {
       }
 
       return render(NightwaveComponent(result.data))
+    },
+
+    sortieCommand: async (_action: Argv) => {
+      const result = await getSortie()
+      if (!result.ok) {
+        return t(result)
+      }
+
+      return render(SortieComponent(result.data))
     },
 
     weeklyRivenCommand: async (_action: Argv, minPrice?: number) => {

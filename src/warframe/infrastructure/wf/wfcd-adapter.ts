@@ -68,6 +68,21 @@ export function fissureTierNumToNumber(a: number | string): number {
   return typeof a === 'string' ? Number(a.charAt(5)) : a
 }
 
+export async function translateSortieBoss(key: string): Promise<string> {
+  const { sortieBoss } = await import('warframe-worldstate-data/utilities')
+  return sortieBoss(key, 'zh')
+}
+
+export async function translateSortieFaction(key: string): Promise<string> {
+  const { sortieFaction } = await import('warframe-worldstate-data/utilities')
+  return sortieFaction(key, 'zh')
+}
+
+export async function translateSortieModifier(key: string): Promise<string> {
+  const { sortieModifier } = await import('warframe-worldstate-data/utilities')
+  return sortieModifier(key, 'zh')
+}
+
 export function getVoidTraderItem(i: {
   item: string
   uniqueName: string
