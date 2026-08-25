@@ -713,9 +713,33 @@ export function WeeklyComponent(archon: ArchonHunt, deepArchimedea: ArchiMedea, 
         Archon Hunt
       </div>
 
-      <div style="font-size:16px;font-weight:600;color:var(--wf-text-primary);">
-        {`执行官刺杀: ${archon.name}`}
+      <div style="font-size:16px;font-weight:600;color:var(--wf-text-primary);margin-bottom:8px;">
+        {`${archon.modeName}: ${archon.name}`}
       </div>
+
+      {archon.missions.map((mission) => {
+        const location = [mission.node.system, mission.node.name, mission.node.faction]
+          .filter(Boolean)
+          .join(' · ')
+        const levels = mission.node.minLevel && mission.node.maxLevel
+          ? `Lv.${mission.node.minLevel}-${mission.node.maxLevel}`
+          : ''
+
+        return (
+          <div style={missionCardStyle}>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
+              {mission.type}
+            </div>
+            {location || levels
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {[location, levels].filter(Boolean).join(' · ')}
+                  </div>
+                )
+              : null}
+          </div>
+        )
+      })}
     </section>
   )
 
