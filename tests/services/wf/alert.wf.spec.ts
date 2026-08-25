@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
 import { t } from '../../../src/i18n'
+import { dictZhExtra } from '../../../src/warframe/assets'
 import { resolveExportItemNameZh } from '../../../src/warframe/infrastructure/wf/bounty-adapter'
 import { adaptAlerts } from '../../../src/warframe/services'
 import { msToHumanReadable } from '../../../src/warframe/utils/time'
@@ -11,6 +12,12 @@ const HOUR = 3_600_000
 const LOTUS_REWARD = '/Lotus/Types/Items/Research/EnergyComponent'
 const TITLE_KEY = '/Lotus/Language/Menu/AlertPopup_Alert'
 const NIGHTMARE_KEY = '/Lotus/Language/Menu/NightmareModeName'
+
+function officialZh(key: string): string {
+  const text = dict_zh[key] ?? dictZhExtra[key]
+  expect(text, key).to.be.a('string').and.not.equal(key)
+  return text
+}
 
 function parsedAlert(overrides: Record<string, unknown> = {}) {
   return {
@@ -39,7 +46,7 @@ describe('adaptAlerts', () => {
   it('translates mission type and node into Chinese', async () => {
     const board = await adaptAlerts([parsedAlert()], NOW)
 
-    expect(board.title).to.equal(dict_zh[TITLE_KEY])
+    expect(board.title).to.equal(officialZh(TITLE_KEY))
     expect(board.alerts).to.have.length(1)
     expect(board.alerts[0].type).to.equal('拦截')
     expect(board.alerts[0].node.name).to.equal(dict_zh[ExportRegions.SolNode406.name])
@@ -109,7 +116,7 @@ describe('adaptAlerts', () => {
 
     expect(empty.alerts).to.deep.equal([])
     expect(expired.alerts).to.deep.equal([])
-    expect(empty.title).to.equal(dict_zh[TITLE_KEY])
+    expect(empty.title).to.equal(officialZh(TITLE_KEY))
     expect(t('alert.unavailable')).to.equal('当前没有警报')
   })
 
@@ -126,6 +133,6 @@ describe('adaptAlerts', () => {
     })], NOW)
 
     expect(board.alerts[0].type).to.equal('破坏')
-    expect(board.alerts[0].nightmare).to.equal(dict_zh[NIGHTMARE_KEY])
+    expect(board.alerts[0].nightmare).to.equal(officialZh(NIGHTMARE_KEY))
   })
 })
