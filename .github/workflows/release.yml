@@ -38,13 +38,12 @@ jobs:
       - run: yarn install --no-immutable
       - run: yarn build
       - run: yarn dtsc
-      - run: yarn add @semantic-release/commit-analyzer
-      - run: yarn add @semantic-release/release-notes-generator
-      - run: yarn add @semantic-release/github
-      - run: yarn add @semantic-release/npm
-      - run: yarn add conventional-changelog-conventionalcommits
+      # Use the repo-declared CLI and plugins. Unpinned `yarn add` / `npx`
+      # pulled conventional-changelog-conventionalcommits@10, which needs
+      # writer@9; @semantic-release/release-notes-generator@14 still ships
+      # writer@8. Hold the preset at v9 until generator 15 is stable.
       - name: Semantic Release
-        run: npx semantic-release
+        run: yarn semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
