@@ -6,6 +6,10 @@ import type {
   ArchonHunt,
   BountyBoard,
   Fissure,
+  InvasionBoard,
+  InvasionFactionTone,
+  InvasionReward,
+  InvasionSide,
   NightwaveBoard,
   OutputRelic,
   OutputRelicReward,
@@ -415,6 +419,169 @@ export function FissureComponent(fissures: Fissure[], type: 'fissure' | 'sp-fiss
       <div style="margin-top:30px;font-size:30px;color:var(--wf-text-muted);">
         注: 该功能的数据有一定延迟
       </div>
+    </div>
+  )
+}
+
+function formatInvasionRewards(rewards: InvasionReward[]): string {
+  return rewards
+    .map(reward => reward.count > 1 ? `${reward.count}×${reward.name}` : reward.name)
+    .join(' · ')
+}
+
+const INVASION_FACTION_COLOR: Record<InvasionFactionTone, string> = {
+  grineer: '#c14444',
+  corpus: '#3b7dc4',
+  infested: '#3d9a4a',
+  other: 'var(--wf-text-muted)',
+}
+
+function invasionPercent(value: number): string {
+  const pct = Math.min(1, Math.max(0, value)) * 100
+  return Number.isInteger(pct) ? `${pct}%` : `${pct.toFixed(1)}%`
+}
+
+function InvasionSideBlock(
+  label: string,
+  side: InvasionSide,
+  percent: string,
+  align: 'left' | 'right' = 'left',
+): Element {
+  const color = INVASION_FACTION_COLOR[side.tone]
+  const meta = align === 'right'
+    ? `${percent} · ${side.faction} · ${label}`
+    : `${label} · ${side.faction} ${percent}`
+  return (
+    <div style={`flex:1;min-width:0;text-align:${align};`}>
+      <div style={`font-size:13px;font-weight:600;color:${color};`}>
+        {meta}
+      </div>
+      {side.rewards.length > 0
+        ? (
+            <div style="font-size:12px;color:var(--wf-text-secondary);margin-top:2px;">
+              {formatInvasionRewards(side.rewards)}
+            </div>
+          )
+        : null}
+    </div>
+  )
+}
+
+function InvasionProgressBar(
+  completion: number,
+  attacker: InvasionSide,
+  defender: InvasionSide,
+): Element {
+  const attackRatio = Math.min(1, Math.max(0, completion))
+  const defendRatio = 1 - attackRatio
+  const attackColor = INVASION_FACTION_COLOR[attacker.tone]
+  const defendColor = INVASION_FACTION_COLOR[defender.tone]
+
+  return (
+    <div
+      style="display:flex;height:8px;margin-top:8px;overflow:hidden;border-radius:var(--wf-radius-sm);background-color:var(--wf-bg-subtle);"
+    >
+      {attackRatio > 0
+        ? (
+            <div
+              style={`width:${invasionPercent(attackRatio)};background-color:${attackColor};`}
+            >
+              {'\u00A0'}
+            </div>
+          )
+        : null}
+      {defendRatio > 0
+        ? (
+            <div
+              style={`width:${invasionPercent(defendRatio)};background-color:${defendColor};`}
+            >
+              {'\u00A0'}
+            </div>
+          )
+        : null}
+    </div>
+  )
+}
+
+function InvasionSides(
+  completion: number,
+  attacker: InvasionSide,
+  defender: InvasionSide,
+): Element {
+  const attackRatio = Math.min(1, Math.max(0, completion))
+  return (
+    <div>
+      <div style="display:flex;gap:10px;margin-top:6px;">
+        {InvasionSideBlock('进攻', attacker, invasionPercent(attackRatio))}
+        {InvasionSideBlock('防守', defender, invasionPercent(1 - attackRatio), 'right')}
+      </div>
+      {InvasionProgressBar(completion, attacker, defender)}
+    </div>
+  )
+}
+
+export function InvasionComponent(board: InvasionBoard): Element {
+  return (
+    <div
+      style="
+        color: var(--wf-text-body);
+        line-height: 1.5;
+        font-size: 14px;
+        background-color: var(--wf-bg-card);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 16px;
+        border-radius: var(--wf-radius);
+        border: 1px solid var(--wf-border);
+        box-shadow: var(--wf-shadow-card);
+      "
+    >
+      <h1 style="font-size:22px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 12px 0;text-align:center;">
+        {board.title}
+      </h1>
+      {board.planets.map(group => (
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            {group.planet
+              ? (
+                  <div
+                    style="font-size:18px;font-weight:700;color:var(--wf-text-primary);"
+                  >
+                    {group.planet}
+                  </div>
+                )
+              : null}
+            {group.title
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-muted);">
+                    {group.title}
+                  </div>
+                )
+              : null}
+          </div>
+          <div style="border-radius:var(--wf-radius-md);overflow:hidden;border:1px solid var(--wf-border);">
+            {group.invasions.map((item, index) => (
+              <div
+                style={`padding:8px 10px;background-color:var(--wf-bg-card);${
+                  index < group.invasions.length - 1
+                    ? 'border-bottom:1px solid var(--wf-border);'
+                    : ''
+                }`}
+              >
+                {item.node
+                  ? (
+                      <div style="font-size:13px;font-weight:600;color:var(--wf-text-primary);">
+                        {item.node}
+                      </div>
+                    )
+                  : null}
+                {InvasionSides(item.completion, item.attacker, item.defender)}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

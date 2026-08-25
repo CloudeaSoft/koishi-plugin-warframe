@@ -28,6 +28,18 @@ export type {
 } from './wf/bounty'
 export type { Fissure } from './wf/fissure'
 export type {
+  Invasion,
+  InvasionBoard,
+  InvasionFactionTone,
+  InvasionPlanetGroup,
+  InvasionReward,
+  InvasionSide,
+  RawInvasion,
+  RawInvasionCountedItem,
+  RawInvasionMissionInfo,
+  RawInvasionReward,
+} from './wf/invasion'
+export type {
   NightwaveBoard,
   NightwaveChallengeInfo,
   NightwaveChallengeKind,
