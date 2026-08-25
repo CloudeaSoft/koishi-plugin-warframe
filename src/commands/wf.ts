@@ -5,6 +5,7 @@ import {
   BountyComponent,
   CircuitComponent,
   FissureComponent,
+  NightwaveComponent,
   RelicComponent,
   RivenComponent,
   RivenStatComponent,
@@ -21,6 +22,7 @@ import {
   getCircuitWeek,
   getEnvironment,
   getFissures,
+  getNightwave,
   getRailjackFissures,
   getRelic,
   getStaticRivenStats,
@@ -46,6 +48,7 @@ export function createWfCommands(deps: PluginDependencies): {
     disposition: number,
   ) => Promise<string>
   weeklyCommand: (_action: Argv) => Promise<string>
+  nightwaveCommand: (_action: Argv) => Promise<string>
   weeklyRivenCommand: (_action: Argv, minPrice?: number) => Promise<string>
   environmentCommand: () => Promise<string>
   bountyCetusCommand: () => Promise<string>
@@ -191,6 +194,15 @@ export function createWfCommands(deps: PluginDependencies): {
           result.data.temporalArchimedea,
         ),
       )
+    },
+
+    nightwaveCommand: async (_action: Argv) => {
+      const result = await getNightwave()
+      if (!result.ok) {
+        return t(result)
+      }
+
+      return render(NightwaveComponent(result.data))
     },
 
     weeklyRivenCommand: async (_action: Argv, minPrice?: number) => {
