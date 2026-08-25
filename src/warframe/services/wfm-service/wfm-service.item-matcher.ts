@@ -21,20 +21,45 @@ export const wfmItemMatcher = (() => {
   const bpAliasSuffix = '总图'
   const bpShortSuffix = '图'
   const primeSuffix = 'prime'
-  const warframePartSuffix = ['系统', '头部神经光元', '机体']
-  const weaponPartSuffix = [
+  const relicSuffix = '遗物'
+  const relicEnSuffix = 'relic'
+  const neuropticsSuffix = '头部神经光元'
+  const cerebrumSuffix = '头部'
+  const headShortSuffix = '头'
+  const partSuffixes = [
+    neuropticsSuffix,
+    '项圈扣',
+    '项圈带',
+    '连接器',
+    '下弓臂',
+    '上弓臂',
+    '系统',
+    '机体',
+    '外壳',
+    '外甲',
+    '机翼',
+    cerebrumSuffix,
     '枪管',
     '枪托',
     '枪机',
     '弓弦',
-    '上弓臂',
-    '下弓臂',
+    '弓身',
     '刀刃',
+    '爪刃',
     '握柄',
+    '握把',
     '拳套',
     '圆盘',
-    '连接器',
-  ]
+    '镖袋',
+    '护手',
+    '饰物',
+    '锤头',
+    '链条',
+    '星镖',
+    '靴子',
+    '手套',
+  ].sort((left, right) => right.length - left.length)
+  const headSuffixLookup = [neuropticsSuffix, cerebrumSuffix]
   const warframeAliasDict: Record<string, string> = ((aliasObject) => {
     const transformedObject: Record<string, string> = {}
     for (const [key, aliases] of Object.entries(aliasObject)) {
@@ -55,6 +80,14 @@ export const wfmItemMatcher = (() => {
     return transformedObject
   })(warframeAlias)
 
+  function resolvePartSuffixes(suffix: string): string[] {
+    if (suffix === neuropticsSuffix || suffix === cerebrumSuffix || suffix === headShortSuffix) {
+      return headSuffixLookup
+    }
+
+    return suffix ? [suffix] : ['']
+  }
+
   function removeNameSuffix(input: string): { pure: string, suffix: string } {
     let hasBPSuffix = false
     if (input.endsWith(bpSuffix) || input.endsWith(bpAliasSuffix) || input.endsWith(bpShortSuffix)) {
@@ -71,26 +104,24 @@ export const wfmItemMatcher = (() => {
       hasBPSuffix = true
     }
 
-    const suffix
-      = warframePartSuffix.find(value => input.endsWith(value))
-        ?? weaponPartSuffix.find(value => input.endsWith(value))
-        ?? (input.endsWith('头') ? '头部神经光元' : undefined)
-        ?? (hasBPSuffix ? bpSuffix : undefined)
-        ?? ''
-
-    if (suffix) {
-      input = input.endsWith('头') ? input.replace(/头$/, '') : input
-      const pure = input.replace(new RegExp(`${suffix}$`), '')
+    const matchedPartSuffix = partSuffixes.find(value => input.endsWith(value))
+    if (matchedPartSuffix) {
       return {
-        pure,
-        suffix,
+        pure: input.slice(0, input.length - matchedPartSuffix.length),
+        suffix: matchedPartSuffix === cerebrumSuffix ? neuropticsSuffix : matchedPartSuffix,
       }
     }
-    else {
+
+    if (input.endsWith(headShortSuffix)) {
       return {
-        pure: input,
-        suffix,
+        pure: input.slice(0, input.length - headShortSuffix.length),
+        suffix: neuropticsSuffix,
       }
+    }
+
+    return {
+      pure: input,
+      suffix: hasBPSuffix ? bpSuffix : '',
     }
   }
 
@@ -107,57 +138,69 @@ export const wfmItemMatcher = (() => {
     return candidates
   }
 
+  function lookupByNormalizedName(
+    name: string,
+    lookup: Pick<WFMItemLookupData, 'globalItemDict' | 'globalItemNameToSlugDict'>,
+  ): ItemShort | undefined {
+    const slug = lookup.globalItemNameToSlugDict[name]
+    return slug ? lookup.globalItemDict[slug] : undefined
+  }
+
   function shortHandProcess(
     input: string,
     lookup: Pick<WFMItemLookupData, 'globalItemDict' | 'globalItemNameToSlugDict'>,
   ): ItemShort | undefined {
     const { pure: inputNoSuffix, suffix } = removeNameSuffix(input)
     if (inputNoSuffix === input) {
-      const fixSet = input + setSuffix
-      const fixSetRes = lookup.globalItemNameToSlugDict[fixSet]
+      const fixSetRes = lookupByNormalizedName(input + setSuffix, lookup)
       if (fixSetRes)
-        return lookup.globalItemDict[fixSetRes]
+        return fixSetRes
 
       const fixPrimeCandidates = buildPrimeNameCandidates(input)
       for (const fixPrime of fixPrimeCandidates) {
-        const fixPrimeRes = lookup.globalItemNameToSlugDict[fixPrime]
+        const fixPrimeRes = lookupByNormalizedName(fixPrime, lookup)
         if (fixPrimeRes)
-          return lookup.globalItemDict[fixPrimeRes]
+          return fixPrimeRes
 
-        const fixPrimeSet = fixPrime + setSuffix
-        const fixPrimeSetRes = lookup.globalItemNameToSlugDict[fixPrimeSet]
+        const fixPrimeSetRes = lookupByNormalizedName(fixPrime + setSuffix, lookup)
         if (fixPrimeSetRes)
-          return lookup.globalItemDict[fixPrimeSetRes]
+          return fixPrimeSetRes
       }
 
-      const fixBP = input + bpSuffix
-      const fixBPRes = lookup.globalItemNameToSlugDict[fixBP]
+      const fixBPRes = lookupByNormalizedName(input + bpSuffix, lookup)
       if (fixBPRes)
-        return lookup.globalItemDict[fixBPRes]
+        return fixBPRes
 
       for (const fixPrime of fixPrimeCandidates) {
-        const fixPrimeBP = fixPrime + bpSuffix
-        const fixPrimeBPRes = lookup.globalItemNameToSlugDict[fixPrimeBP]
+        const fixPrimeBPRes = lookupByNormalizedName(fixPrime + bpSuffix, lookup)
         if (fixPrimeBPRes)
-          return lookup.globalItemDict[fixPrimeBPRes]
+          return fixPrimeBPRes
       }
+
+      const fixRelicRes = lookupByNormalizedName(input + relicSuffix, lookup)
+      if (fixRelicRes)
+        return fixRelicRes
+
+      const fixRelicEnRes = lookupByNormalizedName(input + relicEnSuffix, lookup)
+      if (fixRelicEnRes)
+        return fixRelicEnRes
     }
     else {
-      const fixBP = inputNoSuffix + suffix + bpSuffix
-      const fixBPRes = lookup.globalItemNameToSlugDict[fixBP]
-      if (fixBPRes)
-        return lookup.globalItemDict[fixBPRes]
-
       const fixPrimeCandidates = buildPrimeNameCandidates(inputNoSuffix)
-      for (const fixPrime of fixPrimeCandidates) {
-        const fixPrimeRes = lookup.globalItemNameToSlugDict[fixPrime + suffix]
-        if (fixPrimeRes)
-          return lookup.globalItemDict[fixPrimeRes]
+      for (const resolvedSuffix of resolvePartSuffixes(suffix)) {
+        const fixBPRes = lookupByNormalizedName(inputNoSuffix + resolvedSuffix + bpSuffix, lookup)
+        if (fixBPRes)
+          return fixBPRes
 
-        const fixPrimeBP = fixPrime + suffix + bpSuffix
-        const fixPrimeBPRes = lookup.globalItemNameToSlugDict[fixPrimeBP]
-        if (fixPrimeBPRes)
-          return lookup.globalItemDict[fixPrimeBPRes]
+        for (const fixPrime of fixPrimeCandidates) {
+          const fixPrimeRes = lookupByNormalizedName(fixPrime + resolvedSuffix, lookup)
+          if (fixPrimeRes)
+            return fixPrimeRes
+
+          const fixPrimeBPRes = lookupByNormalizedName(fixPrime + resolvedSuffix + bpSuffix, lookup)
+          if (fixPrimeBPRes)
+            return fixPrimeBPRes
+        }
       }
     }
   }
@@ -237,19 +280,21 @@ export const wfmItemMatcher = (() => {
     const candidates = new Set<string>()
     const { pure, suffix } = removeNameSuffix(input)
 
-    candidates.add(input)
-    candidates.add(input + bpSuffix)
-    candidates.add(`${input}blueprint`)
-    candidates.add(input + setSuffix)
-    candidates.add(`${input}set`)
-
-    if (suffix) {
-      const base = pure + suffix
+    const addVariants = (base: string): void => {
       candidates.add(base)
       candidates.add(base + bpSuffix)
       candidates.add(`${base}blueprint`)
       candidates.add(base + setSuffix)
       candidates.add(`${base}set`)
+    }
+
+    addVariants(input)
+    for (const resolvedSuffix of resolvePartSuffixes(suffix)) {
+      if (!resolvedSuffix) {
+        continue
+      }
+
+      addVariants(pure + resolvedSuffix)
     }
 
     return [...candidates]

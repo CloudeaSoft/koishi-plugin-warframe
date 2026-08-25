@@ -14,11 +14,17 @@ describe('wfm-item-matcher helpers', () => {
   describe('removeNameSuffix', () => {
     const cases = [
       { input: 'Volt Prime 头', pure: 'voltprime', suffix: '头部神经光元' },
+      { input: 'Volt Prime 头部', pure: 'voltprime', suffix: '头部神经光元' },
       { input: 'Rhino Prime 机体', pure: 'rhinoprime', suffix: '机体' },
       { input: 'Volt Prime 系统', pure: 'voltprime', suffix: '系统' },
       { input: 'Volt Prime 蓝图', pure: 'voltprime', suffix: '蓝图' },
       { input: 'Volt Prime 总图', pure: 'voltprime', suffix: '蓝图' },
       { input: '夜灵总图', pure: '夜灵', suffix: '蓝图' },
+      { input: '重击巨锤 Prime 锤头', pure: '重击巨锤prime', suffix: '锤头' },
+      { input: '凯旋之爪 Prime 爪刃', pure: '凯旋之爪prime', suffix: '爪刃' },
+      { input: '帕里斯 Prime 弓身', pure: '帕里斯prime', suffix: '弓身' },
+      { input: '蛟龙 Prime 外壳', pure: '蛟龙prime', suffix: '外壳' },
+      { input: '蛟龙 Prime 头部', pure: '蛟龙prime', suffix: '头部神经光元' },
     ]
 
     for (const testCase of cases) {
@@ -65,6 +71,11 @@ describe('wfm-item-matcher helpers', () => {
           'voltprime头部神经光元blueprint',
           'voltprime头部神经光元一套',
           'voltprime头部神经光元set',
+          'voltprime头部',
+          'voltprime头部蓝图',
+          'voltprime头部blueprint',
+          'voltprime头部一套',
+          'voltprime头部set',
         ],
       },
       {
@@ -80,6 +91,11 @@ describe('wfm-item-matcher helpers', () => {
           'dj头部神经光元blueprint',
           'dj头部神经光元一套',
           'dj头部神经光元set',
+          'dj头部',
+          'dj头部蓝图',
+          'dj头部blueprint',
+          'dj头部一套',
+          'dj头部set',
         ],
       },
     ]
@@ -90,6 +106,14 @@ describe('wfm-item-matcher helpers', () => {
         expect(result).to.deep.equal(testCase.expected)
       })
     }
+
+    it('expands 头 to both neuroptics and cerebrum suffixes', () => {
+      const result = buildSuffixVariantCandidates(normalizeName('Volt Prime 头'))
+      expect(result).to.include('voltprime头部神经光元')
+      expect(result).to.include('voltprime头部')
+      expect(result).to.include('voltprime头部神经光元蓝图')
+      expect(result).to.include('voltprime头部蓝图')
+    })
   })
 
   describe('word prefix tokenizer', () => {

@@ -103,6 +103,7 @@ describe('wfm-service.inputToItem', () => {
   const suffixCases = [
     { input: 'Volt Prime 系统', slug: 'volt_prime_systems_blueprint' },
     { input: 'Volt Prime 头', slug: 'volt_prime_neuroptics_blueprint' },
+    { input: 'Volt Prime 头部', slug: 'volt_prime_neuroptics_blueprint' },
     { input: 'Volt Prime 机体', slug: 'volt_prime_chassis_blueprint' },
     { input: 'Rhino Prime 头', slug: 'rhino_prime_neuroptics_blueprint' },
     { input: 'Rhino Prime 机体', slug: 'rhino_prime_chassis_blueprint' },
@@ -112,6 +113,28 @@ describe('wfm-service.inputToItem', () => {
     { input: 'Mag Prime 头', slug: 'mag_prime_neuroptics_blueprint' },
     { input: 'Frost Prime 头', slug: 'frost_prime_neuroptics_blueprint' },
     { input: 'Ember Prime 机体', slug: 'ember_prime_chassis_blueprint' },
+    { input: '蛟龙 Prime 头', slug: 'wyrm_prime_cerebrum' },
+    { input: '蛟龙头', slug: 'wyrm_prime_cerebrum' },
+    { input: '死亡魔方 Prime 头', slug: 'dethcube_prime_cerebrum' },
+    { input: '重击巨锤 Prime 锤头', slug: 'fragor_prime_head' },
+    { input: '帕里斯 Prime 弓身', slug: 'paris_prime_grip' },
+    { input: '蛟龙 Prime 外壳', slug: 'wyrm_prime_carapace' },
+    { input: '飞扬 Prime 镖袋', slug: 'hikou_prime_pouch' },
+    { input: '凯旋之爪 Prime 爪刃', slug: 'venka_prime_blades' },
+    { input: '红隼 Prime 握把', slug: 'kestrel_prime_grip' },
+    { input: '陨蜓 Prime 外甲', slug: 'odonata_prime_harness_blueprint' },
+    { input: '陨蜓 Prime 机翼', slug: 'odonata_prime_wings_blueprint' },
+    { input: '喀婆萨 Prime 项圈扣', slug: 'kavasa_prime_buckle' },
+  ]
+
+  const relicOmitCases = [
+    { input: '后纪H3', slug: 'axi_h3_relic' },
+    { input: '后纪 H3', slug: 'axi_h3_relic' },
+    { input: 'Axi H3', slug: 'axi_h3_relic' },
+    { input: 'AxiH3', slug: 'axi_h3_relic' },
+    { input: '安魂 IV', slug: 'requiem_iv_relic' },
+    { input: '安魂IV', slug: 'requiem_iv_relic' },
+    { input: 'Requiem IV', slug: 'requiem_iv_relic' },
   ]
 
   const combinedCases = [
@@ -126,6 +149,7 @@ describe('wfm-service.inputToItem', () => {
     { input: '瓦喵头', slug: 'valkyr_prime_neuroptics_blueprint' },
     { input: '奶爸头', slug: 'oberon_prime_neuroptics_blueprint' },
     { input: 'DJ头', slug: 'octavia_prime_neuroptics_blueprint' },
+    { input: '电头部', slug: 'volt_prime_neuroptics_blueprint' },
     { input: '花图', slug: 'wisp_prime_blueprint' },
   ]
 
@@ -204,6 +228,14 @@ describe('wfm-service.inputToItem', () => {
   describe('suffix variants', () => {
     for (const testCase of suffixCases) {
       it(`normalizes ${testCase.input}`, async () => {
+        await expectItemSlug(testCase.input, testCase.slug)
+      })
+    }
+  })
+
+  describe('omitted relic suffix', () => {
+    for (const testCase of relicOmitCases) {
+      it(`resolves ${testCase.input}`, async () => {
         await expectItemSlug(testCase.input, testCase.slug)
       })
     }
