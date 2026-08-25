@@ -24,6 +24,8 @@ function snapshot(raw: Partial<WorldState>): WorldStateSnapshot {
     rjFissures: [],
     syndicateMissionsRaw: [],
     seasonInfoRaw: undefined,
+    sortieRaw: undefined,
+    invasionsRaw: [],
   }
 }
 

@@ -5,6 +5,7 @@ export const warframeErrorCodes = [
   'relic.notFound',
   'arbitration.invalidDayRange',
   'bounty.unavailable',
+  'invasion.unavailable',
   'nightwave.unavailable',
   'sortie.unavailable',
   'voidTrader.drifting',

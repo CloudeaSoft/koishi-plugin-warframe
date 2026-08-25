@@ -18,6 +18,8 @@ tsconfig.tsbuildinfo
 
 coverage/
 
+src/warframe/assets/zh.json
+
 .agents
 .superpowers
 docs/superpowers

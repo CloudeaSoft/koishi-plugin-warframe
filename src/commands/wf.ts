@@ -5,6 +5,7 @@ import {
   BountyComponent,
   CircuitComponent,
   FissureComponent,
+  InvasionComponent,
   NightwaveComponent,
   RelicComponent,
   RivenComponent,
@@ -23,6 +24,7 @@ import {
   getCircuitWeek,
   getEnvironment,
   getFissures,
+  getInvasions,
   getNightwave,
   getRailjackFissures,
   getRelic,
@@ -39,6 +41,7 @@ export function createWfCommands(deps: PluginDependencies): {
   circuitCommand: (_action: Argv) => Promise<string>
   voidtraderCommand: (_action: Argv) => Promise<string>
   fissureCommand: (_action: Argv) => Promise<string>
+  invasionCommand: (_action: Argv) => Promise<string>
   steelPathFissureCommand: (_action: Argv) => Promise<string>
   railjackFissureCommand: (_action: Argv) => Promise<string>
   relicCommand: (_action: Argv, input: string) => Promise<string>
@@ -111,6 +114,15 @@ export function createWfCommands(deps: PluginDependencies): {
       }
 
       return render(FissureComponent(result.data, 'fissure'))
+    },
+
+    invasionCommand: async (_action: Argv) => {
+      const result = await getInvasions()
+      if (!result.ok) {
+        return t(result)
+      }
+
+      return render(InvasionComponent(result.data))
     },
 
     steelPathFissureCommand: async (_action: Argv) => {

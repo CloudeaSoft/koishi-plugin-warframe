@@ -10,6 +10,7 @@ export const messages = {
   'arbitration.invalidDayRange': '天数需小于等于14且大于0',
 
   'bounty.unavailable': '当前该地点暂无可用赏金',
+  'invasion.unavailable': '当前没有入侵',
   'nightwave.unavailable': '当前没有午夜电波',
 
   'sortie.unavailable': '当前没有突击',

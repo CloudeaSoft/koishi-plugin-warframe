@@ -1,0 +1,89 @@
+{
+  "Invasions": [
+    {
+      "_id": { "$oid": "694be17b617b0f3626ce5f4a" },
+      "Faction": "FC_CORPUS",
+      "DefenderFaction": "FC_GRINEER",
+      "Node": "SolNode135",
+      "Count": 38067,
+      "Goal": 38000,
+      "LocTag": "/Lotus/Language/Menu/CorpusInvasionGeneric",
+      "Completed": true,
+      "AttackerReward": {
+        "countedItems": [
+          {
+            "ItemType": "/Lotus/Types/Items/Research/EnergyComponent",
+            "ItemCount": 3
+          }
+        ]
+      },
+      "AttackerMissionInfo": { "seed": 963820, "faction": "FC_GRINEER" },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
+            "ItemCount": 3
+          }
+        ]
+      },
+      "DefenderMissionInfo": { "seed": 703948, "faction": "FC_CORPUS" },
+      "Activation": { "$date": { "$numberLong": "1766664792489" } }
+    },
+    {
+      "_id": { "$oid": "694f3a1e1c3f07aa28ce5f49" },
+      "Faction": "FC_CORPUS",
+      "DefenderFaction": "FC_GRINEER",
+      "Node": "SolNode140",
+      "Count": 375,
+      "Goal": 31000,
+      "LocTag": "/Lotus/Language/Menu/CorpusInvasionGeneric",
+      "Completed": false,
+      "AttackerReward": {
+        "countedItems": [
+          {
+            "ItemType": "/Lotus/Types/Items/Research/EnergyComponent",
+            "ItemCount": 3
+          }
+        ],
+        "credits": 25000
+      },
+      "AttackerMissionInfo": { "seed": 331352, "faction": "FC_GRINEER" },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemType": "/Lotus/Types/Items/Research/ChemComponent",
+            "ItemCount": 3
+          }
+        ]
+      },
+      "DefenderMissionInfo": { "seed": 124464, "faction": "FC_CORPUS" },
+      "Activation": { "$date": { "$numberLong": "1766800293338" } }
+    },
+    {
+      "_id": { "$oid": "694f00b2918408cac0ce5f48" },
+      "Faction": "FC_INFESTATION",
+      "DefenderFaction": "FC_GRINEER",
+      "Node": "SolNode99",
+      "Count": -7810,
+      "Goal": 30000,
+      "LocTag": "/Lotus/Language/Menu/InfestedInvasionBoss",
+      "Completed": false,
+      "AttackerReward": [],
+      "AttackerMissionInfo": { "seed": 591, "faction": "FC_GRINEER" },
+      "DefenderReward": {
+        "countedItems": [
+          {
+            "ItemType": "/Lotus/Types/Items/Research/BioComponent",
+            "ItemCount": 1
+          }
+        ]
+      },
+      "DefenderMissionInfo": {
+        "seed": 713455,
+        "faction": "FC_INFESTATION",
+        "missionReward": []
+      },
+      "Activation": { "$date": { "$numberLong": "1766785201979" } }
+    }
+  ]
+}

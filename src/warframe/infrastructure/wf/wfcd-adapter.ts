@@ -83,6 +83,11 @@ export async function translateSortieModifier(key: string): Promise<string> {
   return sortieModifier(key, 'zh')
 }
 
+export async function translateLanguageString(key: string): Promise<string> {
+  const { languageString } = await import('warframe-worldstate-data/utilities')
+  return languageString(key, 'zh')
+}
+
 export function getVoidTraderItem(i: {
   item: string
   uniqueName: string

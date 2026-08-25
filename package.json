@@ -26,12 +26,13 @@
     "provenance": true
   },
   "scripts": {
-    "build": "yakumo build && node scripts/copy-assets.mjs",
+    "build": "node scripts/download-zh-dict.mjs && yakumo build && node scripts/copy-assets.mjs",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
+    "dict:zh": "node scripts/download-zh-dict.mjs",
     "dtsc": "tsc",
-    "test": "vitest run",
-    "prepare": "husky",
+    "test": "node scripts/download-zh-dict.mjs && vitest run",
+    "prepare": "node scripts/download-zh-dict.mjs && husky",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
