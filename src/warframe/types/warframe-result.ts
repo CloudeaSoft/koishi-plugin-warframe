@@ -6,6 +6,7 @@ export const warframeErrorCodes = [
   'arbitration.invalidDayRange',
   'bounty.unavailable',
   'nightwave.unavailable',
+  'sortie.unavailable',
   'voidTrader.drifting',
   'voidTrader.arriving',
   'riven.imageFetchFailed',

@@ -13,6 +13,7 @@ import type {
   RivenAttributeUnit,
   RivenStatAnalyzeResult,
   RivenStatResult,
+  Sortie,
   VoidTrader,
 } from '../warframe'
 import { hexToRgb, lerp, rgbToHex } from '../utils'
@@ -919,6 +920,83 @@ export function NightwaveComponent(board: NightwaveBoard): Element {
           </div>
         ))}
       </div>
+    </div>
+  )
+}
+
+export function SortieComponent(sortie: Sortie): Element {
+  const timeLeft = sortie.expiry - Date.now()
+  const timeColor
+    = timeLeft > 3600000
+      ? 'var(--wf-success)'
+      : timeLeft > 600000
+        ? 'var(--wf-info)'
+        : 'var(--wf-danger)'
+  const sectionStyle = `
+    border-radius: var(--wf-radius);
+    border: 1px solid var(--wf-border);
+    padding: 12px 14px;
+    background-color: var(--wf-bg-subtle);
+    box-shadow: var(--wf-shadow-inner);
+    color: var(--wf-text-body);
+  `
+  const missionCardStyle = `
+    border-radius: var(--wf-radius-md);
+    border: 1px solid var(--wf-border);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    background-color: var(--wf-bg-card);
+  `
+
+  return (
+    <div
+      style="width:320px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <section style={sectionStyle}>
+        <div style="font-size:16px;font-weight:600;color:var(--wf-text-primary);margin-bottom:8px;">
+          {`${sortie.modeName}: ${sortie.boss}${sortie.faction ? ` (${sortie.faction})` : ''}`}
+        </div>
+        <div
+          style={`font-size:13px;margin-bottom:8px;color:${timeColor};`}
+        >
+          剩余
+          {sortie.remaining}
+        </div>
+        {sortie.missions.map((mission) => {
+          const location = [mission.node.system, mission.node.name]
+            .filter(Boolean)
+            .join(' · ')
+          const levels = mission.node.minLevel && mission.node.maxLevel
+            ? `Lv.${mission.node.minLevel}-${mission.node.maxLevel}`
+            : ''
+          const mapAndLevel = [location, levels].filter(Boolean).join(' · ')
+
+          return (
+            <div style={missionCardStyle}>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
+                {mission.type}
+              </div>
+              {mapAndLevel
+                ? (
+                    <div style="font-size:12px;color:var(--wf-text-secondary);">
+                      {mapAndLevel}
+                    </div>
+                  )
+                : null}
+              {mission.modifier
+                ? (
+                    <div style="font-size:12px;color:var(--wf-text-secondary);">
+                      <span style="font-weight:600;margin-right:4px;color:var(--wf-text-body);">
+                        条件:
+                      </span>
+                      {mission.modifier}
+                    </div>
+                  )
+                : null}
+            </div>
+          )
+        })}
+      </section>
     </div>
   )
 }

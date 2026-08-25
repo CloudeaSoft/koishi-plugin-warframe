@@ -13,6 +13,7 @@ import type {
   NightwaveBoard,
   OcrAPISecret,
   RawSeasonInfo,
+  RawSortie,
   Relic,
   RivenAttribute,
   RivenStatAnalyzeResult,
@@ -20,6 +21,8 @@ import type {
   RivenStatCountType,
   RivenStatResult,
   RivenWeaponType,
+  Sortie,
+  SortieMission,
   VoidTrader,
   WarframeResult,
 } from '../types'
@@ -48,6 +51,10 @@ import { relics } from '../data/wf/relics'
 import { rivenAttrValueDict } from '../data/wf/rivenBaseValues'
 import { weaponRivenDispositionDict } from '../data/wf/rivenDisposition'
 import { rivenStatFixFactor } from '../data/wf/rivenStatData'
+import {
+  getSortieEnemyLevels,
+  getSortieModeName,
+} from '../data/wf/sortie'
 import { globalRivenAttribute } from '../data/wfm/globalRivenAttribute'
 import { globalRivenItemData } from '../data/wfm/globalRivenItem'
 import { extractTextFromImage } from '../infrastructure/ocr-api'
@@ -63,6 +70,9 @@ import {
   getMissionTypeKey,
   getSolNodeKey,
   getVoidTraderItem,
+  translateSortieBoss,
+  translateSortieFaction,
+  translateSortieModifier,
 } from '../infrastructure/wf/wfcd-adapter'
 import { failure } from '../types/warframe-result'
 import {
@@ -212,6 +222,100 @@ export async function adaptArchonHunt(source: {
     modeName: getArchonHuntModeName(),
     name,
     missions,
+  }
+}
+
+function mongoDateMs(value?: { $date?: { $numberLong?: string } }): number | undefined {
+  const raw = value?.$date?.$numberLong
+  if (!raw) {
+    return undefined
+  }
+  const ms = Number(raw)
+  return Number.isFinite(ms) ? ms : undefined
+}
+
+export async function adaptSortie(
+  source: RawSortie,
+  dates?: { activation?: Date, expiry?: Date },
+): Promise<Sortie> {
+  const expiryMs = dates?.expiry?.getTime() ?? mongoDateMs(source.Expiry) ?? 0
+  const missions = await Promise.all(
+    (source.Variants ?? []).map(async (variant, index): Promise<SortieMission> => {
+      const missionType = variant.missionType ?? ''
+      const receivedType = (await getMissionTypeKey(missionType)) || missionType
+      const type = dict_zh[ExportMissionTypes[receivedType]?.name ?? ''] ?? missionType
+      const nodeId = variant.node ?? ''
+      const solNodeKey = (await getSolNodeKey(nodeId)) || nodeId
+      const region = solNodeKey ? ExportRegions[solNodeKey] : undefined
+      const levels = getSortieEnemyLevels(index)
+      const node = region
+        ? {
+            ...regionToShort(region, dict_zh),
+            minLevel: levels.minLevel,
+            maxLevel: levels.maxLevel,
+          }
+        : {
+            name: nodeId,
+            system: '',
+            type: '',
+            faction: '',
+            minLevel: levels.minLevel,
+            maxLevel: levels.maxLevel,
+          }
+
+      return {
+        type,
+        node,
+        modifier: await translateSortieModifier(variant.modifierType ?? ''),
+      }
+    }),
+  )
+
+  const bossKey = source.Boss ?? ''
+  return {
+    modeName: getSortieModeName(),
+    boss: await translateSortieBoss(bossKey),
+    faction: await translateSortieFaction(bossKey),
+    expiry: expiryMs,
+    remaining: msToHumanReadable(expiryMs - Date.now()),
+    missions,
+  }
+}
+
+export async function getSortieFrom(snapshot?: {
+  raw?: { sortie?: { activation?: Date, expiry?: Date } }
+  sortieRaw?: RawSortie
+}): Promise<WarframeResult<Sortie>> {
+  if (!snapshot?.raw) {
+    return failure('common.fetchFailed', true)
+  }
+
+  const raw = snapshot.sortieRaw
+  if (!raw) {
+    return failure('sortie.unavailable')
+  }
+
+  const parsed = snapshot.raw.sortie
+  const expiryMs = parsed?.expiry?.getTime() ?? mongoDateMs(raw.Expiry)
+  if (expiryMs === undefined || expiryMs <= Date.now()) {
+    return failure('sortie.unavailable')
+  }
+
+  return {
+    ok: true,
+    data: await adaptSortie(raw, {
+      activation: parsed?.activation,
+      expiry: parsed?.expiry,
+    }),
+  }
+}
+
+export async function getSortie(): Promise<WarframeResult<Sortie>> {
+  try {
+    return await getSortieFrom(await globalWorldState.get())
+  }
+  catch {
+    return failure('common.fetchFailed', true)
   }
 }
 

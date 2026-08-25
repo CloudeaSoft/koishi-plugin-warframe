@@ -12,6 +12,8 @@ export const messages = {
   'bounty.unavailable': '当前该地点暂无可用赏金',
   'nightwave.unavailable': '当前没有午夜电波',
 
+  'sortie.unavailable': '当前没有突击',
+
   'voidTrader.drifting': '虚空商人仍在未知地带漂流...',
   'voidTrader.arriving': '距离虚空商人到达还有: {time}',
 
