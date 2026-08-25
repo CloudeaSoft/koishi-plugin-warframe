@@ -1,6 +1,7 @@
 import type { WFRegionShort } from './region'
 
 export interface ArchonHunt {
+  modeName: string
   name: string
   missions: ArchonHuntMissions[]
 }

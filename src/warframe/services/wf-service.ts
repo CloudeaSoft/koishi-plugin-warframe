@@ -6,6 +6,7 @@ import type {
   ArchiMedeaDebuff,
   ArchiMedeaMission,
   ArchonHunt,
+  ArchonHuntMissions,
   BountyBoard,
   BountyLocation,
   Fissure,
@@ -35,6 +36,10 @@ import {
   warframes as warframeRewards,
 } from '../assets/index'
 import { arbitrationSchedule } from '../data/wf/arbitrationSchedule'
+import {
+  getArchonHuntEnemyLevels,
+  getArchonHuntModeName,
+} from '../data/wf/archonHunt'
 import { globalOracleBountyCycle } from '../data/wf/globalOracleBountyCycle'
 import { globalWorldState } from '../data/wf/globalWorldState'
 import { relics } from '../data/wf/relics'
@@ -53,6 +58,7 @@ import {
 import { regionToShort } from '../infrastructure/wf/wf-export-adapter'
 import {
   getMissionTypeKey,
+  getSolNodeKey,
   getVoidTraderItem,
 } from '../infrastructure/wf/wfcd-adapter'
 import { failure } from '../types/warframe-result'
@@ -157,6 +163,55 @@ export function getArbitrations(day: number = 3): WarframeResult<Arbitration[]> 
   }
 }
 
+export async function adaptArchonHunt(source: {
+  boss: string
+  missions?: Array<{
+    type: string
+    node?: string
+    nodeKey: string
+  }>
+}): Promise<ArchonHunt> {
+  const name = dict_zh[
+    `/Lotus/Language/Narmer/${removeSpace(source.boss)}`
+  ] ?? source.boss
+
+  const missions = await Promise.all(
+    (source.missions ?? []).map(async (mission, index): Promise<ArchonHuntMissions> => {
+      const receivedType = await getMissionTypeKey(mission.type)
+      const type = dict_zh[ExportMissionTypes[receivedType]?.name ?? ''] ?? mission.type
+      const solNodeKey = await getSolNodeKey(mission.nodeKey)
+      const region = solNodeKey ? ExportRegions[solNodeKey] : undefined
+      const levels = getArchonHuntEnemyLevels(index)
+
+      const node = region
+        ? regionToShort(region, dict_zh)
+        : {
+            name: mission.node ?? mission.nodeKey,
+            system: '',
+            type: '',
+            faction: '',
+            minLevel: 0,
+            maxLevel: 0,
+          }
+
+      return {
+        type,
+        node: {
+          ...node,
+          minLevel: levels.minLevel,
+          maxLevel: levels.maxLevel,
+        },
+      }
+    }),
+  )
+
+  return {
+    modeName: getArchonHuntModeName(),
+    name,
+    missions,
+  }
+}
+
 export async function getWeekly(): Promise<WarframeResult<{
   archonHunt: ArchonHunt
   deepArchimedea: ArchiMedea
@@ -167,12 +222,7 @@ export async function getWeekly(): Promise<WarframeResult<{
     return failure('common.fetchFailed', true)
   }
 
-  const archon: ArchonHunt = {
-    name: dict_zh[
-      `/Lotus/Language/Narmer/${removeSpace(worldState.archonHunt.boss)}`
-    ],
-    missions: [],
-  }
+  const archon = await adaptArchonHunt(worldState.archonHunt)
 
   const stringToDebuff = (
     key: string,
