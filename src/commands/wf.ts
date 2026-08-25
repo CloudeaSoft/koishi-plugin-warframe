@@ -1,6 +1,7 @@
 import type { Argv, Dict } from 'koishi'
 import type { PluginDependencies } from '../types/config'
 import {
+  AlertComponent,
   ArbitrationComponent,
   BountyComponent,
   CircuitComponent,
@@ -18,6 +19,7 @@ import {
 import { t } from '../i18n'
 import {
   applyRelicData,
+  getAlerts,
   getAnalyzedRiven,
   getArbitrations,
   getBounty,
@@ -42,6 +44,7 @@ export function createWfCommands(deps: PluginDependencies): {
   voidtraderCommand: (_action: Argv) => Promise<string>
   fissureCommand: (_action: Argv) => Promise<string>
   invasionCommand: (_action: Argv) => Promise<string>
+  alertCommand: (_action: Argv) => Promise<string>
   steelPathFissureCommand: (_action: Argv) => Promise<string>
   railjackFissureCommand: (_action: Argv) => Promise<string>
   relicCommand: (_action: Argv, input: string) => Promise<string>
@@ -123,6 +126,15 @@ export function createWfCommands(deps: PluginDependencies): {
       }
 
       return render(InvasionComponent(result.data))
+    },
+
+    alertCommand: async (_action: Argv) => {
+      const result = await getAlerts()
+      if (!result.ok) {
+        return t(result)
+      }
+
+      return render(AlertComponent(result.data))
     },
 
     steelPathFissureCommand: async (_action: Argv) => {
