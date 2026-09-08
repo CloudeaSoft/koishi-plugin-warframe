@@ -29,15 +29,28 @@ Procedure summary (the skill is authoritative):
    fall back to a grooming iteration.
 6. Update docs/loop/backlog.md (status) and prepend an entry to
    docs/loop/journal.md using its template.
-7. Re-run the WIP guard from step 1. If a loop PR appeared meanwhile, do not
+7. Capture evidence. For changes to src/components, src/messages,
+   src/commands, or README command rows: add tests/previews/<feature>.preview.tsx
+   (copy tests/previews/alert.preview.tsx; live data with fixture fallback),
+   run `mkdir -p /opt/cursor/artifacts` and
+   `yarn preview tests/previews/<feature>.preview.tsx --out /opt/cursor/artifacts/loop-<N>-<slug>.png`,
+   and look at the PNG to confirm it shows the intended state. For non-visual
+   changes save the validation output to /opt/cursor/artifacts/loop-<N>-validation.txt.
+8. Re-run the WIP guard from step 1. If a loop PR appeared meanwhile, do not
    open a PR; report and stop.
-8. Commit with Conventional Commits (scopes wf, wfm, miscs, readme, deps, or
-   none), one logical change per commit, no fixup commits. Open a DRAFT pull
-   request against master. The body must include the literal line
-   "loop-iteration: <N>" where N is the new journal entry number, the item
-   text, the validation commands you ran, and any decision a human should make.
-9. If a memory tool is available, save loop_last_iteration with N, the type,
-   the item title, and the PR URL.
+9. Commit with Conventional Commits (scopes wf, wfm, miscs, readme, deps, or
+   none), one logical change per commit, no fixup commits. Never stage
+   yarn.lock or .yarn/. Open a DRAFT pull request against master. The body
+   must include the literal line "loop-iteration: <N>" where N is the new
+   journal entry number, the item text, the validation commands you ran, any
+   decision a human should make, and an "Evidence" section embedding every
+   artifact as <img alt="..." src="/opt/cursor/artifacts/<file>" /> (the PR
+   tool uploads the files and rewrites the paths). Then run
+   `gh pr view <url> --json body --jq .body`; if the src paths were not
+   rewritten to https URLs, commit the PNGs under docs/loop/evidence/<N>/ and
+   link them relatively instead.
+10. If a memory tool is available, save loop_last_iteration with N, the type,
+    the item title, and the PR URL.
 
 Hard limits: never merge or enable auto-merge; never force-push; do not touch
 .github/workflows, .releaserc.yml, secrets, or dependency major versions; no

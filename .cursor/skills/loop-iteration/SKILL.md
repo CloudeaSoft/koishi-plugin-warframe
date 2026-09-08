@@ -90,7 +90,35 @@ the item, revert the implementation, set the item back to `todo` with a
 - If a memory tool is available, save key `loop_last_iteration` with the
   iteration number, type, item title, and PR URL.
 
-## 6. Commit and open the PR
+## 6. Capture evidence (screenshots)
+
+Every PR carries a screenshot of what the iteration produced, so the reviewer
+sees the result without running the bot.
+
+- **Visual changes** (anything under `src/components/`, `src/messages/`,
+  `src/commands/`, or a README command row): render the affected component
+  with `yarn preview`.
+  1. Add or update an entry `tests/previews/<feature>.preview.tsx` whose
+     default export returns the Element to render. Prefer live data through
+     the Warframe facade and fall back to a fixture when the query fails
+     (`api.warframe.com` often rejects Cloud Agent egress); write a one-line
+     note to stderr saying which source was used. Copy
+     `tests/previews/alert.preview.tsx`.
+  2. Run `yarn build` (previews resolve assets from `lib/`), then
+     `yarn preview tests/previews/<feature>.preview.tsx --out /opt/cursor/artifacts/loop-<N>-<slug>.png`
+     (`mkdir -p /opt/cursor/artifacts` first). Open the PNG and check that it
+     shows the intended state, not an error or empty card.
+  3. Render one PNG per distinct state worth reviewing (populated, empty,
+     before/after for layout changes). Keep it to the minimal set.
+- **Non-visual changes** (services, data, infrastructure, docs, tests):
+  produce a text screenshot of the proof instead. Save the tail of the
+  validation run and any focused test output to
+  `/opt/cursor/artifacts/loop-<N>-validation.txt`, and in the PR body state
+  "no visual output" with the reason.
+- Never fabricate a preview with made-up data presented as live. A fixture is
+  fine; label it as a fixture in the alt text and body.
+
+## 7. Commit and open the PR
 
 - Re-run the WIP guard from step 0 first. Two merges close together can start
   two runs; if a loop PR appeared while you were working, do not open a
@@ -103,14 +131,23 @@ the item, revert the implementation, set the item back to `todo` with a
   owned by the parent Koishi workspace).
 - Open a **draft** PR against `master` whose title is the primary commit
   message. The body must contain the literal line `loop-iteration: <N>` (the
-  WIP guard searches for it), the item text, the validation commands run, and
-  anything a human reviewer should decide.
+  WIP guard searches for it), the item text, the validation commands run,
+  anything a human reviewer should decide, and an **Evidence** section that
+  embeds each artifact from step 6 with an absolute path, for example
+  `<img alt="alert command, fixture data" src="/opt/cursor/artifacts/loop-<N>-alert.png" />`.
+  The PR tool uploads files referenced this way and rewrites the paths to
+  public URLs.
+- After creating the PR, run `gh pr view <url> --json body --jq .body` and
+  confirm the `src` attributes now point at `https://` URLs. If they still
+  contain `/opt/cursor/artifacts`, the upload did not happen: commit the PNGs
+  under `docs/loop/evidence/<N>/` in a follow-up commit and reference them
+  with relative links instead.
 - Never merge, never enable auto-merge, never force-push.
 
 ## Quality bar
 
 - Small: prefer under 400 changed lines excluding fixtures and generated data.
-- Complete: tests, README rows, i18n messages, and backlog/journal updates
-  ship in the same PR.
+- Complete: tests, README rows, i18n messages, preview entries, and
+  backlog/journal updates ship in the same PR; the PR body shows the result.
 - Honest: if the change is speculative or the data source is unverified, say
   so in the PR body rather than smoothing it over.

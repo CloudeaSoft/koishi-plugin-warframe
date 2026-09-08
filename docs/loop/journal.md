@@ -21,7 +21,9 @@ Newest entry first. Every iteration prepends one entry using this template:
   detection (22 assertions previously failed on ENOENT)
 - Outcome: added the `loop-iteration` and `add-wf-command` skills,
   `.cursor/BUGBOT.md`, this backlog and journal, and the automation prompt;
-  corrected the test runner commands in `AGENTS.md`
+  corrected the test runner commands in `AGENTS.md`; added `yarn preview`
+  (`scripts/preview.mjs`) plus `tests/previews/alert.preview.tsx` so every
+  loop PR can embed a screenshot of the rendered result
 - Next: L-001 (CONTRIBUTING.md drift) is the only P0 and needs no new data;
   after that, alternate between the P1 world-state commands (L-003..L-005)
   and the injection refactors (L-006..L-008)

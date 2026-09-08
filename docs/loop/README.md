@@ -17,7 +17,8 @@ A human reviews and merges; the merge starts the next iteration.
                    3. implement on a branch, with tests
                    4. yarn build && yarn dtsc && yarn lint && yarn test
                    5. update backlog + journal in the same branch
-                   6. open a draft PR (body contains `loop-iteration: N`)
+                   6. render screenshots with `yarn preview` → /opt/cursor/artifacts
+                   7. open a draft PR (body contains `loop-iteration: N` + evidence)
                           │
                           ▼
              CI (build-and-test) + Bugbot review ──▶ you review / merge ──▶ loop
@@ -35,6 +36,7 @@ A human reviews and merges; the merge starts the next iteration.
 | Candidates | `docs/loop/backlog.md` | repository, edited by every iteration |
 | History | `docs/loop/journal.md` | repository, edited by every iteration |
 | Prompt source of truth | `docs/loop/prompts/loop-iteration.md` | repository, paste into the Automation |
+| Screenshot tooling | `scripts/preview.mjs` (`yarn preview`), `tests/previews/*.preview.tsx` | repository |
 | Cloud Agent environment | Cursor dashboard, saved environment | maintainer |
 | Validation | `.github/workflows/build-and-test.yml` | repository |
 
@@ -64,6 +66,31 @@ corepack prepare yarn@4.5.3 --activate
 yarn install --no-immutable
 yarn build
 ```
+
+## Evidence in every PR
+
+Reviewers should see the result without running a bot. Each loop PR carries an
+**Evidence** section:
+
+- For visual changes (components, messages, commands, README command rows) the
+  agent renders the affected component with `yarn preview
+  tests/previews/<feature>.preview.tsx --out /opt/cursor/artifacts/<file>.png`.
+  The script bundles the entry with esbuild, wraps it in the same
+  `render.html` / `render.css` / icon sprite the bot uses, and screenshots it
+  with Chrome through `puppeteer-core`, so the PNG matches what Koishi would
+  send. Preview entries prefer live data through the Warframe facade and fall
+  back to a fixture (labelled as such) because `api.warframe.com` frequently
+  rejects requests from Cloud Agent egress.
+- For non-visual changes the agent saves the validation output as a text
+  artifact and states "no visual output".
+- Files under `/opt/cursor/artifacts/` are uploaded by the Cloud Agent
+  platform; the PR tool rewrites `<img src="/opt/cursor/artifacts/...">` in the
+  body to public URLs. If that rewrite does not happen, the agent falls back to
+  committing the PNGs under `docs/loop/evidence/<N>/`.
+
+Maintainers can reproduce any screenshot locally with the same command after
+`yarn build`; set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not on a standard
+path.
 
 ## Guardrails
 
