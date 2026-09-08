@@ -1,11 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect } from 'chai'
-
-function packageRoot() {
-  const cwd = process.cwd()
-  return cwd.endsWith('warframe') ? cwd : resolve(cwd, 'external/warframe')
-}
+import { packageRoot } from '../helpers/packageRoot'
 
 describe('render static assets', () => {
   it('keeps render css, svg, and html outside render.tsx', () => {
