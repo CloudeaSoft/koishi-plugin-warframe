@@ -201,6 +201,15 @@ Error handling:
   metadata churn.
 - Use `yarn` for validation commands.
 
+## Loop Engineering
+
+Autonomous improvement runs are driven by a Cursor Automation that starts one
+Cloud Agent whenever a pull request is merged into `master`. The workflow,
+selection rules, and guardrails live in `docs/loop/README.md`; candidates are
+tracked in `docs/loop/backlog.md` and every run is recorded in
+`docs/loop/journal.md`. Agents performing a run follow the repository skill
+`.cursor/skills/loop-iteration/SKILL.md`.
+
 ## Current Maintenance Notes
 
 - `globalRivenItem.ts`, `globalDucatnator.ts`, and `globalWorldState.ts` do not
