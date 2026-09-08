@@ -35,7 +35,7 @@ yarn test          # run all tests
 yarn build         # full yakumo build
 yarn lint          # eslint, including markdown
 yarn install       # install dependencies from the workspace setup
-yarn preview <entry.tsx> --out <file.png>   # screenshot a component (after yarn build)
+yarn capture "<message>" ...   # send messages to the built plugin in a real Koishi app and save the replies (after yarn build)
 ```
 
 Run one test file with:

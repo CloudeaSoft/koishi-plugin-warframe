@@ -70,15 +70,16 @@ Reuse existing layout helpers in the file (card, table, and badge helpers) and
   states).
 - Put `before()`/`after()` inside `describe()`. No live network.
 
-## 8. Documentation and preview
+## 8. Documentation and evidence
 
 Add a row to the matching table in `README.md` (command, arguments, aliases,
 description). Update `TODO.md` if the command closes an item there.
 
-Add `tests/previews/<feature>.preview.tsx` (copy `alert.preview.tsx`): default
-export returns `<Feature>Component(data)`, using the live facade query with a
-fixture fallback. `yarn preview tests/previews/<feature>.preview.tsx` renders
-it to a PNG for the pull request.
+After `yarn build`, talk to the bot: `yarn capture "<command>" "<alias>"
+"<command> <bad-argument>"` sends the messages to the built plugin inside a
+real Koishi app and saves the replies (PNG for images, `.txt` for text). Check
+that the populated state and the error path both look right, and embed the
+files in the pull request.
 
 ## 9. Validate
 

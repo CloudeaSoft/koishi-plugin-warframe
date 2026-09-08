@@ -90,33 +90,35 @@ the item, revert the implementation, set the item back to `todo` with a
 - If a memory tool is available, save key `loop_last_iteration` with the
   iteration number, type, item title, and PR URL.
 
-## 6. Capture evidence (screenshots)
+## 6. Capture evidence (talk to the bot)
 
-Every PR carries a screenshot of what the iteration produced, so the reviewer
-sees the result without running the bot.
+Every PR shows what the bot actually replied, so the reviewer sees the result
+without running it. `yarn capture` boots the built plugin inside a real Koishi
+app (mock adapter, in-memory database, cron, `koishi-plugin-puppeteer` on the
+local Chrome), sends each argument as a chat message, and saves the replies:
+images are decoded to PNG, text goes to a `.txt` next to them.
 
-- **Visual changes** (anything under `src/components/`, `src/messages/`,
-  `src/commands/`, or a README command row): render the affected component
-  with `yarn preview`.
-  1. Add or update an entry `tests/previews/<feature>.preview.tsx` whose
-     default export returns the Element to render. Prefer live data through
-     the Warframe facade and fall back to a fixture when the query fails
-     (`api.warframe.com` often rejects Cloud Agent egress); write a one-line
-     note to stderr saying which source was used. Copy
-     `tests/previews/alert.preview.tsx`.
-  2. Run `yarn build` (previews resolve assets from `lib/`), then
-     `yarn preview tests/previews/<feature>.preview.tsx --out /opt/cursor/artifacts/loop-<N>-<slug>.png`
-     (`mkdir -p /opt/cursor/artifacts` first). Open the PNG and check that it
-     shows the intended state, not an error or empty card.
-  3. Render one PNG per distinct state worth reviewing (populated, empty,
-     before/after for layout changes). Keep it to the minimal set.
-- **Non-visual changes** (services, data, infrastructure, docs, tests):
-  produce a text screenshot of the proof instead. Save the tail of the
-  validation run and any focused test output to
-  `/opt/cursor/artifacts/loop-<N>-validation.txt`, and in the PR body state
-  "no visual output" with the reason.
-- Never fabricate a preview with made-up data presented as live. A fixture is
-  fine; label it as a fixture in the alt text and body.
+- **Behaviour changes** (anything under `src/commands/`, `src/components/`,
+  `src/messages/`, `src/services/`, or a README command row):
+  1. `yarn build` (the harness loads `lib/index.js`), then
+     `mkdir -p /opt/cursor/artifacts` and
+     `yarn capture --out /opt/cursor/artifacts --prefix loop-<N> "<message>" ["<message>" ...]`
+     using the exact messages a user would type (the command, its aliases if
+     they matter, an argument that hits the new path, and one that misses).
+  2. Read the printed manifest, then open each PNG and `.txt` and check they
+     show the intended state, not an error or an empty card. A missing reply
+     makes the script exit 1; treat that as a failed iteration, not as
+     "nothing to show".
+  3. Keep the set minimal: one capture per distinct state worth reviewing.
+- **Non-visual changes** (data, infrastructure, docs, tests): save the tail of
+  the validation run and any focused test output to
+  `/opt/cursor/artifacts/loop-<N>-validation.txt`, and state "no visual
+  output" in the PR body with the reason.
+- Data sources: Warframe Market is reached live. `api.warframe.com` rejects
+  Cloud Agent egress, so world-state commands replay
+  `tests/assets/example-world-state.json` with its timestamps shifted to now;
+  the manifest's first line says which source was used. Copy that line into
+  the PR body. Never present a fixture as live data.
 
 ## 7. Commit and open the PR
 
@@ -133,10 +135,11 @@ sees the result without running the bot.
   message. The body must contain the literal line `loop-iteration: <N>` (the
   WIP guard searches for it), the item text, the validation commands run,
   anything a human reviewer should decide, and an **Evidence** section that
-  embeds each artifact from step 6 with an absolute path, for example
-  `<img alt="alert command, fixture data" src="/opt/cursor/artifacts/loop-<N>-alert.png" />`.
-  The PR tool uploads files referenced this way and rewrites the paths to
-  public URLs.
+  embeds each artifact from step 6 with an absolute path (the manifest prints
+  ready-made tags such as
+  `<img alt="alert" src="/opt/cursor/artifacts/loop-<N>-alert.png" />`),
+  quotes text replies, and names the data source. The PR tool uploads files
+  referenced this way and rewrites the paths to public URLs.
 - After creating the PR, run `gh pr view <url> --json body --jq .body` and
   confirm each artifact reference became an `https://` URL: an inline image
   when the maintainer has enabled inline artifacts, otherwise a link of the
@@ -149,7 +152,7 @@ sees the result without running the bot.
 ## Quality bar
 
 - Small: prefer under 400 changed lines excluding fixtures and generated data.
-- Complete: tests, README rows, i18n messages, preview entries, and
-  backlog/journal updates ship in the same PR; the PR body shows the result.
+- Complete: tests, README rows, i18n messages, and backlog/journal updates
+  ship in the same PR; the PR body shows the bot's actual replies.
 - Honest: if the change is speculative or the data source is unverified, say
   so in the PR body rather than smoothing it over.

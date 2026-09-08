@@ -29,13 +29,17 @@ Procedure summary (the skill is authoritative):
    fall back to a grooming iteration.
 6. Update docs/loop/backlog.md (status) and prepend an entry to
    docs/loop/journal.md using its template.
-7. Capture evidence. For changes to src/components, src/messages,
-   src/commands, or README command rows: add tests/previews/<feature>.preview.tsx
-   (copy tests/previews/alert.preview.tsx; live data with fixture fallback),
-   run `mkdir -p /opt/cursor/artifacts` and
-   `yarn preview tests/previews/<feature>.preview.tsx --out /opt/cursor/artifacts/loop-<N>-<slug>.png`,
-   and look at the PNG to confirm it shows the intended state. For non-visual
-   changes save the validation output to /opt/cursor/artifacts/loop-<N>-validation.txt.
+7. Capture evidence by talking to the bot. For changes to src/commands,
+   src/components, src/messages, src/services, or README command rows run
+   `mkdir -p /opt/cursor/artifacts` and
+   `yarn capture --out /opt/cursor/artifacts --prefix loop-<N> "<message>" ...`
+   with the exact messages a user would type (after yarn build). The script
+   boots the built plugin in a real Koishi app with a mock chat client and
+   saves every reply: images as PNG, text as .txt. Open each file and confirm
+   it shows the intended state; a missing reply exits 1 and means the
+   iteration is not done. Note the "World state:" line of the manifest (live
+   or time-shifted fixture) for the PR body. For non-visual changes save the
+   validation output to /opt/cursor/artifacts/loop-<N>-validation.txt.
 8. Re-run the WIP guard from step 1. If a loop PR appeared meanwhile, do not
    open a PR; report and stop.
 9. Commit with Conventional Commits (scopes wf, wfm, miscs, readme, deps, or
@@ -44,8 +48,9 @@ Procedure summary (the skill is authoritative):
    must include the literal line "loop-iteration: <N>" where N is the new
    journal entry number, the item text, the validation commands you ran, any
    decision a human should make, and an "Evidence" section embedding every
-   artifact as <img alt="..." src="/opt/cursor/artifacts/<file>" /> (the PR
-   tool uploads the files and rewrites the paths). Then run
+   artifact as <img alt="..." src="/opt/cursor/artifacts/<file>" /> (the
+   capture manifest prints these tags; the PR tool uploads the files and
+   rewrites the paths), quoting text replies, and naming the data source. Then run
    `gh pr view <url> --json body --jq .body`; each reference must now be an
    https URL (inline image or a cursor.com/agents/.../artifacts link). If the
    literal path /opt/cursor/artifacts/ is still in the body, commit the PNGs

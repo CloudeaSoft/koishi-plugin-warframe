@@ -17,7 +17,7 @@ A human reviews and merges; the merge starts the next iteration.
                    3. implement on a branch, with tests
                    4. yarn build && yarn dtsc && yarn lint && yarn test
                    5. update backlog + journal in the same branch
-                   6. render screenshots with `yarn preview` → /opt/cursor/artifacts
+                   6. chat with the bot via `yarn capture` → replies in /opt/cursor/artifacts
                    7. open a draft PR (body contains `loop-iteration: N` + evidence)
                           │
                           ▼
@@ -36,7 +36,7 @@ A human reviews and merges; the merge starts the next iteration.
 | Candidates | `docs/loop/backlog.md` | repository, edited by every iteration |
 | History | `docs/loop/journal.md` | repository, edited by every iteration |
 | Prompt source of truth | `docs/loop/prompts/loop-iteration.md` | repository, paste into the Automation |
-| Screenshot tooling | `scripts/preview.mjs` (`yarn preview`), `tests/previews/*.preview.tsx` | repository |
+| Evidence tooling | `scripts/capture.mjs` (`yarn capture`) | repository |
 | Cloud Agent environment | Cursor dashboard, saved environment | maintainer |
 | Validation | `.github/workflows/build-and-test.yml` | repository |
 
@@ -69,18 +69,27 @@ yarn build
 
 ## Evidence in every PR
 
-Reviewers should see the result without running a bot. Each loop PR carries an
-**Evidence** section:
+Reviewers should see what the bot replied without running one. Each loop PR
+carries an **Evidence** section:
 
-- For visual changes (components, messages, commands, README command rows) the
-  agent renders the affected component with `yarn preview
-  tests/previews/<feature>.preview.tsx --out /opt/cursor/artifacts/<file>.png`.
-  The script bundles the entry with esbuild, wraps it in the same
-  `render.html` / `render.css` / icon sprite the bot uses, and screenshots it
-  with Chrome through `puppeteer-core`, so the PNG matches what Koishi would
-  send. Preview entries prefer live data through the Warframe facade and fall
-  back to a fixture (labelled as such) because `api.warframe.com` frequently
-  rejects requests from Cloud Agent egress.
+- For behaviour changes (commands, components, messages, services, README
+  command rows) the agent talks to the bot:
+  `yarn capture --out /opt/cursor/artifacts --prefix loop-<N> "fissure" "wmi 龙 prime"`.
+  The script boots a real Koishi `App` in the agent's process with the built
+  plugin (`lib/index.js`) and the services it requires: `koishi-plugin-cron`,
+  `@koishijs/plugin-database-memory`, `@koishijs/plugin-http`, and
+  `koishi-plugin-puppeteer` driving the local Chrome. `@koishijs/plugin-mock`
+  provides the chat client. Every argument is delivered as a message, so the
+  reply goes through the same command → service → component → Puppeteer path
+  a production bot uses; the harness then decodes the `<img>` elements in the
+  replies to PNG files and writes text replies to `.txt`, and prints a
+  Markdown manifest with ready-to-paste `<img>` tags.
+- Data sources: Warframe Market is reached live from the Cloud Agent.
+  `api.warframe.com` rejects Cloud Agent egress, so unless `--worldstate live`
+  succeeds the harness replays `tests/assets/example-world-state.json` through
+  a `fetch` shim, with every timestamp shifted forward by the snapshot's age so
+  fissures and cycles look current. The manifest's first line names the source
+  and the PR body repeats it; a fixture is never presented as live data.
 - For non-visual changes the agent saves the validation output as a text
   artifact and states "no visual output".
 - Files under `/opt/cursor/artifacts/` are uploaded by the Cloud Agent
@@ -94,9 +103,9 @@ Reviewers should see the result without running a bot. Each loop PR carries an
   contain credentials. If the rewrite does not happen at all, the agent falls
   back to committing the PNGs under `docs/loop/evidence/<N>/`.
 
-Maintainers can reproduce any screenshot locally with the same command after
+Maintainers can reproduce any capture locally with the same command after
 `yarn build`; set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not on a standard
-path.
+path, and pass `--worldstate live` to insist on the real API.
 
 ## Guardrails
 
