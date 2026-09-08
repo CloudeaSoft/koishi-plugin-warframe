@@ -23,7 +23,8 @@ cycles, Riven analysis/OCR, and Void Trader information.
 - On Windows, prefer `pwsh` (PowerShell 7) for shell commands. Do not use
   legacy `powershell.exe` unless a command explicitly requires it.
 - Build system: `yakumo` with `yakumo-tsc` and `yakumo-esbuild`.
-- Test stack: Mocha + Chai. Do not add `chai-as-promised`; use explicit
+- Test stack: Vitest (Mocha-style globals `describe`/`it`/`before`/`after`)
+  with Chai assertions. Do not add `chai-as-promised`; use explicit
   `try`/`catch` assertions for rejected promises.
 
 Common commands:
@@ -39,8 +40,13 @@ yarn install       # install dependencies from the workspace setup
 Run one test file with:
 
 ```bash
-yarn mocha tests/<file>.spec.ts
+yarn vitest run tests/<file>.spec.ts
 ```
+
+Run `yarn build` before `yarn test`: the package-boundary specs under
+`tests/packages/` and `tests/components/renderAssets.spec.ts` read
+`lib/index.js`. The full validation order used by CI is
+`yarn build && yarn dtsc && yarn lint && yarn test`.
 
 Repository rule: do not create a package-local `yarn.lock`. This package is part
 of a Koishi/Yarn workspace where lockfiles are managed at the workspace root.
