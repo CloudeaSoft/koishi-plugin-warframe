@@ -98,6 +98,9 @@ the item, revert the implementation, set the item back to `todo` with a
 - Commits follow Conventional Commits with scopes `wf`, `wfm`, `miscs`,
   `readme`, `deps`, or none. One logical change per commit; keep them clean
   enough to rebase onto `master` without fixups.
+- Stage files by path. `yarn install --no-immutable` leaves an untracked
+  `yarn.lock` and `.yarn/` in the checkout; never commit them (the lockfile is
+  owned by the parent Koishi workspace).
 - Open a **draft** PR against `master` whose title is the primary commit
   message. The body must contain the literal line `loop-iteration: <N>` (the
   WIP guard searches for it), the item text, the validation commands run, and
