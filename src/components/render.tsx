@@ -14,9 +14,14 @@ const slots = {
   svg: '<!-- __WARFRAME_RENDER_SLOT_SVG__ -->',
 } as const
 
-function htmlString(htmlString: string, title: string = 'title'): string {
+/**
+ * Full HTML document for a rendered component body. Shared by the Puppeteer
+ * outputs below and by `scripts/preview.mjs`, which screenshots components
+ * outside Koishi for pull-request evidence.
+ */
+export function renderHtml(body: string, title: string = 'title'): string {
   return template
-    .replace(slots.body, () => htmlString)
+    .replace(slots.body, () => body)
     .replace(slots.title, () => title)
     .replace(slots.style, () => style)
     .replace(slots.svg, () => svg)
@@ -31,7 +36,7 @@ export async function generateImageOutput(
   }
 
   return puppe.render(
-    htmlString(element.toString()),
+    renderHtml(element.toString()),
     async (page, next) => {
       const handle = await page.$('#root>*')
       return next(handle ?? undefined)
@@ -44,7 +49,7 @@ export async function generateImageElementOutput(
   element: Element,
 ): Promise<Element> {
   return puppe.render(
-    htmlString(element.toString()),
+    renderHtml(element.toString()),
     async (page): Promise<any> => {
       const handle = await page.$('#root>*')
       const clip = (await handle?.boundingBox()) ?? undefined

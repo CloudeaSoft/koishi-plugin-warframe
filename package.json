@@ -34,6 +34,7 @@
     "test": "node scripts/download-zh-dict.mjs && vitest run",
     "prepare": "node scripts/download-zh-dict.mjs && husky",
     "lint": "eslint",
+    "preview": "node scripts/preview.mjs",
     "lint:fix": "eslint --fix"
   },
   "koishi": {
