@@ -34,7 +34,7 @@
     "test": "node scripts/download-zh-dict.mjs && vitest run",
     "prepare": "node scripts/download-zh-dict.mjs && husky",
     "lint": "eslint",
-    "preview": "node scripts/preview.mjs",
+    "capture": "node scripts/capture.mjs",
     "lint:fix": "eslint --fix"
   },
   "koishi": {
@@ -78,6 +78,7 @@
     "@antfu/eslint-config": "9.1.0",
     "@eslint/markdown": "^8.0.2",
     "@koishijs/client": "^5.30.11",
+    "@koishijs/plugin-database-memory": "^3.7.0",
     "@koishijs/plugin-help": "^2.4.6",
     "@koishijs/plugin-mock": "^2.6.6",
     "@satorijs/element": "^3.2.0",
