@@ -86,9 +86,12 @@ Reviewers should see the result without running a bot. Each loop PR carries an
 - Files under `/opt/cursor/artifacts/` are uploaded by the Cloud Agent
   platform; the PR tool rewrites `<img src="/opt/cursor/artifacts/...">` in the
   body to `https://cursor.com/agents/<run>/artifacts?path=...` URLs. By default
-  GitHub shows them as links; enable "show artifacts inline" under
+  GitHub shows them as links that require a Cursor login; enable
+  "Allow Posting Artifacts to GitHub" under
   [Cloud Agents → My Pull Requests](https://cursor.com/dashboard/cloud-agents#my-pull-requests)
-  to get inline images. If the rewrite does not happen at all, the agent falls
+  to embed them inline through hard-to-guess public URLs. Only game-data
+  renders and validation output go into artifacts, never logs that could
+  contain credentials. If the rewrite does not happen at all, the agent falls
   back to committing the PNGs under `docs/loop/evidence/<N>/`.
 
 Maintainers can reproduce any screenshot locally with the same command after
@@ -129,8 +132,8 @@ abandons its branch and reports instead of opening a second PR.
    - Prompt: paste `docs/loop/prompts/loop-iteration.md` verbatim.
    - Save and activate.
 4. **Inline evidence**: in the Cloud Agents dashboard, under My Pull Requests,
-   enable showing artifacts inline so screenshots render directly in PR bodies
-   instead of as links.
+   enable "Allow Posting Artifacts to GitHub" so screenshots render directly in
+   PR bodies instead of as login-gated links.
 5. **Kick off**: merge the bootstrap PR that adds these files. That merge is
    the first trigger.
 
