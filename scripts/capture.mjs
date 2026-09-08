@@ -224,6 +224,22 @@ function decodeImage(src) {
   return undefined
 }
 
+/** One-line Markdown table cell: backslashes first, then pipes, then newlines. */
+function markdownCell(text) {
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/\|/g, '\\|')
+    .replace(/\r?\n/g, ' ')
+}
+
+function htmlAttribute(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
 async function captureReplies(client, message, timeout) {
   const timer = new Promise((_, reject) =>
     setTimeout(() => reject(new Error(`no reply within ${timeout}ms`)), timeout))
@@ -309,13 +325,13 @@ async function main() {
     const files = row.files.map(file => `\`${file}\``).join('<br>') || '-'
     const text = row.error
       ? `**${row.error}**`
-      : row.text.replace(/\|/g, '\\|').replace(/\n/g, ' ').slice(0, 120) || '-'
+      : markdownCell(row.text).slice(0, 120) || '-'
     console.log(`| \`${row.message}\` | ${files} | ${text} |`)
   }
   console.log('')
   for (const row of rows) {
     for (const file of row.files.filter(f => !f.endsWith('.txt'))) {
-      console.log(`<img alt="${row.message}" src="${file}" />`)
+      console.log(`<img alt="${htmlAttribute(row.message)}" src="${file}" />`)
     }
   }
 
