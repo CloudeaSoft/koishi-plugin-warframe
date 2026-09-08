@@ -46,9 +46,10 @@ Procedure summary (the skill is authoritative):
    decision a human should make, and an "Evidence" section embedding every
    artifact as <img alt="..." src="/opt/cursor/artifacts/<file>" /> (the PR
    tool uploads the files and rewrites the paths). Then run
-   `gh pr view <url> --json body --jq .body`; if the src paths were not
-   rewritten to https URLs, commit the PNGs under docs/loop/evidence/<N>/ and
-   link them relatively instead.
+   `gh pr view <url> --json body --jq .body`; each reference must now be an
+   https URL (inline image or a cursor.com/agents/.../artifacts link). If the
+   literal path /opt/cursor/artifacts/ is still in the body, commit the PNGs
+   under docs/loop/evidence/<N>/ and link them relatively instead.
 10. If a memory tool is available, save loop_last_iteration with N, the type,
     the item title, and the PR URL.
 

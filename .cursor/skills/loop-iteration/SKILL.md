@@ -138,10 +138,12 @@ sees the result without running the bot.
   The PR tool uploads files referenced this way and rewrites the paths to
   public URLs.
 - After creating the PR, run `gh pr view <url> --json body --jq .body` and
-  confirm the `src` attributes now point at `https://` URLs. If they still
-  contain `/opt/cursor/artifacts`, the upload did not happen: commit the PNGs
-  under `docs/loop/evidence/<N>/` in a follow-up commit and reference them
-  with relative links instead.
+  confirm each artifact reference became an `https://` URL: an inline image
+  when the maintainer has enabled inline artifacts, otherwise a link of the
+  form `https://cursor.com/agents/<run>/artifacts?path=...`. Both are fine.
+  If the body still contains the literal path `/opt/cursor/artifacts/`, the
+  upload did not happen: commit the PNGs under `docs/loop/evidence/<N>/` in a
+  follow-up commit and reference them with relative links instead.
 - Never merge, never enable auto-merge, never force-push.
 
 ## Quality bar

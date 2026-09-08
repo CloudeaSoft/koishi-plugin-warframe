@@ -85,8 +85,11 @@ Reviewers should see the result without running a bot. Each loop PR carries an
   artifact and states "no visual output".
 - Files under `/opt/cursor/artifacts/` are uploaded by the Cloud Agent
   platform; the PR tool rewrites `<img src="/opt/cursor/artifacts/...">` in the
-  body to public URLs. If that rewrite does not happen, the agent falls back to
-  committing the PNGs under `docs/loop/evidence/<N>/`.
+  body to `https://cursor.com/agents/<run>/artifacts?path=...` URLs. By default
+  GitHub shows them as links; enable "show artifacts inline" under
+  [Cloud Agents → My Pull Requests](https://cursor.com/dashboard/cloud-agents#my-pull-requests)
+  to get inline images. If the rewrite does not happen at all, the agent falls
+  back to committing the PNGs under `docs/loop/evidence/<N>/`.
 
 Maintainers can reproduce any screenshot locally with the same command after
 `yarn build`; set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not on a standard
@@ -125,7 +128,10 @@ abandons its branch and reports instead of opening a second PR.
      over a summary (`loop_last_iteration`).
    - Prompt: paste `docs/loop/prompts/loop-iteration.md` verbatim.
    - Save and activate.
-4. **Kick off**: merge the bootstrap PR that adds these files. That merge is
+4. **Inline evidence**: in the Cloud Agents dashboard, under My Pull Requests,
+   enable showing artifacts inline so screenshots render directly in PR bodies
+   instead of as links.
+5. **Kick off**: merge the bootstrap PR that adds these files. That merge is
    the first trigger.
 
 ## Operating the loop
