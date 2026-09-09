@@ -39,6 +39,7 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 | `weekly`      |                | `周常`, `科研`, `时光科研`, `深层科研`, `执行官` | Query weekly missions (Archon Hunt, Deep Archimedea, Temporal Archimedea).                         |
 | `circuit`     |                | `灵化之源`, `灵化`                               | Query weekly circuit rewards (warframes and incarnon adapters).                                    |
 | `steel-essence` |                | `钢铁精华`                                     | Query this week's Steel Essence shop rotation (current offering, remaining time, upcoming).        |
+| `calendar`      |                | `日历`, `1999日历`, `霍瓦尼亚日历`             | Query this week's 1999 Höllvania calendar (challenges, overrides, rewards).                        |
 
 ### Open World Cycles
 

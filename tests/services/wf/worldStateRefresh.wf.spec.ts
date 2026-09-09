@@ -26,6 +26,7 @@ function snapshot(raw: Partial<WorldState>): WorldStateSnapshot {
     seasonInfoRaw: undefined,
     sortieRaw: undefined,
     invasionsRaw: [],
+    calendarRaw: undefined,
   }
 }
 

@@ -38,6 +38,7 @@ src/warframe/services/wf-service/
 |-- wf-service.circuit.ts
 |-- wf-service.invasion.ts
 |-- wf-service.alert.ts
+|-- wf-service.calendar.ts
 |-- wf-service.steel-essence.ts
 |-- wf-service.fissure.ts          # normal / steel-path / railjack
 |-- wf-service.void-trader.ts
@@ -72,7 +73,7 @@ unless they already import a helper file.
    only (`assetsBoundary`, this spec, `add-wf-command`).
 2. **L-024** — extract `wf-service.riven.ts` first (largest cluster).
 3. **L-025** — extract world-state boards (alert, invasion, nightwave,
-   steel-essence, fissure, void-trader, environment).
+   steel-essence, fissure, void-trader, environment, calendar).
 4. **L-026** — extract the rest (relic, arbitration, sortie, weekly, bounty,
    circuit).
 
@@ -100,6 +101,9 @@ here.
 | `getInvasions` | `wf-service.invasion.ts` |
 | `adaptAlerts` | `wf-service.alert.ts` |
 | `getAlerts` | `wf-service.alert.ts` |
+| `adaptCalendar` | `wf-service.calendar.ts` |
+| `getCalendarFrom` | `wf-service.calendar.ts` |
+| `getCalendar` | `wf-service.calendar.ts` |
 | `adaptSteelEssence` | `wf-service.steel-essence.ts` |
 | `getSteelEssenceFrom` | `wf-service.steel-essence.ts` |
 | `getSteelEssence` | `wf-service.steel-essence.ts` |

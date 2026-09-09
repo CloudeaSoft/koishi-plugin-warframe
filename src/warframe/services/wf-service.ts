@@ -12,6 +12,7 @@ import type {
   ArchonHuntMissions,
   BountyBoard,
   BountyLocation,
+  CalendarBoard,
   Fissure,
   Invasion,
   InvasionBoard,
@@ -19,6 +20,7 @@ import type {
   InvasionSide,
   NightwaveBoard,
   OcrAPISecret,
+  RawCalendarSeason,
   RawInvasion,
   RawSeasonInfo,
   RawSortie,
@@ -77,6 +79,7 @@ import {
   oracleBountyLocations,
   resolveExportItemNameZh,
 } from '../infrastructure/wf/bounty-adapter'
+import { adaptCalendar as mapCalendar } from '../infrastructure/wf/calendar-adapter'
 import { adaptNightwave } from '../infrastructure/wf/nightwave-adapter'
 import { regionToShort } from '../infrastructure/wf/wf-export-adapter'
 import {
@@ -830,6 +833,41 @@ export async function getAlerts(): Promise<WarframeResult<AlertBoard>> {
     }
 
     return { ok: true, data }
+  }
+  catch {
+    return failure('common.fetchFailed', true)
+  }
+}
+
+export function adaptCalendar(
+  raw: RawCalendarSeason | undefined,
+  now: number = Date.now(),
+): CalendarBoard {
+  return mapCalendar(raw, now)
+}
+
+export async function getCalendarFrom(
+  snapshot?: {
+    raw?: unknown
+    calendarRaw?: RawCalendarSeason
+  },
+  now: number = Date.now(),
+): Promise<WarframeResult<CalendarBoard>> {
+  if (!snapshot?.raw) {
+    return failure('common.fetchFailed', true)
+  }
+
+  const data = adaptCalendar(snapshot.calendarRaw, now)
+  if (data.days.length === 0 || data.expiry <= now) {
+    return failure('calendar.unavailable')
+  }
+
+  return { ok: true, data }
+}
+
+export async function getCalendar(): Promise<WarframeResult<CalendarBoard>> {
+  try {
+    return await getCalendarFrom(await globalWorldState.get())
   }
   catch {
     return failure('common.fetchFailed', true)
