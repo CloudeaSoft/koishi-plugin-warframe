@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 2 — 2026-09-09 — explore
+
+- Item: L-002 Extend Chinese warframe aliases (issue #69)
+- PR: none (manual run; branch `cursor/loop-explore-aliases-5a6d`; maintainer asked not to open a PR)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 583 tests after the Ember alias cases)
+- Outcome: Filled the empty Sirius & Orion list with official copy (众星, 决斗之子) and star names (天狼星, 猎户座); added Follie's 绘影者 / 狂墨 and Ember's Changyou name 余烬. Added `tests/services/wfm/warframeAlias.spec.ts` so every normalized alias, including the auto `甲` form, maps to exactly one warframe. Live `wmi 余烬` resolves to Ember Prime Set; `wmi 众星` / `wmi 绘影者` stay not-found because Warframe Market has no non-Prime Follie or Sirius items yet.
+- Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (globalWorldState factory + override). Issue #69 stays open (L-021). Matcher order for `加速` vs Quickening is L-020.
+
 ## 1 — 2026-09-09 — optimize
 
 - Item: L-001 Align `CONTRIBUTING.md` with the current layout

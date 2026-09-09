@@ -12,7 +12,6 @@ from so future runs can judge how well-grounded it is.
 
 | ID | P | Type | Item | Source | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| L-002 | P1 | explore | Extend Chinese warframe aliases in `src/warframe/assets/warframeAlias.json` (issue #69) with a spec asserting each alias resolves to exactly one item | GitHub issue #69 | todo | Good first explore item; no new data source |
 | L-003 | P1 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation from world-state `steelPath` (current offering, remaining time, upcoming) | unused world-state field | todo | Data already fetched by `globalWorldState` |
 | L-004 | P1 | explore | `calendar` command: current 1999 Höllvania calendar week (events, challenges, rewards) from world-state `calendar` | unused world-state field | todo | Verify official Chinese names via `dict_zh` |
 | L-005 | P1 | explore | `event` command: active world events / tactical alerts from world-state `events` with progress and rewards | unused world-state field | todo | Handle empty state with `event.unavailable` |
@@ -30,6 +29,8 @@ from so future runs can judge how well-grounded it is.
 | L-017 | P2 | optimize | Raise the vitest `functions` coverage threshold in steps once coverage gaps in `src/warframe/services` are closed | vitest.config.ts | todo | Measure with `yarn vitest run --coverage` first |
 | L-018 | P2 | explore | Clarify TODO.md item 2 ("wfm alias") into a concrete design (per-user aliases vs. item name aliases) | TODO.md | todo | Grooming only; produce a design note in the journal |
 | L-019 | P2 | optimize | Align README Develop setup with CONTRIBUTING: Corepack Yarn 4 instead of `npm i -g yarn` | found while doing L-001 | todo | README still documents Yarn 1 global install |
+| L-020 | P2 | optimize | Apply warframe aliases before item shorthand so names like Nova's `加速` do not lose to unrelated mods (`quickening`) | found while doing L-002 | todo | Matcher currently does slug/shorthand before alias |
+| L-021 | P2 | explore | Keep adding community aliases to `warframeAlias.json` for sparse frames (Loki, Caliban, Harrow, …); issue #69 stays open | GitHub issue #69 | todo | Uniqueness spec in `tests/services/wfm/warframeAlias.spec.ts` must stay green |
 
 ## Out of loop scope (maintainer decisions)
 
@@ -44,4 +45,5 @@ Items the loop must not act on because they touch CI, release, or dependencies:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
+| L-002 | explore | Extend Chinese warframe aliases (Sirius & Orion 众星/决斗之子/天狼星/猎户座, Follie 绘影者/狂墨, Ember 余烬) with a uniqueness spec | skipped (manual run, no PR) |
 | L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |
