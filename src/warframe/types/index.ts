@@ -76,6 +76,12 @@ export type {
   Sortie,
   SortieMission,
 } from './wf/sortie'
+export type {
+  RawSteelPathOffering,
+  RawSteelPathOfferings,
+  SteelPathBoard,
+  SteelPathOfferingInfo,
+} from './wf/steelpath'
 export type { VoidTrader, VoidTraderItem } from './wf/voidtrader'
 export type {
   ArchiMedea,

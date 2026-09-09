@@ -104,6 +104,27 @@ export function getVoidTraderItem(i: {
   return { name: itemName, ducats: i.ducats, credits: i.credits }
 }
 
+export interface SteelPathCatalogOffering {
+  name: string
+  cost: number
+}
+
+export interface SteelPathCatalog {
+  rotation: SteelPathCatalogOffering[]
+  evergreen: SteelPathCatalogOffering[]
+}
+
+export async function getSteelPathCatalogs(): Promise<{
+  zh: SteelPathCatalog
+  en: SteelPathCatalog
+}> {
+  const { steelPath } = await import('warframe-worldstate-data/utilities')
+  return {
+    zh: steelPath('zh'),
+    en: steelPath('en'),
+  }
+}
+
 function getVoidTraderItemName(
   sourceKey: string,
 ): string | { era: string, category: string } | undefined {

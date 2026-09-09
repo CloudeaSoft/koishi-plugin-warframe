@@ -19,6 +19,7 @@ import type {
   RivenStatAnalyzeResult,
   RivenStatResult,
   Sortie,
+  SteelPathBoard,
   VoidTrader,
 } from '../warframe'
 import { hexToRgb, lerp, rgbToHex } from '../utils'
@@ -2061,6 +2062,81 @@ export function AlertComponent(board: AlertBoard): Element {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+export function SteelPathComponent(board: SteelPathBoard): Element {
+  const timeLeft = board.expiry - Date.now()
+  const timeColor
+    = timeLeft > 3600000
+      ? 'var(--wf-success)'
+      : timeLeft > 600000
+        ? 'var(--wf-info)'
+        : 'var(--wf-danger)'
+  const currentCardStyle = `
+    border-radius: var(--wf-radius-md);
+    border: 1px solid var(--wf-border-strong);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    background-color: var(--wf-bg-tint);
+  `
+  const upcomingCardStyle = `
+    border-radius: var(--wf-radius-md);
+    border: 1px solid var(--wf-border);
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--wf-bg-card);
+  `
+
+  return (
+    <div
+      style="width:360px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <h1 style="font-size:18px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 8px 0;text-align:center;">
+        {board.title}
+      </h1>
+      <div style={`font-size:12px;text-align:center;margin-bottom:8px;color:${timeColor};`}>
+        剩余
+        {board.remaining}
+      </div>
+      <div style={currentCardStyle}>
+        <div style="font-size:10px;font-weight:bold;color:var(--wf-warning);margin-bottom:4px;">
+          本周
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--wf-text-body);">
+          {board.current.name}
+        </div>
+        <div style="font-size:12px;color:var(--wf-text-secondary);">
+          {board.current.cost}
+          {' '}
+          {board.costLabel}
+        </div>
+      </div>
+      {board.upcoming.length > 0
+        ? (
+            <div>
+              <div style="font-size:12px;font-weight:600;color:var(--wf-text-secondary);margin:4px 0 6px 0;">
+                即将轮换
+              </div>
+              {board.upcoming.map((item, index) => (
+                <div style={upcomingCardStyle}>
+                  <div style="font-size:10px;color:var(--wf-text-muted);margin-bottom:2px;">
+                    {index === 0 ? '下周' : `第${index + 2}周`}
+                  </div>
+                  <div style="font-size:13px;color:var(--wf-text-body);">
+                    {item.name}
+                  </div>
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {item.cost}
+                    {' '}
+                    {board.costLabel}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        : null}
     </div>
   )
 }
