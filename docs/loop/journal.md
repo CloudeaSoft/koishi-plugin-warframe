@@ -16,8 +16,8 @@ Newest entry first. Every iteration prepends one entry using this template:
 
 - Item: L-002 Extend Chinese warframe aliases (issue #69) with a unique-resolution spec
 - PR: not opened (explicit request); branch `cursor/loop-explore-aliases-b749`
-- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 595 tests)
-- Outcome: Added 23 community nicknames (沃班, 沙爹, 天狼猎户, …) to `warframeAlias.json` and a spec that every nickname maps to exactly one warframe and resolves to that warframe's set item. Live capture: `wmi 沃班` → Vauban Prime Set, `wmi 沙爹` → Inaros Prime Set; `wmi 天狼猎户` maps correctly but Warframe Market has no Sirius & Orion listing yet (`未找到物品`).
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 608 tests)
+- Outcome: Nicknames in `warframeAlias.json` now come from Chinese community sources (灰机wiki 游戏用语 via cowlevel, 17173/OrdisBlog 黑话大全, 萌娘百科, Bilibili titles, 233乐园), not invented names. Spec asserts uniqueness, that each nickname resolves to one set item, and that guesses such as 沙爹/沃班/天狼猎户 are absent. Live capture: `wmi 沙甲` → Inaros Prime Set, `wmi 玻璃甲` → Gara, `wmi 猫甲` → Khora, `wmi 弱鸡` → Loki, `wmi 阿屎` → Ash, `wmi 花甲` → Wisp, `wmi 猿神` → Wukong; `wmi 沙爹` → 未找到物品. Khora keeps 猫甲/螳螂甲; Oraxia keeps 蜘蛛, because 蜘蛛甲 would collide.
 - Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (`globalWorldState` factory + override). L-003 (`steelpath`) remains the next explore item.
 
 ## 1 — 2026-09-09 — optimize

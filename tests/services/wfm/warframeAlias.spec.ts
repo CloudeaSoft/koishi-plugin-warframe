@@ -11,30 +11,73 @@ import {
 } from '../../../src/warframe/services/wfm-service/wfm-service.item-matcher'
 import { createAsyncCache, normalizeName } from '../../../src/warframe/utils'
 
-const communityAliases = [
-  { input: '沃班', key: 'Vauban' },
-  { input: '洛基男', key: 'Loki' },
-  { input: '脑女', key: 'Nyx' },
-  { input: '水王', key: 'Hydroid' },
-  { input: '沙爹', key: 'Inaros' },
-  { input: '精灵', key: 'Titania' },
-  { input: '哈洛', key: 'Harrow' },
-  { input: '玻璃妹', key: 'Gara' },
-  { input: '巴鲁克', key: 'Baruuk' },
-  { input: '盾妹', key: 'Hildryn' },
-  { input: '跑男', key: 'Gauss' },
-  { input: '大胃王', key: 'Grendel' },
-  { input: '回旋', key: 'Gyre' },
-  { input: '盾矛', key: 'Styanax' },
-  { input: '月狼', key: 'Voruna' },
-  { input: '辐射男', key: 'Qorvex' },
-  { input: '诗人', key: 'Dante' },
-  { input: '摇滚', key: 'Temple' },
-  { input: '蛛后', key: 'Oraxia' },
-  { input: '菇男', key: 'Nokko' },
-  { input: '堕天使', key: 'Uriel' },
-  { input: '墨水妹', key: 'Follie' },
-  { input: '天狼猎户', key: 'Sirius & Orion' },
+/**
+ * Nicknames attested in Chinese Warframe community sources:
+ * huijiwiki 游戏用语 (cowlevel reprint), 17173/OrdisBlog 黑话大全,
+ * 萌娘百科, Bilibili titles, and 233乐园 posts. Do not add invented names.
+ */
+const attestedAliases = [
+  { input: '阿屎', key: 'Ash' },
+  { input: '一拳', key: 'Atlas' },
+  { input: '土甲', key: 'Atlas' },
+  { input: '火女', key: 'Ember' },
+  { input: '弱鸡', key: 'Loki' },
+  { input: '祭司', key: 'Harrow' },
+  { input: '大水怪', key: 'Hydroid' },
+  { input: '泡澡男', key: 'Hydroid' },
+  { input: '沙甲', key: 'Inaros' },
+  { input: '法老', key: 'Inaros' },
+  { input: '玻璃甲', key: 'Gara' },
+  { input: '猫甲', key: 'Khora' },
+  { input: '螳螂甲', key: 'Khora' },
+  { input: '蛆爹', key: 'Nidus' },
+  { input: '死灵', key: 'Nekros' },
+  { input: '歌甲', key: 'Octavia' },
+  { input: '蝶甲', key: 'Titania' },
+  { input: '妖精', key: 'Titania' },
+  { input: '花甲', key: 'Wisp' },
+  { input: '鬼火', key: 'Wisp' },
+  { input: '鬼甲', key: 'Sevagoth' },
+  { input: '幽灵甲', key: 'Sevagoth' },
+  { input: '骨甲', key: 'Xaku' },
+  { input: '毛妹', key: 'Hildryn' },
+  { input: '母牛甲', key: 'Hildryn' },
+  { input: '吃货', key: 'Grendel' },
+  { input: '饕餮甲', key: 'Grendel' },
+  { input: '海棠花', key: 'Protea' },
+  { input: '猿神', key: 'Wukong' },
+  { input: '吉他甲', key: 'Temple' },
+  { input: '蘑菇甲', key: 'Nokko' },
+  { input: '恶魔甲', key: 'Uriel' },
+  { input: '炼狱使徒', key: 'Uriel' },
+  { input: '狂墨', key: 'Follie' },
+  { input: '蜘蛛', key: 'Oraxia' },
+] as const
+
+const inventedNicknames = [
+  '沃班',
+  '洛基男',
+  '脑女',
+  '水王',
+  '沙爹',
+  '精灵',
+  '哈洛',
+  '玻璃妹',
+  '巴鲁克',
+  '盾妹',
+  '跑男',
+  '大胃王',
+  '回旋',
+  '盾矛',
+  '月狼',
+  '辐射男',
+  '诗人',
+  '摇滚',
+  '蛛后',
+  '菇男',
+  '堕天使',
+  '墨水妹',
+  '天狼猎户',
 ] as const
 
 function warframeSlug(name: string): string {
@@ -103,6 +146,13 @@ describe('warframe aliases', () => {
       expect(nicknames.length).to.be.greaterThan(0)
       expect(owners.size).to.be.greaterThan(nicknames.length)
     })
+
+    it('does not register invented nicknames', () => {
+      const nicknames = new Set(Object.values(warframeAlias).flat())
+      for (const guess of inventedNicknames) {
+        expect(nicknames.has(guess), guess).to.equal(false)
+      }
+    })
   })
 
   describe('resolution', () => {
@@ -124,12 +174,12 @@ describe('warframe aliases', () => {
     })
   })
 
-  describe('community nicknames from issue #69', () => {
+  describe('attested community nicknames', () => {
     beforeAll(() => {
       overrideAliasCatalog()
     })
 
-    for (const testCase of communityAliases) {
+    for (const testCase of attestedAliases) {
       it(`maps ${testCase.input} to ${testCase.key}`, async () => {
         expect(transformByWarframeAlias(normalizeName(testCase.input))).to.equal(
           normalizeName(testCase.key),
