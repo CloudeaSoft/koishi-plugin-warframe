@@ -12,6 +12,7 @@ import {
   RivenComponent,
   RivenStatComponent,
   SortieComponent,
+  SteelPathComponent,
   VoidTraderComponent,
   WeeklyComponent,
   WeeklyRivenComponent,
@@ -32,6 +33,7 @@ import {
   getRelic,
   getSortie,
   getStaticRivenStats,
+  getSteelPath,
   getSteelPathFissures,
   getVoidTrader,
   getWeekly,
@@ -45,6 +47,7 @@ export function createWfCommands(deps: PluginDependencies): {
   fissureCommand: (_action: Argv) => Promise<string>
   invasionCommand: (_action: Argv) => Promise<string>
   alertCommand: (_action: Argv) => Promise<string>
+  steelPathCommand: (_action: Argv) => Promise<string>
   steelPathFissureCommand: (_action: Argv) => Promise<string>
   railjackFissureCommand: (_action: Argv) => Promise<string>
   relicCommand: (_action: Argv, input: string) => Promise<string>
@@ -135,6 +138,15 @@ export function createWfCommands(deps: PluginDependencies): {
       }
 
       return render(AlertComponent(result.data))
+    },
+
+    steelPathCommand: async (_action: Argv) => {
+      const result = await getSteelPath()
+      if (!result.ok) {
+        return t(result)
+      }
+
+      return render(SteelPathComponent(result.data))
     },
 
     steelPathFissureCommand: async (_action: Argv) => {

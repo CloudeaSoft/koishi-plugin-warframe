@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 3 — 2026-09-09 — explore
+
+- Item: L-003 `steelpath` command for Teshin's weekly Steel Path honors
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (63 files, 582 tests)
+- Outcome: Added `steelpath` (`钢铁精华`, `钢铁之路`, `teshin`) showing the current Teshin honor, remaining time, and the rest of the 8-week rotation in Chinese from `warframe-worldstate-data`. The parser computes `steelPath` from a 2020-11-16 weekly epoch rather than a live JSON field; names are remapped from the English locale the plugin still passes to WorldState.build.
+- Next: P0 L-021 is now first: groom a `wf-service.ts` split (discuss file structure only, do not move code). After that, previous type is explore so a P1 optimize such as L-006 is next.
+
 ## 2 — 2026-09-09 — grooming
 
 - Item: withdraw L-002 from the loop (Chinese warframe nicknames, issue #69)

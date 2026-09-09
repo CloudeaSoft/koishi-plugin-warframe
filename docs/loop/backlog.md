@@ -12,7 +12,7 @@ from so future runs can judge how well-grounded it is.
 
 | ID | P | Type | Item | Source | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| L-003 | P1 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation from world-state `steelPath` (current offering, remaining time, upcoming) | unused world-state field | todo | Data already fetched by `globalWorldState` |
+| L-021 | P0 | optimize | Groom a split of `src/warframe/services/wf-service.ts` (~1450 lines): propose a target file structure and follow-up implement items, do not move code yet | found while doing L-003 | todo | Grooming only. Next loop discusses layout (per-command vs. domain buckets vs. matching `wfm-service/`); leave the actual split for later items |
 | L-004 | P1 | explore | `calendar` command: current 1999 Höllvania calendar week (events, challenges, rewards) from world-state `calendar` | unused world-state field | todo | Verify official Chinese names via `dict_zh` |
 | L-005 | P1 | explore | `event` command: active world events / tactical alerts from world-state `events` with progress and rewards | unused world-state field | todo | Handle empty state with `event.unavailable` |
 | L-006 | P1 | optimize | Factory + override injection for `globalWorldState.ts` (pattern from `globalItem.ts`) so world-state services can be tested with fixtures instead of parsed JSON | AGENTS.md maintenance notes | todo | Keep `overrideGlobal*` naming |
@@ -29,6 +29,7 @@ from so future runs can judge how well-grounded it is.
 | L-017 | P2 | optimize | Raise the vitest `functions` coverage threshold in steps once coverage gaps in `src/warframe/services` are closed | vitest.config.ts | todo | Measure with `yarn vitest run --coverage` first |
 | L-018 | P2 | explore | Clarify TODO.md item 2 ("wfm alias") into a concrete design (per-user aliases vs. item name aliases) | TODO.md | todo | Grooming only; do not extend `warframeAlias.json` |
 | L-019 | P2 | optimize | Align README Develop setup with CONTRIBUTING: Corepack Yarn 4 instead of `npm i -g yarn` | found while doing L-001 | todo | README still documents Yarn 1 global install |
+| L-020 | P2 | optimize | Add README command rows for `alert`, `invasion`, `nightwave`, and `sortie` (already shipped, tables still omit them) | found while doing L-003 | todo | Keep the Weekly & Activities / Alerts grouping consistent |
 
 ## Out of loop scope (maintainer decisions)
 
@@ -50,4 +51,5 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
+| L-003 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation | this PR |
 | L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |

@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import {
   fissureTierName,
   fissureTierNumToNumber,
+  getSteelPathCatalogs,
   getVoidTraderItem,
 } from '../../src/warframe/infrastructure/wf/wfcd-adapter'
 
@@ -65,5 +66,23 @@ describe('getVoidTraderItem Tests', () => {
     const result = getVoidTraderItem(input)
     expect(result.ducats).to.equal(75)
     expect(result.credits).to.equal(3000)
+  })
+})
+
+describe('getSteelPathCatalogs Tests', () => {
+  it('returns parallel English and Chinese weekly rotations', async () => {
+    const catalogs = await getSteelPathCatalogs()
+    const english = catalogs.en.rotation[0]
+    const chinese = catalogs.zh.rotation[0]
+    if (!english || !chinese) {
+      expect.fail('Steel path rotation is empty')
+      return
+    }
+
+    expect(catalogs.en.rotation).to.have.length(catalogs.zh.rotation.length)
+    expect(catalogs.en.rotation.length).to.be.greaterThan(0)
+    expect(english.name).to.include('Blueprint')
+    expect(chinese.name).to.include('蓝图')
+    expect(chinese.cost).to.equal(english.cost)
   })
 })

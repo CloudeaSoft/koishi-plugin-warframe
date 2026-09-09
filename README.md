@@ -38,6 +38,7 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 | `arbitration` | `[day:number]` | `arbi`, `仲裁`, `仲裁表`                         | Query high-value arbitration missions. Optional `day` controls how many days to show (default: 3). |
 | `weekly`      |                | `周常`, `科研`, `时光科研`, `深层科研`, `执行官` | Query weekly missions (Archon Hunt, Deep Archimedea, Temporal Archimedea).                         |
 | `circuit`     |                | `灵化之源`, `灵化`                               | Query weekly circuit rewards (warframes and incarnon adapters).                                    |
+| `steelpath`   |                | `steel-path`, `teshin`, `钢铁精华`, `钢铁之路`   | Query this week's Steel Essence shop rotation (current offering, remaining time, upcoming).        |
 
 ### Open World Cycles
 
