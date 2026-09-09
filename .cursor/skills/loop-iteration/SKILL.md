@@ -9,6 +9,10 @@ One iteration produces at most one small, fully validated draft pull request,
 or a backlog-only PR when nothing is ready to build. The design and guardrails
 are in `docs/loop/README.md`; read it once before starting.
 
+You may have been started by a merge into `master`, by the automation's
+schedule, by its webhook, or by hand. The trigger does not change anything
+below; the merged PR (if any) is context only.
+
 ## 0. Work-in-progress guard (WIP = 1)
 
 ```bash
@@ -17,6 +21,14 @@ gh pr list --repo CloudeaSoft/koishi-plugin-warframe --state open --search "loop
 
 If any PR is returned, stop immediately and report "loop PR #N is still
 open". Do not create a branch, do not open a second PR.
+
+Then check for a concurrent run (two merges minutes apart start two runs
+before either has a PR). With the `cursor-cloud` MCP tools: `run-info` gives
+your own id; `list-cloud-agents` with `sources: ["automations"]`,
+`statuses: ["RUNNING"]`, and `createdAfter` one hour ago lists the others. If
+another loop run (same automation, same name) was created before yours, stop
+and report it; the older run owns this iteration. If the tools are
+unavailable, continue; the pre-PR re-check in step 7 still applies.
 
 ## 1. Load state
 
@@ -98,22 +110,30 @@ app (mock adapter, in-memory database, cron, `koishi-plugin-puppeteer` on the
 local Chrome), sends each argument as a chat message, and saves the replies:
 images are decoded to PNG, text goes to a `.txt` next to them.
 
+Decide where the files live first. Under the automation, the only PR tool is
+`open_git_pr`; it does not upload `/opt/cursor/artifacts/` and cannot edit the
+body later, so write to `docs/loop/evidence/<N>/` and commit it with the
+iteration. As an ordinary Cloud Agent (the `ManagePullRequest` tool exists),
+write to `/opt/cursor/artifacts/`, which the PR tool uploads. Below,
+`<evidence>` stands for whichever directory applies.
+
 - **Behaviour changes** (anything under `src/commands/`, `src/components/`,
   `src/messages/`, `src/services/`, or a README command row):
   1. `yarn build` (the harness loads `lib/index.js`), then
-     `mkdir -p /opt/cursor/artifacts` and
-     `yarn capture --out /opt/cursor/artifacts --prefix loop-<N> "<message>" ["<message>" ...]`
+     `mkdir -p <evidence>` and
+     `yarn capture --out <evidence> --prefix loop-<N> "<message>" ["<message>" ...]`
      using the exact messages a user would type (the command, its aliases if
      they matter, an argument that hits the new path, and one that misses).
   2. Read the printed manifest, then open each PNG and `.txt` and check they
      show the intended state, not an error or an empty card. A missing reply
      makes the script exit 1; treat that as a failed iteration, not as
      "nothing to show".
-  3. Keep the set minimal: one capture per distinct state worth reviewing.
+  3. Keep the set minimal: one capture per distinct state worth reviewing,
+     and no more than three PNGs when they are committed to the repository.
 - **Non-visual changes** (data, infrastructure, docs, tests): save the tail of
   the validation run and any focused test output to
-  `/opt/cursor/artifacts/loop-<N>-validation.txt`, and state "no visual
-  output" in the PR body with the reason.
+  `<evidence>/loop-<N>-validation.txt`, and state "no visual output" in the
+  PR body with the reason.
 - Data sources: Warframe Market is reached live. `api.warframe.com` rejects
   Cloud Agent egress, so world-state commands replay
   `tests/assets/example-world-state.json` with its timestamps shifted to now;
@@ -132,21 +152,22 @@ images are decoded to PNG, text goes to a `.txt` next to them.
   `yarn.lock` and `.yarn/` in the checkout; never commit them (the lockfile is
   owned by the parent Koishi workspace).
 - Open a **draft** PR against `master` whose title is the primary commit
-  message. The body must contain the literal line `loop-iteration: <N>` (the
-  WIP guard searches for it), the item text, the validation commands run,
-  anything a human reviewer should decide, and an **Evidence** section that
-  embeds each artifact from step 6 with an absolute path (the manifest prints
-  ready-made tags such as
-  `<img alt="alert" src="/opt/cursor/artifacts/loop-<N>-alert.png" />`),
-  quotes text replies, and names the data source. The PR tool uploads files
-  referenced this way and rewrites the paths to public URLs.
-- After creating the PR, run `gh pr view <url> --json body --jq .body` and
-  confirm each artifact reference became an `https://` URL: an inline image
-  when the maintainer has enabled inline artifacts, otherwise a link of the
-  form `https://cursor.com/agents/<run>/artifacts?path=...`. Both are fine.
-  If the body still contains the literal path `/opt/cursor/artifacts/`, the
-  upload did not happen: commit the PNGs under `docs/loop/evidence/<N>/` in a
-  follow-up commit and reference them with relative links instead.
+  message. Write the body completely the first time: the automation's
+  `open_git_pr` cannot edit it afterwards and `gh` is read-only. It must
+  contain the literal line `loop-iteration: <N>` (the WIP guard searches for
+  it), the item text, the validation commands run, anything a human reviewer
+  should decide, and an **Evidence** section that embeds each file from step 6,
+  quotes text replies, and names the data source.
+  - Committed evidence (automation runs): relative links, e.g.
+    `![fissure](docs/loop/evidence/<N>/loop-<N>-fissure.png)`; the files must
+    be in a pushed commit before the PR is opened.
+  - Artifact evidence (ordinary Cloud Agent runs): the tags the manifest
+    prints, e.g. `<img alt="alert" src="/opt/cursor/artifacts/loop-<N>-alert.png" />`;
+    the PR tool uploads them and rewrites the paths. Afterwards run
+    `gh pr view <url> --json body --jq .body` and confirm each reference became
+    an `https://` URL; if the literal path `/opt/cursor/artifacts/` remains,
+    commit the files under `docs/loop/evidence/<N>/` and link them relatively
+    in a follow-up commit.
 - Never merge, never enable auto-merge, never force-push.
 
 ## Quality bar

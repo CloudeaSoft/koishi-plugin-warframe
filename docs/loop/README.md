@@ -47,8 +47,15 @@ credentials.
 
 ## Decisions
 
-- **Trigger**: any pull request merged into `master`, including human and
-  Dependabot PRs. Merging anything is a way to request another iteration.
+- **Triggers**: the same automation has three, and a run behaves identically
+  whichever one fired it:
+  - *Pull request merged* into `master`: the normal path; merging anything is a
+    way to request another iteration.
+  - *Scheduled* (every 6 hours): the safety net. If a merge trigger failed to
+    start a run (the first live merge of a loop PR did, with a Cursor-side
+    permission error), the next tick picks the loop up again. When a loop PR is
+    already open the tick exits at the WIP guard within a minute.
+  - *Webhook*: the manual "run now" button; see Operating the loop.
 - **Work in progress limit**: 1. If a loop PR is open, a triggered run exits
   without doing anything. The guard searches open PRs for the body line
   `loop-iteration:`; keep that line intact when editing PR descriptions.
@@ -92,16 +99,19 @@ carries an **Evidence** section:
   and the PR body repeats it; a fixture is never presented as live data.
 - For non-visual changes the agent saves the validation output as a text
   artifact and states "no visual output".
-- Files under `/opt/cursor/artifacts/` are uploaded by the Cloud Agent
-  platform; the PR tool rewrites `<img src="/opt/cursor/artifacts/...">` in the
-  body to `https://cursor.com/agents/<run>/artifacts?path=...` URLs. By default
-  GitHub shows them as links that require a Cursor login; enable
-  "Allow Posting Artifacts to GitHub" under
+- Where the files go depends on how the run was started. Automation runs only
+  have the automation's `open_git_pr` tool, which neither uploads
+  `/opt/cursor/artifacts/` files nor edits a PR body afterwards (iteration 1
+  shipped a dead artifact link this way). Automation runs therefore commit the
+  evidence under `docs/loop/evidence/<N>/` in the same PR and reference it with
+  relative links, keeping it to a few PNGs plus the `.txt` replies. Runs
+  started as ordinary Cloud Agents have the regular PR tool, which uploads
+  `/opt/cursor/artifacts/` files and rewrites the paths to
+  `https://cursor.com/artifacts/...` URLs; "Allow Posting Artifacts to GitHub"
+  under
   [Cloud Agents → My Pull Requests](https://cursor.com/dashboard/cloud-agents#my-pull-requests)
-  to embed them inline through hard-to-guess public URLs. Only game-data
-  renders and validation output go into artifacts, never logs that could
-  contain credentials. If the rewrite does not happen at all, the agent falls
-  back to committing the PNGs under `docs/loop/evidence/<N>/`.
+  makes those render inline. Only game-data renders and validation output are
+  ever attached, never logs that could contain credentials.
 
 Maintainers can reproduce any capture locally with the same command after
 `yarn build`; set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not on a standard
@@ -121,8 +131,12 @@ Loop PRs never:
   updates the backlog and journal.
 
 Two merges within a few minutes can start two runs before either has opened a
-PR. The skill re-runs the WIP guard right before opening the PR; the later run
-abandons its branch and reports instead of opening a second PR.
+PR (this happened on 2026-09-09 when #103 and #104 merged three minutes apart:
+both runs implemented L-001 before the later one stopped at the pre-PR guard).
+The WIP guard therefore also lists running agents of this automation through
+the `cursor-cloud` MCP tools and yields to an older one at step 0, and it is
+re-run right before opening the PR; the later run abandons its branch and
+reports instead of opening a second PR.
 
 ## Setup (one time, maintainer)
 
@@ -133,8 +147,11 @@ abandons its branch and reports instead of opening a second PR.
    rules are read from `.cursor/BUGBOT.md`. A private automation opens PRs as
    your GitHub account, which satisfies Bugbot's "PRs you author" rule.
 3. **Automation**: at `cursor.com/automations` create a new automation:
-   - Trigger: GitHub → Pull request merged; repository
-     `CloudeaSoft/koishi-plugin-warframe`, branch `master`.
+   - Triggers (an automation may have several; a run starts when any fires):
+     GitHub → Pull request merged, repository
+     `CloudeaSoft/koishi-plugin-warframe`, branch `master`; Scheduled, cron
+     `0 */6 * * *`; Webhook. The webhook URL and API key appear after the
+     first save; keep them out of the repository.
    - Repository: single repository, the same one, base branch `master`.
    - Tools: keep "Pull request creation" on; enable "Memory" so runs can hand
      over a summary (`loop_last_iteration`).
@@ -153,8 +170,24 @@ abandons its branch and reports instead of opening a second PR.
 - **Steer**: edit `docs/loop/backlog.md` directly. Raise a priority to make an
   item next, add `blocked by:` to hold one, or add new candidates. Merging that
   edit as a PR also triggers the next run.
-- **Run manually**: start a Cloud Agent on `master` with the prompt "Run one
-  loop iteration using the `loop-iteration` skill." The same WIP guard applies.
+- **Run now / restart after a failed trigger**: POST to the automation's
+  webhook (URL and key from the automation's Webhook trigger card):
+
+  ```bash
+  curl -sS -X POST "$LOOP_WEBHOOK_URL" -H "Authorization: Bearer $LOOP_WEBHOOK_KEY"
+  ```
+
+  This starts a run inside the automation itself, with its memory, tools, and
+  identity. If nothing is done, the scheduled trigger starts one within six
+  hours anyway. Do not open an empty PR just to trigger a run.
+- **Run outside the automation**: start a Cloud Agent on `master` from
+  `cursor.com/agents` with the prompt "Run one loop iteration using the
+  `loop-iteration` skill." The same WIP guard applies; the run has no
+  automation memory and opens the PR with the regular Cloud Agent PR tool.
+- **Failed trigger diagnosis**: the automation's run list shows attempts that
+  failed before an agent existed; agent-side transcripts do not. From any Cloud
+  Agent, `cursor-cloud list-cloud-agents` with source `automations` lists the
+  runs that did start.
 - **Change the prompt**: edit `docs/loop/prompts/loop-iteration.md` in a PR and
   paste the merged version into the automation, so the dashboard and the repo
   stay in sync.
