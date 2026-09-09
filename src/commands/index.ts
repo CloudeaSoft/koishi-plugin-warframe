@@ -138,7 +138,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('灵化')
     .action(wf.circuitCommand)
   ctx
-    .command('steelpath', '钢铁之路荣誉奖励')
+    .command('steelpath', '钢铁精华荣誉奖励')
     .alias('steel-path')
     .alias('teshin')
     .alias('钢铁精华')

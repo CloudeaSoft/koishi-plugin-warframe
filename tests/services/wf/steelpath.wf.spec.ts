@@ -91,7 +91,7 @@ describe('getSteelPathFrom', () => {
     }
 
     expect(result.error.code).to.equal('steelpath.unavailable')
-    expect(t(result)).to.equal('当前没有钢铁之路荣誉奖励')
+    expect(t(result)).to.equal('当前没有钢铁精华荣誉奖励')
   })
 
   it('fails when the current rotation has expired', async () => {
