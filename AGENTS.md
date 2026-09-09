@@ -23,7 +23,8 @@ cycles, Riven analysis/OCR, and Void Trader information.
 - On Windows, prefer `pwsh` (PowerShell 7) for shell commands. Do not use
   legacy `powershell.exe` unless a command explicitly requires it.
 - Build system: `yakumo` with `yakumo-tsc` and `yakumo-esbuild`.
-- Test stack: Mocha + Chai. Do not add `chai-as-promised`; use explicit
+- Test stack: Vitest (Mocha-style globals `describe`/`it`/`before`/`after`)
+  with Chai assertions. Do not add `chai-as-promised`; use explicit
   `try`/`catch` assertions for rejected promises.
 
 Common commands:
@@ -34,13 +35,19 @@ yarn test          # run all tests
 yarn build         # full yakumo build
 yarn lint          # eslint, including markdown
 yarn install       # install dependencies from the workspace setup
+yarn capture "<message>" ...   # send messages to the built plugin in a real Koishi app and save the replies (after yarn build)
 ```
 
 Run one test file with:
 
 ```bash
-yarn mocha tests/<file>.spec.ts
+yarn vitest run tests/<file>.spec.ts
 ```
+
+Run `yarn build` before `yarn test`: the package-boundary specs under
+`tests/packages/` and `tests/components/renderAssets.spec.ts` read
+`lib/index.js`. The full validation order used by CI is
+`yarn build && yarn dtsc && yarn lint && yarn test`.
 
 Repository rule: do not create a package-local `yarn.lock`. This package is part
 of a Koishi/Yarn workspace where lockfiles are managed at the workspace root.
@@ -194,6 +201,15 @@ Error handling:
 - Keep edits focused on the requested area. Avoid unrelated refactors and
   metadata churn.
 - Use `yarn` for validation commands.
+
+## Loop Engineering
+
+Autonomous improvement runs are driven by a Cursor Automation that starts one
+Cloud Agent whenever a pull request is merged into `master`. The workflow,
+selection rules, and guardrails live in `docs/loop/README.md`; candidates are
+tracked in `docs/loop/backlog.md` and every run is recorded in
+`docs/loop/journal.md`. Agents performing a run follow the repository skill
+`.cursor/skills/loop-iteration/SKILL.md`.
 
 ## Current Maintenance Notes
 

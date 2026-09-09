@@ -1,11 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect } from 'chai'
-
-function packageRoot(): string {
-  const cwd = process.cwd()
-  return cwd.endsWith('warframe') ? cwd : resolve(cwd, 'external/warframe')
-}
+import { packageRoot } from '../helpers/packageRoot'
 
 describe('setup entrypoint ownership', () => {
   it('delegates command and hook registration to feature directory entries', () => {

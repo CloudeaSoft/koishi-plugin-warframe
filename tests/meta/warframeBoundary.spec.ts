@@ -1,11 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { expect } from 'chai'
-
-function packageRoot(): string {
-  const cwd = process.cwd()
-  return cwd.endsWith('warframe') ? cwd : resolve(cwd, 'external/warframe')
-}
+import { packageRoot } from '../helpers/packageRoot'
 
 function sourceFiles(path: string): string[] {
   if (!existsSync(path)) {

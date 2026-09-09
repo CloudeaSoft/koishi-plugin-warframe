@@ -1,11 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect } from 'chai'
-
-function packageRoot() {
-  const cwd = process.cwd()
-  return cwd.endsWith('warframe') ? cwd : resolve(cwd, 'external/warframe')
-}
+import { packageRoot } from '../helpers/packageRoot'
 
 describe('wfm-api-client install boundary', () => {
   it('depends on wfm-api-client at runtime (npm or local portal for pre-release)', () => {

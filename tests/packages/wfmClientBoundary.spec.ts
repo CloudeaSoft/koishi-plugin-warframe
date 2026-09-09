@@ -1,13 +1,7 @@
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect } from 'chai'
-
-function packageRoot() {
-  const cwd = process.cwd()
-  return existsSync(resolve(cwd, 'src'))
-    ? cwd
-    : resolve(cwd, 'external/warframe')
-}
+import { packageRoot } from '../helpers/packageRoot'
 
 describe('wfm client boundary', () => {
   it('uses a local client instance instead of WFM API wrapper functions', () => {

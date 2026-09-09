@@ -1,11 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect } from 'chai'
-
-function packageRoot() {
-  const cwd = process.cwd()
-  return cwd.endsWith('warframe') ? cwd : resolve(cwd, 'external/warframe')
-}
+import { packageRoot } from '../helpers/packageRoot'
 
 describe('asset ownership boundary', () => {
   it('keeps circuit reward resource loading behind the unified assets entry', () => {
