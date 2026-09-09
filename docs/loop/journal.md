@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 5 — 2026-09-09 — optimize
+
+- Item: L-021 Groom a split of `src/warframe/services/wf-service.ts`
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (65 files, 588 tests)
+- Outcome: Chose a `wf-service/` folder matching `wfm-service/`, with one module per command cluster and a barrel `index.ts` after extracts. Documented the export map in `docs/loop/wf-service-split.md` and locked it with `tests/meta/wfServiceSplit.spec.ts`. No service code moved.
+- Next: Previous type is optimize, so pick a P1 explore (L-004 `calendar`). If that run lands after L-023, add `wf-service.calendar.ts` instead of growing `index.ts`. Next optimize after an explore is L-023 (folder scaffold).
+
 ## 4 — 2026-09-09 — fix
 
 - Item: L-022 Rename `steelpath` command to `steel-essence` and drop Steel Path aliases

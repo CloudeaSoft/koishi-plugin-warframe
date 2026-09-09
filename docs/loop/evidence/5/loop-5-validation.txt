@@ -1,0 +1,16 @@
+loop-iteration: 5
+item: L-021 Groom a split of src/warframe/services/wf-service.ts
+no visual output: docs, meta test, and backlog/journal only; no command or component changes
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present (17991799 bytes)
+esbuild: src/index.ts -> lib/index.js
+Test Files  65 passed (65)
+     Tests  588 passed (588)
+Duration  17.69s
+
+focused: yarn vitest run tests/meta/wfServiceSplit.spec.ts
+Test Files  1 passed (1)
+     Tests  3 passed (3)
+
+all four CI commands exited 0
