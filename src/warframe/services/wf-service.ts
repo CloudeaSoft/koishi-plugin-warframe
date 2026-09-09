@@ -902,7 +902,7 @@ export async function adaptSteelPath(
     ?? STEEL_PATH_ESSENCE_KEY
 
   return {
-    title: `${teshin} · ${essence}`,
+    title: `${teshin} · ${essence}商店`,
     costLabel: essence,
     remaining: msToHumanReadable(expiry - now),
     expiry,

@@ -11,7 +11,7 @@ function offering(
 
 function board(overrides: Partial<SteelPathBoard> = {}): SteelPathBoard {
   return {
-    title: 'Teshin · 钢铁精华',
+    title: 'Teshin · 钢铁精华商店',
     costLabel: '钢铁精华',
     remaining: '1天0秒',
     expiry: Date.now() + 86_400_000,
@@ -28,7 +28,7 @@ describe('steelPathComponent tests', () => {
   it('renders title, current offering, cost, remaining time, and upcoming', () => {
     const html = String(SteelPathComponent(board()))
 
-    expect(html).to.include('Teshin · 钢铁精华')
+    expect(html).to.include('Teshin · 钢铁精华商店')
     expect(html).to.include('本周')
     expect(html).to.include('Umbra Forma 蓝图')
     expect(html).to.include('150')

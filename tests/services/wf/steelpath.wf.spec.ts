@@ -35,7 +35,7 @@ describe('adaptSteelPath', () => {
     const catalogs = await getSteelPathCatalogs()
     const board = await adaptSteelPath(parsedOfferings('Umbra Forma Blueprint'), NOW)
 
-    expect(board.title).to.equal(`${officialZh(TESHIN_KEY)} · ${officialZh(ESSENCE_KEY)}`)
+    expect(board.title).to.equal(`${officialZh(TESHIN_KEY)} · ${officialZh(ESSENCE_KEY)}商店`)
     expect(board.costLabel).to.equal(officialZh(ESSENCE_KEY))
     expect(board.current).to.deep.equal(catalogs.zh.rotation[0])
     expect(board.upcoming).to.deep.equal([
@@ -91,7 +91,7 @@ describe('getSteelPathFrom', () => {
     }
 
     expect(result.error.code).to.equal('steelpath.unavailable')
-    expect(t(result)).to.equal('当前没有钢铁精华荣誉奖励')
+    expect(t(result)).to.equal('当前没有钢铁精华商店轮换')
   })
 
   it('fails when the current rotation has expired', async () => {
