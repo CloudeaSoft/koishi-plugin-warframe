@@ -55,7 +55,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-021 | optimize | Groom a split of `wf-service.ts`: folder matching `wfm-service/`, per-cluster modules, follow-ups L-023–L-026 | this PR |
+| L-021 | optimize | Groom a split of `wf-service.ts`: folder matching `wfm-service/`, per-cluster modules, follow-ups L-023–L-026 | [#111](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/111) |
 | L-022 | fix | Rename `steelpath` command to `steel-essence`; drop aliases `steelpath`, `teshin`, `steel-path`, `钢铁之路`; rename shop methods from steelPath to steelEssence | [#110](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/110) |
 | L-003 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation (renamed to `steel-essence` in L-022) | [#109](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/109) |
 | L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |
