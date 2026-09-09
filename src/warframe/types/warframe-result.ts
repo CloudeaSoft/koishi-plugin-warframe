@@ -7,7 +7,7 @@ export const warframeErrorCodes = [
   'bounty.unavailable',
   'invasion.unavailable',
   'alert.unavailable',
-  'steelpath.unavailable',
+  'steelEssence.unavailable',
   'nightwave.unavailable',
   'sortie.unavailable',
   'voidTrader.drifting',
