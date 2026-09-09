@@ -1,0 +1,28 @@
+=== yarn build ===
+zh.json already present (17991799 bytes)
+esbuild: src/index.ts -> lib/index.js
+exit:0
+=== yarn dtsc ===
+exit:0
+=== yarn lint ===
+exit:0
+=== yarn test ===
+zh.json already present (17991799 bytes)
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  61 passed (61)
+      Tests  578 passed (578)
+   Start at  02:12:59
+   Duration  17.03s (transform 2.36s, setup 0ms, import 40.38s, tests 2.53s, environment 4ms)
+
+exit:0
+
+=== yarn capture ===
+World state: fixture /workspace/tests/assets/example-world-state.json, timestamps shifted to now (live API unreachable or fixture requested)
+Warframe Market: live
+
+wmi 女武神 -> Valkyr Prime Set (valkyr_prime_set)
+wmi 跑男 -> Gauss Prime Set (gauss_prime_set)
+wmi 灵薄狱 -> Limbo Prime Set (limbo_prime_set)
