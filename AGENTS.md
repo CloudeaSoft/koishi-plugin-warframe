@@ -214,6 +214,10 @@ tracked in `docs/loop/backlog.md` and every run is recorded in
 
 ## Current Maintenance Notes
 
+- `src/warframe/services/wf-service.ts` (~1450 lines) is scheduled to become
+  a `wf-service/` folder matching `wfm-service/`. The layout and export map
+  live in `docs/loop/wf-service-split.md`; implement via L-023–L-026. Do not
+  add new `get*` / `adapt*` bodies to `index.ts` once the folder exists.
 - `globalRivenItem.ts`, `globalDucatnator.ts`, and `globalWorldState.ts` do not
   yet expose the factory + override injection pattern used by other data
   singletons.
