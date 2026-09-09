@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 2 — 2026-09-09 — explore
+
+- Item: L-002 Extend Chinese warframe aliases with a uniqueness spec (issue #69)
+- PR: none (branch `cursor/loop-explore-aliases-d3b6`; PR skipped by request). Loop PR #106 was already open at step 0.
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 607 tests)
+- Outcome: Extracted `buildWarframeAliasDict` / `findWarframeAliasCollisions` so CI fails if two warframes share a nickname (including auto `甲` forms). Added community nicknames for sparse frames (Loki 隐身, Vauban 沃班, Hydroid 海贼, and others) and filled Sirius & Orion (天狼 / 猎户 / 双子星). Live `wmi` capture: 隐身 → Loki Prime Set, 海贼 → Hydroid Prime Set, 沃班 → Vauban Prime Set. Sirius & Orion is not on Warframe Market yet (`wmi 天狼` and `wmi Sirius & Orion` both 未找到物品).
+- Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (factory + override for `globalWorldState.ts`). L-003 (`steelpath`) is the next P1 explore after that. Re-check Sirius & Orion on WFM once the item is listed.
+
 ## 1 — 2026-09-09 — optimize
 
 - Item: L-001 Align `CONTRIBUTING.md` with the current layout
