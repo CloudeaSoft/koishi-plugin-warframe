@@ -17,7 +17,6 @@ import { resolveExportItemNameZh } from './bounty-adapter'
 
 const CALENDAR_SEASON_HEADER_KEY = '/Lotus/Language/1999/CalendarSeasonHeader'
 const CALENDAR_HEADER_KEY = '/Lotus/Language/1999/CalendarHeader'
-const WEEK_DAYS = 7
 
 const SEASON_KEYS: Record<string, string> = {
   CST_SPRING: '/Lotus/Language/1999/CalendarSeasonSpring',
@@ -55,7 +54,7 @@ export function calendarTimestampMs(value?: RawMongoDate): number {
 }
 
 function translate(key: string, fallback: string = key): string {
-  return dict_zh[key] ?? dictZhExtra[key] ?? fallback
+  return stripLotusMarkup(dict_zh[key] ?? dictZhExtra[key] ?? fallback)
 }
 
 function seasonLabel(season: string): string {
@@ -74,6 +73,15 @@ function calendarDateLabel(dayOfYear: number): string {
 
 function pathLeaf(path: string): string {
   return path.split('/').pop() ?? path
+}
+
+function stripLotusMarkup(text: string): string {
+  return text
+    .replace(/\|OPEN_COLOR\|/g, '')
+    .replace(/\|CLOSE_COLOR\|/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function adaptChallenge(path: string): Pick<CalendarEventInfo, 'name' | 'description'> {
@@ -118,7 +126,7 @@ function adaptEvent(raw: RawCalendarEvent): CalendarEventInfo | undefined {
     return { kind, kindLabel, ...adaptUpgrade(raw.upgrade) }
   }
   if (raw.reward) {
-    return { kind, kindLabel, name: resolveExportItemNameZh(raw.reward) }
+    return { kind, kindLabel, name: stripLotusMarkup(resolveExportItemNameZh(raw.reward)) }
   }
   if (raw.dialogueName) {
     return { kind, kindLabel, name: pathLeaf(raw.dialogueName) }
@@ -148,10 +156,7 @@ export function adaptCalendar(
     .filter(entry => entry.day > 0)
     .sort((a, b) => a.day - b.day)
 
-  const minDay = days[0]?.day
-  const weekEnd = minDay === undefined ? 0 : minDay + WEEK_DAYS
-  const weekDays: CalendarDayInfo[] = days
-    .filter(entry => minDay !== undefined && entry.day >= minDay && entry.day < weekEnd)
+  const taggedDays: CalendarDayInfo[] = days
     .filter(entry => entry.events.length > 0)
     .map(entry => ({
       day: entry.day,
@@ -164,6 +169,6 @@ export function adaptCalendar(
     season,
     remaining: msToHumanReadable(Math.max(expiry - now, 0)),
     expiry,
-    days: weekDays,
+    days: taggedDays,
   }
 }

@@ -62,6 +62,30 @@ describe('calendarComponent tests', () => {
     expect(html).to.not.match(/<div[^>]*\/>/)
   })
 
+  it('renders later tagged days in the same board', () => {
+    const html = String(CalendarComponent(board({
+      days: [
+        day(),
+        day({
+          day: 105,
+          dateLabel: '1999年4月15日',
+          events: [event({
+            kind: 'reward',
+            kindLabel: '大奖！',
+            name: '赋能助力',
+            description: undefined,
+          })],
+        }),
+      ],
+    })))
+
+    expect(html).to.include('1999年4月6日')
+    expect(html).to.include('1999年4月15日')
+    expect(html).to.include('大奖！')
+    expect(html).to.include('赋能助力')
+    expect(html).to.not.match(/<div[^>]*\/>/)
+  })
+
   it('omits empty descriptions without leaving empty tags', () => {
     const html = String(CalendarComponent(board({
       days: [day({

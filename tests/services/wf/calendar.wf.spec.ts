@@ -87,7 +87,7 @@ describe('calendar', () => {
         .join(officialZh('/Lotus/Language/1999/CalendarSeasonSpring')),
     )
     expect(board.season).to.equal(officialZh('/Lotus/Language/1999/CalendarSeasonSpring'))
-    expect(board.days).to.have.length(2)
+    expect(board.days).to.have.length(3)
     expect(board.days[0]?.dateLabel).to.equal('1999年4月6日')
     expect(board.days[0]?.events[0]?.kindLabel).to.equal(
       officialZh('/Lotus/Language/1999/CalendarEvent_Challenge'),
@@ -102,12 +102,12 @@ describe('calendar', () => {
     )
   })
 
-  it('keeps the current 7-day 1999 window and omits later event days', () => {
+  it('keeps every tagged day in the season blob, including later rewards', () => {
     const board = adaptCalendar(seasonFixture(), NOW)
     const days = board.days.map(entry => entry.day)
 
-    expect(days).to.deep.equal([96, 97])
-    expect(days).to.not.include(105)
+    expect(days).to.deep.equal([96, 97, 105])
+    expect(board.days[2]?.events[0]?.name).to.equal(resolveExportItemNameZh(UTILITY_UNLOCKER))
     expect(board.remaining).to.equal(msToHumanReadable(EXPIRY - NOW))
   })
 
@@ -125,6 +125,31 @@ describe('calendar', () => {
     expect(board.days[0]?.events[0]?.name).to.equal(resolveExportItemNameZh(UTILITY_UNLOCKER))
     expect(board.days[0]?.events[0]?.name).to.not.equal(UTILITY_UNLOCKER)
   })
+
+  it('strips Lotus markup tags from override descriptions and shard names', () => {
+    const board = adaptCalendar(seasonFixture({
+      Days: [
+        {
+          day: 96,
+          events: [{ type: 'CET_UPGRADE', upgrade: '/Lotus/Upgrades/Calendar/BlastEveryXShots' }],
+        },
+        {
+          day: 97,
+          events: [{
+            type: 'CET_REWARD',
+            reward: '/Lotus/StoreItems/Types/Gameplay/NarmerSorties/ArchonCrystalBoreal',
+          }],
+        },
+      ],
+    }), NOW)
+
+    const override = board.days[0]?.events[0]
+    const shard = board.days[1]?.events[0]
+    expect(override?.description ?? '').to.not.match(/<[^>]+>/)
+    expect(override?.description).to.include('爆炸')
+    expect(shard?.name ?? '').to.not.match(/<[^>]+>/)
+    expect(shard?.name).to.include('蔚蓝执刑官源力石')
+  })
 })
 
 describe('getCalendarFrom', () => {
@@ -139,7 +164,7 @@ describe('getCalendarFrom', () => {
       return
     }
 
-    expect(result.data.days).to.have.length(2)
+    expect(result.data.days).to.have.length(3)
     expect(result.data.expiry).to.equal(EXPIRY)
   })
 
@@ -158,16 +183,13 @@ describe('getCalendarFrom', () => {
     expect(t(result)).to.equal('当前没有1999日历')
   })
 
-  it('fails when no event days fall in the current week', async () => {
+  it('fails when every calendar day has no events', async () => {
     const result = await getCalendarFrom({
       raw: {},
       calendarRaw: seasonFixture({
         Days: [
           { day: 96, events: [] },
-          {
-            day: 105,
-            events: [{ type: 'CET_REWARD', reward: UTILITY_UNLOCKER }],
-          },
+          { day: 105, events: [] },
         ],
       }),
     }, NOW)
@@ -191,7 +213,7 @@ describe('getCalendarFrom', () => {
     expect(result.error.retryable).to.equal(true)
   })
 
-  it('uses extracted fixture JSON for the current week', async () => {
+  it('uses extracted fixture JSON for remaining tagged days', async () => {
     const calendarRaw = extractCalendarRaw(JSON.stringify(worldStateJSON))
     const result = await getCalendarFrom({
       raw: {},
@@ -203,6 +225,8 @@ describe('getCalendarFrom', () => {
       return
     }
 
+    expect(result.data.days.length).to.be.greaterThan(2)
     expect(result.data.days.some(day => day.events.some(event => event.name === expectedChallenge(TECHROT_EASY).name))).to.equal(true)
+    expect(result.data.days.some(day => day.day === 180)).to.equal(true)
   })
 })

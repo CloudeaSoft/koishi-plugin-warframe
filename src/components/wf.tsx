@@ -2075,17 +2075,10 @@ export function CalendarComponent(board: CalendarBoard): Element {
       : timeLeft > 600000
         ? 'var(--wf-info)'
         : 'var(--wf-danger)'
-  const dayCardStyle = `
-    border-radius: var(--wf-radius-md);
-    border: 1px solid var(--wf-border);
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    background-color: var(--wf-bg-card);
-  `
 
   return (
     <div
-      style="width:420px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+      style="width:480px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
     >
       <h1 style="font-size:18px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 4px 0;text-align:center;">
         {board.title}
@@ -2095,25 +2088,25 @@ export function CalendarComponent(board: CalendarBoard): Element {
         {board.remaining}
       </div>
       {board.days.map(day => (
-        <div style={dayCardStyle}>
-          <div style="font-size:12px;font-weight:600;color:var(--wf-text-secondary);margin-bottom:6px;">
+        <div
+          style="padding:6px 8px;background-color:var(--wf-bg-subtle);border-radius:var(--wf-radius-sm);margin-bottom:4px;"
+        >
+          <div style="font-size:11px;font-weight:600;color:var(--wf-text-secondary);margin-bottom:4px;">
             {day.dateLabel}
           </div>
           {day.events.map(event => (
-            <div style="margin-bottom:6px;">
-              <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
-                <span style="font-size:11px;color:var(--wf-accent);">
-                  {event.kindLabel}
-                </span>
-                <span style="font-size:13px;font-weight:600;color:var(--wf-text-body);">
-                  {event.name}
-                </span>
-              </div>
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:2px;">
+              <span style="font-size:11px;color:var(--wf-accent);">
+                {event.kindLabel}
+              </span>
+              <span style="font-size:13px;font-weight:600;color:var(--wf-text-body);">
+                {event.name}
+              </span>
               {event.description
                 ? (
-                    <div style="font-size:11px;line-height:1.35;color:var(--wf-text-secondary);margin-top:2px;">
+                    <span style="font-size:11px;color:var(--wf-text-secondary);">
                       {event.description}
-                    </div>
+                    </span>
                   )
                 : null}
             </div>
