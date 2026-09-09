@@ -1,0 +1,24 @@
+loop-iteration: 2
+item: L-002 Extend Chinese warframe aliases (issue #69) with a uniqueness spec
+date: 2026-09-09
+visual: none (alias JSON + matcher specs only; no command/component/message/service change)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+yarn build: exit 0 (esbuild: src/index.ts -> lib/index.js)
+yarn dtsc:  exit 0 (no output)
+yarn lint:  exit 0 (no output)
+yarn test:  Test Files  61 passed (61)
+            Tests  585 passed (585)
+            Duration  16.80s
+
+=== warframeAlias.spec.ts ===
+11 passed: uniqueness, existing alias transform, 8 new nicknames, no ambiguous matchWFMItem
+
+=== wm.wfm.spec.ts added cases ===
+钉男 -> vauban_prime_set
+欺诈者 -> loki_prime_set
+海王 -> hydroid_prime_set
+盾妈 -> hildryn_prime_set
+
+Note: Nova 加速 still matches quickening and Oraxia 蜘蛛 still matches arcane_arachne
+because exact catalog names run before warframe aliases (follow-up L-020).

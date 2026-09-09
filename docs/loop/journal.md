@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 2 — 2026-09-09 — explore
+
+- Item: L-002 Extend Chinese warframe aliases (issue #69) with a uniqueness spec
+- PR: none (manual run; branch `loop/explore-chinese-aliases`)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 585 tests)
+- Outcome: Added nicknames for Sirius & Orion (`天狼`, `猎户`, `决斗之子`) and a few sparse frames (`盾妈`, `钉男`, `欺诈者`, `海王`, `蛛后`). New spec asserts each normalized alias (including the matcher’s auto `${alias}甲` key) belongs to exactly one warframe, that `transformByWarframeAlias` maps every listed alias, and that `matchWFMItem` never returns `ambiguous` for an alias.
+- Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (factory + override for `globalWorldState.ts`). L-020 is a follow-up on Nova `加速` / Oraxia `蜘蛛` colliding with existing WFM item names.
+
 ## 1 — 2026-09-09 — optimize
 
 - Item: L-001 Align `CONTRIBUTING.md` with the current layout
