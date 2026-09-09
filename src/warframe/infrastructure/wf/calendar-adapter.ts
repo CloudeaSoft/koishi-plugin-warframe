@@ -119,6 +119,51 @@ function adaptUpgrade(path: string): Pick<CalendarEventInfo, 'name' | 'descripti
   }
 }
 
+const MESSENGER_NAME_ALIASES: Record<string, string> = {
+  Amir: 'Jabir',
+}
+
+function plotCharacterId(raw: RawCalendarEvent): string | undefined {
+  const fromConvo = raw.dialogueConvo?.match(/^([A-Za-z]+)BirthdayConvo$/)?.[1]
+  if (fromConvo) {
+    return fromConvo
+  }
+  return pathLeaf(raw.dialogueName ?? '').match(/^([A-Za-z]+)Dialogue/)?.[1]
+}
+
+function plotCharacterName(id: string | undefined): string | undefined {
+  if (!id) {
+    return undefined
+  }
+  const keyIds = [id]
+  const alias = MESSENGER_NAME_ALIASES[id]
+  if (alias) {
+    keyIds.push(alias)
+  }
+  for (const keyId of keyIds) {
+    const key = `/Lotus/Language/1999/Messenger${keyId}Name`
+    const text = dict_zh[key] ?? dictZhExtra[key]
+    if (text) {
+      return stripLotusMarkup(text)
+    }
+  }
+  return undefined
+}
+
+function adaptPlot(raw: RawCalendarEvent): Pick<CalendarEventInfo, 'name' | 'description'> {
+  const id = plotCharacterId(raw)
+  const name = plotCharacterName(id)
+    ?? id
+    ?? pathLeaf(raw.dialogueConvo ?? raw.dialogueName ?? '')
+  const description = translate('/Lotus/Language/1999/CalendarEvent_BirthdayLabel')
+    .split('|NAME|')
+    .join(name)
+  return {
+    name,
+    ...(description ? { description } : {}),
+  }
+}
+
 function adaptEvent(raw: RawCalendarEvent): CalendarEventInfo | undefined {
   const type = raw.type ?? ''
   const mapped = EVENT_TYPE_KEYS[type]
@@ -134,8 +179,8 @@ function adaptEvent(raw: RawCalendarEvent): CalendarEventInfo | undefined {
   if (raw.reward) {
     return { kind, kindLabel, name: stripLotusMarkup(resolveExportItemNameZh(raw.reward)) }
   }
-  if (raw.dialogueName) {
-    return { kind, kindLabel, name: pathLeaf(raw.dialogueName) }
+  if (raw.dialogueName || raw.dialogueConvo) {
+    return { kind, kindLabel, ...adaptPlot(raw) }
   }
   return undefined
 }

@@ -86,6 +86,27 @@ describe('calendarComponent tests', () => {
     expect(html).to.not.match(/<div[^>]*\/>/)
   })
 
+  it('renders birthday kind, character name, and prompt', () => {
+    const html = String(CalendarComponent(board({
+      days: [day({
+        day: 143,
+        dateLabel: '1999年5月23日',
+        events: [event({
+          kind: 'birthday',
+          kindLabel: '生日',
+          name: '阿米尔',
+          description: '嘿！今天是阿米尔的生日。:D 也许你应该祝他/她生日快乐！',
+        })],
+      })],
+    })))
+
+    expect(html).to.include('1999年5月23日')
+    expect(html).to.include('生日')
+    expect(html).to.include('阿米尔')
+    expect(html).to.include('祝他/她生日快乐')
+    expect(html).to.not.include('.dialogue')
+  })
+
   it('omits empty descriptions without leaving empty tags', () => {
     const html = String(CalendarComponent(board({
       days: [day({

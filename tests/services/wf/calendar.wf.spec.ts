@@ -173,6 +173,48 @@ describe('calendar', () => {
     expect(stripLotusMarkup('<<script>alert(1)</script>')).to.not.match(/[<>]/)
     expect(stripLotusMarkup('prefix<script')).to.not.include('<script')
   })
+
+  it('translates CET_PLOT birthdays from dialogue paths into official Chinese names', () => {
+    const board = adaptCalendar(seasonFixture({
+      Days: [{
+        day: 143,
+        events: [{
+          type: 'CET_PLOT',
+          dialogueName: '/Lotus/Types/Gameplay/1999Wf/Dialogue/AmirDialogue_rom.dialogue',
+          dialogueConvo: 'AmirBirthdayConvo',
+        }],
+      }],
+    }), NOW)
+    const birthday = board.days[0]?.events[0]
+    const amir = officialZh('/Lotus/Language/1999/MessengerJabirName')
+
+    expect(birthday?.kindLabel).to.equal(officialZh('/Lotus/Language/1999/CalendarEvent_BDay'))
+    expect(birthday?.name).to.equal(amir)
+    expect(birthday?.name).to.not.include('.dialogue')
+    expect(birthday?.description).to.equal(
+      stripLotusMarkup(officialZh('/Lotus/Language/1999/CalendarEvent_BirthdayLabel'))
+        .split('|NAME|')
+        .join(amir),
+    )
+  })
+
+  it('keeps a plot event that only has dialogueConvo', () => {
+    const board = adaptCalendar(seasonFixture({
+      Days: [{
+        day: 45,
+        events: [{
+          type: 'CET_PLOT',
+          dialogueConvo: 'LettieBirthdayConvo',
+        }],
+      }],
+    }), NOW)
+    const birthday = board.days[0]?.events[0]
+    const lettie = officialZh('/Lotus/Language/1999/MessengerLettieName')
+
+    expect(birthday?.name).to.equal(lettie)
+    expect(birthday?.description).to.include(lettie)
+    expect(birthday?.description).to.not.include('|NAME|')
+  })
 })
 
 describe('getCalendarFrom', () => {
