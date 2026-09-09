@@ -15,9 +15,8 @@ from so future runs can judge how well-grounded it is.
 | --- | --- | --- | --- | --- | --- | --- |
 | L-023 | P1 | optimize | Scaffold `src/warframe/services/wf-service/` by moving `wf-service.ts` to `wf-service/index.ts`; update meta tests and `add-wf-command` | L-021 | todo | Mechanical move only. `services/index.ts` keeps `export * from './wf-service'`. Follow `docs/loop/wf-service-split.md` |
 | L-024 | P1 | optimize | Extract `wf-service.riven.ts` (OCR, stats, weekly rivens, disposition) from `wf-service/index.ts` | L-021 | todo | blocked by: L-023. Largest cluster (~450 lines). Move only; keep public imports unchanged |
-| L-025 | P1 | optimize | Extract world-state board modules: alert, invasion, nightwave, steel-essence, fissure, void-trader, environment | L-021 | todo | blocked by: L-023. Split into two PRs if the diff exceeds ~400 lines |
+| L-025 | P1 | optimize | Extract world-state board modules: alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar | L-021 | todo | blocked by: L-023. Split into two PRs if the diff exceeds ~400 lines |
 | L-026 | P1 | optimize | Extract remaining wf-service modules: relic, arbitration, sortie, weekly+archon, bounty, circuit | L-021 | todo | blocked by: L-023. Split into two PRs if the diff exceeds ~400 lines |
-| L-004 | P1 | explore | `calendar` command: current 1999 Höllvania calendar week (events, challenges, rewards) from world-state `calendar` | unused world-state field | todo | Verify official Chinese names via `dict_zh`. After L-023, add `wf-service.calendar.ts` instead of growing `index.ts` |
 | L-005 | P1 | explore | `event` command: active world events / tactical alerts from world-state `events` with progress and rewards | unused world-state field | todo | Handle empty state with `event.unavailable` |
 | L-006 | P1 | optimize | Factory + override injection for `globalWorldState.ts` (pattern from `globalItem.ts`) so world-state services can be tested with fixtures instead of parsed JSON | AGENTS.md maintenance notes | todo | Keep `overrideGlobal*` naming |
 | L-007 | P1 | optimize | Factory + override injection for `globalRivenItem.ts` and `globalDucatnator.ts` | AGENTS.md maintenance notes | todo | Split into two PRs if the diff grows |
@@ -55,6 +54,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
+| L-004 | explore | `1999calendar` command: current 1999 Höllvania calendar week | [#112](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/112) |
 | L-021 | optimize | Groom a split of `wf-service.ts`: folder matching `wfm-service/`, per-cluster modules, follow-ups L-023–L-026 | [#111](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/111) |
 | L-022 | fix | Rename `steelpath` command to `steel-essence`; drop aliases `steelpath`, `teshin`, `steel-path`, `钢铁之路`; rename shop methods from steelPath to steelEssence | [#110](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/110) |
 | L-003 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation (renamed to `steel-essence` in L-022) | [#109](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/109) |

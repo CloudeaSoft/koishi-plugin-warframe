@@ -141,6 +141,12 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .command('steel-essence', '钢铁精华商店')
     .alias('钢铁精华')
     .action(wf.steelEssenceCommand)
+  ctx
+    .command('1999calendar', '当前1999日历')
+    .alias('日历')
+    .alias('1999日历')
+    .alias('霍瓦尼亚日历')
+    .action(wf.calendarCommand)
 
   ctx.command('riven <img:image>', '分析紫卡截图').action(wf.rivenCommand)
   ctx

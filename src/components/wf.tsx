@@ -6,6 +6,7 @@ import type {
   ArchiMedea,
   ArchonHunt,
   BountyBoard,
+  CalendarBoard,
   Fissure,
   InvasionBoard,
   InvasionFactionTone,
@@ -2062,6 +2063,56 @@ export function AlertComponent(board: AlertBoard): Element {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+export function CalendarComponent(board: CalendarBoard): Element {
+  const timeLeft = board.expiry - Date.now()
+  const timeColor
+    = timeLeft > 3600000
+      ? 'var(--wf-success)'
+      : timeLeft > 600000
+        ? 'var(--wf-info)'
+        : 'var(--wf-danger)'
+
+  return (
+    <div
+      style="width:480px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <h1 style="font-size:18px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 4px 0;text-align:center;">
+        {board.title}
+      </h1>
+      <div style={`font-size:12px;text-align:center;margin-bottom:8px;color:${timeColor};`}>
+        剩余
+        {board.remaining}
+      </div>
+      {board.days.map(day => (
+        <div
+          style="padding:6px 8px;background-color:var(--wf-bg-subtle);border-radius:var(--wf-radius-sm);margin-bottom:4px;"
+        >
+          <div style="font-size:11px;font-weight:600;color:var(--wf-text-secondary);margin-bottom:4px;">
+            {day.dateLabel}
+          </div>
+          {day.events.map(event => (
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:2px;">
+              <span style="font-size:11px;color:var(--wf-accent);">
+                {event.kindLabel}
+              </span>
+              <span style="font-size:13px;font-weight:600;color:var(--wf-text-body);">
+                {event.name}
+              </span>
+              {event.description
+                ? (
+                    <span style="font-size:11px;color:var(--wf-text-secondary);">
+                      {event.description}
+                    </span>
+                  )
+                : null}
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   )
 }

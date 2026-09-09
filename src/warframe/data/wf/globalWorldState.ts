@@ -1,8 +1,9 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { Fissure, RawSeasonInfo, RawSyndicateMission } from '../../types'
+import type { Fissure, RawCalendarSeason, RawSeasonInfo, RawSyndicateMission } from '../../types'
 
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
 import {
+  extractCalendarRaw,
   extractInvasionsRaw,
   extractSeasonInfoRaw,
   extractSortieRaw,
@@ -54,6 +55,7 @@ export const globalWorldState = createAsyncCache(async () => {
   const seasonInfoRaw: RawSeasonInfo | undefined = extractSeasonInfoRaw(json)
   const sortieRaw = extractSortieRaw(json)
   const invasionsRaw = extractInvasionsRaw(json)
+  const calendarRaw: RawCalendarSeason | undefined = extractCalendarRaw(json)
   const worldState = await getWorldState(json)
   const fissures: Fissure[] = []
   const rjFissures: Fissure[] = []
@@ -81,6 +83,7 @@ export const globalWorldState = createAsyncCache(async () => {
     seasonInfoRaw,
     sortieRaw,
     invasionsRaw,
+    calendarRaw,
     fissures,
     spFissures,
     rjFissures,

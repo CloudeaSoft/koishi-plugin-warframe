@@ -27,6 +27,15 @@ export type {
   RawSyndicateJob,
   RawSyndicateMission,
 } from './wf/bounty'
+export type {
+  CalendarBoard,
+  CalendarDayInfo,
+  CalendarEventInfo,
+  CalendarEventKind,
+  RawCalendarDay,
+  RawCalendarEvent,
+  RawCalendarSeason,
+} from './wf/calendar'
 export type { Fissure } from './wf/fissure'
 export type {
   Invasion,
