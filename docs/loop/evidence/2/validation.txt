@@ -8,17 +8,37 @@ yarn build: exit 0 (esbuild: src/index.ts -> lib/index.js)
 yarn dtsc:  exit 0 (no output)
 yarn lint:  exit 0 (no output)
 yarn test:  Test Files  61 passed (61)
-            Tests  585 passed (585)
-            Duration  16.80s
+            Tests  605 passed (605)
+            Duration  16.25s
 
 === warframeAlias.spec.ts ===
-11 passed: uniqueness, existing alias transform, 8 new nicknames, no ambiguous matchWFMItem
+uniqueness, transform of every listed alias, attested nickname cases, no ambiguous matchWFMItem
 
-=== wm.wfm.spec.ts added cases ===
-钉男 -> vauban_prime_set
-欺诈者 -> loki_prime_set
-海王 -> hydroid_prime_set
-盾妈 -> hildryn_prime_set
+=== wm.wfm.spec.ts market cases (community nicknames) ===
+缴械基 / 弱鸡 -> loki_prime_set
+阿屎 -> ash_prime_set
+开门娃 -> nova_prime_set
+水男 -> hydroid_prime_set
+母牛 -> hildryn_prime_set
+男工程 -> vauban_prime_set
+驴王 -> oberon_prime_set
+蛆爹 -> nidus_prime_set
+核弹猴 -> wukong_prime_set
+一拳超人 -> atlas_prime_set
+歌甲 -> octavia_prime_set
+蝶甲 -> titania_prime_set
+夜店 -> revenant_prime_set
+
+=== sources (no invented nicknames) ===
+Deathcraft & TH-188 国服黑话: https://xjzj.17173.com/content/07122020/134622675.shtml
+  and https://blog.imbhj.com/archives/ukhrNuuT
+WFBotSlang: https://github.com/TRKS-Team/WFBotSlang
+尘墟氏族: http://www.jsauce.top/616.html
+233乐园 / Bilibili: 西里斯/奥里昂, 9号甲, 绘影者, 炼狱使徒, 缚影蛛后, 猿神
+
+Dropped guessed names: 欺诈者, 钉男, 海王, 盾妈, 蛛后, 天狼, 猎户, 决斗之子
+Skipped 无头 (jsauce Atlas) because the matcher strips 头 as a part suffix
+Skipped Khora 蜘蛛甲 (old glossary) because current CN usage maps 蜘蛛 to Oraxia
 
 Note: Nova 加速 still matches quickening and Oraxia 蜘蛛 still matches arcane_arachne
 because exact catalog names run before warframe aliases (follow-up L-020).
