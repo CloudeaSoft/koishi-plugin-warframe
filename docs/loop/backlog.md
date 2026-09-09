@@ -12,7 +12,6 @@ from so future runs can judge how well-grounded it is.
 
 | ID | P | Type | Item | Source | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| L-001 | P0 | optimize | Align `CONTRIBUTING.md` with the current layout: point to `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>` error handling, vitest commands; remove the link to the missing `docs/architecture.md` or add that document | doc drift found during bootstrap | todo | Contributors and agents read this file first |
 | L-002 | P1 | explore | Extend Chinese warframe aliases in `src/warframe/assets/warframeAlias.json` (issue #69) with a spec asserting each alias resolves to exactly one item | GitHub issue #69 | todo | Good first explore item; no new data source |
 | L-003 | P1 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation from world-state `steelPath` (current offering, remaining time, upcoming) | unused world-state field | todo | Data already fetched by `globalWorldState` |
 | L-004 | P1 | explore | `calendar` command: current 1999 Höllvania calendar week (events, challenges, rewards) from world-state `calendar` | unused world-state field | todo | Verify official Chinese names via `dict_zh` |
@@ -30,6 +29,7 @@ from so future runs can judge how well-grounded it is.
 | L-016 | P2 | optimize | Retire the deprecated `wm` command or make it a thin alias of `wmi`, then update README | README deprecation note | todo | Confirm no schedule or hook depends on it |
 | L-017 | P2 | optimize | Raise the vitest `functions` coverage threshold in steps once coverage gaps in `src/warframe/services` are closed | vitest.config.ts | todo | Measure with `yarn vitest run --coverage` first |
 | L-018 | P2 | explore | Clarify TODO.md item 2 ("wfm alias") into a concrete design (per-user aliases vs. item name aliases) | TODO.md | todo | Grooming only; produce a design note in the journal |
+| L-019 | P2 | optimize | Align README Develop setup with CONTRIBUTING: Corepack Yarn 4 instead of `npm i -g yarn` | found while doing L-001 | todo | README still documents Yarn 1 global install |
 
 ## Out of loop scope (maintainer decisions)
 
@@ -44,3 +44,4 @@ Items the loop must not act on because they touch CI, release, or dependencies:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
+| L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |

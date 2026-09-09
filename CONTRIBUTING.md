@@ -24,7 +24,7 @@ This document describes how to set up your environment, follow project conventio
   - [Testing](#testing)
     - [Running Tests](#running-tests)
     - [Writing Tests](#writing-tests)
-    - [⚠️ Test Isolation (Critical)](#️-test-isolation-critical)
+    - [Test Isolation](#test-isolation)
   - [Commit Message Convention](#commit-message-convention)
     - [Types](#types)
     - [Scopes](#scopes)
@@ -49,12 +49,14 @@ Participation in this project is governed by the [Contributor Covenant Code of C
 ### Prerequisites
 
 - **Node.js** >= 18 (tested on v24)
-- **Yarn** (Yarn 4 with PnP-compatible workspace) — install via `npm i -g yarn`
+- **Yarn** 4 (Corepack: `corepack enable && corepack prepare yarn@4.5.3 --activate`)
 - **VS Code** (recommended) with the workspace TypeScript version
+
+This package is part of a Koishi/Yarn workspace. Do not add a package-local `yarn.lock`; the lockfile is managed at the workspace root.
 
 ### Setup
 
-Follow the [Develop section in README.md](./README.md#develop) for the full koishi bootstrap process. Summary:
+Follow the [Develop section in README.md](./README.md#develop) for the full Koishi bootstrap process. Summary:
 
 ```bash
 # 1. Create a koishi project (in your preferred parent directory)
@@ -77,7 +79,8 @@ Open any `.ts` file, click the `{ }` item in the status bar, then select **Use W
 yarn dtsc          # Type-check (no emit)
 yarn test          # Run all tests (vitest)
 yarn build         # Full build (yakumo)
-yarn install       # Install dependencies
+yarn lint          # ESLint, including markdown
+yarn install       # Install dependencies from the workspace setup
 ```
 
 Run a single test file:
@@ -86,37 +89,54 @@ Run a single test file:
 yarn vitest run tests/<file>.spec.ts
 ```
 
+`yarn build` must run before `yarn test`: the package-boundary specs under `tests/packages/` and `tests/components/renderAssets.spec.ts` read `lib/index.js`. The full validation order used by CI is:
+
+```bash
+yarn build && yarn dtsc && yarn lint && yarn test
+```
+
 ---
 
 ## Project Structure
 
-The project follows a **domain-driven layered architecture**. Three domains — `wf` (Warframe game state), `wfm` (Warframe Market), `miscs` (miscellaneous APIs) — each split by layer:
+The project follows a **domain-driven layered architecture**. Three domains — `wf` (Warframe game state), `wfm` (Warframe Market), `miscs` (miscellaneous APIs) — live under `src/warframe/`. Koishi-facing code sits beside that domain root and may only import it through the facade.
 
-```
+```text
 src/
-├── commands/         Thin handlers: service → component → render
-├── components/       JSX → koishi Element renderers + Puppeteer output
-├── services/         Business logic (pure functions + data orchestration)
-├── data/             Cached data singletons (createAsyncCache wrappers)
-├── infrastructure/   External API clients & data adapters
-├── utils/            Generic, domain-agnostic primitives
-├── types/            Ambient .d.ts type declarations (no runtime)
-├── hooks/            Lifecycle hooks (on-ready)
-└── assets/           Static data (JSON, TS string constants)
+|-- index.ts              # plugin entry; registers commands, hooks, and schedules
+|-- commands/             # thin Koishi command handlers
+|-- components/           # JSX -> Koishi Element renderers + Puppeteer output
+|-- i18n.ts               # structured errors -> Chinese user-facing text
+|-- messages/             # Koishi Element message builders
+|-- types/                # Koishi configuration and dependency types
+|-- utils/                # Koishi presentation helpers
+|-- assets/               # render HTML/CSS/SVG
+|-- hooks/                # on-ready lifecycle hooks
+|-- schedules/            # cron jobs (world-state refresh, primed mod history)
+`-- warframe/             # self-contained domain (future SDK)
+    |-- index.ts          # sole public domain facade
+    |-- services/         # business logic and data orchestration
+    |-- data/             # cached data singletons
+    |-- infrastructure/   # external API clients and package adapters
+    |-- utils/            # private domain primitives (including HTTP)
+    |-- types/            # domain type declarations
+    `-- assets/           # Warframe static JSON and text data
 ```
 
 **Layer dependencies (strict, one-directional):**
 
-```
-commands → services → data → infrastructure → utils
-       └→ components ──┘
+```text
+commands -> warframe/index.ts -> services -> data -> infrastructure -> utils
+commands -> components -> presentation utils
 ```
 
-- `services/` and `components/` are **sibling layers** — services never imports components, and vice versa. Only `commands/` calls into both.
-- `utils/` must not import from any other layer.
-- `components/` only depends on `utils/` + `types/`.
+- `src/warframe/index.ts` is the only domain entry available to Koishi-facing code.
+- `src/warframe/` must not import outside its subtree or depend on Koishi, Satori Element, or Puppeteer.
+- `commands/` may import from the Warframe facade, `components/`, `i18n.ts`, `messages/`, and Koishi-specific configuration.
+- `components/` may import from presentation `utils/` and the Warframe facade only. It must not import from `services/`, `data/`, or `infrastructure/`.
+- `src/assets/` contains only Koishi render resources; `src/utils/` contains only presentation-side helpers.
 
-📖 **For the full architecture reference** — including data flow diagrams, per-layer file tables, the Factory+Override testing pattern, and technical debt notes — see **[docs/architecture.md](./docs/architecture.md)**.
+The full architecture reference — including layer rules, important modules, and maintenance notes — lives in **[AGENTS.md](./AGENTS.md)**.
 
 ---
 
@@ -126,48 +146,63 @@ Detailed guidance for AI assistants and contributors lives in **[AGENTS.md](./AG
 
 ### Logging
 
-Use the **single global logger** — never `console.log` / `console.error`:
+Koishi entry points, controllers, and adapters own contextual logging through the Koishi logger scoped to `koishi-plugin-warframe`. Domain code under `src/warframe/` must remain independent of Koishi, including logging. Never `console.log` / `console.error`:
 
 ```typescript
-import { logger } from '../utils'
-
-logger.info('message')
-logger.warn('warning')
-logger.error('error')
+export function apply(ctx: Context): void {
+  const deps: PluginDependencies = {
+    logger: ctx.logger('koishi-plugin-warframe'),
+    // ...
+  }
+}
 ```
+
+Use `deps.logger` from `PluginDependencies` in Koishi-facing modules (`src/hooks/`, `src/schedules/`, commands). Do not import a global logger from `src/utils/`.
 
 ### HTTP Requests
 
-Always use the shared wrappers from `src/utils/http.ts`:
+Always use the shared wrappers from `src/warframe/utils/http.ts` (re-exported by `src/warframe/utils/`):
 
 ```typescript
 import { fetchAsyncData } from '../utils'
 
 const data = await fetchAsyncData<MyType>('https://api.example.com/data')
 if (!data) {
-  return '获取数据失败' // handle undefined
+  return failure('common.fetchFailed', true)
 }
 ```
 
-**Never** use raw `fetch()` or `ofetch()` directly. All three wrappers (`fetchAsyncText` / `fetchAsyncData<T>` / `fetchAsyncImage`) provide 10s timeout, 3 retries, browser headers, and `Language: zh-hans`.
+**Never** use raw `fetch()` or `ofetch()` directly. All three wrappers (`fetchAsyncText` / `fetchAsyncData<T>` / `fetchAsyncImage`) provide 10s timeout, 3 retries, browser headers, and `Language: zh-hans`. HTTP helpers catch operational failures and return `undefined`; callers must handle `T | undefined`.
 
 ### Error Handling
 
-- **Service functions** return `string` for user-facing error messages (Chinese), or the data type on success.
-- **Infrastructure functions** return `T | undefined` (undefined = failure, logged internally). Never throw from infrastructure/utils.
+- **Infrastructure and utils** return `T | undefined` (undefined = failure). Never throw from those layers.
+- **Warframe services** return `WarframeResult<T>`: `{ ok: true, data }` on success, or `{ ok: false, error }` with a stable error code, retryability, and optional interpolation parameters.
+- **Commands** map failures to Chinese text with `t()` from `src/i18n.ts`. New error codes need a matching message there.
+
+```typescript
+const result = await getAlerts()
+if (!result.ok) {
+  return t(result)
+}
+return render(AlertComponent(result.data))
+```
 
 ### TypeScript
 
-- Type declarations live in `src/types/` as ambient `.d.ts` files (global types, no import needed).
-- Domain types are organized: `types/wf/`, `types/wfm/`, `types/miscs/`.
+- Koishi configuration declarations live in `src/types/` (`config.d.ts`).
+- Domain types live under `src/warframe/types/wf/`, `src/warframe/types/wfm.ts`, and `src/warframe/types/miscs/`.
+- Use `declare module` only when extending external package interfaces.
 
 ### File Placement
 
-- **utils/**: generic, domain-agnostic primitives only. If it imports a Warframe-specific package, it belongs in `infrastructure/`.
-- **infrastructure/**: one file per external API, imports from `utils/` only.
-- **data/**: each file exports a `createAsyncCache` instance. Use the Factory+Override pattern (`globalItem.ts` as reference) when testability is needed.
-- **commands/**: thin handlers, no business logic.
-- **components/**: JSX renderers, depend on `utils/` + `types/` only.
+- **`src/warframe/utils/`**: reusable domain primitives, including HTTP. If a helper is Warframe-specific, it belongs here rather than in presentation `src/utils/`.
+- **`src/warframe/infrastructure/`**: one adapter or client per external API; may import from domain `utils/` only.
+- **`src/warframe/data/`**: cache-backed singletons around infrastructure calls (`createAsyncCache`). Use the factory + override pattern (`globalItem.ts` / `overrideGlobalItemData`) when testability is needed.
+- **`src/warframe/services/`**: user-facing behavior. Prefer pure helpers for transforms. Do not import from `components/`.
+- **`src/commands/`**: thin handlers — parse input, call a facade query, branch on `WarframeResult`, render. No business logic.
+- **`src/components/`**: JSX renderers; depend on presentation `utils/` and the Warframe facade only.
+- **`src/utils/`**: Koishi presentation helpers only (assets, color).
 
 ---
 
@@ -176,26 +211,28 @@ if (!data) {
 ### Running Tests
 
 ```bash
-yarn test                              # all tests
-yarn vitest run tests/cache.utils.spec.ts   # single file
+yarn test                                          # all tests
+yarn vitest run tests/utils/cache.utils.spec.ts    # single file
 ```
+
+The test stack is Vitest with Mocha-style globals (`describe` / `it` / `before` / `after`) and Chai assertions.
 
 ### Writing Tests
 
-- Test files live in `tests/`, named `<feature>.<domain>.spec.ts` or `<module>.utils.spec.ts`.
+- Test files live in `tests/` and use `*.spec.ts`.
 - Use `chai` `expect()` style assertions.
 - `chai-as-promised` is **not** installed — use try/catch for rejected-promise assertions.
-- For async tests needing network, set `this.timeout(...)` appropriately.
+- For async tests that intentionally touch slow paths or network-like behavior, set `this.timeout(...)`.
 - Fixture JSON files go in `tests/assets/`.
-- Use `overrideGlobal*` functions to inject fixture data and avoid live network in unit tests.
+- Prefer fixture data and `overrideGlobal*` helpers over live network calls. Internal service tests may import implementations directly; Koishi-facing code still goes through `src/warframe/index.ts`.
 
-### ⚠️ Test Isolation (Critical)
+### Test Isolation
 
 **`before()` / `after()` hooks MUST be placed inside `describe()` blocks — never at the file root.**
 
-The old test runner ran root-level hooks before **all** test files in the suite, which caused cross-file interference when multiple files overrode the same global singleton. This was a real bug we encountered and fixed — root-level beforeAll() in one file overrode a cache that another file's test depended on.
+Root-level Mocha-style hooks can leak singleton overrides across files. This was a real bug: a root-level hook in one file overrode a cache that another file's test depended on.
 
-✅ Correct:
+Correct:
 
 ```typescript
 describe('My Feature', function () {
@@ -209,7 +246,7 @@ describe('My Feature', function () {
 })
 ```
 
-❌ Wrong (will break other test files):
+Wrong (will break other test files):
 
 ```typescript
 before(() => {
@@ -225,38 +262,38 @@ describe('My Feature', () => { /* ... */ })
 
 This project follows [**Conventional Commits**](https://www.conventionalcommits.org/). Each commit message should be structured as:
 
-```
+```text
 <type>(<scope>): <description>
 ```
 
 ### Types
 
-| Type       | Use for                                                |
-| ---------- | ------------------------------------------------------ |
-| `feat`     | New feature                                            |
-| `fix`      | Bug fix                                                |
-| `refactor` | Code restructuring without behavior change             |
-| `docs`     | Documentation only                                      |
-| `test`     | Adding or correcting tests                             |
-| `chore`    | Build, tooling, dependencies, release chores           |
-| `style`    | Formatting, whitespace, semicolons (no logic change)   |
-| `perf`     | Performance improvement                                |
-| `ci`       | CI/CD pipeline changes                                 |
+| Type       | Use for                                              |
+| ---------- | ---------------------------------------------------- |
+| `feat`     | New feature                                          |
+| `fix`      | Bug fix                                              |
+| `refactor` | Code restructuring without behavior change           |
+| `docs`     | Documentation only                                   |
+| `test`     | Adding or correcting tests                           |
+| `chore`    | Build, tooling, dependencies, release chores         |
+| `style`    | Formatting, whitespace, semicolons (no logic change) |
+| `perf`     | Performance improvement                              |
+| `ci`       | CI/CD pipeline changes                               |
 
 ### Scopes
 
-| Scope     | Maps to                                  |
-| --------- | ---------------------------------------- |
+| Scope     | Maps to                                               |
+| --------- | ----------------------------------------------------- |
 | `wf`      | Warframe game state (commands, services, data, infra) |
-| `wfm`     | Warframe Market                          |
-| `miscs`   | Miscellaneous APIs                       |
-| `readme`  | README documentation                     |
-| `deps`    | Dependency updates                       |
-| (none)    | Cross-cutting or project-wide changes    |
+| `wfm`     | Warframe Market                                       |
+| `miscs`   | Miscellaneous APIs                                    |
+| `readme`  | README documentation                                  |
+| `deps`    | Dependency updates                                    |
+| (none)    | Cross-cutting or project-wide changes                 |
 
 ### Examples
 
-```
+```text
 feat(wfm): add pmodhistory command
 fix(wf): resolve possible runtime error, remove unused dependencies
 refactor: re-organize utils folder
@@ -265,7 +302,7 @@ docs(readme): add new command descriptions
 
 If your change relates to an issue or PR, reference it in the description or body:
 
-```
+```text
 fix(wf): new incarnon genesis (#42)
 ```
 
@@ -285,9 +322,10 @@ fix(wf): new incarnon genesis (#42)
 
    ```bash
    yarn install
-   yarn dtsc    # type-check must pass
-   yarn test    # all tests must pass
    yarn build   # build must succeed
+   yarn dtsc    # type-check must pass
+   yarn lint    # eslint, including markdown
+   yarn test    # all tests must pass
    ```
 
 3. **Write tests** for new features or bug fixes. Use the Factory+Override pattern to inject fixture data and avoid live network calls in unit tests. Place `before()`/`after()` hooks inside `describe()` blocks.
@@ -303,17 +341,18 @@ fix(wf): new incarnon genesis (#42)
    - **Why** is it needed? (link any related issues)
    - **How** was it tested?
    - **Breaking changes** (if any)
-4. CI (`.github/workflows/build-and-test.yml`) will automatically run `yarn build`, `yarn dtsc`, and `yarn test` on your PR. All checks must pass.
+4. CI (`.github/workflows/build-and-test.yml`) will automatically run `yarn build`, `yarn dtsc`, `yarn lint`, and `yarn test` on your PR. All checks must pass.
 5. Address review feedback by pushing additional commits (avoid force-pushing unless requested).
 
 ### Review Criteria
 
-- ✅ Type-check passes (`yarn dtsc`)
-- ✅ All tests pass (`yarn test`)
-- ✅ Build succeeds (`yarn build`)
-- ✅ No `console.log` / raw `fetch` / layer violations
-- ✅ Tests cover new logic
-- ✅ Commit messages follow Conventional Commits
+- Type-check passes (`yarn dtsc`)
+- All tests pass (`yarn test`)
+- Build succeeds (`yarn build`)
+- Lint passes (`yarn lint`)
+- No `console.log` / raw `fetch` / layer violations
+- Tests cover new logic
+- Commit messages follow Conventional Commits
 
 ---
 
@@ -326,6 +365,7 @@ Use the issue templates in [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE)
 - **[Custom](./.github/ISSUE_TEMPLATE/custom.md)** — anything else
 
 When reporting a bug, include:
+
 - Koishi version and plugin version
 - Steps to reproduce
 - Expected vs. actual behavior
