@@ -54,7 +54,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-004 | explore | `calendar` command: current 1999 Höllvania calendar week | [#112](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/112) |
+| L-004 | explore | `1999calendar` command: current 1999 Höllvania calendar week | [#112](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/112) |
 | L-021 | optimize | Groom a split of `wf-service.ts`: folder matching `wfm-service/`, per-cluster modules, follow-ups L-023–L-026 | [#111](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/111) |
 | L-022 | fix | Rename `steelpath` command to `steel-essence`; drop aliases `steelpath`, `teshin`, `steel-path`, `钢铁之路`; rename shop methods from steelPath to steelEssence | [#110](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/110) |
 | L-003 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation (renamed to `steel-essence` in L-022) | [#109](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/109) |

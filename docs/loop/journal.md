@@ -14,10 +14,10 @@ Newest entry first. Every iteration prepends one entry using this template:
 
 ## 6 — 2026-09-09 — explore
 
-- Item: L-004 `calendar` command for the current 1999 Höllvania calendar week
+- Item: L-004 `1999calendar` command for the current 1999 Höllvania calendar week
 - PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/112
-- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (67 files, 599 tests)
-- Outcome: Added `calendar` (`日历`, `1999日历`, `霍瓦尼亚日历`) showing remaining tagged 1999 days (challenges, Hex overrides, rewards) from `KnownCalendarSeasons` in official Chinese. Empty days are skipped; the world-state expiry is still a weekly window even though the day list covers the rest of the season.
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (67 files, 601 tests)
+- Outcome: Added `1999calendar` (`日历`, `1999日历`, `霍瓦尼亚日历`) showing remaining tagged 1999 days (challenges, Hex overrides, rewards) from `KnownCalendarSeasons` in official Chinese. Empty days are skipped; the world-state expiry is still a weekly window even though the day list covers the rest of the season.
 - Next: Previous type is explore, so pick P1 optimize L-023 (scaffold `wf-service/`). Put new calendar queries in `wf-service.calendar.ts` after that extract.
 
 ## 5 — 2026-09-09 — optimize

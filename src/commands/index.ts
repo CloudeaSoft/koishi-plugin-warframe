@@ -142,7 +142,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('钢铁精华')
     .action(wf.steelEssenceCommand)
   ctx
-    .command('calendar', '当前1999日历')
+    .command('1999calendar', '当前1999日历')
     .alias('日历')
     .alias('1999日历')
     .alias('霍瓦尼亚日历')
