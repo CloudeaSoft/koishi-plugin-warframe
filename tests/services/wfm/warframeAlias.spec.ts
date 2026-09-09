@@ -50,15 +50,30 @@ function aliasOwnersByNormalizedKey(
   return owners
 }
 
+/**
+ * Nicknames added from Chinese community sources, not invented:
+ * Deathcraft & TH-188 国服黑话 (17173 / OrdisBlog), WFBotSlang,
+ * 尘墟氏族 jsauce 战甲出处, 233乐园 / Bilibili titles.
+ */
 const addedAliasCases = [
-  { input: '天狼', frame: 'sirius&orion' },
-  { input: '猎户', frame: 'sirius&orion' },
-  { input: '决斗之子', frame: 'sirius&orion' },
-  { input: '盾妈', frame: 'hildryn' },
-  { input: '钉男', frame: 'vauban' },
-  { input: '欺诈者', frame: 'loki' },
-  { input: '海王', frame: 'hydroid' },
-  { input: '蛛后', frame: 'oraxia' },
+  { input: '缴械基', frame: 'loki' },
+  { input: '运输基', frame: 'loki' },
+  { input: '弱鸡', frame: 'loki' },
+  { input: '阿屎', frame: 'ash' },
+  { input: '开门娃', frame: 'nova' },
+  { input: '核弹猴', frame: 'wukong' },
+  { input: '蛆爹', frame: 'nidus' },
+  { input: '驴王', frame: 'oberon' },
+  { input: '一拳超人', frame: 'atlas' },
+  { input: '歌甲', frame: 'octavia' },
+  { input: '蝶甲', frame: 'titania' },
+  { input: '夜店', frame: 'revenant' },
+  { input: '西里斯', frame: 'sirius&orion' },
+  { input: '奥里昂', frame: 'sirius&orion' },
+  { input: '9号甲', frame: 'cyte09' },
+  { input: '绘影者', frame: 'follie' },
+  { input: '炼狱使徒', frame: 'uriel' },
+  { input: '缚影蛛后', frame: 'oraxia' },
 ]
 
 describe('warframe aliases', () => {

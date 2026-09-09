@@ -44,5 +44,5 @@ Items the loop must not act on because they touch CI, release, or dependencies:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-002 | explore | Extend Chinese warframe aliases in `src/warframe/assets/warframeAlias.json` (issue #69) with a spec asserting each alias resolves to exactly one item | branch `loop/explore-chinese-aliases` (no PR this run) |
+| L-002 | explore | Extend Chinese warframe aliases in `src/warframe/assets/warframeAlias.json` (issue #69) with a spec asserting each alias resolves to exactly one item; nicknames taken from CN community glossaries (Deathcraft/TH-188, WFBotSlang, jsauce, 233乐园/Bilibili), not guessed | branch `loop/explore-chinese-aliases` |
 | L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |
