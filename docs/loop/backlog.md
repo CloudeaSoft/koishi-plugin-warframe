@@ -45,5 +45,5 @@ Items the loop must not act on because they touch CI, release, or dependencies:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-002 | explore | Extend Chinese warframe aliases (Sirius & Orion 众星/决斗之子/天狼星/猎户座, Follie 绘影者/狂墨, Ember 余烬) with a uniqueness spec | skipped (manual run, no PR) |
+| L-002 | explore | Extend Chinese warframe aliases from community 黑话 (西里斯/奥里昂, 狂墨/肥婆, 火女, plus 17173 terms) with a uniqueness spec | skipped (manual run, no PR) |
 | L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |

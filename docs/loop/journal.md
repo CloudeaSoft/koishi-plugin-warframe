@@ -16,8 +16,8 @@ Newest entry first. Every iteration prepends one entry using this template:
 
 - Item: L-002 Extend Chinese warframe aliases (issue #69)
 - PR: none (manual run; branch `cursor/loop-explore-aliases-5a6d`; maintainer asked not to open a PR)
-- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 583 tests after the Ember alias cases)
-- Outcome: Filled the empty Sirius & Orion list with official copy (众星, 决斗之子) and star names (天狼星, 猎户座); added Follie's 绘影者 / 狂墨 and Ember's Changyou name 余烬. Added `tests/services/wfm/warframeAlias.spec.ts` so every normalized alias, including the auto `甲` form, maps to exactly one warframe. Live `wmi 余烬` resolves to Ember Prime Set; `wmi 众星` / `wmi 绘影者` stay not-found because Warframe Market has no non-Prime Follie or Sirius items yet.
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — pending after replacing guessed names with community 黑话
+- Outcome: Dropped guessed labels (众星 / 决斗之子 / 天狼星 / 猎户座, 绘影者, 余烬). Sirius & Orion now use 西里斯 / 奥里昂 (17173 / 233乐园); Follie keeps 狂墨 / 肥婆 / 墨水 (233乐园); Ember uses 火女 (九游) plus existing 火鸡. Also added 17173/萌娘百科/233乐园 黑话 that was missing: 阿屎, 缴械基, 运输基, 开门娃, 减速娃, 驴王, 蛆爹, 歌甲, 蝶甲, 蹦蹦, 吼牛, 核弹猴, 炼狱使徒. Uniqueness spec still requires each normalized alias (and auto `甲`) to map to one warframe.
 - Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (globalWorldState factory + override). Issue #69 stays open (L-021). Matcher order for `加速` vs Quickening is L-020.
 
 ## 1 — 2026-09-09 — optimize
