@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 2 — 2026-09-09 — explore
+
+- Item: L-002 Extend Chinese warframe aliases (issue #69) with a unique-resolution spec
+- PR: not opened (explicit request); branch `cursor/loop-explore-aliases-b749`
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 595 tests)
+- Outcome: Added 23 community nicknames (沃班, 沙爹, 天狼猎户, …) to `warframeAlias.json` and a spec that every nickname maps to exactly one warframe and resolves to that warframe's set item. Live capture: `wmi 沃班` → Vauban Prime Set, `wmi 沙爹` → Inaros Prime Set; `wmi 天狼猎户` maps correctly but Warframe Market has no Sirius & Orion listing yet (`未找到物品`).
+- Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (`globalWorldState` factory + override). L-003 (`steelpath`) remains the next explore item.
+
 ## 1 — 2026-09-09 — optimize
 
 - Item: L-001 Align `CONTRIBUTING.md` with the current layout
