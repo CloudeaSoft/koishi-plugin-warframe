@@ -15,8 +15,8 @@ Newest entry first. Every iteration prepends one entry using this template:
 ## 4 — 2026-09-09 — fix
 
 - Item: L-022 Rename `steelpath` command to `steel-essence` and drop Steel Path aliases
-- PR: (this change)
-- Validation: yarn build, yarn dtsc, yarn lint, yarn test — pending
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/110
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (64 files, 585 tests)
 - Outcome: Command is now `steel-essence` (`钢铁精华`). Removed `steelpath`, `teshin`, `steel-path`, and `钢铁之路` so the Steel Essence shop is not confused with Steel Path fissures (`fissure-sp`). Shop methods and presentation types use steelEssence; the world-state field `steelPath` and `getSteelPathCatalogs` keep the upstream names.
 - Next: Previous type is fix. P0 L-021 remains first (groom a `wf-service.ts` split, discuss file structure only). After that a P1 explore such as L-004 is next.
 

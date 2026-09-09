@@ -14,11 +14,11 @@ describe('steel-essence command definition', () => {
   it('registers steel-essence with 钢铁精华 and without Steel Path aliases', () => {
     expect(match, 'steel-essence command block').to.not.equal(null)
     const block = match?.[0] ?? ''
-    expect(block).to.include(".alias('钢铁精华')")
-    expect(block).to.not.include("'steelpath'")
-    expect(block).to.not.include("'teshin'")
-    expect(block).to.not.include("'steel-path'")
-    expect(block).to.not.include("'钢铁之路'")
+    expect(block).to.match(/\.alias\('钢铁精华'\)/)
+    expect(block).to.not.match(/'steelpath'/)
+    expect(block).to.not.match(/'teshin'/)
+    expect(block).to.not.match(/'steel-path'/)
+    expect(block).to.not.match(/'钢铁之路'/)
     expect(commands).to.not.match(/\.command\('steelpath'/)
   })
 
