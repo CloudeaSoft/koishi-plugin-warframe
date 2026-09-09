@@ -3,6 +3,7 @@ import type { ItemShort } from '../../types'
 import { warframeAlias } from '../../assets'
 import { globalItemData } from '../../data/wfm/globalItem'
 import { fullWidthToHalfWidth, normalizeName } from '../../utils'
+import { buildWarframeAliasDict } from './wfm-service.warframe-alias'
 
 export type WFMItemMatchResult
   = | { type: 'matched', item: ItemShort }
@@ -60,25 +61,7 @@ export const wfmItemMatcher = (() => {
     '手套',
   ].sort((left, right) => right.length - left.length)
   const headSuffixLookup = [neuropticsSuffix, cerebrumSuffix]
-  const warframeAliasDict: Record<string, string> = ((aliasObject) => {
-    const transformedObject: Record<string, string> = {}
-    for (const [key, aliases] of Object.entries(aliasObject)) {
-      const normalizedKey = normalizeName(key)
-      transformedObject[normalizedKey] = normalizedKey
-      for (const alias of aliases) {
-        if (typeof alias !== 'string' || alias.length === 0) {
-          continue
-        }
-
-        const normalizedAlias = normalizeName(alias)
-        transformedObject[normalizedAlias] = normalizedKey
-        const warframeNameWithSuffix = normalizeName(`${alias}甲`)
-        transformedObject[warframeNameWithSuffix] = normalizedKey
-      }
-    }
-
-    return transformedObject
-  })(warframeAlias)
+  const warframeAliasDict = buildWarframeAliasDict(warframeAlias)
 
   function resolvePartSuffixes(suffix: string): string[] {
     if (suffix === neuropticsSuffix || suffix === cerebrumSuffix || suffix === headShortSuffix) {

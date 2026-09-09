@@ -98,6 +98,16 @@ describe('wfm-service.inputToItem', () => {
     { input: '小丑', slug: 'mirage_prime_set' },
     { input: '伏特', slug: 'volt_prime_set' },
     { input: '瓦喵甲', slug: 'valkyr_prime_set' },
+    { input: '隐身', slug: 'loki_prime_set' },
+    { input: '沃班', slug: 'vauban_prime_set' },
+    { input: '海贼', slug: 'hydroid_prime_set' },
+    { input: '尼克斯', slug: 'nyx_prime_set' },
+    { input: '法老', slug: 'inaros_prime_set' },
+    { input: '蝴蝶', slug: 'titania_prime_set' },
+    { input: '哈洛', slug: 'harrow_prime_set' },
+    { input: '加拉', slug: 'gara_prime_set' },
+    { input: '巴鲁克', slug: 'baruuk_prime_set' },
+    { input: '陀螺', slug: 'gyre_prime_set' },
   ]
 
   const suffixCases = [
