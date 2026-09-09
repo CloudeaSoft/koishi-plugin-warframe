@@ -16,8 +16,8 @@ Newest entry first. Every iteration prepends one entry using this template:
 
 - Item: L-002 Extend Chinese warframe aliases with a uniqueness spec (issue #69)
 - PR: none (branch `cursor/loop-explore-aliases-d3b6`; PR skipped by request). Loop PR #106 was already open at step 0.
-- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 607 tests)
-- Outcome: Extracted `buildWarframeAliasDict` / `findWarframeAliasCollisions` so CI fails if two warframes share a nickname (including auto `甲` forms). Added community nicknames for sparse frames (Loki 隐身, Vauban 沃班, Hydroid 海贼, and others) and filled Sirius & Orion (天狼 / 猎户 / 双子星). Live `wmi` capture: 隐身 → Loki Prime Set, 海贼 → Hydroid Prime Set, 沃班 → Vauban Prime Set. Sirius & Orion is not on Warframe Market yet (`wmi 天狼` and `wmi Sirius & Orion` both 未找到物品).
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 617 tests)
+- Outcome: Extracted `buildWarframeAliasDict` / `findWarframeAliasCollisions` so CI fails if two warframes share a nickname (including auto `甲` forms). Aliases are taken from Chinese Warframe pages, not invented transliterations: 17173《黑话术语大全（战甲篇）》 (缴械基 / 运输基 / 开门娃 / 沙甲 / 蝶甲 / 工程), 星际云玩家国服用语 (弱鸡 / 圣拳武僧 / 离火幻灵), 木答案掉落帖 (花妈 / 球妈 / 蛇佬), 233乐园 (缚影蛛后 / 炼狱使徒 / 乌列尔), and 17173 国服公告 (西里斯&奥里昂, 缮写士, 蘑菇小子, 狂墨 / 绘影者). Guessed names (隐身, 沃班, 海贼, 天狼 / 猎户座) were removed. Live `wmi`: 缴械基 → Loki Prime Set, 工程统帅 → Vauban Prime Set, 沙甲 → Inaros Prime Set. Sirius & Orion is not on Warframe Market yet (`wmi 西里斯` → 未找到物品).
 - Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (factory + override for `globalWorldState.ts`). L-003 (`steelpath`) is the next P1 explore after that. Re-check Sirius & Orion on WFM once the item is listed.
 
 ## 1 — 2026-09-09 — optimize

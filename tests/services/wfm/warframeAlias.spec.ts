@@ -83,7 +83,7 @@ describe('extended Chinese warframe aliases', () => {
 
   it('does not map unpublished guessed nicknames', () => {
     for (const guessed of ['隐身', '沃班', '海贼', '天狼', '猎户座', '双子星', '诺科', '佛莉']) {
-      expect(transformByWarframeAlias(normalizeName(guessed)), guessed).to.equal(normalizeName(guessed))
+      expect(transformByWarframeAlias(normalizeName(guessed)), guessed).to.equal(undefined)
     }
   })
 })
