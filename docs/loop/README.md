@@ -3,8 +3,8 @@
 A merge-driven improvement loop for `koishi-plugin-warframe`, built on Cursor
 Cloud Agents. Every time a pull request is merged into `master`, a Cursor
 Automation starts one Cloud Agent that performs a single, small, fully
-validated iteration (a new feature or an optimization) and opens a draft PR.
-A human reviews and merges; the merge starts the next iteration.
+validated iteration (a new feature, an optimization, or a fix) and opens a
+draft PR. A human reviews and merges; the merge starts the next iteration.
 
 ```text
  you merge a PR ──▶ Cursor Automation (trigger: Pull request merged)
@@ -59,8 +59,8 @@ credentials.
 - **Work in progress limit**: 1. If a loop PR is open, a triggered run exits
   without doing anything. The guard searches open PRs for the body line
   `loop-iteration:`; keep that line intact when editing PR descriptions.
-- **Selection**: by priority (`P0` > `P1` > `P2`) across both explore and
-  optimize items. Ties go to the type not used by the previous iteration.
+- **Selection**: by priority (`P0` > `P1` > `P2`) across explore, optimize, and
+  fix items. Ties go to the type not used by the previous iteration.
   Skip community-sourced content (Chinese nicknames, `warframeAlias.json`,
   issue #69); that belongs to public contributors.
 - **Scope of one iteration**: one backlog item, one draft PR, ideally under 400

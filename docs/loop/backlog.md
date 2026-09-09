@@ -4,8 +4,9 @@ Candidates for autonomous iterations. Each run picks the highest-priority
 `todo` item (P0 first), skipping anything with an unresolved `blocked by`.
 Status values: `todo`, `in-progress`, `done`, `dropped`.
 
-Columns: **Type** is `explore` (new user-facing capability) or `optimize`
-(quality, maintainability, docs, tests). **Source** records where the idea came
+Columns: **Type** is `explore` (new user-facing capability), `optimize`
+(quality, maintainability, docs, tests), or `fix` (correct a shipped command,
+alias, or user-facing naming). **Source** records where the idea came
 from so future runs can judge how well-grounded it is.
 
 ## Candidates
@@ -51,5 +52,6 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-003 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation | this PR |
+| L-022 | fix | Rename `steelpath` command to `steel-essence`; drop aliases `steelpath`, `teshin`, `steel-path`, `钢铁之路`; rename shop methods from steelPath to steelEssence | this PR |
+| L-003 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation (renamed to `steel-essence` in L-022) | [#109](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/109) |
 | L-001 | optimize | Align `CONTRIBUTING.md` with `src/warframe/*` layers, `src/warframe/utils/http.ts`, `WarframeResult<T>`, vitest/lint commands; drop the missing `docs/architecture.md` link | [#105](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/105) |

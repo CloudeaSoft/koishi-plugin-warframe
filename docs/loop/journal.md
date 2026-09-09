@@ -3,7 +3,7 @@
 Newest entry first. Every iteration prepends one entry using this template:
 
 ```markdown
-## N — YYYY-MM-DD — <explore|optimize|grooming>
+## N — YYYY-MM-DD — <explore|optimize|grooming|fix>
 
 - Item: L-XXX <title>
 - PR: <url>
@@ -11,6 +11,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Outcome: <one or two sentences on what changed and why>
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
+
+## 4 — 2026-09-09 — fix
+
+- Item: L-022 Rename `steelpath` command to `steel-essence` and drop Steel Path aliases
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — pending
+- Outcome: Command is now `steel-essence` (`钢铁精华`). Removed `steelpath`, `teshin`, `steel-path`, and `钢铁之路` so the Steel Essence shop is not confused with Steel Path fissures (`fissure-sp`). Shop methods and presentation types use steelEssence; the world-state field `steelPath` and `getSteelPathCatalogs` keep the upstream names.
+- Next: Previous type is fix. P0 L-021 remains first (groom a `wf-service.ts` split, discuss file structure only). After that a P1 explore such as L-004 is next.
 
 ## 3 — 2026-09-09 — explore
 
