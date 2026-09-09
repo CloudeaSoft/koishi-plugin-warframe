@@ -1,0 +1,24 @@
+=== yarn build ===
+zh.json already present (17991799 bytes)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+esbuild: src/index.ts -> lib/index.js
+exit:0
+=== yarn dtsc ===
+exit:0
+=== yarn lint ===
+exit:0
+=== yarn test ===
+zh.json already present (17991799 bytes)
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  60 passed (60)
+      Tests  570 passed (570)
+   Start at  01:12:22
+   Duration  17.01s (transform 1.87s, setup 0ms, import 39.61s, tests 3.34s, environment 4ms)
+
+exit:0
