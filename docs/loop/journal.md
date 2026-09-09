@@ -18,7 +18,7 @@ Newest entry first. Every iteration prepends one entry using this template:
 - PR: (this change)
 - Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (63 files, 582 tests)
 - Outcome: Added `steelpath` (`钢铁精华`, `钢铁之路`, `teshin`) showing the current Teshin honor, remaining time, and the rest of the 8-week rotation in Chinese from `warframe-worldstate-data`. The parser computes `steelPath` from a 2020-11-16 weekly epoch rather than a live JSON field; names are remapped from the English locale the plugin still passes to WorldState.build.
-- Next: Previous type is explore, so pick a P1 optimize. Table order is L-006 (`globalWorldState` factory + override). L-020 is a small README-row follow-up if that refactor looks large.
+- Next: P0 L-021 is now first: groom a `wf-service.ts` split (discuss file structure only, do not move code). After that, previous type is explore so a P1 optimize such as L-006 is next.
 
 ## 2 — 2026-09-09 — grooming
 
