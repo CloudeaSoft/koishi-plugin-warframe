@@ -41,6 +41,14 @@ describe('wf-service split contract', () => {
     expect(doc).to.include('index.ts')
   })
 
+  it('scaffolds wf-service as a folder with index.ts rather than a single file', () => {
+    const dir = resolve(root, 'src/warframe/services/wf-service')
+    const file = resolve(root, 'src/warframe/services/wf-service.ts')
+    expect(existsSync(dir) && statSync(dir).isDirectory()).to.equal(true)
+    expect(existsSync(resolve(dir, 'index.ts'))).to.equal(true)
+    expect(existsSync(file)).to.equal(false)
+  })
+
   it('maps every exported wf-service function to a target file', () => {
     expect(mapped.length).to.be.greaterThan(0)
     expect(exported.length).to.be.greaterThan(0)

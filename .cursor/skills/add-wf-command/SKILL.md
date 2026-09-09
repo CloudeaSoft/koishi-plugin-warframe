@@ -16,17 +16,15 @@ Declare the shape the component will render (`<Feature>Info`, `<Feature>Board`).
 Re-export it from `src/warframe/types/index.ts` with `export type { ... }`.
 Types stay free of Koishi and Satori imports.
 
-## 2. Service: `src/warframe/services/wf-service.ts` (until the folder split)
+## 2. Service: `src/warframe/services/wf-service/`
 
-Today the queries live in `src/warframe/services/wf-service.ts`. The target
-layout is `src/warframe/services/wf-service/` matching `wfm-service/`; see
-`docs/loop/wf-service-split.md`.
+Queries live in `src/warframe/services/wf-service/` matching `wfm-service/`;
+see `docs/loop/wf-service-split.md`.
 
-- Until that folder exists, add the query to `wf-service.ts` (or a new file
-  under `services/` re-exported from `services/index.ts`).
-- Once `wf-service/` exists, add `wf-service.<feature>.ts` there and
-  re-export it from `wf-service/index.ts`. Do not grow `index.ts` with new
-  `get*` / `adapt*` bodies.
+- Add `wf-service.<feature>.ts` there and re-export it from
+  `wf-service/index.ts`. Do not grow `index.ts` with new `get*` / `adapt*`
+  bodies. Existing clusters still in `index.ts` are extracted by L-024–L-026;
+  new features skip that queue and land in their own module.
 
 - Write a pure `adapt<Feature>(raw, now = Date.now())` that maps upstream data
   to the domain types. Keep it exported so tests can call it with fixtures.
