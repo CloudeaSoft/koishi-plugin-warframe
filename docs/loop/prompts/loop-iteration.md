@@ -23,7 +23,7 @@ Procedure summary (the skill is authoritative):
    available, read the key loop_last_iteration.
 3. Select the highest-priority backlog item with status todo (P0 > P1 > P2),
    skipping items with an unresolved "blocked by". On ties prefer the type
-   (explore/optimize) that differs from the previous iteration. If nothing is
+   (explore/optimize/fix) that differs from the previous iteration. If nothing is
    selectable, do a grooming iteration: add well-reasoned candidates to the
    backlog and open a PR containing only backlog and journal changes.
 4. Implement the item on a branch named loop/<type>-<slug> with tests. For new

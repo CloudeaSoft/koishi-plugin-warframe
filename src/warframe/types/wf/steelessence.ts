@@ -10,16 +10,16 @@ export interface RawSteelPathOfferings {
   rotation?: RawSteelPathOffering[]
 }
 
-export interface SteelPathOfferingInfo {
+export interface SteelEssenceOfferingInfo {
   name: string
   cost: number
 }
 
-export interface SteelPathBoard {
+export interface SteelEssenceBoard {
   title: string
   costLabel: string
   remaining: string
   expiry: number
-  current: SteelPathOfferingInfo
-  upcoming: SteelPathOfferingInfo[]
+  current: SteelEssenceOfferingInfo
+  upcoming: SteelEssenceOfferingInfo[]
 }

@@ -79,9 +79,9 @@ export type {
 export type {
   RawSteelPathOffering,
   RawSteelPathOfferings,
-  SteelPathBoard,
-  SteelPathOfferingInfo,
-} from './wf/steelpath'
+  SteelEssenceBoard,
+  SteelEssenceOfferingInfo,
+} from './wf/steelessence'
 export type { VoidTrader, VoidTraderItem } from './wf/voidtrader'
 export type {
   ArchiMedea,

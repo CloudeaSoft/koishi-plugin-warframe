@@ -209,7 +209,8 @@ Cloud Agent whenever a pull request is merged into `master`. The workflow,
 selection rules, and guardrails live in `docs/loop/README.md`; candidates are
 tracked in `docs/loop/backlog.md` and every run is recorded in
 `docs/loop/journal.md`. Agents performing a run follow the repository skill
-`.cursor/skills/loop-iteration/SKILL.md`.
+`.cursor/skills/loop-iteration/SKILL.md`. Iteration types are `explore`,
+`optimize`, and `fix`.
 
 ## Current Maintenance Notes
 

@@ -3,7 +3,7 @@ import { dict_zh } from 'warframe-public-export-plus'
 import { t } from '../../../src/i18n'
 import { dictZhExtra } from '../../../src/warframe/assets'
 import { getSteelPathCatalogs } from '../../../src/warframe/infrastructure/wf/wfcd-adapter'
-import { adaptSteelPath, getSteelPathFrom } from '../../../src/warframe/services'
+import { adaptSteelEssence, getSteelEssenceFrom } from '../../../src/warframe/services'
 import { msToHumanReadable } from '../../../src/warframe/utils/time'
 
 const NOW = Date.parse('2026-08-25T09:00:00Z')
@@ -30,10 +30,10 @@ function parsedOfferings(
   }
 }
 
-describe('adaptSteelPath', () => {
+describe('adaptSteelEssence', () => {
   it('translates the English current reward into official Chinese', async () => {
     const catalogs = await getSteelPathCatalogs()
-    const board = await adaptSteelPath(parsedOfferings('Umbra Forma Blueprint'), NOW)
+    const board = await adaptSteelEssence(parsedOfferings('Umbra Forma Blueprint'), NOW)
 
     expect(board.title).to.equal(`${officialZh(TESHIN_KEY)} · ${officialZh(ESSENCE_KEY)}商店`)
     expect(board.costLabel).to.equal(officialZh(ESSENCE_KEY))
@@ -48,10 +48,10 @@ describe('adaptSteelPath', () => {
     const catalogs = await getSteelPathCatalogs()
     const last = catalogs.en.rotation[catalogs.en.rotation.length - 1]
     if (!last) {
-      expect.fail('English steel path rotation is empty')
+      expect.fail('English steel essence rotation is empty')
       return
     }
-    const board = await adaptSteelPath(parsedOfferings(last.name), NOW)
+    const board = await adaptSteelEssence(parsedOfferings(last.name), NOW)
 
     expect(board.current).to.deep.equal(catalogs.zh.rotation[catalogs.zh.rotation.length - 1])
     expect(board.upcoming[0]).to.deep.equal(catalogs.zh.rotation[0])
@@ -60,17 +60,17 @@ describe('adaptSteelPath', () => {
 
   it('falls back to the epoch rotation index when the name is unknown', async () => {
     const catalogs = await getSteelPathCatalogs()
-    const board = await adaptSteelPath(parsedOfferings('Not A Real Honor'), NOW)
+    const board = await adaptSteelEssence(parsedOfferings('Not A Real Honor'), NOW)
 
     expect(board.current).to.deep.equal(catalogs.zh.rotation[5])
     expect(board.upcoming[0]).to.deep.equal(catalogs.zh.rotation[6])
   })
 })
 
-describe('getSteelPathFrom', () => {
+describe('getSteelEssenceFrom', () => {
   it('returns the adapted board from a worldstate snapshot', async () => {
     const catalogs = await getSteelPathCatalogs()
-    const result = await getSteelPathFrom({
+    const result = await getSteelEssenceFrom({
       raw: { steelPath: parsedOfferings('50,000 Kuva') },
     }, NOW)
 
@@ -84,18 +84,18 @@ describe('getSteelPathFrom', () => {
   })
 
   it('fails when steelPath is missing', async () => {
-    const result = await getSteelPathFrom({ raw: {} }, NOW)
+    const result = await getSteelEssenceFrom({ raw: {} }, NOW)
     expect(result.ok).to.equal(false)
     if (result.ok) {
       return
     }
 
-    expect(result.error.code).to.equal('steelpath.unavailable')
+    expect(result.error.code).to.equal('steelEssence.unavailable')
     expect(t(result)).to.equal('钢铁精华商店获取失败')
   })
 
   it('fails when the current rotation has expired', async () => {
-    const result = await getSteelPathFrom({
+    const result = await getSteelEssenceFrom({
       raw: { steelPath: parsedOfferings('Umbra Forma Blueprint', { expiry: new Date(NOW) }) },
     }, NOW)
     expect(result.ok).to.equal(false)
@@ -103,11 +103,11 @@ describe('getSteelPathFrom', () => {
       return
     }
 
-    expect(result.error.code).to.equal('steelpath.unavailable')
+    expect(result.error.code).to.equal('steelEssence.unavailable')
   })
 
   it('fails with common.fetchFailed when worldstate cannot be loaded', async () => {
-    const result = await getSteelPathFrom()
+    const result = await getSteelEssenceFrom()
     expect(result.ok).to.equal(false)
     if (result.ok) {
       return

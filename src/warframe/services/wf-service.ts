@@ -32,8 +32,8 @@ import type {
   RivenWeaponType,
   Sortie,
   SortieMission,
-  SteelPathBoard,
-  SteelPathOfferingInfo,
+  SteelEssenceBoard,
+  SteelEssenceOfferingInfo,
   VoidTrader,
   WarframeResult,
 } from '../types'
@@ -836,12 +836,12 @@ export async function getAlerts(): Promise<WarframeResult<AlertBoard>> {
   }
 }
 
-const STEEL_PATH_TESHIN_KEY = '/Lotus/Language/Bosses/Teshin'
-const STEEL_PATH_ESSENCE_KEY = '/Lotus/Language/Resources/SteelEssence'
-const STEEL_PATH_EPOCH_MS = Date.parse('2020-11-16T00:00:00.000Z')
-const STEEL_PATH_WEEK_SECONDS = 604800
+const STEEL_ESSENCE_TESHIN_KEY = '/Lotus/Language/Bosses/Teshin'
+const STEEL_ESSENCE_KEY = '/Lotus/Language/Resources/SteelEssence'
+const STEEL_ESSENCE_EPOCH_MS = Date.parse('2020-11-16T00:00:00.000Z')
+const STEEL_ESSENCE_WEEK_SECONDS = 604800
 
-function steelPathWeekExpiryUtc(now: number): number {
+function steelEssenceWeekExpiryUtc(now: number): number {
   const date = new Date(now)
   const offset = date.getUTCDay() === 0 ? 6 : date.getUTCDay() - 1
   return Date.UTC(
@@ -855,20 +855,20 @@ function steelPathWeekExpiryUtc(now: number): number {
   )
 }
 
-function steelPathRotationIndex(now: number, length: number): number {
+function steelEssenceRotationIndex(now: number, length: number): number {
   if (length <= 0) {
     return 0
   }
-  const elapsed = Math.max(0, now - STEEL_PATH_EPOCH_MS) / 1000
+  const elapsed = Math.max(0, now - STEEL_ESSENCE_EPOCH_MS) / 1000
   return Math.floor(
-    (elapsed % (length * STEEL_PATH_WEEK_SECONDS)) / STEEL_PATH_WEEK_SECONDS,
+    (elapsed % (length * STEEL_ESSENCE_WEEK_SECONDS)) / STEEL_ESSENCE_WEEK_SECONDS,
   )
 }
 
-export async function adaptSteelPath(
+export async function adaptSteelEssence(
   raw: RawSteelPathOfferings = {},
   now: number = Date.now(),
-): Promise<SteelPathBoard> {
+): Promise<SteelEssenceBoard> {
   const catalogs = await getSteelPathCatalogs()
   const rotationZh = catalogs.zh.rotation
   const rotationEn = catalogs.en.rotation
@@ -879,27 +879,27 @@ export async function adaptSteelPath(
     index = rotationZh.findIndex(item => item.name === currentName)
   }
   if (index < 0) {
-    index = steelPathRotationIndex(now, rotationZh.length)
+    index = steelEssenceRotationIndex(now, rotationZh.length)
   }
 
-  const current: SteelPathOfferingInfo = rotationZh[index] ?? {
+  const current: SteelEssenceOfferingInfo = rotationZh[index] ?? {
     name: currentName,
     cost: raw.currentReward?.cost ?? 0,
   }
-  const upcoming: SteelPathOfferingInfo[] = rotationZh.length > 1
+  const upcoming: SteelEssenceOfferingInfo[] = rotationZh.length > 1
     ? rotationZh
         .map((_, offset) => rotationZh[(index + offset + 1) % rotationZh.length])
-        .filter((item): item is SteelPathOfferingInfo => item !== undefined)
+        .filter((item): item is SteelEssenceOfferingInfo => item !== undefined)
         .slice(0, rotationZh.length - 1)
     : []
 
-  const expiry = raw.expiry?.getTime() ?? steelPathWeekExpiryUtc(now)
-  const teshin = dict_zh[STEEL_PATH_TESHIN_KEY]
-    ?? dictZhExtra[STEEL_PATH_TESHIN_KEY]
-    ?? STEEL_PATH_TESHIN_KEY
-  const essence = dict_zh[STEEL_PATH_ESSENCE_KEY]
-    ?? dictZhExtra[STEEL_PATH_ESSENCE_KEY]
-    ?? STEEL_PATH_ESSENCE_KEY
+  const expiry = raw.expiry?.getTime() ?? steelEssenceWeekExpiryUtc(now)
+  const teshin = dict_zh[STEEL_ESSENCE_TESHIN_KEY]
+    ?? dictZhExtra[STEEL_ESSENCE_TESHIN_KEY]
+    ?? STEEL_ESSENCE_TESHIN_KEY
+  const essence = dict_zh[STEEL_ESSENCE_KEY]
+    ?? dictZhExtra[STEEL_ESSENCE_KEY]
+    ?? STEEL_ESSENCE_KEY
 
   return {
     title: `${teshin} · ${essence}商店`,
@@ -911,30 +911,30 @@ export async function adaptSteelPath(
   }
 }
 
-export async function getSteelPathFrom(
+export async function getSteelEssenceFrom(
   snapshot?: { raw?: { steelPath?: RawSteelPathOfferings } },
   now: number = Date.now(),
-): Promise<WarframeResult<SteelPathBoard>> {
+): Promise<WarframeResult<SteelEssenceBoard>> {
   if (!snapshot?.raw) {
     return failure('common.fetchFailed', true)
   }
 
   const offerings = snapshot.raw.steelPath
   if (!offerings) {
-    return failure('steelpath.unavailable')
+    return failure('steelEssence.unavailable')
   }
 
-  const data = await adaptSteelPath(offerings, now)
+  const data = await adaptSteelEssence(offerings, now)
   if (!data.current.name || data.expiry <= now) {
-    return failure('steelpath.unavailable')
+    return failure('steelEssence.unavailable')
   }
 
   return { ok: true, data }
 }
 
-export async function getSteelPath(): Promise<WarframeResult<SteelPathBoard>> {
+export async function getSteelEssence(): Promise<WarframeResult<SteelEssenceBoard>> {
   try {
-    return await getSteelPathFrom(await globalWorldState.get())
+    return await getSteelEssenceFrom(await globalWorldState.get())
   }
   catch {
     return failure('common.fetchFailed', true)

@@ -19,7 +19,7 @@ import type {
   RivenStatAnalyzeResult,
   RivenStatResult,
   Sortie,
-  SteelPathBoard,
+  SteelEssenceBoard,
   VoidTrader,
 } from '../warframe'
 import { hexToRgb, lerp, rgbToHex } from '../utils'
@@ -2066,7 +2066,7 @@ export function AlertComponent(board: AlertBoard): Element {
   )
 }
 
-export function SteelPathComponent(board: SteelPathBoard): Element {
+export function SteelEssenceComponent(board: SteelEssenceBoard): Element {
   const timeLeft = board.expiry - Date.now()
   const timeColor
     = timeLeft > 3600000

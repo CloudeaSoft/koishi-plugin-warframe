@@ -138,12 +138,9 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('灵化')
     .action(wf.circuitCommand)
   ctx
-    .command('steelpath', '钢铁精华商店')
-    .alias('steel-path')
-    .alias('teshin')
+    .command('steel-essence', '钢铁精华商店')
     .alias('钢铁精华')
-    .alias('钢铁之路')
-    .action(wf.steelPathCommand)
+    .action(wf.steelEssenceCommand)
 
   ctx.command('riven <img:image>', '分析紫卡截图').action(wf.rivenCommand)
   ctx

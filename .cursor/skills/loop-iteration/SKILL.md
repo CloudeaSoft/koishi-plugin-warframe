@@ -45,7 +45,7 @@ If the Cursor Automation exposes a memory tool, also read key
 
 ## 2. Select one item
 
-Selection is by priority, mixing explore and optimize items:
+Selection is by priority, mixing explore, optimize, and fix items:
 
 - Pick the highest-priority item whose status is `todo` (P0 before P1 before
   P2). Ties: prefer the item whose type differs from the previous iteration.
@@ -78,6 +78,13 @@ Optimize sources:
 - Coverage gaps (`yarn vitest run --coverage` and the `functions` threshold in
   `vitest.config.ts`), dead exports, duplicated helpers.
 - Cache TTLs, retry behavior, or rendering cost visible in `src/components/`.
+
+Fix sources:
+
+- Incorrect command names or aliases (README vs `src/commands/`).
+- User-facing naming that conflicts with game terms (for example a shop
+  command using Steel Path aliases that belong to `fissure-sp`).
+- Small regressions called out in a journal "Next" note or a maintainer prompt.
 
 ## 3. Implement
 
