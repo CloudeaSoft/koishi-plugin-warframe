@@ -61,6 +61,8 @@ credentials.
   `loop-iteration:`; keep that line intact when editing PR descriptions.
 - **Selection**: by priority (`P0` > `P1` > `P2`) across both explore and
   optimize items. Ties go to the type not used by the previous iteration.
+  Skip community-sourced content (Chinese nicknames, `warframeAlias.json`,
+  issue #69); that belongs to public contributors.
 - **Scope of one iteration**: one backlog item, one draft PR, ideally under 400
   changed lines excluding fixtures.
 - **Environment**: a dashboard-saved Cloud Agent environment rather than a
@@ -128,7 +130,9 @@ Loop PRs never:
 - use `console.*`, raw `fetch()`, or cross layer boundaries (`AGENTS.md`);
 - skip a failing validation command. If the item cannot be finished green, the
   run reverts the implementation and turns into a grooming iteration that only
-  updates the backlog and journal.
+  updates the backlog and journal;
+- curate `warframeAlias.json` or other community slang / nickname tables
+  (public contributors own those).
 
 Two merges within a few minutes can start two runs before either has opened a
 PR (this happened on 2026-09-09 when #103 and #104 merged three minutes apart:

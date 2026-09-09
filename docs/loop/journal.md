@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 2 — 2026-09-09 — grooming
+
+- Item: withdraw L-002 from the loop (Chinese warframe nicknames, issue #69)
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 572 tests)
+- Outcome: Nickname curation in `warframeAlias.json` belongs to public contributors, not loop engineering. L-002 is out of scope; selection rules skip community slang tables and issue #69. The unmerged alias branch is not loop work.
+- Next: Last completed type is still optimize (L-001). Next selectable P1 explore is L-003 (`steelpath`).
+
 ## 1 — 2026-09-09 — optimize
 
 - Item: L-001 Align `CONTRIBUTING.md` with the current layout
