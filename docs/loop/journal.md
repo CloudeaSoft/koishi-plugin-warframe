@@ -16,8 +16,8 @@ Newest entry first. Every iteration prepends one entry using this template:
 
 - Item: L-002 Extend Chinese warframe aliases (issue #69)
 - PR: none (manual run; branch `cursor/loop-explore-aliases-5a6d`; maintainer asked not to open a PR)
-- Validation: yarn build, yarn dtsc, yarn lint, yarn test — pending after replacing guessed names with community 黑话
-- Outcome: Dropped guessed labels (众星 / 决斗之子 / 天狼星 / 猎户座, 绘影者, 余烬). Sirius & Orion now use 西里斯 / 奥里昂 (17173 / 233乐园); Follie keeps 狂墨 / 肥婆 / 墨水 (233乐园); Ember uses 火女 (九游) plus existing 火鸡. Also added 17173/萌娘百科/233乐园 黑话 that was missing: 阿屎, 缴械基, 运输基, 开门娃, 减速娃, 驴王, 蛆爹, 歌甲, 蝶甲, 蹦蹦, 吼牛, 核弹猴, 炼狱使徒. Uniqueness spec still requires each normalized alias (and auto `甲`) to map to one warframe.
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 594 tests)
+- Outcome: Dropped guessed labels (众星 / 决斗之子 / 天狼星 / 猎户座, 绘影者, 余烬). Sirius & Orion now use 西里斯 / 奥里昂 (17173 / 233乐园); Follie keeps 狂墨 / 肥婆 / 墨水 (233乐园); Ember uses 火女 (九游) plus existing 火鸡. Also added 17173/萌娘百科/233乐园 黑话 that was missing: 阿屎, 缴械基, 运输基, 开门娃, 减速娃, 驴王, 蛆爹, 歌甲, 蝶甲, 蹦蹦, 吼牛, 核弹猴, 炼狱使徒. Live `wmi 火女` / `wmi 阿屎` resolve to Ember / Ash Prime sets; `wmi 西里斯` / `wmi 狂墨` stay not-found because Warframe Market has no non-Prime listings; dropped guesses `余烬` / `众星` / `绘影者` no longer match.
 - Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (globalWorldState factory + override). Issue #69 stays open (L-021). Matcher order for `加速` vs Quickening is L-020.
 
 ## 1 — 2026-09-09 — optimize
