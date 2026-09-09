@@ -15,7 +15,7 @@ Newest entry first. Every iteration prepends one entry using this template:
 ## 2 — 2026-09-09 — explore
 
 - Item: L-002 Extend Chinese warframe aliases (issue #69) with unique-resolution spec
-- PR: this draft (`loop/explore-warframe-aliases`)
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/107
 - Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (61 files, 578 tests)
 - Outcome: Filled every warframe key including `Sirius & Orion` with community Chinese nicknames (女武神, 跑男, 灵薄狱, 天狼, …). Removed Nova's `加速` because it exact-matched the Quickening mod (`quickening`) before the alias ran. Added `tests/services/wfm/warframeAlias.spec.ts` so each alias maps to one warframe and resolves to that warframe's prime set (synthetic sets for frames missing from `test-items.json`). Live `yarn capture` of `wmi 女武神` / `wmi 跑男` / `wmi 灵薄狱` returned Valkyr / Gauss / Limbo Prime sets from Warframe Market.
 - Next: Previous type is explore, so pick a P1 optimize. Table order says L-006 (`globalWorldState` factory + override). Follow-up: L-020 if WFM lists `Orion & Sirius` separately. Issue #69 can close after this merges.
