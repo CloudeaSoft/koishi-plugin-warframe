@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 6 — 2026-09-09 — explore
+
+- Item: L-004 `calendar` command for the current 1999 Höllvania calendar week
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (67 files, 599 tests)
+- Outcome: Added `calendar` (`日历`, `1999日历`, `霍瓦尼亚日历`) showing this week's 1999 dates, official Chinese challenges/overrides/rewards from `KnownCalendarSeasons`, and remaining time until the world-state expiry. Later event days in the same blob are omitted until they fall in the first seven 1999-days.
+- Next: Previous type is explore, so pick P1 optimize L-023 (scaffold `wf-service/`). Put new calendar queries in `wf-service.calendar.ts` after that extract.
+
 ## 5 — 2026-09-09 — optimize
 
 - Item: L-021 Groom a split of `src/warframe/services/wf-service.ts`
