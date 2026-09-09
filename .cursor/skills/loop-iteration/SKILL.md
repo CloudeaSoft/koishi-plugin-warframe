@@ -52,6 +52,10 @@ Selection is by priority, mixing explore and optimize items:
 - Skip items whose `blocked by` is unresolved.
 - Do not pick an item that needs secrets, production credentials, dependency
   major upgrades, or changes to `.github/workflows/` or `.releaserc.yml`.
+- Do not pick community-sourced content that belongs to public contributors:
+  Chinese warframe nicknames, slang / 黑话 tables, expansions of
+  `src/warframe/assets/warframeAlias.json`, or GitHub issue #69. Leave those
+  for human PRs.
 
 If nothing is selectable, do a **grooming iteration**: add new candidates from
 these sources, each with a one-line rationale and a priority, then continue to
@@ -59,7 +63,8 @@ step 5 with only `docs/loop/backlog.md` and `docs/loop/journal.md` changed.
 
 Explore sources:
 
-- `TODO.md` and open GitHub issues (`gh issue list --state open`).
+- `TODO.md` and open GitHub issues (`gh issue list --state open`), skipping
+  issues that are community nickname or slang lists.
 - Placeholder commands (`lich-c`, `lich-i`) and README "In Development" rows.
 - World-state fields the plugin does not surface yet. Compare the fields on the
   `warframe-worldstate-parser` result used in `src/warframe/data/wf/globalWorldState.ts`

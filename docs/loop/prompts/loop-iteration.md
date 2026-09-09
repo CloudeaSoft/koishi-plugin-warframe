@@ -65,7 +65,8 @@ Procedure summary (the skill is authoritative):
 
 Hard limits: never merge or enable auto-merge; never force-push; do not touch
 .github/workflows, .releaserc.yml, secrets, or dependency major versions; no
-console.* or raw fetch(); no package-local yarn.lock. The merged PR that
-triggered you is context only; do not review or modify it. Prefer a smaller,
-finished change over a larger unfinished one.
+console.* or raw fetch(); no package-local yarn.lock; do not curate
+warframeAlias.json or Chinese community nicknames (public contributors). The
+merged PR that triggered you is context only; do not review or modify it.
+Prefer a smaller, finished change over a larger unfinished one.
 ```

@@ -12,7 +12,6 @@ from so future runs can judge how well-grounded it is.
 
 | ID | P | Type | Item | Source | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| L-002 | P1 | explore | Extend Chinese warframe aliases in `src/warframe/assets/warframeAlias.json` (issue #69) with a spec asserting each alias resolves to exactly one item | GitHub issue #69 | todo | Good first explore item; no new data source |
 | L-003 | P1 | explore | `steelpath` command: Teshin's weekly Steel Path honors rotation from world-state `steelPath` (current offering, remaining time, upcoming) | unused world-state field | todo | Data already fetched by `globalWorldState` |
 | L-004 | P1 | explore | `calendar` command: current 1999 Höllvania calendar week (events, challenges, rewards) from world-state `calendar` | unused world-state field | todo | Verify official Chinese names via `dict_zh` |
 | L-005 | P1 | explore | `event` command: active world events / tactical alerts from world-state `events` with progress and rewards | unused world-state field | todo | Handle empty state with `event.unavailable` |
@@ -28,7 +27,7 @@ from so future runs can judge how well-grounded it is.
 | L-015 | P2 | optimize | Decide the fate of unused exports `relicQualityToName` and `relicQualityToTransKey` (use them in `relic` output or remove) | AGENTS.md maintenance notes | todo | |
 | L-016 | P2 | optimize | Retire the deprecated `wm` command or make it a thin alias of `wmi`, then update README | README deprecation note | todo | Confirm no schedule or hook depends on it |
 | L-017 | P2 | optimize | Raise the vitest `functions` coverage threshold in steps once coverage gaps in `src/warframe/services` are closed | vitest.config.ts | todo | Measure with `yarn vitest run --coverage` first |
-| L-018 | P2 | explore | Clarify TODO.md item 2 ("wfm alias") into a concrete design (per-user aliases vs. item name aliases) | TODO.md | todo | Grooming only; produce a design note in the journal |
+| L-018 | P2 | explore | Clarify TODO.md item 2 ("wfm alias") into a concrete design (per-user aliases vs. item name aliases) | TODO.md | todo | Grooming only; do not extend `warframeAlias.json` |
 | L-019 | P2 | optimize | Align README Develop setup with CONTRIBUTING: Corepack Yarn 4 instead of `npm i -g yarn` | found while doing L-001 | todo | README still documents Yarn 1 global install |
 
 ## Out of loop scope (maintainer decisions)
@@ -39,6 +38,13 @@ Items the loop must not act on because they touch CI, release, or dependencies:
   `actions/setup-node@v3` while `release.yml` uses `@v6`.
 - `koishi-plugin-cron` is pinned exactly (`3.1.0`) in `peerDependencies` but
   ranged in `devDependencies`.
+
+Items the loop must not act on because they belong to public contributors:
+
+- L-002 / GitHub issue #69: Chinese warframe nicknames and other slang in
+  `src/warframe/assets/warframeAlias.json`. Community 黑话 is curated by
+  people who play the game; the loop must not invent, scrape, or bulk-edit
+  that table.
 
 ## Done
 
