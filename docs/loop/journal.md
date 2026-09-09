@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 7 — 2026-09-09 — optimize
+
+- Item: L-023 Scaffold `src/warframe/services/wf-service/` matching `wfm-service/`
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (68 files, 609 tests)
+- Outcome: Moved `wf-service.ts` to `wf-service/index.ts` and rewrote relative imports one directory deeper. Public `export * from './wf-service'` is unchanged. Meta tests now read the folder; `add-wf-command` tells new queries to land in `wf-service.<feature>.ts` instead of growing `index.ts`.
+- Next: Previous type is optimize, so pick P1 explore L-005 (`event`). Next optimize after that is L-024 (`wf-service.riven.ts`).
+
 ## 6 — 2026-09-09 — explore
 
 - Item: L-004 `1999calendar` command for the current 1999 Höllvania calendar week
