@@ -75,13 +75,19 @@ function pathLeaf(path: string): string {
   return path.split('/').pop() ?? path
 }
 
-function stripLotusMarkup(text: string): string {
-  return text
-    .replace(/\|OPEN_COLOR\|/g, '')
-    .replace(/\|CLOSE_COLOR\|/g, '')
-    .replace(/<[^>]+>/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
+/** Strip Lotus color pipes and HTML-like markup tags. */
+export function stripLotusMarkup(text: string): string {
+  const withoutPipes = text
+    .replaceAll('|OPEN_COLOR|', '')
+    .replaceAll('|CLOSE_COLOR|', '')
+  const withoutTags = withoutPipes.split('<').map((part, index) => {
+    if (index === 0) {
+      return part
+    }
+    const close = part.indexOf('>')
+    return close === -1 ? '' : part.slice(close + 1)
+  }).join('')
+  return withoutTags.replaceAll('<', '').replaceAll('>', '').replace(/\s+/g, ' ').trim()
 }
 
 function adaptChallenge(path: string): Pick<CalendarEventInfo, 'name' | 'description'> {

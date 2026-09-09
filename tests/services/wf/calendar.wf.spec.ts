@@ -4,6 +4,7 @@ import { dict_zh, ExportChallenges } from 'warframe-public-export-plus'
 import { t } from '../../../src/i18n'
 import { dictZhExtra } from '../../../src/warframe/assets'
 import { resolveExportItemNameZh } from '../../../src/warframe/infrastructure/wf/bounty-adapter'
+import { stripLotusMarkup } from '../../../src/warframe/infrastructure/wf/calendar-adapter'
 import { extractCalendarRaw } from '../../../src/warframe/infrastructure/wf/wf-api'
 import { adaptCalendar, getCalendarFrom } from '../../../src/warframe/services'
 import { msToHumanReadable } from '../../../src/warframe/utils/time'
@@ -149,6 +150,28 @@ describe('calendar', () => {
     expect(override?.description).to.include('爆炸')
     expect(shard?.name ?? '').to.not.match(/<[^>]+>/)
     expect(shard?.name).to.include('蔚蓝执刑官源力石')
+  })
+
+  it('leaves no angle brackets in names or descriptions from the world-state fixture', () => {
+    const board = adaptCalendar(extractCalendarRaw(JSON.stringify(worldStateJSON)), NOW)
+    for (const day of board.days) {
+      expect(day.dateLabel).to.not.match(/[<>]/)
+      for (const event of day.events) {
+        expect(event.name, event.name).to.not.match(/[<>]/)
+        if (event.description) {
+          expect(event.description, event.description).to.not.match(/[<>]/)
+        }
+      }
+    }
+  })
+
+  it('strips nested and unclosed tags without leaving angle brackets', () => {
+    expect(stripLotusMarkup('<<script>alert(1)</script>')).to.equal('alert(1)')
+    expect(stripLotusMarkup('prefix<script')).to.equal('prefix')
+    expect(stripLotusMarkup('|OPEN_COLOR|<DT_MAGNETIC>Magnetic|CLOSE_COLOR|')).to.equal('Magnetic')
+    expect(stripLotusMarkup('<SHARD_BLUE_SIMPLE>蔚蓝执刑官源力石')).to.equal('蔚蓝执刑官源力石')
+    expect(stripLotusMarkup('<<script>alert(1)</script>')).to.not.match(/[<>]/)
+    expect(stripLotusMarkup('prefix<script')).to.not.include('<script')
   })
 })
 
