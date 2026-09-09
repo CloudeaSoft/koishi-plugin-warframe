@@ -73,6 +73,7 @@ describe('warframeAlias', () => {
       { input: '猎户座', output: 'sirius&orion' },
       { input: '绘影者', output: 'follie' },
       { input: '狂墨', output: 'follie' },
+      { input: '余烬', output: 'ember' },
     ]
 
     for (const testCase of cases) {
@@ -110,6 +111,14 @@ describe('warframeAlias', () => {
       expect(result).to.deep.include({ type: 'matched' })
       if (result.type === 'matched') {
         expect(result.item.slug).to.equal('follie_set')
+      }
+    })
+
+    it('resolves 余烬 to exactly one Ember item', async () => {
+      const result = await matchWFMItem('余烬')
+      expect(result).to.deep.include({ type: 'matched' })
+      if (result.type === 'matched') {
+        expect(result.item.slug).to.equal('ember_prime_set')
       }
     })
 
