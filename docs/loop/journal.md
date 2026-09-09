@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 1 — 2026-09-09 — optimize
+
+- Item: L-001 Align `CONTRIBUTING.md` with the current layout
+- PR: this PR
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (60 files, 570 tests)
+- Outcome: Rewrote `CONTRIBUTING.md` to match `AGENTS.md`: `src/warframe/` domain layers, HTTP via `src/warframe/utils/http.ts`, `WarframeResult<T>` plus `src/i18n.ts`, Koishi-scoped logging, and the CI command set including `yarn lint`. Removed the broken `docs/architecture.md` link and pointed architecture at `AGENTS.md` instead of adding a duplicate document. Added `tests/meta/contributing.spec.ts` so those paths cannot drift again.
+- Next: Previous type is optimize, so pick a P1 explore. Table order says L-002 (Chinese aliases, issue #69). L-003 (`steelpath`) is the unused-world-state alternative if aliases look too large.
+
 ## 0 — 2026-09-08 — bootstrap
 
 - Item: set up the merge-driven loop
