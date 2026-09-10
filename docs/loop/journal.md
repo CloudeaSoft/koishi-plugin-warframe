@@ -15,7 +15,7 @@ Newest entry first. Every iteration prepends one entry using this template:
 ## 12 — 2026-09-10 — optimize
 
 - Item: L-006 Factory + override injection for `globalWorldState.ts`
-- PR: (this change)
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/118
 - Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (72 files, 631 tests)
 - Outcome: Extracted `globalWorldStateFactory` and `overrideGlobalWorldState` matching `globalItem.ts`. Fixture JSON now builds a full snapshot (raw extracts plus categorized fissures) that `getEventsFrom` can consume without a live fetch.
 - Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-007. `globalRivenItem.ts` already has factory + override; remaining work is exporting a factory from `globalDucatnator.ts`.
