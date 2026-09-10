@@ -48,7 +48,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-007 | optimize | Factory + override injection for `globalDucatnator.ts` (`globalRivenItem.ts` already had the seam) | (this change) |
+| L-007 | optimize | Factory + override injection for `globalDucatnator.ts` (`globalRivenItem.ts` already had the seam) | [#119](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/119) |
 | L-006 | optimize | Factory + override injection for `globalWorldState.ts` | [#118](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/118) |
 | L-026 | optimize | Extract remaining wf-service modules (relic, arbitration, sortie, weekly+archon, bounty, circuit) from `wf-service/index.ts` | [#117](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/117) |
 | L-025 | optimize | Extract world-state board modules (alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar) from `wf-service/index.ts` | [#116](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/116) |
