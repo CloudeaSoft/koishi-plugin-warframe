@@ -23,7 +23,7 @@ see `docs/loop/wf-service-split.md`.
 
 - Add `wf-service.<feature>.ts` there and re-export it from
   `wf-service/index.ts`. Do not grow `index.ts` with new `get*` / `adapt*`
-  bodies. Existing clusters still in `index.ts` are extracted by L-024–L-026;
+  bodies. Existing clusters still in `index.ts` are extracted by L-026;
   new features skip that queue and land in their own module.
 
 - Write a pure `adapt<Feature>(raw, now = Date.now())` that maps upstream data
