@@ -6,6 +6,7 @@ import {
   BountyComponent,
   CalendarComponent,
   CircuitComponent,
+  EventComponent,
   FissureComponent,
   InvasionComponent,
   NightwaveComponent,
@@ -28,6 +29,7 @@ import {
   getCalendar,
   getCircuitWeek,
   getEnvironment,
+  getEvents,
   getFissures,
   getInvasions,
   getNightwave,
@@ -49,6 +51,7 @@ export function createWfCommands(deps: PluginDependencies): {
   fissureCommand: (_action: Argv) => Promise<string>
   invasionCommand: (_action: Argv) => Promise<string>
   alertCommand: (_action: Argv) => Promise<string>
+  eventCommand: (_action: Argv) => Promise<string>
   calendarCommand: (_action: Argv) => Promise<string>
   steelEssenceCommand: (_action: Argv) => Promise<string>
   steelPathFissureCommand: (_action: Argv) => Promise<string>
@@ -141,6 +144,15 @@ export function createWfCommands(deps: PluginDependencies): {
       }
 
       return render(AlertComponent(result.data))
+    },
+
+    eventCommand: async (_action: Argv) => {
+      const result = await getEvents()
+      if (!result.ok) {
+        return t(result)
+      }
+
+      return render(EventComponent(result.data))
     },
 
     calendarCommand: async (_action: Argv) => {

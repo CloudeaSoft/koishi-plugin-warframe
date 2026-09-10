@@ -38,6 +38,7 @@ src/warframe/services/wf-service/
 |-- wf-service.circuit.ts
 |-- wf-service.invasion.ts
 |-- wf-service.alert.ts
+|-- wf-service.event.ts
 |-- wf-service.calendar.ts
 |-- wf-service.steel-essence.ts
 |-- wf-service.fissure.ts          # normal / steel-path / railjack
@@ -100,6 +101,9 @@ Every `export function` in `wf-service/` must appear here.
 | `getInvasions` | `wf-service.invasion.ts` |
 | `adaptAlerts` | `wf-service.alert.ts` |
 | `getAlerts` | `wf-service.alert.ts` |
+| `adaptEvents` | `wf-service.event.ts` |
+| `getEventsFrom` | `wf-service.event.ts` |
+| `getEvents` | `wf-service.event.ts` |
 | `adaptCalendar` | `wf-service.calendar.ts` |
 | `getCalendarFrom` | `wf-service.calendar.ts` |
 | `getCalendar` | `wf-service.calendar.ts` |

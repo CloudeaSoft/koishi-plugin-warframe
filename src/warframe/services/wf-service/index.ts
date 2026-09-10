@@ -102,6 +102,8 @@ import {
   tokenSimilarity,
 } from '../../utils'
 
+export { adaptEvents, getEvents, getEventsFrom } from './wf-service.event'
+
 // ================ features ===================
 
 export async function getRelic(input: string): Promise<WarframeResult<Relic>> {

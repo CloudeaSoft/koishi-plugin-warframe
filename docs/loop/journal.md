@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 8 — 2026-09-10 — explore
+
+- Item: L-005 `event` command for active world events from world-state Goals
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/114
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (71 files, 623 tests)
+- Outcome: Added `event` (`活动`, `事件`) showing active Goals with official Chinese names, progress/rewards, and remaining time. Parser `events` map to JSON `Goals`; community `Events` (Discord/wiki links) are not listed. The query lives in `wf-service.event.ts` instead of growing `index.ts`.
+- Next: Previous type is explore, so pick P1 optimize L-024 (`wf-service.riven.ts`).
+
 ## 7 — 2026-09-09 — optimize
 
 - Item: L-023 Scaffold `src/warframe/services/wf-service/` matching `wfm-service/`

@@ -12,6 +12,7 @@ export const messages = {
   'bounty.unavailable': '当前该地点暂无可用赏金',
   'invasion.unavailable': '当前没有入侵',
   'alert.unavailable': '当前没有警报',
+  'event.unavailable': '当前没有活动',
   'calendar.unavailable': '当前没有1999日历',
   'steelEssence.unavailable': '钢铁精华商店获取失败',
   'nightwave.unavailable': '当前没有午夜电波',

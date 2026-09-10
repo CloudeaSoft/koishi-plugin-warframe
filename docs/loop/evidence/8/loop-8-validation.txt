@@ -1,0 +1,17 @@
+loop-iteration: 8
+item: L-005 event command for active world events from world-state Goals
+data source: fixture /workspace/tests/assets/example-world-state.json, timestamps shifted to now (live API unreachable or fixture requested)
+visual: docs/loop/evidence/8/loop-8-event.png (Thermia Fractures + Blood of Perita; community Events omitted)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present
+esbuild: src/index.ts -> lib/index.js
+Test Files  71 passed (71)
+     Tests  623 passed (623)
+Duration  18.05s
+
+focused: yarn vitest run tests/services/wf/event.wf.spec.ts tests/components/event.wf.spec.ts
+Test Files  2 passed (2)
+     Tests  12 passed (12)
+
+all four CI commands exited 0

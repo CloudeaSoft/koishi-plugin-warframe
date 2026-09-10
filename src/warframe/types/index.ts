@@ -36,6 +36,15 @@ export type {
   RawCalendarEvent,
   RawCalendarSeason,
 } from './wf/calendar'
+export type {
+  EventBoard,
+  EventInfo,
+  EventInterimStep,
+  EventReward,
+  RawEventCountedItem,
+  RawEventReward,
+  RawWorldEvent,
+} from './wf/event'
 export type { Fissure } from './wf/fissure'
 export type {
   Invasion,
