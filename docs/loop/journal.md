@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 16 — 2026-09-10 — optimize
+
+- Item: L-029 Export `buildRelicDict` from `relics.ts`
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/122
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (76 files, 663 tests)
+- Outcome: Replaced the IIFE in `relics.ts` with `buildRelicDict`. Tests cover empty input, non-mutation, era+category keys, era translation keys, first-tier-only mapping with `StoreItems/` stripping, missing decks as empty items, later overwrite of quality variants, and that the singleton still matches bundled `ExportRelics`.
+- Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-030 (`arbitrationSchedule`). `globalHotRivenWeapons` factory is L-027.
+
 ## 15 — 2026-09-10 — optimize
 
 - Item: L-028 Export `buildWeaponRivenDispositionDict` from `rivenDisposition.ts`
