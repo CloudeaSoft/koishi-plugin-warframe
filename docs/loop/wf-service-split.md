@@ -72,7 +72,7 @@ unless they already import a helper file.
 
 1. **L-023** (done) — `git mv` `wf-service.ts` → `wf-service/index.ts`. Path
    updates only (`assetsBoundary`, this spec, `add-wf-command`).
-2. **L-024** — extract `wf-service.riven.ts` first (largest cluster).
+2. **L-024** (done) — extract `wf-service.riven.ts` first (largest cluster).
 3. **L-025** — extract world-state boards (alert, invasion, nightwave,
    steel-essence, fissure, void-trader, environment, calendar).
 4. **L-026** — extract the rest (relic, arbitration, sortie, weekly, bounty,

@@ -214,9 +214,10 @@ tracked in `docs/loop/backlog.md` and every run is recorded in
 
 ## Current Maintenance Notes
 
-- `src/warframe/services/wf-service/` matches `wfm-service/`. Feature queries
-  currently still live in `index.ts`; extract via L-024–L-026. Do not add
-  new `get*` / `adapt*` bodies to `index.ts`. The layout and export map live in
+- `src/warframe/services/wf-service/` matches `wfm-service/`. Riven queries
+  live in `wf-service.riven.ts` (L-024). Remaining clusters still live in
+  `index.ts`; extract via L-025–L-026. Do not add new `get*` / `adapt*` bodies
+  to `index.ts`. The layout and export map live in
   `docs/loop/wf-service-split.md`.
 - `globalRivenItem.ts`, `globalDucatnator.ts`, and `globalWorldState.ts` do not
   yet expose the factory + override injection pattern used by other data
