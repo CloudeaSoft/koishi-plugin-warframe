@@ -1,0 +1,38 @@
+loop-iteration: 13
+item: L-007 Factory + override injection for globalDucatnator.ts
+data source: in-memory Ducatnator hour/day fixtures (factory input; no live Warframe Market fetch)
+visual: none (data-layer factory/override; no command or renderer change)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present (17991799 bytes)
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+esbuild: src/index.ts -> lib/index.js
+zh.json already present (17991799 bytes)
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  73 passed (73)
+      Tests  636 passed (636)
+   Start at  04:01:10
+   Duration  20.31s (transform 2.64s, setup 0ms, import 47.46s, tests 4.03s, environment 5ms)
+
+
+focused: yarn vitest run tests/data/globalDucatnator.data.spec.ts tests/services/wfm/applyRelicData.wfm.spec.ts tests/services/wfm/updateCache.wfm.spec.ts
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  3 passed (3)
+      Tests  12 passed (12)
+   Start at  04:01:56
+   Duration  967ms (transform 195ms, setup 0ms, import 1.81s, tests 10ms, environment 0ms)
+
+
+all four CI commands exited 0
