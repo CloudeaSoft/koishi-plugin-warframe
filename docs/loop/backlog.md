@@ -13,8 +13,7 @@ from so future runs can judge how well-grounded it is.
 
 | ID | P | Type | Item | Source | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| L-025 | P1 | optimize | Extract world-state board modules: alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar | L-021 | todo | Split into two PRs if the diff exceeds ~400 lines. `event` is already in `wf-service.event.ts` (L-005); `riven` is already in `wf-service.riven.ts` (L-024) |
-| L-026 | P1 | optimize | Extract remaining wf-service modules: relic, arbitration, sortie, weekly+archon, bounty, circuit | L-021 | todo | Split into two PRs if the diff exceeds ~400 lines |
+| L-026 | P1 | optimize | Extract remaining wf-service modules: relic, arbitration, sortie, weekly+archon, bounty, circuit | L-021 | todo | Split into two PRs if the diff exceeds ~400 lines. Boards (L-025) and riven (L-024) are already extracted |
 | L-006 | P1 | optimize | Factory + override injection for `globalWorldState.ts` (pattern from `globalItem.ts`) so world-state services can be tested with fixtures instead of parsed JSON | AGENTS.md maintenance notes | todo | Keep `overrideGlobal*` naming |
 | L-007 | P1 | optimize | Factory + override injection for `globalRivenItem.ts` and `globalDucatnator.ts` | AGENTS.md maintenance notes | todo | Split into two PRs if the diff grows |
 | L-008 | P1 | optimize | Turn IIFE-built static caches (`rivenDisposition`, `relics`, `rivenBaseValues`, `arbitrationSchedule`) into exported pure builders with unit tests | AGENTS.md maintenance notes | todo | One module per iteration |
@@ -51,6 +50,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
+| L-025 | optimize | Extract world-state board modules (alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar) from `wf-service/index.ts` | (this change) |
 | L-024 | optimize | Extract `wf-service.riven.ts` (OCR, stats, weekly rivens, disposition) from `wf-service/index.ts` | [#115](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/115) |
 | L-005 | explore | `event` command: active world events from world-state Goals (progress and rewards) | [#114](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/114) |
 | L-023 | optimize | Scaffold `src/warframe/services/wf-service/` by moving `wf-service.ts` to `wf-service/index.ts` | [#113](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/113) |

@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 10 — 2026-09-10 — optimize
+
+- Item: L-025 Extract world-state board modules (alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar)
+- PR: (this change)
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (71 files, 625 tests)
+- Outcome: Moved the eight world-state board clusters from `wf-service/index.ts` into mapped modules. Public imports stay on the services barrel. Relic, arbitration, sortie, weekly, bounty, and circuit remain in `index.ts` for L-026.
+- Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-026 (remaining wf-service modules). Split that item if the diff exceeds ~400 lines.
+
 ## 9 — 2026-09-10 — optimize
 
 - Item: L-024 Extract `wf-service.riven.ts` (OCR, stats, weekly rivens, disposition)
