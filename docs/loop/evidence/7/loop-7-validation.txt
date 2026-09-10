@@ -1,0 +1,16 @@
+loop-iteration: 7
+item: L-023 Scaffold src/warframe/services/wf-service/ by moving wf-service.ts to wf-service/index.ts
+no visual output: mechanical folder move, meta tests, and skill/docs path updates; no command or component changes
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present (17991799 bytes)
+esbuild: src/index.ts -> lib/index.js
+Test Files  68 passed (68)
+     Tests  609 passed (609)
+Duration  18.08s
+
+focused: yarn vitest run tests/meta/wfServiceSplit.spec.ts tests/meta/assetsBoundary.spec.ts
+Test Files  2 passed (2)
+     Tests  11 passed (11)
+
+all four CI commands exited 0

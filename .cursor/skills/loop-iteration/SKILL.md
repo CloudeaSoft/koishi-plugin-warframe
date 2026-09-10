@@ -68,7 +68,7 @@ Explore sources:
 - Placeholder commands (`lich-c`, `lich-i`) and README "In Development" rows.
 - World-state fields the plugin does not surface yet. Compare the fields on the
   `warframe-worldstate-parser` result used in `src/warframe/data/wf/globalWorldState.ts`
-  with the queries exported from `src/warframe/services/wf-service.ts`.
+  with the queries exported from `src/warframe/services/wf-service/`.
 - Warframe Market endpoints available in `wfm-api-client` that no service uses.
 
 Optimize sources:
