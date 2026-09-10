@@ -7,6 +7,7 @@ import type {
   ArchonHunt,
   BountyBoard,
   CalendarBoard,
+  EventBoard,
   Fissure,
   InvasionBoard,
   InvasionFactionTone,
@@ -2060,6 +2061,120 @@ export function AlertComponent(board: AlertBoard): Element {
               剩余
               {entry.remaining}
             </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function formatEventRewards(rewards: { name: string, count: number }[]): string {
+  return rewards
+    .map(reward => reward.count > 1 ? `${reward.count}×${reward.name}` : reward.name)
+    .join(' · ')
+}
+
+export function EventComponent(board: EventBoard): Element {
+  const missionCardStyle = `
+    border-radius: var(--wf-radius-md);
+    border: 1px solid var(--wf-border);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    background-color: var(--wf-bg-card);
+  `
+
+  return (
+    <div
+      style="width:360px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:10px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
+    >
+      <h1 style="font-size:18px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 8px 0;text-align:center;">
+        {board.title}
+      </h1>
+      {board.events.map((entry) => {
+        const location = [entry.node?.system, entry.node?.name]
+          .filter(Boolean)
+          .join(' · ')
+        const rewardText = formatEventRewards(entry.rewards)
+        const timeLeft = entry.expiry > 0 ? entry.expiry - Date.now() : 0
+        const timeColor
+          = timeLeft > 3600000
+            ? 'var(--wf-success)'
+            : timeLeft > 600000
+              ? 'var(--wf-info)'
+              : 'var(--wf-danger)'
+        const progress = entry.progress
+        const progressPercent = progress === undefined
+          ? ''
+          : `${Math.round(progress * 100)}%`
+        const progressText = progress === undefined
+          ? ''
+          : entry.maximumScore > 0
+            ? [
+                entry.scoreLabel,
+                `${entry.currentScore}/${entry.maximumScore}`,
+                progressPercent,
+              ].filter(Boolean).join(' · ')
+            : progressPercent
+
+        return (
+          <div style={missionCardStyle}>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
+              {entry.name}
+            </div>
+            {entry.description
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {entry.description}
+                  </div>
+                )
+              : null}
+            {location
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {location}
+                  </div>
+                )
+              : null}
+            {progressText
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {progressText}
+                  </div>
+                )
+              : null}
+            {progress === undefined
+              ? null
+              : (
+                  <div
+                    style="height:8px;margin:6px 0;overflow:hidden;border-radius:var(--wf-radius-sm);background-color:var(--wf-bg-subtle);"
+                  >
+                    <div
+                      style={`width:${progressPercent};height:8px;background-color:var(--wf-accent);`}
+                    >
+                      {'\u00A0'}
+                    </div>
+                  </div>
+                )}
+            {rewardText
+              ? (
+                  <div style="font-size:12px;color:var(--wf-text-secondary);">
+                    {rewardText}
+                  </div>
+                )
+              : null}
+            {entry.interimSteps.map(step => (
+              <div style="font-size:12px;color:var(--wf-text-secondary);">
+                {`${step.goal} · ${formatEventRewards(step.rewards)}`}
+              </div>
+            ))}
+            {entry.remaining
+              ? (
+                  <div style={`font-size:12px;color:${timeColor};`}>
+                    剩余
+                    {entry.remaining}
+                  </div>
+                )
+              : null}
           </div>
         )
       })}

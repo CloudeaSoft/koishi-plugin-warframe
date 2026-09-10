@@ -40,6 +40,7 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 | `circuit`     |                | `灵化之源`, `灵化`                               | Query weekly circuit rewards (warframes and incarnon adapters).                                    |
 | `steel-essence` |                | `钢铁精华`                                     | Query this week's Steel Essence shop rotation (current offering, remaining time, upcoming).        |
 | `1999calendar`  |                | `日历`, `1999日历`, `霍瓦尼亚日历`             | Query the current 1999 Höllvania calendar tagged days (challenges, overrides, rewards).            |
+| `event`         |                | `活动`, `事件`                                 | Query active world events (progress, rewards, remaining time).                                    |
 
 ### Open World Cycles
 
