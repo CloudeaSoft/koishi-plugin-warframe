@@ -1,0 +1,19 @@
+loop-iteration: 11
+item: L-026 Extract remaining wf-service modules (relic, arbitration, sortie, weekly, bounty, circuit)
+data source: yarn capture defaulted to fixture /workspace/tests/assets/example-world-state.json, timestamps shifted to now (live API unreachable or fixture requested)
+visual: docs/loop/evidence/11/loop-11-relic.png (古纪 A1 遗物 board)
+visual: docs/loop/evidence/11/loop-11-sortie.png (突击: Alad V)
+visual: docs/loop/evidence/11/loop-11-circuit.png (回廊奖励总览)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present
+esbuild: src/index.ts -> lib/index.js
+Test Files  71 passed (71)
+     Tests  627 passed (627)
+Duration  19.04s
+
+focused: yarn vitest run tests/meta/wfServiceSplit.spec.ts tests/meta/assetsBoundary.spec.ts tests/services/wf/relic.wf.spec.ts tests/services/wf/sortie.wf.spec.ts tests/services/wf/archon-hunt.wf.spec.ts tests/services/wf/circuit.wf.spec.ts
+Test Files  6 passed (6)
+     Tests  50 passed (50)
+
+all four CI commands exited 0
