@@ -124,4 +124,38 @@ describe('wf-service split contract', () => {
       }
     }
   })
+
+  it('extracts remaining clusters into mapped modules', () => {
+    const dir = resolve(root, 'src/warframe/services/wf-service')
+    const indexPath = resolve(dir, 'index.ts')
+    const index = readFileSync(indexPath, 'utf8')
+    const indexExports = exportedFunctionNames(index)
+    const remaining: Array<[string, string[]]> = [
+      ['wf-service.relic.ts', ['getRelic']],
+      ['wf-service.arbitration.ts', ['getArbitrations']],
+      ['wf-service.sortie.ts', ['adaptSortie', 'getSortieFrom', 'getSortie']],
+      ['wf-service.weekly.ts', ['adaptArchonHunt', 'getWeekly']],
+      ['wf-service.bounty.ts', ['getBounty']],
+      ['wf-service.circuit.ts', ['getCircuitWeek']],
+    ]
+
+    for (const [file, names] of remaining) {
+      const target = resolve(dir, file)
+      const specifier = `./${file.replace(/\.ts$/, '')}`
+      expect(existsSync(target), `${file} should exist`).to.equal(true)
+      expect(index, `index.ts should re-export ${specifier}`).to.include(`from '${specifier}'`)
+      const exports = exportedFunctionNames(readFileSync(target, 'utf8'))
+      for (const name of names) {
+        expect(indexExports, `${name} should leave index.ts`).to.not.include(name)
+        expect(exports, `${name} should live in ${file}`).to.include(name)
+      }
+    }
+  })
+
+  it('keeps index.ts as a barrel without feature function bodies', () => {
+    const indexPath = resolve(root, 'src/warframe/services/wf-service/index.ts')
+    const index = readFileSync(indexPath, 'utf8')
+    expect(exportedFunctionNames(index)).to.deep.equal([])
+    expect(index).to.match(/^export \{/m)
+  })
 })
