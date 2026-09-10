@@ -1,25 +1,31 @@
 import { rivenAttrValues } from '../../assets/index'
 import { normalizeName } from '../../utils'
 
-export const rivenAttrValueDict: Record<
-  string,
-  Record<string, number>
-> = (() => {
-  const dict: Record<string, Record<string, number>> = {}
-  for (const key in rivenAttrValues) {
-    const attrs = rivenAttrValues[key]
-    dict[key] = {}
+export type RivenAttrValueDict = Record<string, Record<string, number>>
+
+function wfmKeyForRivenAttr(attrKey: string): string {
+  const removeDamageSuffix
+    = attrKey.endsWith('Damage')
+      && attrKey !== 'Damage'
+      && attrKey !== 'Finisher Damage'
+      && !attrKey.startsWith('Critical')
+  return removeDamageSuffix
+    ? normalizeName(attrKey.replace('Damage', ''))
+    : normalizeName(attrKey)
+}
+
+export function buildRivenAttrValueDict(
+  source: RivenAttrValueDict,
+): RivenAttrValueDict {
+  const dict: RivenAttrValueDict = {}
+  for (const weaponType in source) {
+    const attrs = source[weaponType]
+    dict[weaponType] = {}
     for (const attrKey in attrs) {
-      const removeDamageSuffix
-        = attrKey.endsWith('Damage')
-          && attrKey !== 'Damage'
-          && attrKey !== 'Finisher Damage'
-          && !attrKey.startsWith('Critical')
-      const wfmKey = removeDamageSuffix
-        ? normalizeName(attrKey.replace('Damage', ''))
-        : normalizeName(attrKey)
-      dict[key][wfmKey] = attrs[attrKey]
+      dict[weaponType][wfmKeyForRivenAttr(attrKey)] = attrs[attrKey]
     }
   }
   return dict
-})()
+}
+
+export const rivenAttrValueDict = buildRivenAttrValueDict(rivenAttrValues)
