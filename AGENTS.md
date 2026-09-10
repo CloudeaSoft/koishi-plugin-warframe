@@ -215,8 +215,10 @@ tracked in `docs/loop/backlog.md` and every run is recorded in
 ## Current Maintenance Notes
 
 - `src/warframe/services/wf-service/` matches `wfm-service/`. Riven queries
-  live in `wf-service.riven.ts` (L-024). Remaining clusters still live in
-  `index.ts`; extract via L-025–L-026. Do not add new `get*` / `adapt*` bodies
+  live in `wf-service.riven.ts` (L-024). World-state boards (alert, invasion,
+  nightwave, steel-essence, fissure, void-trader, environment, calendar) live
+  in their mapped modules (L-025). Remaining clusters still live in
+  `index.ts`; extract via L-026. Do not add new `get*` / `adapt*` bodies
   to `index.ts`. The layout and export map live in
   `docs/loop/wf-service-split.md`.
 - `globalRivenItem.ts`, `globalDucatnator.ts`, and `globalWorldState.ts` do not

@@ -1,0 +1,19 @@
+loop-iteration: 10
+item: L-025 Extract world-state board modules (alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar)
+data source: yarn capture defaulted to fixture /workspace/tests/assets/example-world-state.json, timestamps shifted to now (live API unreachable or fixture requested)
+visual: docs/loop/evidence/10/loop-10-fissure.png (虚空裂缝 board)
+visual: docs/loop/evidence/10/loop-10-alert.png (警报 board)
+text: docs/loop/evidence/10/loop-10-environment.txt → 当前环境 / 夜灵平野白天 / 奥布山谷寒冷 / 魔胎之境 Fass / 双衍王境愤怒 / 扎里曼号 Corpus
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present
+esbuild: src/index.ts -> lib/index.js
+Test Files  71 passed (71)
+     Tests  625 passed (625)
+Duration  19.63s
+
+focused: yarn vitest run tests/meta/wfServiceSplit.spec.ts tests/services/wf/alert.wf.spec.ts tests/services/wf/invasion.wf.spec.ts tests/services/wf/nightwave.wf.spec.ts tests/services/wf/steelessence.wf.spec.ts tests/services/wf/calendar.wf.spec.ts tests/services/wf/voidtrader.wf.spec.ts
+Test Files  7 passed (7)
+     Tests  52 passed (52)
+
+all four CI commands exited 0

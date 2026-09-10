@@ -95,4 +95,33 @@ describe('wf-service split contract', () => {
       expect(rivenExports, `${name} should live in wf-service.riven.ts`).to.include(name)
     }
   })
+
+  it('extracts world-state board clusters into mapped modules', () => {
+    const dir = resolve(root, 'src/warframe/services/wf-service')
+    const indexPath = resolve(dir, 'index.ts')
+    const index = readFileSync(indexPath, 'utf8')
+    const indexExports = exportedFunctionNames(index)
+    const boards: Array<[string, string[]]> = [
+      ['wf-service.alert.ts', ['adaptAlerts', 'getAlerts']],
+      ['wf-service.invasion.ts', ['adaptInvasions', 'getInvasionsFrom', 'getInvasions']],
+      ['wf-service.nightwave.ts', ['resolveNightwave', 'getNightwave']],
+      ['wf-service.steel-essence.ts', ['adaptSteelEssence', 'getSteelEssenceFrom', 'getSteelEssence']],
+      ['wf-service.fissure.ts', ['getFissures', 'getSteelPathFissures', 'getRailjackFissures']],
+      ['wf-service.void-trader.ts', ['getVoidTrader']],
+      ['wf-service.environment.ts', ['getEnvironment']],
+      ['wf-service.calendar.ts', ['adaptCalendar', 'getCalendarFrom', 'getCalendar']],
+    ]
+
+    for (const [file, names] of boards) {
+      const target = resolve(dir, file)
+      const specifier = `./${file.replace(/\.ts$/, '')}`
+      expect(existsSync(target), `${file} should exist`).to.equal(true)
+      expect(index, `index.ts should re-export ${specifier}`).to.include(`from '${specifier}'`)
+      const exports = exportedFunctionNames(readFileSync(target, 'utf8'))
+      for (const name of names) {
+        expect(indexExports, `${name} should leave index.ts`).to.not.include(name)
+        expect(exports, `${name} should live in ${file}`).to.include(name)
+      }
+    }
+  })
 })
