@@ -52,7 +52,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-005 | explore | `event` command: active world events from world-state Goals (progress and rewards) | (this change) |
+| L-005 | explore | `event` command: active world events from world-state Goals (progress and rewards) | [#114](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/114) |
 | L-023 | optimize | Scaffold `src/warframe/services/wf-service/` by moving `wf-service.ts` to `wf-service/index.ts` | [#113](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/113) |
 | L-004 | explore | `1999calendar` command: current 1999 Höllvania calendar week | [#112](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/112) |
 | L-021 | optimize | Groom a split of `wf-service.ts`: folder matching `wfm-service/`, per-cluster modules, follow-ups L-023–L-026 | [#111](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/111) |
