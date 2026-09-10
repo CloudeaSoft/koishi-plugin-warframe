@@ -15,7 +15,7 @@ Newest entry first. Every iteration prepends one entry using this template:
 ## 15 — 2026-09-10 — optimize
 
 - Item: L-028 Export `buildWeaponRivenDispositionDict` from `rivenDisposition.ts`
-- PR: (this change)
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/121
 - Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (75 files, 654 tests)
 - Outcome: Replaced the IIFE in `rivenDisposition.ts` with `buildWeaponRivenDispositionDict`. Tests cover uniqueName-tail matching before the English dictionary, `&` names that only match via `dict_en`, non-mutation, later-calc overwrite, and that the singleton still indexes Boltor / Ack & Brunt.
 - Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-029 (`relics` first). `globalHotRivenWeapons` factory is L-027.

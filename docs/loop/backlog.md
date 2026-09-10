@@ -48,7 +48,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-028 | optimize | Export `buildWeaponRivenDispositionDict` from `rivenDisposition.ts` | (this change) |
+| L-028 | optimize | Export `buildWeaponRivenDispositionDict` from `rivenDisposition.ts` | [#121](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/121) |
 | L-008 | optimize | Export `buildRivenAttrValueDict` from `rivenBaseValues.ts` | [#120](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/120) |
 | L-007 | optimize | Factory + override injection for `globalDucatnator.ts` (`globalRivenItem.ts` already had the seam) | [#119](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/119) |
 | L-006 | optimize | Factory + override injection for `globalWorldState.ts` | [#118](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/118) |
