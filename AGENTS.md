@@ -222,8 +222,9 @@ tracked in `docs/loop/backlog.md` and every run is recorded in
   `globalWorldState.ts`, and `globalDucatnator.ts` expose factory + override.
   `globalHotRivenWeapons` in `data/miscs/lab.ts` still inlines its cache
   factory and has no override (L-027).
-- `rivenBaseValues.ts` exports `buildRivenAttrValueDict`. Remaining IIFE static
-  caches are `rivenDisposition`, `relics`, and `arbitrationSchedule` (L-028).
+- `rivenBaseValues.ts` exports `buildRivenAttrValueDict`. `rivenDisposition.ts`
+  exports `buildWeaponRivenDispositionDict`. Remaining IIFE-style static
+  caches are `relics` and `arbitrationSchedule` (L-029).
 - `relicQualityToName` and `relicQualityToTransKey` are exported and covered by
   adapter tests, but currently appear to have no runtime callers.
 - `lich-c` and `lich-i` are hidden placeholder commands that return an

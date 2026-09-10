@@ -4,56 +4,71 @@ import { dict_en, dict_zh, ExportWeapons } from 'warframe-public-export-plus'
 import { rivenCalc } from '../../assets/index'
 import { listToDict, normalizeName } from '../../utils'
 
-export const weaponRivenDispositionDict = (() => {
-  const mapped = rivenCalc.weapons.reduce<RivenWeaponDisposition[]>(
-    (prev, element) => {
-      let mapped: IWeapon | undefined
-      for (const weaponKey in ExportWeapons) {
-        const weapon = ExportWeapons[weaponKey]
+function uniqueNameTail(uniqueName: string): string | undefined {
+  const parts = uniqueName.split('/')
+  if (parts.length <= 0) {
+    return undefined
+  }
+  return parts[parts.length - 1]
+}
 
-        const splited = weapon.name.split('/')
-        if (splited.length <= 0) {
-          continue
-        }
+function findExportWeapon(
+  calcName: string,
+  exportWeapons: Record<string, IWeapon>,
+  dictEn: Record<string, string>,
+): IWeapon | undefined {
+  const normalizedCalcName = normalizeName(calcName)
+  for (const weaponKey in exportWeapons) {
+    const weapon = exportWeapons[weaponKey]
+    const tail = uniqueNameTail(weapon.name)
+    if (tail === undefined) {
+      continue
+    }
 
-        const keyName = splited[splited.length - 1]
-        const normalizedCalcName = normalizeName(element.name)
-        if (normalizeName(keyName) === normalizedCalcName) {
-          mapped = weapon
-          break
-        }
+    if (normalizeName(tail) === normalizedCalcName) {
+      return weapon
+    }
 
-        const weaponEN = dict_en[weapon.name]
-        if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
-          mapped = weapon
-          break
-        }
-      }
+    const weaponEN = dictEn[weapon.name]
+    if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
+      return weapon
+    }
+  }
+  return undefined
+}
 
-      if (!mapped) {
-        return prev
-      }
+export function buildWeaponRivenDispositionDict(
+  calcWeapons: RivenWeaponDisposition['calc'][],
+  exportWeapons: Record<string, IWeapon>,
+  dictEn: Record<string, string>,
+  dictZh: Record<string, string>,
+): Record<string, RivenWeaponDisposition> {
+  const mapped: RivenWeaponDisposition[] = []
+  for (const element of calcWeapons) {
+    const weapon = findExportWeapon(element.name, exportWeapons, dictEn)
+    if (!weapon) {
+      continue
+    }
 
-      const weaponEN = dict_en[mapped.name]
-      const weaponZH = dict_zh[mapped.name]
-      const result = {
-        name: {
-          en: weaponEN,
-          zh: weaponZH,
-        },
-        calc: element,
-        weapon: mapped,
-      }
-
-      prev.push(result)
-
-      return prev
-    },
-    [],
-  )
+    mapped.push({
+      name: {
+        en: dictEn[weapon.name],
+        zh: dictZh[weapon.name],
+      },
+      calc: element,
+      weapon,
+    })
+  }
 
   return listToDict(mapped, e => [
     normalizeName(e.name.zh),
     normalizeName(e.name.en),
   ])
-})()
+}
+
+export const weaponRivenDispositionDict = buildWeaponRivenDispositionDict(
+  rivenCalc.weapons,
+  ExportWeapons,
+  dict_en,
+  dict_zh,
+)

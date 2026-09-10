@@ -1,0 +1,38 @@
+loop-iteration: 15
+item: L-028 Export buildWeaponRivenDispositionDict from rivenDisposition.ts
+data source: in-memory ExportWeapons/dict fixtures plus bundled src/warframe/assets/rivencalc.json (no live network)
+visual: none (data-layer builder extract; no command or renderer change)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present (17991799 bytes)
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+esbuild: src/index.ts -> lib/index.js
+zh.json already present (17991799 bytes)
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  75 passed (75)
+      Tests  654 passed (654)
+   Start at  06:50:16
+   Duration  19.75s (transform 2.58s, setup 0ms, import 46.20s, tests 3.73s, environment 5ms)
+
+
+focused: yarn vitest run tests/data/rivenDisposition.data.spec.ts tests/services/wf/rivenDisposition.wf.spec.ts tests/meta/assetsBoundary.spec.ts
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  3 passed (3)
+      Tests  22 passed (22)
+   Start at  06:49:43
+   Duration  1.81s (transform 356ms, setup 0ms, import 3.21s, tests 14ms, environment 0ms)
+
+
+all four CI commands exited 0
