@@ -75,8 +75,8 @@ unless they already import a helper file.
 2. **L-024** (done) — extract `wf-service.riven.ts` first (largest cluster).
 3. **L-025** (done) — extract world-state boards (alert, invasion, nightwave,
    steel-essence, fissure, void-trader, environment, calendar).
-4. **L-026** — extract the rest (relic, arbitration, sortie, weekly, bounty,
-   circuit).
+4. **L-026** (done) — extract the rest (relic, arbitration, sortie, weekly,
+   bounty, circuit). `index.ts` is a barrel only.
 
 ## Export map
 

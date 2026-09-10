@@ -22,9 +22,8 @@ Queries live in `src/warframe/services/wf-service/` matching `wfm-service/`;
 see `docs/loop/wf-service-split.md`.
 
 - Add `wf-service.<feature>.ts` there and re-export it from
-  `wf-service/index.ts`. Do not grow `index.ts` with new `get*` / `adapt*`
-  bodies. Existing clusters still in `index.ts` are extracted by L-026;
-  new features skip that queue and land in their own module.
+  `wf-service/index.ts`. `index.ts` is a barrel only; do not grow it with
+  new `get*` / `adapt*` bodies. New features land in their own module.
 
 - Write a pure `adapt<Feature>(raw, now = Date.now())` that maps upstream data
   to the domain types. Keep it exported so tests can call it with fixtures.
