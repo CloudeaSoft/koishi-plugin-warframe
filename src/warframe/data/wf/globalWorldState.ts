@@ -1,5 +1,14 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { Fissure, RawCalendarSeason, RawSeasonInfo, RawSyndicateMission, RawWorldEvent } from '../../types'
+import type {
+  AsyncCache,
+  Fissure,
+  RawCalendarSeason,
+  RawInvasion,
+  RawSeasonInfo,
+  RawSortie,
+  RawSyndicateMission,
+  RawWorldEvent,
+} from '../../types'
 
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
 import {
@@ -21,6 +30,19 @@ import {
 import { createAsyncCache } from '../../utils'
 
 type ParsedFissure = WorldState['fissures'][number]
+
+export interface GlobalWorldStateData {
+  raw: WorldState
+  syndicateMissionsRaw: RawSyndicateMission[]
+  seasonInfoRaw: RawSeasonInfo | undefined
+  sortieRaw: RawSortie | undefined
+  invasionsRaw: RawInvasion[]
+  calendarRaw: RawCalendarSeason | undefined
+  eventsRaw: RawWorldEvent[]
+  fissures: Fissure[]
+  spFissures: Fissure[]
+  rjFissures: Fissure[]
+}
 
 export async function adaptFissure(fissure: ParsedFissure): Promise<Fissure> {
   const nodeKey = await getSolNodeKey(fissure.nodeKey)
@@ -46,8 +68,10 @@ export async function adaptFissure(fissure: ParsedFissure): Promise<Fissure> {
   }
 }
 
-export const globalWorldState = createAsyncCache(async () => {
-  const json = await fetchWorldStateJson()
+export async function globalWorldStateFactory(
+  json?: string,
+): Promise<GlobalWorldStateData> {
+  json ??= await fetchWorldStateJson()
   if (!json) {
     throw new Error('获取游戏信息失败')
   }
@@ -91,4 +115,12 @@ export const globalWorldState = createAsyncCache(async () => {
     spFissures,
     rjFissures,
   }
-}, -1)
+}
+
+export let globalWorldState = createAsyncCache(globalWorldStateFactory, -1)
+
+export function overrideGlobalWorldState(
+  cache: AsyncCache<GlobalWorldStateData>,
+): void {
+  globalWorldState = cache
+}

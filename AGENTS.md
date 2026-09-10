@@ -218,9 +218,9 @@ tracked in `docs/loop/backlog.md` and every run is recorded in
   live in mapped `wf-service.<cluster>.ts` modules (L-023–L-026); `index.ts`
   is a barrel only. Do not add new `get*` / `adapt*` bodies to `index.ts`.
   The layout and export map live in `docs/loop/wf-service-split.md`.
-- `globalRivenItem.ts`, `globalDucatnator.ts`, and `globalWorldState.ts` do not
-  yet expose the factory + override injection pattern used by other data
-  singletons.
+- `globalDucatnator.ts` still inlines its cache factory; `globalRivenItem.ts`
+  already exposes factory + override. `globalWorldState.ts` now matches
+  `globalItem.ts` (`globalWorldStateFactory` / `overrideGlobalWorldState`).
 - Several `data/wf/` modules build static caches through inline IIFEs, including
   `rivenDisposition`, `relics`, `rivenBaseValues`, and `arbitrationSchedule`.
   Their transform logic is harder to test in isolation.
