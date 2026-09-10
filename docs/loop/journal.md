@@ -15,7 +15,7 @@ Newest entry first. Every iteration prepends one entry using this template:
 ## 11 — 2026-09-10 — optimize
 
 - Item: L-026 Extract remaining wf-service modules (relic, arbitration, sortie, weekly, bounty, circuit)
-- PR: (this change)
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/117
 - Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (71 files, 627 tests)
 - Outcome: Moved relic, arbitration, sortie, weekly/archon, bounty, and circuit queries out of `wf-service/index.ts` into mapped modules. `index.ts` is now a barrel only. Public imports stay on the services barrel. The wf-service split (L-023–L-026) is complete.
 - Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-006 (factory + override for `globalWorldState.ts`).

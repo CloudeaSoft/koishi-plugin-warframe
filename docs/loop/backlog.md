@@ -49,7 +49,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
-| L-026 | optimize | Extract remaining wf-service modules (relic, arbitration, sortie, weekly+archon, bounty, circuit) from `wf-service/index.ts` | (this change) |
+| L-026 | optimize | Extract remaining wf-service modules (relic, arbitration, sortie, weekly+archon, bounty, circuit) from `wf-service/index.ts` | [#117](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/117) |
 | L-025 | optimize | Extract world-state board modules (alert, invasion, nightwave, steel-essence, fissure, void-trader, environment, calendar) from `wf-service/index.ts` | [#116](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/116) |
 | L-024 | optimize | Extract `wf-service.riven.ts` (OCR, stats, weekly rivens, disposition) from `wf-service/index.ts` | [#115](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/115) |
 | L-005 | explore | `event` command: active world events from world-state Goals (progress and rewards) | [#114](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/114) |
