@@ -70,4 +70,29 @@ describe('wf-service split contract', () => {
       expect(names, `${row.name} should live in ${row.file}`).to.include(row.name)
     }
   })
+
+  it('extracts the riven cluster into wf-service.riven.ts', () => {
+    const dir = resolve(root, 'src/warframe/services/wf-service')
+    const rivenPath = resolve(dir, 'wf-service.riven.ts')
+    const indexPath = resolve(dir, 'index.ts')
+    const rivenNames = [
+      'getAnalyzedRiven',
+      'filterWeeklyRivens',
+      'getWeeklyRivens',
+      'getStaticRivenStats',
+      'getWeaponRivenDisposition',
+      'parseOCRResult',
+      'analyzeRivenStat',
+    ]
+
+    expect(existsSync(rivenPath)).to.equal(true)
+    const index = readFileSync(indexPath, 'utf8')
+    expect(index).to.include('from \'./wf-service.riven\'')
+    const indexExports = exportedFunctionNames(index)
+    const rivenExports = exportedFunctionNames(readFileSync(rivenPath, 'utf8'))
+    for (const name of rivenNames) {
+      expect(indexExports, `${name} should leave index.ts`).to.not.include(name)
+      expect(rivenExports, `${name} should live in wf-service.riven.ts`).to.include(name)
+    }
+  })
 })

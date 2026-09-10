@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 9 — 2026-09-10 — optimize
+
+- Item: L-024 Extract `wf-service.riven.ts` (OCR, stats, weekly rivens, disposition)
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/115
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (71 files, 624 tests)
+- Outcome: Moved the riven cluster (`getAnalyzedRiven`, weekly rivens, static stats, OCR parse, disposition) from `wf-service/index.ts` into `wf-service.riven.ts`. Public imports stay on the services barrel. `getVoidTrader` remains in `index.ts` for L-025.
+- Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-025 (world-state boards). Split that item if the diff exceeds ~400 lines; skip `event` and `riven`, which are already extracted.
+
 ## 8 — 2026-09-10 — explore
 
 - Item: L-005 `event` command for active world events from world-state Goals
