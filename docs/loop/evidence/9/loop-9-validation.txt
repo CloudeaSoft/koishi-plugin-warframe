@@ -1,0 +1,18 @@
+loop-iteration: 9
+item: L-024 Extract wf-service.riven.ts (OCR, stats, weekly rivens, disposition)
+data source: yarn capture defaulted to fixture /workspace/tests/assets/example-world-state.json, timestamps shifted to now (live API unreachable or fixture requested). riven-stat and riven do not read world-state.
+visual: docs/loop/evidence/9/loop-9-riven-stat.png (步枪 / 31 / 0.7 static ranges)
+text: docs/loop/evidence/9/loop-9-riven.txt → 未检测到图片
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present
+esbuild: src/index.ts -> lib/index.js
+Test Files  71 passed (71)
+     Tests  624 passed (624)
+Duration  19.39s
+
+focused: yarn vitest run tests/meta/wfServiceSplit.spec.ts tests/services/wf/riven.wf.spec.ts tests/services/wf/staticRivenStats.wf.spec.ts tests/services/wf/rivenDisposition.wf.spec.ts tests/data/weekly-riven.spec.ts tests/i18n.spec.ts
+Test Files  6 passed (6)
+     Tests  46 passed (46)
+
+all four CI commands exited 0
