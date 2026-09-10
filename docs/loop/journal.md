@@ -12,6 +12,14 @@ Newest entry first. Every iteration prepends one entry using this template:
 - Next: <recommendation for the following run: follow-ups, blockers, ideas>
 ```
 
+## 13 — 2026-09-10 — optimize
+
+- Item: L-007 Factory + override injection for `globalDucatnator.ts`
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/119
+- Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (73 files, 636 tests)
+- Outcome: Extracted `globalDucatnatorIDDictFactory` matching `globalItem.ts`. Tests inject `{ hour, day }` snapshots and never hit Warframe Market. Missing payloads still return `undefined`; the cache TTL stays `3600_000`.
+- Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-008. Start with `rivenBaseValues` (smallest IIFE). `globalHotRivenWeapons` factory is L-027.
+
 ## 12 — 2026-09-10 — optimize
 
 - Item: L-006 Factory + override injection for `globalWorldState.ts`
