@@ -15,7 +15,7 @@ Newest entry first. Every iteration prepends one entry using this template:
 ## 14 — 2026-09-10 — optimize
 
 - Item: L-008 Export `buildRivenAttrValueDict` from `rivenBaseValues.ts`
-- PR: (this change)
+- PR: https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/120
 - Validation: yarn build, yarn dtsc, yarn lint, yarn test — all green (74 files, 644 tests)
 - Outcome: Replaced the IIFE in `rivenBaseValues.ts` with `buildRivenAttrValueDict`. Tests cover Damage-suffix stripping (`Cold Damage` → `cold`, keep `Damage` / `Finisher Damage` / `Critical*`), non-mutation, and that the singleton matches the bundled asset.
 - Next: Previous type is optimize. No P1 explore remains, so pick P1 optimize L-028 (`rivenDisposition` first). `globalHotRivenWeapons` factory is L-027.
