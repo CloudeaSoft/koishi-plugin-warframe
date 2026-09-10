@@ -1,0 +1,38 @@
+loop-iteration: 12
+item: L-006 Factory + override injection for globalWorldState.ts
+data source: tests/assets/example-world-state.json (factory input; no live world-state fetch)
+visual: none (data-layer factory/override; no command or renderer change)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present (17991799 bytes)
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+esbuild: src/index.ts -> lib/index.js
+zh.json already present (17991799 bytes)
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  72 passed (72)
+      Tests  631 passed (631)
+   Start at  03:37:35
+   Duration  20.52s (transform 2.00s, setup 0ms, import 48.94s, tests 3.45s, environment 5ms)
+
+
+focused: yarn vitest run tests/data/globalWorldState.data.spec.ts tests/services/wf/event.wf.spec.ts
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  2 passed (2)
+      Tests  13 passed (13)
+   Start at  03:37:56
+   Duration  1.90s (transform 407ms, setup 0ms, import 2.52s, tests 621ms, environment 0ms)
+
+
+all four CI commands exited 0
