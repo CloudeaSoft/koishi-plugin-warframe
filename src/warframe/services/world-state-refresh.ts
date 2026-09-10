@@ -1,6 +1,7 @@
 import type { TMissionType } from 'warframe-public-export-plus'
 import type WorldState from 'warframe-worldstate-parser'
 
+import type { GlobalWorldStateData } from '../data/wf/globalWorldState'
 import type { VoidTraderItem, WFRegionShort } from '../types'
 import { ExportRegions } from 'warframe-public-export-plus'
 import {
@@ -9,9 +10,7 @@ import {
 } from '../data/wf/globalWorldState'
 import { getSolNodeKey, getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
 
-export type WorldStateSnapshot = Awaited<
-  ReturnType<typeof globalWorldState.get>
->
+export type WorldStateSnapshot = GlobalWorldStateData
 
 type ParsedFissure = WorldState['fissures'][number]
 type ParsedVoidTrader = WorldState['voidTraders'][number]

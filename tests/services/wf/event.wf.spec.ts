@@ -3,11 +3,13 @@ import { expect } from 'chai'
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
 import { t } from '../../../src/i18n'
 import { dictZhExtra } from '../../../src/warframe/assets'
+import { globalWorldStateFactory } from '../../../src/warframe/data/wf/globalWorldState'
 import { resolveExportItemNameZh } from '../../../src/warframe/infrastructure/wf/bounty-adapter'
 import { extractEventsRaw } from '../../../src/warframe/infrastructure/wf/wf-api'
 import { adaptEvents, getEventsFrom } from '../../../src/warframe/services'
 import { msToHumanReadable } from '../../../src/warframe/utils/time'
 import worldStateJSON from '../../assets/example-world-state.json'
+import 'reflect-metadata'
 
 const NOW = 1_766_804_995_000
 const HOUR = 3_600_000
@@ -204,5 +206,20 @@ describe('getEventsFrom', () => {
     expect(names).to.include(officialZh(HEAT_NAME))
     expect(names).to.include(officialZh(TAU_NAME))
     expect(names.join(' ')).to.not.include('Discord')
+  })
+
+  it('accepts a snapshot built by globalWorldStateFactory from fixture JSON', async () => {
+    const snapshot = await globalWorldStateFactory(JSON.stringify(worldStateJSON))
+    const result = await getEventsFrom(snapshot, NOW)
+
+    expect(result.ok).to.equal(true)
+    if (!result.ok) {
+      return
+    }
+
+    const names = result.data.events.map(event => event.name)
+    expect(names).to.include(officialZh(HEAT_NAME))
+    expect(names).to.include(officialZh(TAU_NAME))
+    expect(snapshot.eventsRaw).to.deep.equal(extractEventsRaw(JSON.stringify(worldStateJSON)))
   })
 })
