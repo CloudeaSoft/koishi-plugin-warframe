@@ -108,7 +108,7 @@ describe('oracle bounty adapter', () => {
     const text = formatOracleChallenge(
       '/Lotus/Types/Challenges/Vania/VaniaSafeCracker',
     )
-    expect(text).to.include('储藏箱')
+    expect(text).to.include('科腐者补给箱')
     expect(text).to.not.include('|OPEN_COLOR|')
     expect(text).to.not.include('|ALLY|')
   })
