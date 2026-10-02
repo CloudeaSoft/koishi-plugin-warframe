@@ -18,7 +18,11 @@ updates:
     pull-request-branch-name:
       separator: '-'
     rebase-strategy: auto
+    # Raise manifest minimums even when the existing ranges allow newer releases.
+    versioning-strategy: increase
     allow:
       - dependency-name: warframe-worldstate-data
       - dependency-name: warframe-worldstate-parser
       - dependency-name: warframe-public-export-plus
+      - dependency-name: warframe-weekly-rivens
+      - dependency-name: wfm-api-client
