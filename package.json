@@ -70,7 +70,7 @@
     "tencentcloud-sdk-nodejs-ocr": "^4.1.267",
     "warframe-public-export-plus": "^0.6.11",
     "warframe-weekly-rivens": "^0.0.3",
-    "warframe-worldstate-data": "^3.16.10",
+    "warframe-worldstate-data": "^3.17.0",
     "warframe-worldstate-parser": "^5.5.7",
     "wfm-api-client": "^0.0.3"
   },
