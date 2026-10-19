@@ -18,20 +18,13 @@ describe('wfm-api-client bundle behavior', () => {
     expect(existsSync(resolve(root, 'lib/warframe/assets/circuitRewards.json'))).to.equal(true)
   })
 
-  it('keeps riven attribute value json outside the plugin bundle', () => {
+  it('packages the official riven snapshot outside the bundle', () => {
     const root = packageRoot()
-    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
-
-    expect(bundle).to.not.include('// src/warframe/assets/rivenAttrValues.json')
-    expect(existsSync(resolve(root, 'lib/warframe/assets/rivenAttrValues.json'))).to.equal(true)
-  })
-
-  it('keeps riven calc json outside the plugin bundle', () => {
-    const root = packageRoot()
-    const bundle = readFileSync(resolve(root, 'lib/index.js'), 'utf8')
-
-    expect(bundle).to.not.include('// src/warframe/assets/rivencalc.json')
-    expect(existsSync(resolve(root, 'lib/warframe/assets/rivencalc.json'))).to.equal(true)
+    const snapshot = JSON.parse(readFileSync(resolve(root, 'lib/warframe/assets/riven-public-export.json'), 'utf8'))
+    expect(snapshot.upgrades.length).to.equal(7)
+    expect(snapshot.sources.ExportUpgrades_en.url).to.match(/^https:\/\/content\.warframe\.com\//)
+    expect(existsSync(resolve(root, 'lib/warframe/assets/rivenAttrValues.json'))).to.equal(false)
+    expect(existsSync(resolve(root, 'lib/warframe/assets/rivencalc.json'))).to.equal(false)
   })
 
   it('keeps extra dictionary json files outside the plugin bundle', () => {

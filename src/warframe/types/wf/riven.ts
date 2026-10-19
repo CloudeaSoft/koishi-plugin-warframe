@@ -1,7 +1,12 @@
-import type { IWeapon } from 'warframe-public-export-plus'
 import type { RivenAttributeUnit } from '../wfm'
+import type { RivenExportWeapon } from './riven-export'
 
-export type RivenWeaponType = 'Rifle' | 'Shotgun' | 'Pistol' | 'Archgun' | 'Melee'
+export type RivenWeaponType = 'Rifle' | 'Shotgun' | 'Pistol' | 'Archgun' | 'Melee' | 'Kitgun' | 'Zaw'
+export interface RivenCalculationAttribute {
+  gameRef?: string
+  unit?: RivenAttributeUnit
+  i18n?: { 'en'?: { name?: string }, 'zh-hans'?: { name?: string } }
+}
 export type RivenStatCountType = '31' | '2' | '21' | '3'
 
 export interface RivenStatFixFactor {
@@ -23,6 +28,7 @@ export interface RivenStatAnalyzsis {
 }
 
 export interface RivenStatAnalyzeResult {
+  notes?: string[]
   name: string
   disposition: number
   buffs: RivenStatAnalyzsis[]
@@ -40,10 +46,11 @@ export interface RivenWeaponDisposition {
     texture: string
     riventype: string
   }
-  weapon: IWeapon
+  weapon: RivenExportWeapon
 }
 
 export interface RivenStatResult {
+  notes?: string[]
   positive: Record<
     string,
     { name: string, max: number, min: number, unit: RivenAttributeUnit }

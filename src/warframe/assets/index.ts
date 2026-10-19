@@ -1,4 +1,4 @@
-import type { RivenWeaponDisposition } from '../types'
+import type { RivenPublicExport } from '../types/wf/riven-export'
 import { loadAssetJson, loadAssetText } from '../utils/assets'
 
 export interface BaroParsedItem {
@@ -17,13 +17,7 @@ export const {
   warframes: string[][]
 }>('circuitRewards.json')
 
-export const rivenAttrValues = loadAssetJson<
-  Record<string, Record<string, number>>
->('rivenAttrValues.json')
-
-export const rivenCalc = loadAssetJson<{
-  weapons: RivenWeaponDisposition['calc'][]
-}>('rivencalc.json')
+export const rivenPublicExport = loadAssetJson<RivenPublicExport>('riven-public-export.json')
 
 export const dictEnExtra = loadAssetJson<Record<string, string>>('en.json')
 export const dictZhExtra = loadAssetJson<Record<string, string>>('zh.json')

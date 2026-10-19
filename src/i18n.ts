@@ -30,6 +30,9 @@ export const messages = {
   'riven.dispositionError': '裂罅倾向错误',
   'riven.weaponTypeError': '武器类型错误',
   'riven.statTypeError': '词条类型错误',
+  'riven.unverifiedStat': '{stat}的显示换算尚未确认，暂不提供数值分析。',
+  'riven.variantRequired': '组合枪的主副武器倾向不同，请使用 riven -v primary 或 riven -v secondary 指定形态。',
+  'riven.variantError': '组合枪形态应为 primary（主武器）或 secondary（副武器）。',
   'riven.invalidParams': '请输入正确参数',
   'riven.noWeeklyData': '没有找到符合条件的紫卡参考数据',
 
