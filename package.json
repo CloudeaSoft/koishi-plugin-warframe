@@ -26,6 +26,8 @@
     "provenance": true
   },
   "scripts": {
+    "riven:update": "node scripts/update-riven-data.mjs",
+    "riven:test-sync": "vitest run tests/scripts/updateRivenData.spec.ts",
     "build": "node scripts/download-zh-dict.mjs && yakumo build && node scripts/copy-assets.mjs",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",
@@ -101,6 +103,7 @@
     "koishi": "^4.18.11",
     "koishi-plugin-cron": "^3.1.0",
     "koishi-plugin-puppeteer": "^3.9.0",
+    "lzma": "^2.3.2",
     "reflect-metadata": "^0.2.2",
     "semantic-release": "^25.0.9",
     "typescript": "^5.9.3",

@@ -1,74 +1,72 @@
-import type { IWeapon } from 'warframe-public-export-plus'
 import type { RivenWeaponDisposition } from '../../types'
-import { dict_en, dict_zh, ExportWeapons } from 'warframe-public-export-plus'
-import { rivenCalc } from '../../assets/index'
-import { listToDict, normalizeName } from '../../utils'
+import type { RivenExportWeapon } from '../../types/wf/riven-export'
+import { ExportUpgrades, ExportWeapons } from 'warframe-public-export-plus'
+import { rivenPublicExport } from '../../assets/index'
+import { rivenDefinitionTypes } from '../../infrastructure/wf/riven-export-adapter'
+import { normalizeName } from '../../utils'
 
-function uniqueNameTail(uniqueName: string): string | undefined {
-  const parts = uniqueName.split('/')
-  if (parts.length <= 0) {
-    return undefined
-  }
-  return parts[parts.length - 1]
-}
-
-function findExportWeapon(
-  calcName: string,
-  exportWeapons: Record<string, IWeapon>,
-  dictEn: Record<string, string>,
-): IWeapon | undefined {
-  const normalizedCalcName = normalizeName(calcName)
-  for (const weaponKey in exportWeapons) {
-    const weapon = exportWeapons[weaponKey]
-    const tail = uniqueNameTail(weapon.name)
-    if (tail === undefined) {
-      continue
-    }
-
-    if (normalizeName(tail) === normalizedCalcName) {
-      return weapon
-    }
-
-    const weaponEN = dictEn[weapon.name]
-    if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
-      return weapon
-    }
-  }
-  return undefined
+// The enriched export supplies compatibility metadata, never numeric values.
+const weaponTypes: Record<string, string> = {}
+for (const [path, definition] of Object.entries(ExportUpgrades)) {
+  const type = rivenDefinitionTypes[path.split('/').pop()!]
+  if (!type)
+    continue
+  for (const item of definition.compatibleItems ?? []) weaponTypes[item] = type
 }
 
 export function buildWeaponRivenDispositionDict(
-  calcWeapons: RivenWeaponDisposition['calc'][],
-  exportWeapons: Record<string, IWeapon>,
-  dictEn: Record<string, string>,
-  dictZh: Record<string, string>,
+  weapons: RivenExportWeapon[],
+  namesZh: Record<string, string>,
+  types: Record<string, string>,
 ): Record<string, RivenWeaponDisposition> {
-  const mapped: RivenWeaponDisposition[] = []
-  for (const element of calcWeapons) {
-    const weapon = findExportWeapon(element.name, exportWeapons, dictEn)
-    if (!weapon) {
+  const result: Record<string, RivenWeaponDisposition> = {}
+  for (const weapon of weapons) {
+    if (!Number.isFinite(weapon.omegaAttenuation) || weapon.omegaAttenuation <= 0)
       continue
+    const type = types[weapon.uniqueName]
+    if (!type)
+      continue
+    const add = (en: string, zh: string, disposition: number): void => {
+      const data: RivenWeaponDisposition = {
+        name: { en, zh },
+        calc: { name: en, disposition, riventype: type, texture: '' },
+        weapon,
+      }
+      result[normalizeName(en)] = result[normalizeName(zh)] = data
     }
-
-    mapped.push({
-      name: {
-        en: dictEn[weapon.name],
-        zh: dictZh[weapon.name],
-      },
-      calc: element,
-      weapon,
-    })
+    const zh = namesZh[weapon.uniqueName] ?? weapon.name
+    if (type === 'Kitgun') {
+      add(`${weapon.name} (Secondary)`, `${zh}（副武器）`, weapon.omegaAttenuation)
+      if (weapon.primeOmegaAttenuation && Number.isFinite(weapon.primeOmegaAttenuation)) {
+        add(`${weapon.name} (Primary)`, `${zh}（主武器）`, weapon.primeOmegaAttenuation)
+      }
+    }
+    else {
+      add(weapon.name, zh, weapon.omegaAttenuation)
+    }
   }
+  return result
+}
 
-  return listToDict(mapped, e => [
-    normalizeName(e.name.zh),
-    normalizeName(e.name.en),
-  ])
+// Only categories unambiguously identified by the export are safe fallbacks.
+for (const weapon of rivenPublicExport.weapons) {
+  if (weaponTypes[weapon.uniqueName])
+    continue
+  const metadata = ExportWeapons[weapon.uniqueName]
+  const category = weapon.productCategory
+  const type = category === 'Melee'
+    ? 'Melee'
+    : category === 'SpaceGuns'
+      ? 'Archgun'
+      : category === 'Pistols'
+        ? 'Pistol'
+        : category === 'LongGuns' && metadata?.holsterCategory ? (metadata.holsterCategory === 'SHOTGUN' ? 'Shotgun' : 'Rifle') : undefined
+  if (type)
+    weaponTypes[weapon.uniqueName] = type
 }
 
 export const weaponRivenDispositionDict = buildWeaponRivenDispositionDict(
-  rivenCalc.weapons,
-  ExportWeapons,
-  dict_en,
-  dict_zh,
+  rivenPublicExport.weapons,
+  rivenPublicExport.weaponNamesZh,
+  weaponTypes,
 )
