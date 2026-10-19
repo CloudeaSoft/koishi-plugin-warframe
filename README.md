@@ -58,9 +58,11 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 | Command        | Arguments                                                    | Aliases                         | Description                                                                                                                                                                                     |
 | -------------- | ------------------------------------------------------------ | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `riven`        | `<img:image>`                                                |                                 | Analyze riven stats from a screenshot using OCR.                                                                                                                                                |
+| `riven`        | `<img:image>`                                                |                                 | Analyze traditional and spliced riven stats from a screenshot using OCR. Kitguns require `-v primary` or `-v secondary`.                                                                                                                                                |
 | `riven-weekly` | `[minPrice:number]`                                          | `weeklyriven`, `周紫卡`, `周卡` | Query weekly high-value riven reference (unrolled median prices).                                                                                                                               |
-| `riven-stat`   | `<weaponType:string> <statType:string> <disposition:number>` | `rivenstat`, `紫卡数值`         | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun)<br>Stat types: 2, 3, 21, 31 |
+| `riven-stat`   | `<weaponType:string> <statType:string> <disposition:number>` | `rivenstat`, `紫卡数值`         | Query riven stat ranges by weapon type, stat type, and disposition.<br>Weapon types: 步枪(rifle), 手枪(pistol), 霰弹枪(shotgun), 近战(melee), Archwing枪械(archgun), Kitgun(组合枪), Zaw(组合近战)<br>Stat types: 2, 3, 21, 31 |
+
+Riven calculations use a bundled official Public Export snapshot. See [data sources and refresh instructions](docs/riven-data.md).
 
 ### Kuva/Tenet/Coda (In Development)
 

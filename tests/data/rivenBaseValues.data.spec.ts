@@ -1,110 +1,46 @@
 import { expect } from 'chai'
-import { rivenAttrValues } from '../../src/warframe/assets/index'
-import {
-  buildRivenAttrValueDict,
-  rivenAttrValueDict,
-} from '../../src/warframe/data/wf/rivenBaseValues'
+import { rivenPublicExport } from '../../src/warframe/assets/index'
+import { rivenStatsByType } from '../../src/warframe/data/wf/rivenBaseValues'
+import { adaptRivenDefinitions } from '../../src/warframe/infrastructure/wf/riven-export-adapter'
 
-const fixture = {
-  Rifle: {
-    'Ammo Maximum': 49.95,
-    'Cold Damage': 90,
-    'Critical Chance': 149.99,
-    'Critical Damage': 120,
-    'Damage': 165,
-    'Damage to Infested': 0.45,
-    'Fire Rate / Attack Speed': 60.03,
-    'Impact Damage': 119.97,
-    'Weapon Recoil': -90,
-  },
-  Melee: {
-    'Critical Chance for Slide Attack': 120,
-    'Finisher Damage': 119.7,
-    'Slash Damage': 119.7,
-  },
-}
-
-describe('buildRivenAttrValueDict', () => {
-  it('returns an empty dict for an empty source', () => {
-    expect(buildRivenAttrValueDict({})).to.deep.equal({})
+describe('official riven base values', () => {
+  it('keeps all 97 spliced records, including unverified parry angle', () => {
+    const spliced = Object.values(rivenStatsByType).flat().filter(s => s.spliced)
+    expect(spliced.length).to.equal(97)
+    expect(new Set(spliced.map(s => s.gameRef)).size).to.equal(18)
+    expect(spliced.filter(s => !s.verified).map(s => s.gameRef)).to.deep.equal(['WeaponMeleeParryAngleMod', 'WeaponMeleeParryAngleMod'])
   })
 
-  it('keeps an empty weapon-type table', () => {
-    expect(buildRivenAttrValueDict({ Rifle: {} })).to.deep.equal({ Rifle: {} })
+  it('uses each category own official base without copying traditional elemental values', () => {
+    const archgun = rivenStatsByType.Archgun
+    expect(archgun.find(s => s.gameRef === 'WeaponBlastDamageMod')!.baseValue).to.be.closeTo(89.9999982, 0.0000001)
+    expect(archgun.find(s => s.gameRef === 'WeaponFreezeDamageMod')!.baseValue).to.be.closeTo(119.7, 0.0000001)
+    expect(archgun.find(s => s.gameRef === 'WeaponMagazineReloadHolstered')).to.equal(undefined)
   })
 
-  it('does not mutate the source object', () => {
-    const source = {
-      Rifle: {
-        'Cold Damage': 1,
-        'Damage': 2,
-      },
-    }
-    const snapshot = JSON.parse(JSON.stringify(source)) as typeof source
-
-    const result = buildRivenAttrValueDict(source)
-
-    expect(source).to.deep.equal(snapshot)
-    expect(result).to.not.equal(source)
-    expect(result.Rifle).to.not.equal(source.Rifle)
+  it('converts percentage, multiplier, seconds and flat values separately', () => {
+    const melee = rivenStatsByType.Melee
+    expect(melee.find(s => s.gameRef === 'ComboDurationMod')!.baseValue).to.be.closeTo(8.10000036, 0.00000001)
+    expect(melee.find(s => s.gameRef === 'WeaponMeleeRangeIncMod')!.baseValue).to.be.closeTo(1.94219991, 0.00000001)
+    expect(melee.find(s => s.gameRef === 'WeaponFactionDamageOrokin')!.baseValue).to.be.closeTo(0.449999991, 0.000000001)
   })
 
-  it('strips a trailing Damage suffix except for Damage, Finisher Damage, and Critical*', () => {
-    const result = buildRivenAttrValueDict(fixture)
-
-    expect(result.Rifle).to.deep.equal({
-      'ammomaximum': 49.95,
-      'cold': 90,
-      'criticalchance': 149.99,
-      'criticaldamage': 120,
-      'damage': 165,
-      'damagetoinfested': 0.45,
-      'firerate/attackspeed': 60.03,
-      'impact': 119.97,
-      'weaponrecoil': -90,
-    })
-    expect(result.Melee).to.deep.equal({
-      criticalchanceforslideattack: 120,
-      finisherdamage: 119.7,
-      slash: 119.7,
-    })
+  it('does not mutate the raw official snapshot or round its values', () => {
+    const copy = JSON.stringify(rivenPublicExport.upgrades)
+    adaptRivenDefinitions(rivenPublicExport.upgrades)
+    expect(JSON.stringify(rivenPublicExport.upgrades)).to.equal(copy)
+    expect(rivenStatsByType.Rifle.find(s => s.gameRef === 'WeaponRecoilReductionMod')!.baseValue).to.be.lessThan(0)
+    expect(rivenStatsByType.Rifle.find(s => s.gameRef === 'WeaponAmmoEfficiency')!.baseValue).to.be.greaterThan(0)
   })
 
-  it('keeps the later value when two source keys collapse to the same WFM key', () => {
-    const result = buildRivenAttrValueDict({
-      Rifle: {
-        'Cold': 1,
-        'Cold Damage': 2,
-      },
-    })
-
-    expect(result.Rifle).to.deep.equal({ cold: 2 })
-  })
-
-  it('builds independent tables per weapon type', () => {
-    const result = buildRivenAttrValueDict({
-      Rifle: { 'Heat Damage': 10 },
-      Shotgun: { 'Heat Damage': 20 },
-    })
-
-    expect(result.Rifle.heat).to.equal(10)
-    expect(result.Shotgun.heat).to.equal(20)
-  })
-})
-
-describe('rivenAttrValueDict', () => {
-  it('is the bundled asset run through the builder', () => {
-    expect(rivenAttrValueDict).to.deep.equal(
-      buildRivenAttrValueDict(rivenAttrValues),
-    )
-  })
-
-  it('indexes bundled Rifle and Melee keys with the Damage-suffix rules', () => {
-    expect(rivenAttrValueDict.Rifle.cold).to.equal(90)
-    expect(rivenAttrValueDict.Rifle.damage).to.equal(165)
-    expect(rivenAttrValueDict.Rifle.criticaldamage).to.equal(120)
-    expect(rivenAttrValueDict.Rifle.impact).to.equal(119.97)
-    expect(rivenAttrValueDict.Melee.finisherdamage).to.equal(119.7)
-    expect(rivenAttrValueDict.Melee.slash).to.equal(119.7)
+  it('does not infer values or eligibility for unknown attributes', () => {
+    const result = adaptRivenDefinitions([{ uniqueName: '/Lotus/Upgrades/Mods/Randomized/LotusRifleRandomModRare', upgradeEntries: [
+      { tag: 'FutureUnknown', upgradeValues: [{ value: 0.01, locTag: '|val|% Future Stat' }] },
+      { tag: 'Invalid', upgradeValues: [{ value: NaN, locTag: '|val|% Bad' }] },
+    ] }])
+    expect(result.Rifle.length).to.equal(1)
+    expect(result.Rifle[0].verified).to.equal(false)
+    expect(result.Rifle[0].canBeBuff).to.equal(false)
+    expect(result.Rifle[0].canBeCurse).to.equal(false)
   })
 })

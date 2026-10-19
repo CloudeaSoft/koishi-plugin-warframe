@@ -57,7 +57,7 @@ export function createWfCommands(deps: PluginDependencies): {
   steelPathFissureCommand: (_action: Argv) => Promise<string>
   railjackFissureCommand: (_action: Argv) => Promise<string>
   relicCommand: (_action: Argv, input: string) => Promise<string>
-  rivenCommand: (_action: Argv, input: Dict) => Promise<string>
+  rivenCommand: (_action: Argv<never, never, unknown[], { variant?: string }>, input: Dict) => Promise<string>
   rivenStatCommand: (
     _action: Argv,
     weaponType: string,
@@ -201,7 +201,7 @@ export function createWfCommands(deps: PluginDependencies): {
       return render(RelicComponent(relic))
     },
 
-    rivenCommand: async (_action: Argv, input: Dict) => {
+    rivenCommand: async (_action: Argv<never, never, unknown[], { variant?: string }>, input: Dict) => {
       // input example
       // {
       //   src: 'https://multimedia.nt.qq.com.cn/download?appid=1407&fileid=EhSbiKlNhenZ15S4s8g3fKbWnigO_xiq1zQg_woo_ITZ2cPTkQMyBHByb2RQgL2jAVoQYr6GFTzpYU9ru9vH3KRquXoCnkGCAQJuag&rkey=CAISONPsN0nSR8aLvM1wiFc17l9Vp25vzGKOI3P88HGlfq2gum-kDb4TI0oJR8m_2-p4vB6cudJCb-C-&spec=0'
@@ -218,6 +218,7 @@ export function createWfCommands(deps: PluginDependencies): {
       const result = await getAnalyzedRiven(
         config.ocrAPISecret,
         input.src as string,
+        _action.options?.variant,
       )
       if (!result.ok) {
         return t(result)
