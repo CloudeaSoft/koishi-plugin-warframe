@@ -89,8 +89,12 @@ export interface RivenCalculationStat extends RivenCalculationAttribute {
   aliases: string[]
 }
 
-export function cleanRivenTemplate(template: string): string {
-  return template.replace(/<[^>]*>/g, '').replace(/\|[^|]+\|[%s]?/g, '').replace(/\([^)]*\)/g, '').trim()
+export function cleanRivenTemplate(template: string): string | undefined {
+  // Parse Public Export formatting tokens, not arbitrary HTML.
+  const text = template.replace(/<DT_[A-Z_]+_COLOR>/g, '')
+  if (/[<>]/.test(text))
+    return undefined
+  return text.replace(/\|[^|]+\|[%s]?/g, '').replace(/\([^)]*\)/g, '').trim()
 }
 
 export function adaptRivenDefinitions(definitions: RivenExportDefinition[]): Record<string, RivenCalculationStat[]> {
@@ -105,13 +109,16 @@ export function adaptRivenDefinitions(definitions: RivenExportDefinition[]): Rec
       const raw = entry.upgradeValues[0]
       if (!raw?.locTag || !Number.isFinite(raw.value))
         continue
+      const templateName = cleanRivenTemplate(raw.locTag)
+      if (!templateName)
+        continue
       const tag = entry.tag
       const spliced = tag in splicedNames
       const englishName = tag === 'WeaponMeleeDamageMod'
         ? 'Damage'
         : tag === 'WeaponFireRateMod'
           ? 'Fire Rate / Attack Speed'
-          : cleanRivenTemplate(raw.locTag)
+          : templateName
       const name = splicedNames[tag] ?? traditionalNames[tag] ?? englishName
       const unit: RivenAttributeUnit = tag.includes('FactionDamage')
         ? 'multiply'
@@ -131,7 +138,7 @@ export function adaptRivenDefinitions(definitions: RivenExportDefinition[]): Rec
         canBeBuff: spliced || (metadata?.canBeBuff ?? false),
         canBeCurse: !spliced && (metadata?.canBeCurse ?? false),
         verified: tag !== 'WeaponMeleeParryAngleMod' && (spliced || tag in traditionalNames),
-        aliases: [name, englishName, cleanRivenTemplate(raw.locTag)],
+        aliases: [name, englishName, templateName],
         i18n: { 'en': { name: englishName }, 'zh-hans': { name } },
       })
     }
