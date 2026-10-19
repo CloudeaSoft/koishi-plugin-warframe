@@ -1503,6 +1503,8 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
           </div>
         </div>
 
+        {data.notes?.map(note => <p style="font-size: 12px; color: var(--wf-text-muted);">{note}</p>)}
+
         {/* 正面词条 */}
         <div style="margin-bottom: 25px;">
           <h3
@@ -1701,6 +1703,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
         max-width: 600px;
       `}
     >
+      {data.notes?.map(note => <p style="font-size: 12px; color: var(--wf-text-muted); margin: 0;">{note}</p>)}
       <div
         style={`
         display: flex;

@@ -1,31 +1,13 @@
-import { rivenAttrValues } from '../../assets/index'
-import { normalizeName } from '../../utils'
+import { rivenPublicExport } from '../../assets/index'
+import { adaptRivenDefinitions } from '../../infrastructure/wf/riven-export-adapter'
 
 export type RivenAttrValueDict = Record<string, Record<string, number>>
 
-function wfmKeyForRivenAttr(attrKey: string): string {
-  const removeDamageSuffix
-    = attrKey.endsWith('Damage')
-      && attrKey !== 'Damage'
-      && attrKey !== 'Finisher Damage'
-      && !attrKey.startsWith('Critical')
-  return removeDamageSuffix
-    ? normalizeName(attrKey.replace('Damage', ''))
-    : normalizeName(attrKey)
-}
-
-export function buildRivenAttrValueDict(
-  source: RivenAttrValueDict,
-): RivenAttrValueDict {
-  const dict: RivenAttrValueDict = {}
-  for (const weaponType in source) {
-    const attrs = source[weaponType]
-    dict[weaponType] = {}
-    for (const attrKey in attrs) {
-      dict[weaponType][wfmKeyForRivenAttr(attrKey)] = attrs[attrKey]
-    }
-  }
-  return dict
-}
-
-export const rivenAttrValueDict = buildRivenAttrValueDict(rivenAttrValues)
+export const rivenStatsByType = adaptRivenDefinitions(rivenPublicExport.upgrades)
+export const rivenAttributes = [...new Map(Object.values(rivenStatsByType).flat().map(stat => [stat.gameRef, stat])).values()]
+export const rivenAttrValueDict: RivenAttrValueDict = Object.fromEntries(
+  Object.entries(rivenStatsByType).map(([type, stats]) => [
+    type,
+    Object.fromEntries(stats.filter(stat => stat.verified).map(stat => [stat.key, stat.baseValue])),
+  ]),
+)

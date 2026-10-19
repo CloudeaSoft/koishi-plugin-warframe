@@ -153,14 +153,16 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('霍瓦尼亚日历')
     .action(wf.calendarCommand)
 
-  ctx.command('riven <img:image>', '分析紫卡截图').action(wf.rivenCommand)
+  ctx.command('riven <img:image>', '分析紫卡截图')
+    .option('variant', '-v <variant:string> 组合枪形态: primary / secondary')
+    .action(wf.rivenCommand)
   ctx
     .command(
       'riven-stat <weaponType:string> <statType:string> <disposition:number>',
       '获取紫卡数值范围',
     )
     .usage(
-      '武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械\n词条类型: 2, 3, 21, 31',
+      '武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械, Kitgun（组合枪）, Zaw（组合近战）\n词条类型: 2, 3, 21, 31\n数值为满级参考范围，包含融合词条。',
     )
     .example('riven-stat 步枪 31 0.7')
     .alias('rivenstat')

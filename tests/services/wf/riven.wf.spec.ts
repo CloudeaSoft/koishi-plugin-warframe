@@ -1,39 +1,13 @@
-import type { ItemShort, RivenAttribute } from '../../../src/warframe/types/wfm'
-
 import { expect } from 'chai'
-import { dict_en, ExportWeapons } from 'warframe-public-export-plus'
-import { rivenCalc } from '../../../src/warframe/assets/index'
+import { rivenPublicExport } from '../../../src/warframe/assets/index'
 
 import { rivenAttrValueDict } from '../../../src/warframe/data/wf/rivenBaseValues'
-import {
-  globalItemDataFactory,
-  overrideGlobalItemData,
-} from '../../../src/warframe/data/wfm/globalItem'
-import {
-  globalRivenAttributeFactory,
-  overrideGlobalRivenAttribute,
-} from '../../../src/warframe/data/wfm/globalRivenAttribute'
 import {
   analyzeRivenStat,
   getWeaponRivenDisposition,
   parseOCRResult,
 } from '../../../src/warframe/services'
-import { createAsyncCache, normalizeName } from '../../../src/warframe/utils'
-import testItem from '../../assets/test-items.json'
-import testAttr from '../../assets/test-riven-attrs.json'
-
-beforeAll(() => {
-  overrideGlobalItemData(
-    createAsyncCache(async () => {
-      return await globalItemDataFactory(testItem.data as ItemShort[])
-    }, -1),
-  )
-  overrideGlobalRivenAttribute(
-    createAsyncCache(async () => {
-      return await globalRivenAttributeFactory(testAttr.data as unknown as RivenAttribute[])
-    }, -1),
-  )
-})
+import { normalizeName } from '../../../src/warframe/utils'
 
 describe('oCR Result Tests', () => {
   it('should extract riven stats correctly for each result', async () => {
@@ -881,7 +855,7 @@ describe('oCR Result Tests', () => {
       const parsed = await parseOCRResult(
         result.TextDetections.map(t => t.DetectedText),
       )
-      expect(parsed).to.not.equal(undefined)
+      expect(parsed, `OCR fixture ${i}: ${result.TextDetections.map(t => t.DetectedText).join(' | ')}`).to.not.equal(undefined)
       expect(parsed!.attributes.length, parsed?.name).to.be.equal(statNum[i])
       parsed!.attributes.forEach((element) => {
         expect(element.attr).to.not.equal(undefined)
@@ -890,33 +864,9 @@ describe('oCR Result Tests', () => {
     }
   })
 
-  it('transform Riven Calc Data Tests', () => {
-    let count = 0
-    for (const element of rivenCalc.weapons) {
-      for (const weaponKey in ExportWeapons) {
-        const weapon = ExportWeapons[weaponKey]
-
-        const splited = weapon.name.split('/')
-        if (splited.length <= 0) {
-          continue
-        }
-
-        const keyName = splited[splited.length - 1]
-        const normalizedCalcName = normalizeName(element.name)
-        if (normalizeName(keyName) === normalizedCalcName) {
-          count++
-          break
-        }
-
-        const weaponEN = dict_en[weapon.name]
-        if (weaponEN && normalizeName(weaponEN) === normalizedCalcName) {
-          count++
-          break
-        }
-      }
-    }
-
-    expect(count).to.be.greaterThan(0)
+  it('uses the official disposition for a known weapon', () => {
+    const exported = rivenPublicExport.weapons.find(w => w.name === 'Boltor')!
+    expect(getWeaponRivenDisposition('Boltor')?.calc.disposition).to.equal(exported.omegaAttenuation)
   })
 
   it('weapon Names', () => {
