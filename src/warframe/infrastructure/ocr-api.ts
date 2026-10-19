@@ -1,4 +1,5 @@
 import type { OcrAPISecret } from '../types'
+import type { OcrTextBlock } from '../types/ocr'
 import { Buffer } from 'node:buffer'
 import crypto from 'node:crypto'
 import { createCache } from 'async-cache-dedupe'
@@ -32,13 +33,13 @@ function getImageBase64Hash(base64: string): string {
 async function getTextFromTencentOCR(
   image: string,
   secret: OcrAPISecret,
-): Promise<string[]> {
+): Promise<OcrTextBlock[]> {
   const tencentcloud = await import('tencentcloud-sdk-nodejs-ocr')
   const OcrClient = tencentcloud.ocr.v20181119.Client
   const clientConfig = {
     credential: {
-      secretId: secret.id,
-      secretKey: secret.key,
+      secretId: secret.id.trim(),
+      secretKey: secret.key.trim(),
     },
     region: '',
     profile: {
@@ -54,14 +55,20 @@ async function getTextFromTencentOCR(
     ImageBase64: image,
   })
 
-  const result = TextDetections?.map(t => t.DetectedText).filter(
-    Boolean,
-  ) as string[]
-
-  return result
+  return (TextDetections ?? []).flatMap((t) => {
+    const text = t.DetectedText
+    if (!text?.trim())
+      return []
+    const box = t.ItemPolygon
+    return [{
+      text,
+      confidence: t.Confidence,
+      box: box ? { x: box.X, y: box.Y, width: box.Width, height: box.Height } : undefined,
+    }]
+  })
 }
 
-export async function extractTextFromImage(image: string | Blob, secret: OcrAPISecret): Promise<string[] | undefined> {
+export async function extractTextFromImage(image: string | Blob, secret: OcrAPISecret): Promise<OcrTextBlock[] | undefined> {
   if (image instanceof Blob) {
     const buffer = await image.arrayBuffer()
     image = Buffer.from(buffer).toString('base64')

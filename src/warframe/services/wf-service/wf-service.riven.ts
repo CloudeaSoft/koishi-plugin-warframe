@@ -11,8 +11,10 @@ import type {
   RivenWeaponType,
   WarframeResult,
 } from '../../types'
+import type { OcrTextBlock } from '../../types/ocr'
 import type { RivenCalculationAttribute } from '../../types/wf/riven'
-import { rivenAttributes, rivenStatsByType } from '../../data/wf/rivenBaseValues'
+import type { ParsedRiven } from '../riven/ocr'
+import { rivenStatsByType } from '../../data/wf/rivenBaseValues'
 import { weaponRivenDispositionDict } from '../../data/wf/rivenDisposition'
 import { rivenStatFixFactor } from '../../data/wf/rivenStatData'
 import { globalRivenItemData } from '../../data/wfm/globalRivenItem'
@@ -21,10 +23,8 @@ import { failure } from '../../types/warframe-result'
 import {
   fetchAsyncImage,
   normalizeName,
-  normalSimilarity,
-  removeSpace,
-  tokenSimilarity,
 } from '../../utils'
+import { parseRivenOcr } from '../riven/ocr'
 
 export async function getAnalyzedRiven(secret: OcrAPISecret, url: string, variant?: string): Promise<WarframeResult<RivenStatAnalyzeResult>> {
   const img = await fetchAsyncImage(url)
@@ -191,194 +191,8 @@ export function getWeaponRivenDisposition(
   return undefined
 }
 
-export async function parseOCRResult(ocrResult: string[]): Promise<
-  | {
-    name: string
-    attributes: {
-      attr: RivenCalculationAttribute
-      value: number
-      prefix: string
-    }[]
-  }
-  | undefined
-> {
-  const globalRivenCalculationAttributeList = rivenAttributes
-
-  const list = ocrResult
-  if (!list.length) {
-    return
-  }
-
-  function normalizeStatName(text: string): string {
-    return normalizeName(text).replace(/的/g, '').replace(/暴击率/g, '暴击几率').replace(/弹药最大值/g, '弹药上限').replace(/^伤害$/, '基础伤害').replace(/触发伤害/g, '异常状态伤害').replace(/orokin/g, '奥罗金').replace(/techrot/g, '科腐者').replace(/scaldra/g, '炽蛇军')
-  }
-
-  function similarity(standard: string, input: string): number {
-    standard = normalizeStatName(standard)
-    input = normalizeStatName(input)
-    if (!standard || !input)
-      return 0
-    if (standard === input)
-      return 2
-    // Longer, more specific names win; never let 伤害 swallow 弱点伤害.
-    if (input.startsWith(standard))
-      return 1 + standard.length / input.length * 0.5
-    if (standard.split('/').includes(input))
-      return 1.8
-    if (standard.split('/').some(x => input.startsWith(x)))
-      return 1.2
-    return Math.max(tokenSimilarity(standard, input), normalSimilarity(standard, input))
-  }
-
-  const texts = list
-  const attributes: {
-    attr: RivenCalculationAttribute
-    value: number
-    prefix: string
-  }[] = []
-  const statLines: string[] = []
-  for (const t of texts) {
-    if (!t || !/^[x×+−-]|^\d/i.test(t)) {
-      continue
-    }
-
-    if (/^(?:\d+\s*(?:段位|等级|次|循环)|(?:段位|等级|循环)\s*\d+)$/.test(t.trim()))
-      continue
-    const prefix = /^[x×+−-]/i.test(t) ? t[0] : ''
-
-    const attrNamePart = removeSpace(t).replace(/^[xX×+−-]?\d+(?:\.\d+)?[%s]?/, '')
-    // Rank and reroll counters are numeric-only OCR fragments.
-    if (!attrNamePart || !/[A-Z\u4E00-\u9FA5]/i.test(attrNamePart))
-      continue
-    if (!prefix && /^[a-z]{1,2}$/i.test(attrNamePart))
-      continue
-    const matches = globalRivenCalculationAttributeList.map(attr => ({
-      attr,
-      score: Math.max(...attr.aliases.map(name => similarity(name, attrNamePart))),
-    })).sort((a, b) => b.score - a.score)
-    const best = matches[0]
-    if (!best || best.score < 0.8)
-      return undefined
-    const attr = best.attr
-
-    statLines.push(t)
-
-    const value = (function extractStatValue(text) {
-      // Normalize
-      const t = text.replace(/\s+/g, '').replace(/×/g, 'x').replace(/−/g, '-')
-
-      // Case 1: multiply format like "x1.07"
-      const multMatch = t.match(/^x(\d+(?:\.\d+)?)/i)
-      if (multMatch) {
-        return {
-          value: Number.parseFloat(multMatch[1]),
-          type: 'multiply',
-        }
-      }
-
-      // Case 2: percentage format like "+15.8%" or "-12%"
-      const percentMatch = t.match(/^([+-]?\d+(?:\.\d+)?)%/)
-      if (percentMatch) {
-        return {
-          value: Number.parseFloat(percentMatch[1]),
-          type: 'percent',
-        }
-      }
-
-      // Case 3: plain number (rare but possible)
-      const numMatch = t.match(/^([+-]?\d+(?:\.\d+)?)/)
-      if (numMatch) {
-        return {
-          value: Number.parseFloat(numMatch[1]),
-          type: 'number',
-        }
-      }
-
-      return undefined
-    })(t)
-    if (!value) {
-      return undefined
-    }
-
-    attributes.push({ attr, value: value.value, prefix })
-  }
-
-  const weaponName = (function extractWeaponName(ocrData: string[]) {
-    const rejectPatterns = [
-      /%/,
-      /x\d/i,
-      /\d/, // numbers, %, multipliers
-      /伤害/,
-      /暴击/,
-      /射速/,
-      /攻击/,
-      /后坐力/,
-      /段位/,
-      /加倍/,
-      /效/,
-      /武器/,
-      /果/,
-      /\)/,
-      /\(/, // junk OCR fragments
-    ]
-
-    // Step 1: filter out obvious non-name items
-    const exact = ocrData.find(text =>
-      getWeaponRivenDisposition(text.trim())
-      || getWeaponRivenDisposition(`${text.trim()} (Primary)`)
-      || getWeaponRivenDisposition(`${text.trim()} (Secondary)`)
-      || getWeaponRivenDisposition(`${text.trim()}（主武器）`)
-      || getWeaponRivenDisposition(`${text.trim()}（副武器）`),
-    )
-    if (exact)
-      return exact.trim()
-    const candidates = ocrData.filter((str) => {
-      const s = str.trim()
-
-      // reject pure numbers
-      if (/^\d+$/.test(s))
-        return false
-
-      // reject lines with % or multipliers
-      if (/[+%]/.test(s))
-        return false
-
-      // must contain at least some letters (Latin or Chinese)
-      if (!/[A-Z\u4E00-\u9FA5]/i.test(s))
-        return false
-
-      // reject anything containing stat words or junk
-      if (rejectPatterns.some(p => p.test(s)))
-        return false
-
-      return true
-    })
-
-    // Step 2: merge adjacent fragments (common OCR issue)
-    const merged = candidates.join('')
-
-    function removeRivenSuffix(name: string): string {
-      // Remove spaces
-      const s = name.replace(/\s+/g, '')
-
-      // Pattern: <latin>-<latin> at the end
-      // Example: Pura-cronitis | Acricron | Visisaticron
-      const rivenPattern = /(?:[A-Z]+-[A-Z]+|[A-Z]{2,})$/i
-
-      return s.replace(rivenPattern, '')
-    }
-
-    return merged ? removeRivenSuffix(merged) : null
-  })(texts.filter(t => !statLines.includes(t)))
-
-  if (!weaponName || !attributes.length) {
-    return undefined
-  }
-
-  return {
-    name: weaponName,
-    attributes,
-  }
+export async function parseOCRResult(ocrResult: readonly (string | OcrTextBlock)[]): Promise<ParsedRiven | undefined> {
+  return parseRivenOcr(ocrResult)
 }
 
 export function analyzeRivenStat(parseResult: {
@@ -408,6 +222,7 @@ export function analyzeRivenStat(parseResult: {
     return failure('riven.statTypeError')
   }
   const entries: { stat: RivenCalculationStat, value: number, displayedValue: number, positive: boolean }[] = []
+  const notes: string[] = []
   for (const entry of parseResult.attributes) {
     const stat = stats.find(s => s.gameRef === entry.attr.gameRef)
       ?? stats.find(s => s.key === normalizeName(entry.attr.i18n?.en?.name ?? ''))
@@ -417,8 +232,13 @@ export function analyzeRivenStat(parseResult: {
       return failure('riven.unverifiedStat', false, { stat: stat.name })
     const value = stat.unit === 'multiply' ? entry.value - 1 : entry.value
     const positive = value / stat.baseValue > 0
-    if (value === 0 || (positive ? !stat.canBeBuff : !stat.canBeCurse))
+    // The supplied Strun card has this curse, although generation metadata excludes it.
+    // Accept analysis of an existing card without changing the list of rollable stats.
+    const observedShotgunZoom = weaponRiven.calc.riventype === 'Shotgun' && stat.gameRef === 'WeaponZoomFovMod' && !positive
+    if (value === 0 || (positive ? !stat.canBeBuff : !stat.canBeCurse && !observedShotgunZoom))
       return failure('riven.statTypeError')
+    if (observedShotgunZoom)
+      notes.push('霰弹枪负变焦按现有卡片兼容解析，范围使用导出基础值作参考；不代表当前可洗出该词条。')
     if (entries.some(e => e.stat.gameRef === stat.gameRef))
       return failure('riven.statTypeError')
     entries.push({ stat, value, displayedValue: entry.value, positive })
@@ -441,11 +261,13 @@ export function analyzeRivenStat(parseResult: {
       max: Math.max(standard * 0.9, standard * 1.1) + offset,
     }
   }
+  if (entries.some(e => e.stat.spliced))
+    notes.push('融合词条为参考范围；实际融合数值的继承方式尚未验证。')
   return { ok: true, data: {
     name: weaponRiven.name.zh,
     disposition,
     buffs: buffs.map(analyze),
     curses: curses.map(analyze),
-    notes: entries.some(e => e.stat.spliced) ? ['融合词条为参考范围；实际融合数值的继承方式尚未验证。'] : undefined,
+    notes: notes.length ? notes : undefined,
   } }
 }
