@@ -23,6 +23,12 @@ function missionByTag(tag: string): RawSyndicateMission {
 }
 
 describe('bounty adapter', () => {
+  it('resolves warframe store items via ExportWarframes', () => {
+    expect(resolveExportItemNameZh(
+      '/Lotus/StoreItems/Powersuits/Bard/Bard',
+    )).to.equal('Octavia')
+  })
+
   it('resolves arcane store items via ExportArcanes', () => {
     expect(resolveExportItemNameZh(
       '/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/LightningStrikeOnKill',

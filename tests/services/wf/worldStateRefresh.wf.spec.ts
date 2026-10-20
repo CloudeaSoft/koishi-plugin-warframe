@@ -52,7 +52,7 @@ describe('world-state change detection', () => {
       dailyDeals: [{
         id: 'd1',
         item: 'Braton',
-        uniqueName: '/Lotus/Weapons/Braton',
+        uniqueName: '/Lotus/StoreItems/Weapons/Tenno/Rifle/Rifle',
         originalPrice: 225,
         salePrice: 157,
         discount: 30,
@@ -98,7 +98,7 @@ describe('world-state change detection', () => {
       {
         type: 'daily-deal',
         id: 'd1',
-        item: 'Braton',
+        item: '布莱顿',
         originalPrice: 225,
         salePrice: 157,
         discount: 30,
@@ -204,6 +204,41 @@ describe('world-state change detection', () => {
       expiry: deal.expiry.getTime(),
     }])
   })
+
+  for (const [uniqueName, item, expected] of [
+    ['/Lotus/StoreItems/Weapons/Tenno/Rifle/Rifle', 'Braton', '布莱顿'],
+    ['/Lotus/StoreItems/Powersuits/Bard/Bard', 'Octavia', 'Octavia'],
+    ['/Lotus/StoreItems/Types/Items/Research/EnergyComponent', 'Fieldron', '电磁力场装置'],
+    ['/Lotus/StoreItems/Unknown/NewItem', 'New Item', 'New Item'],
+    [undefined, 'New Item', 'New Item'],
+  ]) {
+    it(`localizes daily deal ${item} and preserves unknown names (${uniqueName})`, async () => {
+      const previous = snapshot({ timestamp: new Date('2026-07-16T00:00:00Z') })
+      const current = snapshot({
+        dailyDeals: [{
+          id: 'localized-deal',
+          uniqueName,
+          item,
+          originalPrice: 225,
+          salePrice: 157,
+          discount: 30,
+          activation: new Date('2026-07-16T00:03:00Z'),
+          expiry: new Date('2026-07-17T00:03:00Z'),
+        }],
+      } as unknown as Partial<WorldState>)
+
+      expect(await diffWorldStates(previous, current)).to.deep.equal([{
+        type: 'daily-deal',
+        id: 'localized-deal',
+        item: expected,
+        originalPrice: 225,
+        salePrice: 157,
+        discount: 30,
+        expiry: new Date('2026-07-17T00:03:00Z').getTime(),
+      }])
+      expect(current.raw.dailyDeals[0].item).to.equal(item)
+    })
+  }
 
   it('filters fissures whose mission type is not 歼灭/防御/中断', async () => {
     const previous = snapshot({
