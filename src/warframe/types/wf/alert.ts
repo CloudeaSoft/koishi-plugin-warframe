@@ -6,6 +6,7 @@ export interface AlertReward {
 }
 
 export interface AlertInfo {
+  description?: string
   type: string
   node: WFRegionShort
   rewards: AlertReward[]

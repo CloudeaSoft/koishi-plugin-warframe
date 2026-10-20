@@ -5,6 +5,8 @@ import { dictZhExtra } from '../../../src/warframe/assets'
 import { resolveExportItemNameZh } from '../../../src/warframe/infrastructure/wf/bounty-adapter'
 import { adaptAlerts } from '../../../src/warframe/services'
 import { msToHumanReadable } from '../../../src/warframe/utils/time'
+import worldStateJSON from '../../assets/example-world-state.json'
+import 'reflect-metadata'
 
 const NOW = Date.parse('2026-08-25T09:00:00Z')
 const HOUR = 3_600_000
@@ -89,13 +91,95 @@ describe('adaptAlerts', () => {
     ])
   })
 
-  it('keeps English countedItems.key values that are not item paths', async () => {
+  it('translates English counted item names from the official dictionary', async () => {
     const board = await adaptAlerts([parsedAlert()], NOW)
     const names = board.alerts[0].rewards.map(reward => reward.name)
 
-    expect(names).to.include('Marks of Valiance')
+    expect(names).to.include('英勇徽章')
     expect(names).to.include(resolveExportItemNameZh('/12200Credits'))
     expect(names).to.include(resolveExportItemNameZh(LOTUS_REWARD))
+  })
+
+  it('localizes a real parsed alert including its event title', async () => {
+    const { Alert } = await import('warframe-worldstate-parser')
+    const raw = new Alert(worldStateJSON.Alerts[0])
+    const board = await adaptAlerts([raw], raw.activation.getTime())
+
+    expect(board.alerts[0]).to.deep.include({ description: '佩里塔之血', type: '拦截' })
+    expect(board.alerts[0].node.system).to.equal('虚空')
+    expect(board.alerts[0].rewards).to.deep.equal([
+      { name: '英勇徽章', count: 20 },
+      { name: '12200 现金', count: 1 },
+    ])
+  })
+
+  it('uses unique item paths and does not duplicate legacy items from the parser', async () => {
+    const { Alert } = await import('warframe-worldstate-parser')
+    const raw = new Alert({
+      ...worldStateJSON.Alerts[0],
+      MissionInfo: {
+        ...worldStateJSON.Alerts[0].MissionInfo,
+        descText: '/Lotus/Language/Alerts/LotusGiftDesc',
+        missionReward: { items: [LOTUS_REWARD], credits: 0 },
+      },
+    })
+    const board = await adaptAlerts([raw], raw.activation.getTime())
+
+    expect(board.alerts[0]).to.include({ description: 'Lotus 的赏赐' })
+    expect(board.alerts[0].rewards).to.deep.equal([{ name: '电磁力场装置', count: 1 }])
+  })
+
+  it('translates current event resources missing from the public export item table', async () => {
+    const { Alert } = await import('warframe-worldstate-parser')
+    const raw = new Alert({
+      ...worldStateJSON.Alerts[0],
+      MissionInfo: {
+        ...worldStateJSON.Alerts[0].MissionInfo,
+        descText: '/Lotus/Language/TauPrologue/EventAlertTitle',
+        missionReward: {
+          countedItems: [{
+            ItemType: '/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventResource',
+            ItemCount: 50,
+          }],
+          credits: 17000,
+        },
+      },
+    })
+    const board = await adaptAlerts([raw], raw.activation.getTime())
+
+    expect(board.alerts[0]).to.include({ description: '探测到月华脯位置' })
+    expect(board.alerts[0].rewards).to.deep.equal([
+      { name: '月华脯', count: 50 },
+      { name: '17000 现金', count: 1 },
+    ])
+  })
+
+  it('accepts internal keys and display fields when parser keys are missing', async () => {
+    const board = await adaptAlerts([parsedAlert({
+      description: 'Gift from the Lotus',
+      mission: {
+        node: 'SolNode406',
+        type: 'MT_TERRITORY',
+        reward: { items: ['Fieldron'], countedItems: [] },
+      },
+    })], NOW)
+
+    expect(board.alerts[0]).to.deep.include({ description: 'Lotus 的赏赐', type: '拦截' })
+    expect(board.alerts[0].node.system).to.equal('虚空')
+    expect(board.alerts[0].rewards).to.deep.equal([{ name: '电磁力场装置', count: 1 }])
+  })
+
+  it('preserves unknown and already localized text', async () => {
+    for (const text of ['Unknown future content', '已翻译的内容']) {
+      const board = await adaptAlerts([parsedAlert({
+        description: text,
+        mission: { node: text, type: text, reward: { items: [text] } },
+      })], NOW)
+
+      expect(board.alerts[0]).to.include({ description: text, type: text })
+      expect(board.alerts[0].node.name).to.equal(text)
+      expect(board.alerts[0].rewards).to.deep.equal([{ name: text, count: 1 }])
+    }
   })
 
   it('drops expired alerts', async () => {

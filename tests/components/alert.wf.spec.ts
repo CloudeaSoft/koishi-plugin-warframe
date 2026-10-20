@@ -59,4 +59,13 @@ describe('alertComponent tests', () => {
     expect(html).to.include('3×电磁力场装置')
     expect(html).to.not.match(/<div[^>]*\/>/)
   })
+
+  it('shows the translated alert title alongside its mission type', () => {
+    const html = String(AlertComponent(board({
+      alerts: [alert({ description: '佩里塔之血' })],
+    })))
+
+    expect(html).to.include('佩里塔之血')
+    expect(html).to.include('拦截')
+  })
 })

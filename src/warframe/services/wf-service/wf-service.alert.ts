@@ -12,6 +12,7 @@ import {
 
 import { dictZhExtra } from '../../assets/index'
 import { globalWorldState } from '../../data/wf/globalWorldState'
+import { translateAlertText } from '../../infrastructure/wf/alert-adapter'
 import { resolveExportItemNameZh } from '../../infrastructure/wf/bounty-adapter'
 import { regionToShort } from '../../infrastructure/wf/wf-export-adapter'
 import { getMissionTypeKey, getSolNodeKey } from '../../infrastructure/wf/wfcd-adapter'
@@ -24,15 +25,19 @@ const ALERT_NIGHTMARE_KEY = '/Lotus/Language/Menu/NightmareModeName'
 export async function adaptAlerts(
   alerts: readonly {
     expiry?: Date
+    description?: string
     mission?: {
+      description?: string
+      node?: string
       nodeKey?: string
+      type?: string
       typeKey?: string
       minEnemyLevel?: number
       maxEnemyLevel?: number
       nightmare?: boolean
       reward?: {
         items?: string[]
-        countedItems?: Array<{ type?: string, key?: string, count?: number }>
+        countedItems?: Array<{ uniqueName?: string, type?: string, key?: string, count?: number }>
         credits?: number
       }
     }
@@ -47,15 +52,16 @@ export async function adaptAlerts(
     }
 
     const mission = raw.mission ?? {}
-    const typeKey = mission.typeKey ?? ''
+    const typeKey = mission.typeKey || mission.type || ''
     const receivedType = await getMissionTypeKey(typeKey)
-    const nodeKey = mission.nodeKey ?? ''
+    const missionType = ExportMissionTypes[typeKey as keyof typeof ExportMissionTypes] ?? ExportMissionTypes[receivedType]
+    const nodeKey = mission.nodeKey || mission.node || ''
     const solNodeKey = await getSolNodeKey(nodeKey)
-    const region = solNodeKey ? ExportRegions[solNodeKey] : undefined
+    const region = ExportRegions[nodeKey] ?? ExportRegions[solNodeKey]
     const short = region
       ? regionToShort(region, dict_zh)
       : {
-          name: nodeKey,
+          name: await translateAlertText(nodeKey),
           system: '',
           type: '',
           faction: '',
@@ -65,19 +71,29 @@ export async function adaptAlerts(
 
     const reward = mission.reward
     const rewards: AlertInfo['rewards'] = []
+    // New parser versions mirror legacy items in countedItems with uniqueName.
+    const mirroredItems = (reward?.countedItems ?? [])
+      .filter(item => item.uniqueName && item.count === 1)
+      .map(item => [item.uniqueName, item.key, item.type])
     for (const item of reward?.items ?? []) {
+      const mirrored = mirroredItems.findIndex(names => names.includes(item))
+      if (mirrored >= 0) {
+        mirroredItems.splice(mirrored, 1)
+        continue
+      }
       rewards.push({
-        name: item.startsWith('/Lotus') ? resolveExportItemNameZh(item) : item,
+        name: await translateAlertText(item),
         count: 1,
       })
     }
     for (const item of reward?.countedItems ?? []) {
-      const source = item.key ?? item.type ?? ''
+      const source = item.uniqueName || item.key || item.type || ''
       if (!source) {
         continue
       }
+      const name = await translateAlertText(source)
       rewards.push({
-        name: source.startsWith('/Lotus') ? resolveExportItemNameZh(source) : source,
+        name: name === source ? await translateAlertText(item.key || item.type || source) : name,
         count: item.count ?? 1,
       })
     }
@@ -93,7 +109,9 @@ export async function adaptAlerts(
       : undefined
 
     adapted.push({
-      type: dict_zh[ExportMissionTypes[receivedType]?.name ?? ''] ?? typeKey,
+      description: await translateAlertText(raw.description || mission.description || ''),
+      type: dict_zh[missionType?.name ?? '']
+        ?? await translateAlertText(typeKey),
       node: {
         ...short,
         minLevel: mission.minEnemyLevel ?? 0,
