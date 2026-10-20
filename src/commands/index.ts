@@ -3,6 +3,7 @@ import type { Context } from 'koishi'
 import type { PluginDependencies } from '../types/config'
 
 import {} from '@koishijs/plugin-help'
+import { Argv } from 'koishi'
 import { createMiscsCommands } from './miscs'
 import { createWfCommands } from './wf'
 import { createWfmCommands } from './wfm'
@@ -152,6 +153,18 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('1999日历')
     .alias('霍瓦尼亚日历')
     .action(wf.calendarCommand)
+
+  ctx.before('parse', (content, session) => {
+    // Image elements are not token separators in Koishi; QQ can send riven<img .../>.
+    const normalized = content.replace(/^riven\s*(?=<img(?:\s|\/?>))/i, 'riven ')
+    // This bail hook falls through on undefined, which its public callback type omits.
+    if (normalized === content)
+      return undefined!
+    const { isDirect, stripped: { prefix, appel } } = session
+    if (!isDirect && typeof prefix !== 'string' && !appel)
+      return undefined!
+    return Argv.parse(normalized)
+  })
 
   ctx.command('riven <img:image>', '分析紫卡截图')
     .option('variant', '-v <variant:string> 组合枪形态: primary / secondary')
