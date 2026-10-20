@@ -250,7 +250,7 @@ function resolveBlueprintNameViaDictZh(pathLeaf: string): string | undefined {
   return withBlueprint
 }
 
-export function resolveExportItemNameZh(sourceKey: string): string {
+export function resolveExportItemNameZh(sourceKey: string, fallback?: string): string {
   const creditMatch = sourceKey.match(/\/(\d+)Credits(?:$|\?)/)
   if (creditMatch) {
     return `${creditMatch[1]} 现金`
@@ -258,29 +258,34 @@ export function resolveExportItemNameZh(sourceKey: string): string {
 
   const fixedKey = sourceKey.replace('/StoreItems', '')
 
+  const warframe = ExportWarframes[fixedKey]
+  if (warframe?.name) {
+    return dict_zh[warframe.name] ?? fallback ?? warframe.name
+  }
+
   const flavour = ExportFlavour[fixedKey]
   if (flavour?.name) {
-    return dict_zh[flavour.name] ?? flavour.name
+    return dict_zh[flavour.name] ?? fallback ?? flavour.name
   }
 
   const weapon = ExportWeapons[fixedKey]
   if (weapon?.name) {
-    return dict_zh[weapon.name] ?? weapon.name
+    return dict_zh[weapon.name] ?? fallback ?? weapon.name
   }
 
   const mod = ExportUpgrades[fixedKey]
   if (mod?.name) {
-    return dict_zh[mod.name] ?? mod.name
+    return dict_zh[mod.name] ?? fallback ?? mod.name
   }
 
   const arcane = ExportArcanes[fixedKey]
   if (arcane?.name) {
-    return dict_zh[arcane.name] ?? arcane.name
+    return dict_zh[arcane.name] ?? fallback ?? arcane.name
   }
 
   const fusion = ExportFusionBundles[fixedKey]
   if (fusion?.name) {
-    return dict_zh[fusion.name] ?? fusion.name
+    return dict_zh[fusion.name] ?? fallback ?? fusion.name
   }
 
   const relic = ExportRelics[fixedKey]
@@ -291,7 +296,7 @@ export function resolveExportItemNameZh(sourceKey: string): string {
 
   const skin = ExportCustoms[fixedKey]
   if (skin?.name) {
-    return dict_zh[skin.name] ?? skin.name
+    return dict_zh[skin.name] ?? fallback ?? skin.name
   }
 
   const recipe = ExportRecipes[fixedKey]
@@ -302,38 +307,38 @@ export function resolveExportItemNameZh(sourceKey: string): string {
         ?? ExportWeapons[recipe.resultType]
         ?? ExportWarframes[recipe.resultType]
     if (recipeResult?.name) {
-      const translated = dict_zh[recipeResult.name] ?? recipeResult.name
+      const translated = dict_zh[recipeResult.name] ?? fallback ?? recipeResult.name
       return translated.includes('蓝图') ? translated : `${translated} 蓝图`
     }
   }
 
   const virtual = ExportVirtuals[fixedKey]
   if (virtual?.name) {
-    return dict_zh[virtual.name] ?? virtual.name
+    return dict_zh[virtual.name] ?? fallback ?? virtual.name
   }
 
   const resource = ExportResources[fixedKey]
   if (resource?.name) {
-    return dict_zh[resource.name] ?? resource.name
+    return dict_zh[resource.name] ?? fallback ?? resource.name
   }
 
   const gear = ExportGear[fixedKey]
   if (gear?.name) {
-    return dict_zh[gear.name] ?? gear.name
+    return dict_zh[gear.name] ?? fallback ?? gear.name
   }
 
   const bundle = ExportBundles[sourceKey] ?? ExportBundles[fixedKey]
   if (bundle?.name) {
-    return dict_zh[bundle.name] ?? bundle.name
+    return dict_zh[bundle.name] ?? fallback ?? bundle.name
   }
 
   const boosterPack = ExportBoosterPacks[fixedKey]
   if (boosterPack?.name) {
-    return dict_zh[boosterPack.name] ?? boosterPack.name
+    return dict_zh[boosterPack.name] ?? fallback ?? boosterPack.name
   }
 
   const pathLeaf = fixedKey.split('/').pop() ?? sourceKey
-  return resolveBlueprintNameViaDictZh(pathLeaf) ?? pathLeaf
+  return resolveBlueprintNameViaDictZh(pathLeaf) ?? fallback ?? pathLeaf
 }
 
 function rewardsFromDeck(rewardsKey: string): BountyReward[][] {

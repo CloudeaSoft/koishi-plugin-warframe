@@ -8,6 +8,7 @@ import {
   adaptFissure,
   globalWorldState,
 } from '../data/wf/globalWorldState'
+import { resolveExportItemNameZh } from '../infrastructure/wf/bounty-adapter'
 import { getSolNodeKey, getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
 import { adaptAlerts } from './wf-service/wf-service.alert'
 
@@ -159,7 +160,7 @@ export async function diffWorldStates(
       notifications.push({
         type: 'daily-deal',
         id: dailyDealId(deal),
-        item: deal.item,
+        item: resolveExportItemNameZh(deal.uniqueName || deal.item, deal.item),
         originalPrice: deal.originalPrice,
         salePrice: deal.salePrice,
         discount: deal.discount,
