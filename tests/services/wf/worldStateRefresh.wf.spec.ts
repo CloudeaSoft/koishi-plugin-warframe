@@ -63,10 +63,14 @@ describe('world-state change detection', () => {
         id: 'a1',
         description: 'Gift from the Lotus',
         mission: {
-          node: 'Earth',
-          nodeKey: 'SolNode1',
+          node: 'E Prime (Earth)',
+          nodeKey: 'E Prime (Earth)',
           type: 'Defense',
-          reward: { items: ['Forma'], countedItems: [], credits: 0 },
+          reward: {
+            items: ['Fieldron'],
+            countedItems: [{ key: 'Marks of Valiance', type: 'Marks of Valiance', count: 20 }],
+            credits: 1000,
+          },
         },
         activation: new Date('2026-07-16T00:01:00Z'),
         expiry: new Date('2026-07-16T01:01:00Z'),
@@ -103,10 +107,10 @@ describe('world-state change detection', () => {
       {
         type: 'alert',
         id: 'a1',
-        description: 'Gift from the Lotus',
-        node: 'Earth',
-        missionType: 'Defense',
-        reward: 'Forma',
+        description: 'Lotus 的赏赐',
+        node: 'E Prime (地球)',
+        missionType: '防御',
+        reward: '电磁力场装置、英勇徽章 x20、1000 现金',
         expiry: new Date('2026-07-16T01:01:00Z').getTime(),
       },
     ])

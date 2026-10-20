@@ -2029,6 +2029,13 @@ export function AlertComponent(board: AlertBoard): Element {
 
         return (
           <div style={missionCardStyle}>
+            {entry.description
+              ? (
+                  <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--wf-text-primary);">
+                    {entry.description}
+                  </div>
+                )
+              : null}
             <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--wf-text-body);">
               {entry.type}
               {entry.nightmare

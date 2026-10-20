@@ -9,6 +9,7 @@ import {
   globalWorldState,
 } from '../data/wf/globalWorldState'
 import { getSolNodeKey, getVoidTraderItem } from '../infrastructure/wf/wfcd-adapter'
+import { adaptAlerts } from './wf-service/wf-service.alert'
 
 export type WorldStateSnapshot = GlobalWorldStateData
 
@@ -102,22 +103,6 @@ function traderId(value: ParsedVoidTrader): string {
   ].join(':')
 }
 
-function alertReward(alert: ParsedAlert): string {
-  const reward = alert.mission?.reward
-  if (!reward) {
-    return ''
-  }
-
-  const values = [
-    ...reward.items,
-    ...reward.countedItems.map(item => `${item.key} x${item.count}`),
-  ]
-  if (reward.credits) {
-    values.push(`${reward.credits} 现金`)
-  }
-  return values.join('、')
-}
-
 export async function diffWorldStates(
   previous: WorldStateSnapshot,
   current: WorldStateSnapshot,
@@ -187,13 +172,17 @@ export async function diffWorldStates(
   for (const alert of current.raw.alerts) {
     const id = alertId(alert)
     if (!previousAlerts.has(id)) {
+      const { alerts: [mapped] } = await adaptAlerts([alert], currentTimestamp)
+      if (!mapped) {
+        continue
+      }
       notifications.push({
         type: 'alert',
         id,
-        description: alert.description,
-        node: alert.mission?.node ?? '',
-        missionType: alert.mission?.type ?? '',
-        reward: alertReward(alert),
+        description: mapped.description ?? '',
+        node: mapped.node.system ? `${mapped.node.name} (${mapped.node.system})` : mapped.node.name,
+        missionType: mapped.type,
+        reward: mapped.rewards.map(item => item.count > 1 ? `${item.name} x${item.count}` : item.name).join('、'),
         expiry: time(alert.expiry),
       })
     }
