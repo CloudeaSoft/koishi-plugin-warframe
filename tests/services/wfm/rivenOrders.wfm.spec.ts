@@ -259,6 +259,8 @@ describe('riven order attribute filters', () => {
     ['后坐力', 'recoil'],
     ['后座力', 'recoil'],
     ['备弹', 'ammo_maximum'],
+    ['最大弹药', 'ammo_maximum'],
+    ['最大弹药值', 'ammo_maximum'],
     ['弹容', 'magazine_capacity'],
     ['弹夹', 'magazine_capacity'],
     ['弹夹容量', 'magazine_capacity'],

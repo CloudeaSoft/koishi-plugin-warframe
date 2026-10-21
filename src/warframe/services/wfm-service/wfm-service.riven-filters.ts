@@ -16,7 +16,7 @@ const attributeAliases: Record<string, string[]> = {
   'status_damage': ['异常伤害', '异况伤害', '触发伤害'],
   'reload_speed': ['装填', '换弹', '换弹速度'],
   'magazine_capacity': ['弹匣', '弹夹', '弹夹容量', '弹容'],
-  'ammo_maximum': ['弹药', '备弹', '弹药上限', '弹药最大值'],
+  'ammo_maximum': ['弹药', '备弹', '弹药上限', '弹药最大值', '最大弹药', '最大弹药值'],
   'ammo_efficiency': ['弹效'],
   'zoom': ['变'],
   'projectile_speed': ['弹速', '投射', '投射物', '投射物飞行速度', '投射物速度'],

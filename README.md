@@ -50,7 +50,7 @@ Additional shorthand (subject to the market catalog's positive/negative restrict
 
 | Aliases | Attribute |
 | --- | --- |
-| `备弹` | 弹药最大值 |
+| `备弹` / `最大弹药` / `最大弹药值` | 弹药最大值 |
 | `弹容` / `弹夹` / `弹夹容量` | 弹匣容量 |
 | `弹效` | 弹药效率 |
 | `冲` / `穿` / `切` | 冲击 / 穿刺 / 切割伤害 |
