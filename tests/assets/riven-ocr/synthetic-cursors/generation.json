@@ -1,0 +1,23 @@
+{
+  "tool": "built-in image_gen",
+  "source": "../sobek-cursor.jpg",
+  "date": "2026-10-21",
+  "promptBase": "Use case: precise-object-edit. Asset type: synthetic OCR regression test screenshot, not artwork. Input image is the edit target. Preserve the original Warframe riven card screenshot, its framing, purple UI, character artwork, fonts, and ALL text and numeric values exactly. The card text must remain exactly: 鳄神 Satidra; +194.2% 多重射击; +135.9% 射速（弓类武器效果加倍）; -61.1% 弹药最大值; 段位10; reroll count 82; drain 18. Remove the existing small white mouse pointer near the bottom-right above 82 and add ONE similar white game-style arrow pointer with dark outline at the requested position. Do not add any labels, explanations, panels or watermarks. Keep the same image aspect ratio. ",
+  "variants": [
+    {
+      "id": "footer",
+      "image": "footer.png",
+      "prompt": "Place the new pointer just above the reroll count 82, slightly to the left of the original pointer location. Make it about 1.4 times the original pointer size (about one body-text glyph high). The pointer must not cover any statistic text or numbers."
+    },
+    {
+      "id": "margin",
+      "image": "margin.png",
+      "prompt": "Place the pointer in the dark empty left margin immediately to the left of the '-61.1% 弹药最大值' row, pointing up and left. Keep it separate from the minus sign and all letters, with a small visible gap. About one body-text glyph high."
+    },
+    {
+      "id": "occluded",
+      "image": "occluded.png",
+      "prompt": "Place a larger white pointer directly over the '61' digits in the '-61.1% 弹药最大值' row, obscuring those two digits enough that they cannot be reliably read. Keep the minus sign, decimal point, final 1, percentage symbol, and label unchanged and visible. This is an intentional unreadable-number negative test."
+    }
+  ]
+}

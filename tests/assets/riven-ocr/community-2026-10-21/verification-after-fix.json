@@ -1,0 +1,403 @@
+{
+  "date": "2026-10-21",
+  "scope": "Parser fields only, no disposition/range checks; legacy faction percentages excluded.",
+  "summary": {
+    "images": 10,
+    "attributes": 35,
+    "fullyCorrectImages": 10
+  },
+  "cases": [
+    {
+      "image": "riven_001.webp",
+      "name": "奥堤克光子枪",
+      "attributes": [
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "value": 11.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 9.5,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "value": 9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_002.webp",
+      "name": "巴兹火枪",
+      "attributes": [
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "value": 102.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 129.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 177.9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_003.webp",
+      "name": "狂鲨",
+      "attributes": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 251.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 126.8,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "value": -27.4,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_004.webp",
+      "name": "铁晶磁轨炮",
+      "attributes": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 141,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 167.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 84.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "value": -51.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_006.webp",
+      "name": "守望者",
+      "attributes": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 153.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 150.2,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_008.jpg",
+      "name": "压制者",
+      "attributes": [
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 94.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 123.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 157.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "value": -104.1,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_009.jpg",
+      "name": "海克",
+      "attributes": [
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 106.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 140.7,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 98.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "value": -78.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_010.jpg",
+      "name": "战刃",
+      "attributes": [
+        {
+          "gameRef": "WeaponMeleeComboInitialBonusMod",
+          "value": 17,
+          "prefix": "+",
+          "unit": ""
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 65.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 142,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponMeleeFinisherDamageMod",
+          "value": -77.4,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_011.jpg",
+      "name": "钢刃步枪",
+      "attributes": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 119.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 105,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 77.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponRecoilReductionMod",
+          "value": 66.7,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "image": "riven_012.png",
+      "name": "伊格尼斯",
+      "attributes": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 99.3,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 85.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 53,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "value": -24.9,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    }
+  ],
+  "liveGlaive": {
+    "image": "riven_010.jpg",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 189,
+          "y": 19,
+          "width": 34,
+          "height": 15
+        }
+      },
+      {
+        "text": "战刃 Crita-acrium",
+        "confidence": 99,
+        "box": {
+          "x": 31,
+          "y": 149,
+          "width": 180,
+          "height": 24
+        }
+      },
+      {
+        "text": "+17初始连击",
+        "confidence": 99,
+        "box": {
+          "x": 72,
+          "y": 173,
+          "width": 99,
+          "height": 17
+        }
+      },
+      {
+        "text": "+65.4%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 56,
+          "y": 192,
+          "width": 128,
+          "height": 15
+        }
+      },
+      {
+        "text": "+142%暴击几率(重击时",
+        "confidence": 99,
+        "box": {
+          "x": 27,
+          "y": 209,
+          "width": 189,
+          "height": 18
+        }
+      },
+      {
+        "text": "x2)",
+        "confidence": 99,
+        "box": {
+          "x": 102,
+          "y": 226,
+          "width": 28,
+          "height": 17
+        }
+      },
+      {
+        "text": "-77.4%处决伤害",
+        "confidence": 99,
+        "box": {
+          "x": 57,
+          "y": 243,
+          "width": 125,
+          "height": 18
+        }
+      },
+      {
+        "text": "段位8",
+        "confidence": 99,
+        "box": {
+          "x": 39,
+          "y": 270,
+          "width": 43,
+          "height": 18
+        }
+      },
+      {
+        "text": "063",
+        "confidence": 95,
+        "box": {
+          "x": 167,
+          "y": 272,
+          "width": 34,
+          "height": 14
+        }
+      }
+    ],
+    "name": "战刃",
+    "attributes": [
+      {
+        "gameRef": "WeaponMeleeComboInitialBonusMod",
+        "value": 17,
+        "prefix": "+",
+        "unit": ""
+      },
+      {
+        "gameRef": "WeaponCritDamageMod",
+        "value": 65.4,
+        "prefix": "+",
+        "unit": "percent"
+      },
+      {
+        "gameRef": "WeaponCritChanceMod",
+        "value": 142,
+        "prefix": "+",
+        "unit": "percent"
+      },
+      {
+        "gameRef": "WeaponMeleeFinisherDamageMod",
+        "value": -77.4,
+        "prefix": "-",
+        "unit": "percent"
+      }
+    ]
+  }
+}

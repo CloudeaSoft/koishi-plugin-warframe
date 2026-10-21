@@ -24,7 +24,7 @@ describe('riven screenshot OCR recovery', () => {
     expect(parsed?.attributes.map(e => [e.attr.gameRef, e.value, e.prefix])).to.deep.equal(sample.expected.stats)
   })
 
-  for (const sample of corpus.filter(s => !['new-2', 'new-6'].includes(s.id))) {
+  for (const sample of corpus.filter(s => !['new-2', 'new-6', 'sobek-cursor'].includes(s.id))) {
     it(`reads every field from ${sample.id}, including icons and title decorations`, async () => {
       const parsed = await parseOCRResult(sample.blocks.map(b => b.text))
       expect(parsed?.name).to.equal(sample.expected.name)
@@ -38,6 +38,38 @@ describe('riven screenshot OCR recovery', () => {
       const sample = corpus.find(s => s.id === id)!
       expect(await parseOCRResult(sample.blocks.map(b => b.text)), id).to.equal(undefined)
     }
+  })
+
+  it('requires footer geometry before discarding a low-confidence cursor glyph', async () => {
+    const sample = corpus.find(s => s.id === 'sobek-cursor')!
+    expect(await parseOCRResult(sample.blocks.map(b => b.text))).to.equal(undefined)
+    const cursor = sample.blocks.find(b => b.text === '压')!
+    for (const replacement of [
+      { ...cursor, confidence: 99 },
+      { ...cursor, confidence: undefined },
+      { ...cursor, text: '+25%' },
+      { ...cursor, text: '25' },
+      { ...cursor, text: '触发几率' },
+      { ...cursor, box: { ...cursor.box, x: 200 } },
+      { ...cursor, box: { ...cursor.box, y: 600 } },
+    ]) {
+      const blocks = sample.blocks.map(b => b === cursor ? replacement : b)
+      expect(await parseOCRResult(blocks), JSON.stringify(replacement)).to.equal(undefined)
+    }
+    expect(await parseOCRResult(sample.blocks.filter(b => b.text !== '段位10'))).to.equal(undefined)
+    expect(await parseOCRResult(sample.blocks.filter(b => !['5', '82'].includes(b.text)))).to.equal(undefined)
+  })
+
+  it('recognizes footer cursor noise independently of character, order and scale', async () => {
+    const sample = corpus.find(s => s.id === 'sobek-cursor')!
+    const blocks = sample.blocks.toReversed().map(b => ({ ...b, text: b.text === '压' ? '匚' : b.text, box: {
+      x: b.box.x * 2 + 100,
+      y: b.box.y * 2 + 50,
+      width: b.box.width * 2,
+      height: b.box.height * 2,
+    } }))
+    const parsed = await parseOCRResult(blocks)
+    expect(parsed?.attributes.map(e => [e.attr.gameRef, e.value, e.prefix])).to.deep.equal(sample.expected.stats)
   })
 
   it('does not discard an unreadable extra attribute', async () => {

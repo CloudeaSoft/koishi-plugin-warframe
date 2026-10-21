@@ -1,0 +1,278 @@
+[
+  {
+    "id": "footer",
+    "image": "footer.png",
+    "sha256": "255aa078cfeb6a2ed898160c578516205e0de1b2a497d32cf8fad6ffae927b9c",
+    "blocks": [
+      {
+        "text": "18K",
+        "confidence": 73,
+        "box": {
+          "x": 865,
+          "y": 135,
+          "width": 133,
+          "height": 56
+        }
+      },
+      {
+        "text": "鳄神 Satidra",
+        "confidence": 98,
+        "box": {
+          "x": 350,
+          "y": 723,
+          "width": 511,
+          "height": 92
+        }
+      },
+      {
+        "text": "+194.2%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 337,
+          "y": 814,
+          "width": 535,
+          "height": 71
+        }
+      },
+      {
+        "text": "+135.9%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 236,
+          "y": 880,
+          "width": 737,
+          "height": 85
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 441,
+          "y": 952,
+          "width": 294,
+          "height": 66
+        }
+      },
+      {
+        "text": "-61.1%弹药最大值",
+        "confidence": 99,
+        "box": {
+          "x": 326,
+          "y": 1020,
+          "width": 556,
+          "height": 72
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 99,
+        "box": {
+          "x": 282,
+          "y": 1130,
+          "width": 199,
+          "height": 61
+        }
+      },
+      {
+        "text": "82",
+        "confidence": 56,
+        "box": {
+          "x": 788,
+          "y": 1130,
+          "width": 134,
+          "height": 59
+        }
+      }
+    ],
+    "expected": {
+      "name": "鳄神",
+      "stats": [
+        [
+          "WeaponFireIterationsMod",
+          194.2
+        ],
+        [
+          "WeaponFireRateMod",
+          135.9
+        ],
+        [
+          "WeaponAmmoMaxMod",
+          -61.1
+        ]
+      ]
+    }
+  },
+  {
+    "id": "margin",
+    "image": "margin.png",
+    "sha256": "a4b3276a5d06bc68ce8f801b8d1c68db6e323f15a24f4d02af468f5cc895bfa3",
+    "blocks": [
+      {
+        "text": "18K",
+        "confidence": 71,
+        "box": {
+          "x": 862,
+          "y": 132,
+          "width": 136,
+          "height": 59
+        }
+      },
+      {
+        "text": "鳄神 Satidra",
+        "confidence": 98,
+        "box": {
+          "x": 350,
+          "y": 723,
+          "width": 511,
+          "height": 92
+        }
+      },
+      {
+        "text": "+194.2%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 337,
+          "y": 812,
+          "width": 536,
+          "height": 73
+        }
+      },
+      {
+        "text": "+135.9%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 236,
+          "y": 880,
+          "width": 735,
+          "height": 85
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 441,
+          "y": 952,
+          "width": 294,
+          "height": 66
+        }
+      },
+      {
+        "text": "-61.1%弹药最大值",
+        "confidence": 96,
+        "box": {
+          "x": 248,
+          "y": 1020,
+          "width": 634,
+          "height": 74
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 99,
+        "box": {
+          "x": 282,
+          "y": 1129,
+          "width": 199,
+          "height": 62
+        }
+      }
+    ],
+    "expected": {
+      "name": "鳄神",
+      "stats": [
+        [
+          "WeaponFireIterationsMod",
+          194.2
+        ],
+        [
+          "WeaponFireRateMod",
+          135.9
+        ],
+        [
+          "WeaponAmmoMaxMod",
+          -61.1
+        ]
+      ]
+    }
+  },
+  {
+    "id": "occluded",
+    "image": "occluded.png",
+    "sha256": "f1f9e301941947094d5120d32cb5f078e32926acd7164f9b7119e3c5117ae8b9",
+    "blocks": [
+      {
+        "text": "18V",
+        "confidence": 71,
+        "box": {
+          "x": 865,
+          "y": 134,
+          "width": 135,
+          "height": 57
+        }
+      },
+      {
+        "text": "鳄神 Satidra",
+        "confidence": 98,
+        "box": {
+          "x": 348,
+          "y": 723,
+          "width": 513,
+          "height": 92
+        }
+      },
+      {
+        "text": "+194.2%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 337,
+          "y": 812,
+          "width": 537,
+          "height": 75
+        }
+      },
+      {
+        "text": "+135.9%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 236,
+          "y": 880,
+          "width": 735,
+          "height": 85
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 439,
+          "y": 952,
+          "width": 296,
+          "height": 71
+        }
+      },
+      {
+        "text": "1%弹药最大值",
+        "confidence": 99,
+        "box": {
+          "x": 442,
+          "y": 1015,
+          "width": 441,
+          "height": 80
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 99,
+        "box": {
+          "x": 282,
+          "y": 1130,
+          "width": 199,
+          "height": 61
+        }
+      }
+    ],
+    "expected": null
+  }
+]

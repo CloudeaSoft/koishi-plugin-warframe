@@ -1,0 +1,711 @@
+{
+  "date": "2026-10-21",
+  "scope": "Tencent GeneralAccurateOCR and parseOCRResult only; no analyzeRiven or disposition/range validation. Diagnostic text substitutions are not production fixes or passed original samples. User explicitly excludes legacy percentage-form faction damage; samples 005 and 007 are out of scope, regardless of their additional OCR issues.",
+  "summary": {
+    "images": 12,
+    "attributes": 43,
+    "fullyCorrectImages": 9,
+    "returnedCorrectAttributes": 31,
+    "rawNumericFieldsCorrect": 43,
+    "inScopeImages": 10,
+    "inScopeAttributes": 35,
+    "inScopeFullyCorrectImages": 9,
+    "inScopeReturnedCorrectAttributes": 31,
+    "excludedImages": 2
+  },
+  "cases": [
+    {
+      "image": "riven_001.webp",
+      "weapon": "奥堤克光子枪",
+      "attributeCount": 3,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "value": 11.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 9.5,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "value": 9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "value": 11.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 9.5,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "value": 9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_002.webp",
+      "weapon": "巴兹火枪",
+      "attributeCount": 3,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "value": 102.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 129.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 177.9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "value": 102.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 129.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 177.9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_003.webp",
+      "weapon": "狂鲨",
+      "attributeCount": 3,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 251.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 126.8,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "value": -27.4,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 251.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 126.8,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "value": -27.4,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_004.webp",
+      "weapon": "铁晶磁轨炮",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 141,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 167.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 84.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "value": -51.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 141,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 167.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 84.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "value": -51.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_005.webp",
+      "weapon": "奥堤克光子枪",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": false,
+      "expected": [
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 122.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 168.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 92.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFactionDamageInfested",
+          "value": -37.1,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": null,
+      "manualTranscriptionParses": false,
+      "inScope": false,
+      "exclusionReason": "Legacy percentage-form faction damage is not required by the user."
+    },
+    {
+      "image": "riven_006.webp",
+      "weapon": "守望者",
+      "attributeCount": 2,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 153.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 150.2,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 153.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 150.2,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_007.webp",
+      "weapon": "月神",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": false,
+      "expected": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 73.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "value": 46.8,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 49.7,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFactionDamageInfested",
+          "value": -19.7,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": null,
+      "manualTranscriptionParses": false,
+      "inScope": false,
+      "exclusionReason": "Legacy percentage-form faction damage is not required by the user."
+    },
+    {
+      "image": "riven_008.jpg",
+      "weapon": "压制者",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 94.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 123.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 157.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "value": -104.1,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 94.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 123.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 157.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "value": -104.1,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_009.jpg",
+      "weapon": "海克",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 106.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 140.7,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 98.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "value": -78.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 106.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 140.7,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 98.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "value": -78.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_010.jpg",
+      "weapon": "战刃",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": false,
+      "expected": [
+        {
+          "gameRef": "WeaponMeleeComboInitialBonusMod",
+          "value": 17,
+          "prefix": "+",
+          "unit": ""
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 65.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 142,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponMeleeFinisherDamageMod",
+          "value": -77.4,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": null,
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_011.jpg",
+      "weapon": "钢刃步枪",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 119.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 105,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 77.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponRecoilReductionMod",
+          "value": 66.7,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 119.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "value": 105,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 77.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponRecoilReductionMod",
+          "value": 66.7,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    },
+    {
+      "image": "riven_012.png",
+      "weapon": "伊格尼斯",
+      "attributeCount": 4,
+      "rawNumbersCorrect": true,
+      "parserCorrect": true,
+      "expected": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 99.3,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 85.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 53,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "value": -24.9,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "actual": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "value": 99.3,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "value": 85.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "value": 53,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "value": -24.9,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ],
+      "manualTranscriptionParses": true,
+      "inScope": true
+    }
+  ],
+  "probes": [
+    {
+      "label": "005 correct weapon name only",
+      "parsed": null
+    },
+    {
+      "label": "005 correct name and represent legacy faction percent as multiplier (diagnostic only)",
+      "parsed": {
+        "name": "奥堤克光子枪",
+        "stats": [
+          [
+            "WeaponCritDamageMod",
+            122.1,
+            "+"
+          ],
+          [
+            "WeaponCritChanceMod",
+            168.2,
+            "+"
+          ],
+          [
+            "WeaponFireIterationsMod",
+            92.2,
+            "+"
+          ],
+          [
+            "WeaponFactionDamageInfested",
+            0.629,
+            "x"
+          ]
+        ]
+      }
+    },
+    {
+      "label": "007 restore label and discard trailing UI plus only",
+      "parsed": null
+    },
+    {
+      "label": "007 also represent legacy faction percent as multiplier (diagnostic only)",
+      "parsed": {
+        "name": "月神",
+        "stats": [
+          [
+            "WeaponCritChanceMod",
+            73.1,
+            "+"
+          ],
+          [
+            "WeaponFireDamageMod",
+            46.8,
+            "+"
+          ],
+          [
+            "WeaponFireIterationsMod",
+            49.7,
+            "+"
+          ],
+          [
+            "WeaponFactionDamageInfested",
+            0.803,
+            "x"
+          ]
+        ]
+      }
+    },
+    {
+      "label": "010 merge wrapped heavy-attack annotation only",
+      "parsed": {
+        "name": "战刃",
+        "stats": [
+          [
+            "WeaponMeleeComboInitialBonusMod",
+            17,
+            "+"
+          ],
+          [
+            "WeaponCritDamageMod",
+            65.4,
+            "+"
+          ],
+          [
+            "WeaponCritChanceMod",
+            142,
+            "+"
+          ],
+          [
+            "WeaponMeleeFinisherDamageMod",
+            -77.4,
+            "-"
+          ]
+        ]
+      }
+    }
+  ]
+}
