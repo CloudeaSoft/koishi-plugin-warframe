@@ -7,6 +7,16 @@ export interface RivenCalculationAttribute {
   unit?: RivenAttributeUnit
   i18n?: { 'en'?: { name?: string }, 'zh-hans'?: { name?: string } }
 }
+export interface RivenAnalysisInput {
+  name: string
+  rank?: number
+  attributes: { attr: RivenCalculationAttribute, value: number, prefix: string }[]
+}
+
+export interface RivenVariantDetection {
+  status: 'matched' | 'inferred' | 'manual'
+  candidates: string[]
+}
 export type RivenStatCountType = '31' | '2' | '21' | '3'
 
 export interface RivenStatFixFactor {
@@ -19,6 +29,8 @@ export interface RivenStatFixFactor {
 export type RivenStatFixFactorMap = Record<RivenStatCountType, RivenStatFixFactor>
 
 export interface RivenStatAnalyzsis {
+  gameRef?: string
+  sourceIndex?: number
   name: string
   unit: RivenAttributeUnit
   percent: number
@@ -28,6 +40,7 @@ export interface RivenStatAnalyzsis {
 }
 
 export interface RivenStatAnalyzeResult {
+  variant?: RivenVariantDetection
   notes?: string[]
   name: string
   disposition: number

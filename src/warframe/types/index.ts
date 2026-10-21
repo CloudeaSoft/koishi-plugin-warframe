@@ -79,12 +79,14 @@ export type {
   RelicTier,
 } from './wf/relic'
 export type {
+  RivenAnalysisInput,
   RivenStatAnalyzeResult,
   RivenStatAnalyzsis,
   RivenStatCountType,
   RivenStatFixFactor,
   RivenStatFixFactorMap,
   RivenStatResult,
+  RivenVariantDetection,
   RivenWeaponDisposition,
   RivenWeaponType,
 } from './wf/riven'

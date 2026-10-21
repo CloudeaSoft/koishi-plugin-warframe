@@ -43,7 +43,7 @@ src/warframe/services/wf-service/
 |-- wf-service.steel-essence.ts
 |-- wf-service.fissure.ts          # normal / steel-path / railjack
 |-- wf-service.void-trader.ts
-`-- wf-service.riven.ts            # OCR, stats, weekly rivens, disposition
+`-- wf-service.riven.ts            # OCR, stats, weekly rivens; re-exports riven/analysis helpers
 ```
 
 `src/warframe/services/index.ts` keeps `export * from './wf-service'`. Koishi
@@ -82,6 +82,10 @@ unless they already import a helper file.
 
 Every `export function` in `wf-service/` must appear here.
 
+`getWeaponRivenDisposition` and `analyzeRivenStat` are implemented in
+`services/riven/analysis.ts` so market orders and screenshot analysis share the
+same calculations. `wf-service.riven.ts` re-exports them for compatibility.
+
 | Export | Target file |
 | --- | --- |
 | `getRelic` | `wf-service.relic.ts` |
@@ -118,6 +122,4 @@ Every `export function` in `wf-service/` must appear here.
 | `filterWeeklyRivens` | `wf-service.riven.ts` |
 | `getWeeklyRivens` | `wf-service.riven.ts` |
 | `getStaticRivenStats` | `wf-service.riven.ts` |
-| `getWeaponRivenDisposition` | `wf-service.riven.ts` |
 | `parseOCRResult` | `wf-service.riven.ts` |
-| `analyzeRivenStat` | `wf-service.riven.ts` |

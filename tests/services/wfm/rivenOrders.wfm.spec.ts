@@ -77,6 +77,7 @@ describe('riven order attribute filters', () => {
     const weapons = [
       { ...items.data[0], slug: 'torid', i18n: { 'zh-hans': { name: '托里德' }, 'en': { name: 'Torid' } } },
       { ...items.data[0], slug: 'kuva_bramma', i18n: { 'zh-hans': { name: '赤毒 布拉玛' }, 'en': { name: 'Kuva Bramma' } } },
+      { ...items.data[0], slug: 'skana', i18n: { 'zh-hans': { name: '空刃' }, 'en': { name: 'Skana' } } },
     ] as RivenItem[]
     overrideGlobalRivenItemData(createAsyncCache(() => globalRivenItemFactory(weapons), -1))
     overrideGlobalRivenAttribute(createAsyncCache(() => globalRivenAttributeFactory(fixtureAttributes), -1))
@@ -132,6 +133,111 @@ describe('riven order attribute filters', () => {
     expect(requests.map(url => url.searchParams.get('weapon_url_name'))).to.deep.equal(['kuva_bramma', 'kuva_bramma'])
     expect(requests[0].searchParams.has('positive_stats')).to.equal(false)
     expect(requests[1].searchParams.get('positive_stats')).to.equal('critical_chance')
+  })
+
+  it('grades each order using its own rank and detected weapon version', async () => {
+    orders[0].item.attributes[0].value = 250
+    orders[0].item.attributes[1].value = 200
+    orders[0].item.attributes[2].value = 36
+    const result = await getRivenOrders('托里德')
+    expect(result.ok).to.equal(true)
+    if (!result.ok) {
+      throw new Error(result.error.code)
+    }
+    const resultOrder = result.data.orders[0]
+    expect(resultOrder.analysis?.name).to.equal('托里德')
+    expect(resultOrder.item.attributes[0].grade).to.be.closeTo(0.036, 0.001)
+    expect(resultOrder.item.attributes[2].displayValue).to.equal(-36)
+    expect(resultOrder.item.attributes[2].grade).to.be.closeTo(0.0675, 0.001)
+  })
+
+  it('keeps listings when grading is unavailable and does not invent a score', async () => {
+    orders[0].item.attributes[0].value = 9999
+    const result = await getRivenOrders('托里德')
+    expect(result.ok).to.equal(true)
+    if (!result.ok) {
+      throw new Error(result.error.code)
+    }
+    expect(result.data.orders[0].analysis).to.equal(undefined)
+    expect(result.data.orders[0].analysisError).to.not.equal(undefined)
+    expect(result.data.orders[0].item.attributes[0].grade).to.equal(undefined)
+  })
+
+  it('associates melee grades with their input attributes after canonical tag conversion', async () => {
+    orders[0].item.attributes = [
+      { url_name: 'base_damage_/_melee_damage', positive: true, value: 211.97 },
+      { url_name: 'critical_chance', positive: true, value: 231.66 },
+    ]
+    const result = await getRivenOrders('空刃')
+    expect(result.ok).to.equal(true)
+    if (!result.ok) {
+      throw new Error(result.error.code)
+    }
+    expect(result.data.orders[0].analysis).to.not.equal(undefined)
+    expect(result.data.orders[0].item.attributes[0].grade).to.be.closeTo(0, 0.001)
+    expect(result.data.orders[0].item.attributes[1].grade).to.be.closeTo(0, 0.001)
+  })
+
+  it('converts beneficial negative recoil and detrimental positive recoil correctly', async () => {
+    for (const positive of [true, false]) {
+      orders = [order('recoil')]
+      orders[0].item.attributes = [
+        { url_name: 'critical_chance', positive: true, value: positive ? 146.2 : 241.3 },
+        { url_name: 'critical_damage', positive: true, value: positive ? 117 : 193 },
+        { url_name: 'recoil', positive, value: positive ? 87.8 : 57.9 },
+      ]
+      const result = await getRivenOrders(`托里德 ${positive ? '后坐力' : '负后坐力'}`)
+      expect(result.ok).to.equal(true)
+      if (!result.ok) {
+        throw new Error(result.error.code)
+      }
+      expect(result.data.orders[0].analysis).to.not.equal(undefined)
+      expect(result.data.orders[0].item.attributes[2].displayValue).to.equal(positive ? -87.8 : 57.9)
+    }
+  })
+
+  it('preserves the grade of a melee faction multiplier resolved by its English name', async () => {
+    orders[0].item.attributes = [
+      { url_name: 'damage_vs_corpus', positive: true, value: 1.58 },
+      { url_name: 'critical_chance', positive: true, value: 231.66 },
+    ]
+    const result = await getRivenOrders('空刃')
+    expect(result.ok).to.equal(true)
+    if (!result.ok) {
+      throw new Error(result.error.code)
+    }
+    expect(result.data.orders[0].analysis).to.not.equal(undefined)
+    expect(result.data.orders[0].item.attributes[0].grade).to.be.closeTo(0.00147, 0.0001)
+    expect(result.data.orders[0].item.attributes[0].displayValue).to.equal(1.58)
+  })
+
+  it('keeps faction multipliers around one and grades low-rank bonuses at their rank', async () => {
+    orders[0].item.attributes = [
+      { url_name: 'critical_chance', positive: true, value: 250 },
+      { url_name: 'critical_damage', positive: true, value: 200 },
+      { url_name: 'damage_vs_corpus', positive: false, value: 0.72 },
+    ]
+    const multiplier = await getRivenOrders('托里德 负C')
+    expect(multiplier.ok).to.equal(true)
+    if (!multiplier.ok) {
+      throw new Error(multiplier.error.code)
+    }
+    expect(multiplier.data.orders[0].analysis).to.not.equal(undefined)
+    expect(multiplier.data.orders[0].item.attributes[2].displayValue).to.equal(0.72)
+    expect(multiplier.data.orders[0].item.attributes[2].grade).to.be.closeTo(0.033, 0.001)
+
+    orders[0].item.mod_rank = 0
+    orders[0].item.attributes = [
+      { url_name: 'critical_chance', positive: true, value: 23.3 },
+      { url_name: 'critical_damage', positive: true, value: 18.7 },
+    ]
+    const unranked = await getRivenOrders('托里德')
+    expect(unranked.ok).to.equal(true)
+    if (!unranked.ok) {
+      throw new Error(unranked.error.code)
+    }
+    expect(unranked.data.orders[0].analysis).to.not.equal(undefined)
+    expect(unranked.data.orders[0].item.attributes[0].grade).to.be.closeTo(0.086, 0.001)
   })
 
   it('allows positive-only and negative-only filters without inventing other constraints', async () => {
