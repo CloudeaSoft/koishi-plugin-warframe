@@ -3,6 +3,7 @@ import type { ItemShort } from '../../types'
 import { warframeAlias } from '../../assets'
 import { globalItemData } from '../../data/wfm/globalItem'
 import { fullWidthToHalfWidth, normalizeName } from '../../utils'
+import { matchChineseItem } from './wfm-service.chinese-matcher'
 
 export type WFMItemMatchResult
   = | { type: 'matched', item: ItemShort }
@@ -431,12 +432,7 @@ export const wfmItemMatcher = (() => {
     if (arcaneShorthandMatchedItem)
       return arcaneShorthandMatchedItem
 
-    // 5. TODO: Fuzzy word match
-    // Not implemented
-
-    // 6. TODO: AI?
-
-    return { type: 'not-found' }
+    return matchChineseItem(input, Object.values(globalItemDict))
   }
 
   async function stringToWFMItem(input: string): Promise<ItemShort | undefined> {

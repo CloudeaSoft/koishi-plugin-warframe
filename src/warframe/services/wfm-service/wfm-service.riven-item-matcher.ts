@@ -1,7 +1,9 @@
 import type { GlobalRivenItemWordPrefixCandidate } from '../../data/wfm/globalRivenItem'
 import type { RivenItem } from '../../types'
+import type { ItemMatchResult } from './wfm-service.chinese-matcher'
 import { globalRivenItemData } from '../../data/wfm/globalRivenItem'
 import { fullWidthToHalfWidth, normalizeName } from '../../utils'
+import { matchChineseItem } from './wfm-service.chinese-matcher'
 
 interface WFMRivenItemLookupData {
   globalRivenItemDict: Record<string, RivenItem>
@@ -156,39 +158,47 @@ export function matchByWordPrefixSequence(
 function findFromLookup(
   input: string,
   lookup: WFMRivenItemLookupData,
-): RivenItem | undefined {
+): ItemMatchResult<RivenItem> {
   const normalizedInput = normalizeName(input)
   if (!normalizedInput) {
-    return undefined
+    return { type: 'not-found' }
   }
 
   const slugMatchedItem = matchBySlugDict(normalizedInput, lookup)
   if (slugMatchedItem) {
-    return slugMatchedItem
+    return { type: 'matched', item: slugMatchedItem }
   }
 
   const shortHandMatchedItem = shortHandProcess(normalizedInput, lookup)
   if (shortHandMatchedItem) {
-    return shortHandMatchedItem
+    return { type: 'matched', item: shortHandMatchedItem }
   }
 
   const wordPrefixMatchedItem = matchByWordPrefixSequence(input, lookup)
   if (wordPrefixMatchedItem) {
-    return wordPrefixMatchedItem
+    return { type: 'matched', item: wordPrefixMatchedItem }
   }
 
-  return undefined
+  return matchChineseItem(input, Object.values(lookup.globalRivenItemDict))
+}
+
+export async function matchRivenItem(
+  input: string,
+  globalRivenItemList?: RivenItem[],
+): Promise<ItemMatchResult<RivenItem>> {
+  if (globalRivenItemList) {
+    return findFromLookup(input, buildRivenItemLookupData(globalRivenItemList))
+  }
+
+  return globalRivenItemData.get().then(lookup => findFromLookup(input, lookup))
 }
 
 export async function findRivenItemByName(
   input: string,
   globalRivenItemList?: RivenItem[],
 ): Promise<RivenItem | undefined> {
-  if (globalRivenItemList) {
-    return findFromLookup(input, buildRivenItemLookupData(globalRivenItemList))
-  }
-
-  return globalRivenItemData.get().then(lookup => findFromLookup(input, lookup))
+  const result = await matchRivenItem(input, globalRivenItemList)
+  return result.type === 'matched' ? result.item : undefined
 }
 
 export const matchByShortHand = shortHandProcess
