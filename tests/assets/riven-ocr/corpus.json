@@ -2343,5 +2343,244 @@
         ]
       ]
     }
+  },
+  {
+    "id": "ogris-projectile-speed",
+    "image": "ogris-projectile-speed.jpg",
+    "sha256": "257c6c3cc3842e18dc69a2d112301cede801052a5325cdedb4946563552761da",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 96,
+        "box": {
+          "x": 339,
+          "y": 47,
+          "width": 62,
+          "height": 26
+        }
+      },
+      {
+        "text": "食人女魔Sati-",
+        "confidence": 90,
+        "box": {
+          "x": 85,
+          "y": 280,
+          "width": 268,
+          "height": 44
+        }
+      },
+      {
+        "text": "conciada",
+        "confidence": 99,
+        "box": {
+          "x": 129,
+          "y": 324,
+          "width": 179,
+          "height": 38
+        }
+      },
+      {
+        "text": "x1.27对Infested的伤害",
+        "confidence": 94,
+        "box": {
+          "x": 50,
+          "y": 364,
+          "width": 335,
+          "height": 33
+        }
+      },
+      {
+        "text": "+58.7%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 100,
+          "y": 398,
+          "width": 236,
+          "height": 28
+        }
+      },
+      {
+        "text": "+55.8%投射物速度",
+        "confidence": 96,
+        "box": {
+          "x": 86,
+          "y": 428,
+          "width": 266,
+          "height": 33
+        }
+      },
+      {
+        "text": "-28.2%弹匣容量",
+        "confidence": 98,
+        "box": {
+          "x": 104,
+          "y": 463,
+          "width": 229,
+          "height": 30
+        }
+      },
+      {
+        "text": "段位 13",
+        "confidence": 99,
+        "box": {
+          "x": 169,
+          "y": 511,
+          "width": 94,
+          "height": 28
+        }
+      }
+    ],
+    "expected": {
+      "name": "食人女魔",
+      "stats": [
+        [
+          "WeaponFactionDamageInfested",
+          1.27,
+          "x"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          58.7,
+          "+"
+        ],
+        [
+          "WeaponProjectileSpeedMod",
+          55.8,
+          "+"
+        ],
+        [
+          "WeaponClipMaxMod",
+          -28.2,
+          "-"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "sobek-cursor",
+    "image": "sobek-cursor.jpg",
+    "sha256": "674c74d737c95fbb94f25e44be2aac11daf6892cb1050b8768d1f1bdd6122a41",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 98,
+        "box": {
+          "x": 403,
+          "y": 62,
+          "width": 64,
+          "height": 27
+        }
+      },
+      {
+        "text": "鳄神 Satidra",
+        "confidence": 97,
+        "box": {
+          "x": 163,
+          "y": 337,
+          "width": 239,
+          "height": 42
+        }
+      },
+      {
+        "text": "+194.2%多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 156,
+          "y": 379,
+          "width": 251,
+          "height": 34
+        }
+      },
+      {
+        "text": "+135.9%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 111,
+          "y": 410,
+          "width": 342,
+          "height": 37
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 205,
+          "y": 446,
+          "width": 137,
+          "height": 30
+        }
+      },
+      {
+        "text": "-61.1%弹药最大值",
+        "confidence": 100,
+        "box": {
+          "x": 153,
+          "y": 473,
+          "width": 258,
+          "height": 38
+        }
+      },
+      {
+        "text": "压",
+        "confidence": 57,
+        "box": {
+          "x": 405,
+          "y": 501,
+          "width": 27,
+          "height": 29
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 96,
+        "box": {
+          "x": 130,
+          "y": 526,
+          "width": 94,
+          "height": 31
+        }
+      },
+      {
+        "text": "5",
+        "confidence": 96,
+        "box": {
+          "x": 367,
+          "y": 530,
+          "width": 28,
+          "height": 23
+        }
+      },
+      {
+        "text": "82",
+        "confidence": 99,
+        "box": {
+          "x": 393,
+          "y": 527,
+          "width": 36,
+          "height": 27
+        }
+      }
+    ],
+    "expected": {
+      "name": "鳄神",
+      "stats": [
+        [
+          "WeaponFireIterationsMod",
+          194.2,
+          "+"
+        ],
+        [
+          "WeaponFireRateMod",
+          135.9,
+          "+"
+        ],
+        [
+          "WeaponAmmoMaxMod",
+          -61.1,
+          "-"
+        ]
+      ]
+    }
   }
 ]

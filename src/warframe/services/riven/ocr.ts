@@ -23,7 +23,29 @@ function validBox(box: OcrTextBlock['box']): box is NonNullable<OcrTextBlock['bo
   return !!box && Object.values(box).every(Number.isFinite) && box.width > 0 && box.height > 0
 }
 
-/** Group by baseline, not vendor result order; only tiny, interposed overlays are discarded. */
+/** A cursor above the reroll counter can be read as a stray, low-confidence Han glyph. */
+function isFooterCursor(row: OcrTextBlock[], nextRow?: OcrTextBlock[]): boolean {
+  const glyph = row[0]
+  if (row.length !== 1 || !/^[\u4E00-\u9FFF]$/.test(glyph.text)
+    || glyph.confidence === undefined || glyph.confidence < 0 || glyph.confidence >= 60) {
+    return false
+  }
+  const rank = nextRow?.find(b => isRank(b.text))
+  if (!rank)
+    return false
+  const box = glyph.box!
+  const footer = rank.box!
+  if (box.height > footer.height || box.width > box.height * 1.5
+    || box.y >= footer.y || box.y + box.height < footer.y - footer.height * 0.25
+    || box.y + box.height > footer.y + footer.height * 0.5) {
+    return false
+  }
+  // Require alignment with the numeric counter to the right of the rank, not the stat column.
+  return nextRow!.some(b => /^\d+$/.test(b.text) && b.box!.x > footer.x + footer.width
+    && Math.min(box.x + box.width, b.box!.x + b.box!.width) - Math.max(box.x, b.box!.x) >= box.width * 0.5)
+}
+
+/** Group by baseline, not vendor result order; discard only spatially identified overlays. */
 function restoreRows(input: readonly (string | OcrTextBlock)[]): OcrRow[] | undefined {
   const blocks = input.map(b => typeof b === 'string' ? { text: b } : b)
     .map(b => ({ ...b, text: cleanText(b.text) }))
@@ -50,7 +72,9 @@ function restoreRows(input: readonly (string | OcrTextBlock)[]): OcrRow[] | unde
   }
 
   const result: OcrRow[] = []
-  for (const row of rows) {
+  for (const [index, row] of rows.entries()) {
+    if (isFooterCursor(row, rows[index + 1]))
+      continue
     const parts = row.sort((a, b) => a.box!.x - b.box!.x)
     const first = parts[0]
     const last = parts.at(-1)!
@@ -107,6 +131,8 @@ const elemental = /Weapon(?:Electricity|Fire|Freeze|Toxin|Impact|ArmorPiercing|S
 
 function aliases(stat: RivenCalculationStat): string[] {
   const names = stat.aliases.flatMap(name => name.split('/'))
+  if (stat.gameRef === 'WeaponProjectileSpeedMod')
+    names.push('投射物速度')
   if (elemental.test(stat.gameRef))
     names.push(`${stat.name}伤害`)
   if (stat.gameRef === 'WeaponDamageAmountMod' || stat.gameRef === 'WeaponMeleeDamageMod')
@@ -149,6 +175,8 @@ function isMetadata(text: string): boolean {
   return isRank(text) || /^\d[\d\s~\-]*$/.test(text)
 }
 
+const conditionalAnnotation = /\((?:弓类武器效果加倍|重击时x2|x2forBows|x2forHeavyAttacks)\)$/i
+
 export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): ParsedRiven | undefined {
   const rows = restoreRows(input)
   if (!rows?.length)
@@ -181,10 +209,15 @@ export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): Parsed
 
     // Locked attributes display a padlock; Tencent sometimes reads it as a leading 6.
     text = text.replace(/^[6🔒]([+\-])/u, '$1')
-    if (text.includes('(') && !text.includes(')') && rows[i + 1] && !/^[+\-x\d]/i.test(rows[i + 1].text)) {
-      text += rows[++i].text.replace(/\s/g, '')
+    if (text.includes('(') && !text.includes(')') && rows[i + 1]) {
+      const joined = text + rows[i + 1].text.replace(/\s/g, '')
+      // A wrapped x2 is explanatory text only when it completes a known annotation.
+      if (conditionalAnnotation.test(joined)) {
+        text = joined
+        i++
+      }
     }
-    text = text.replace(/\((?:弓类武器效果加倍|重击时x2|x2forBows|x2forHeavyAttacks)\)/gi, '')
+    text = text.replace(conditionalAnnotation, '')
     const match = text.match(/^([+\-x]?)(\d+(?:\.\d+)?)(%|s)?([\p{L}/]+)$/iu)
     if (!match)
       return undefined

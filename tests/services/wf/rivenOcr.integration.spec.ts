@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import { vi } from 'vitest'
 import { getAnalyzedRiven } from '../../../src/warframe/services/wf-service/wf-service.riven'
 import corpus from '../../assets/riven-ocr/corpus.json'
+import syntheticCursors from '../../assets/riven-ocr/synthetic-cursors/recorded.json'
 
 const external = vi.hoisted(() => ({ image: vi.fn(), ocr: vi.fn() }))
 vi.mock('../../../src/warframe/utils/http', () => ({ fetchAsyncImage: external.image }))
@@ -38,6 +39,7 @@ describe('riven image analysis pipeline', () => {
         'new-7': '拉特昂 Prime',
         'new-9': '野猪 Prime',
         'test-riven10': '守望者 Prime',
+        'ogris-projectile-speed': '赤毒·食人女魔',
       }
       expect(result.data.name).to.equal(detectedNames[sample.id] ?? sample.expected.name)
       expect(result.data.variant?.status).to.be.oneOf(['matched', 'inferred'])
@@ -51,4 +53,26 @@ describe('riven image analysis pipeline', () => {
     const result = await getAnalyzedRiven({ id: 'test', key: 'test' }, 'https://fixtures.invalid/missing.png')
     expect(result).to.deep.equal({ ok: false, error: { code: 'riven.imageParseFailed', retryable: false } })
   })
+
+  for (const sample of syntheticCursors) {
+    it(`handles the generated ${sample.id} cursor image without changing or dropping stats`, async () => {
+      external.image.mockResolvedValueOnce(new Blob([`synthetic-cursor-${sample.id}`]))
+      external.ocr.mockResolvedValueOnce({ TextDetections: sample.blocks.map(b => ({
+        DetectedText: b.text,
+        Confidence: b.confidence,
+        ItemPolygon: { X: b.box.x, Y: b.box.y, Width: b.box.width, Height: b.box.height },
+      })) })
+      const result = await getAnalyzedRiven({ id: 'test', key: 'test' }, `https://fixtures.invalid/synthetic-cursors/${sample.image}`)
+      if (!sample.expected) {
+        expect(result).to.deep.equal({ ok: false, error: { code: 'riven.imageParseFailed', retryable: false } })
+        return
+      }
+      expect(result.ok).to.equal(true)
+      if (!result.ok) {
+        throw new Error(result.error.code)
+      }
+      expect(result.data.name).to.equal(sample.expected.name)
+      expect([...result.data.buffs, ...result.data.curses].map(a => [a.gameRef, a.value])).to.deep.equal(sample.expected.stats)
+    })
+  }
 })

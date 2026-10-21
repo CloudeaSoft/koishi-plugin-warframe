@@ -1,0 +1,405 @@
+[
+  {
+    "file_name": "riven_001.webp",
+    "relative_path": "images/riven_001.webp",
+    "weapon_name": "奥堤克光子枪",
+    "riven_name": "Sati-toxicak",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "穿刺伤害",
+        "value": 11.1,
+        "unit": "%",
+        "display_value": "+11.1%"
+      },
+      {
+        "name": "多重射击",
+        "value": 9.5,
+        "unit": "%",
+        "display_value": "+9.5%"
+      },
+      {
+        "name": "毒素伤害",
+        "value": 9,
+        "unit": "%",
+        "display_value": "+9%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/SHHaiebqDfftvEy.webp!a-3-854x.webp",
+    "sha256": "23fc2f699ea7759893d1c8f5a9514d593f9610534acac444eaeee4c9f1677426"
+  },
+  {
+    "file_name": "riven_002.webp",
+    "relative_path": "images/riven_002.webp",
+    "weapon_name": "巴兹火枪",
+    "riven_name": "Toxi-acriata",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "毒素伤害",
+        "value": 102.4,
+        "unit": "%",
+        "display_value": "+102.4%"
+      },
+      {
+        "name": "暴击伤害",
+        "value": 129.9,
+        "unit": "%",
+        "display_value": "+129.9%"
+      },
+      {
+        "name": "伤害",
+        "value": 177.9,
+        "unit": "%",
+        "display_value": "+177.9%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/EdqFnObqDfftFhF.webp!a-3-854x.webp",
+    "sha256": "d8997e06ebb76d37eddca597152c4ac13ce541f94aeabcc2963a587079b334f0"
+  },
+  {
+    "file_name": "riven_003.webp",
+    "relative_path": "images/riven_003.webp",
+    "weapon_name": "狂鲨",
+    "riven_name": "Visipha",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "伤害",
+        "value": 251.6,
+        "unit": "%",
+        "display_value": "+251.6%"
+      },
+      {
+        "name": "火焰伤害",
+        "value": 126.8,
+        "unit": "%",
+        "display_value": "+126.8%"
+      },
+      {
+        "name": "弹药最大值",
+        "value": -27.4,
+        "unit": "%",
+        "display_value": "-27.4%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/mnGtzIbqDffucBC.webp!a-3-854x.webp",
+    "sha256": "06ef6ef9ff1f586b34cfcf09f71827ab25712743f7ccc1ecdfc2751ff87edc1d"
+  },
+  {
+    "file_name": "riven_004.webp",
+    "relative_path": "images/riven_004.webp",
+    "weapon_name": "铁晶磁轨炮",
+    "riven_name": "Visi-critapha",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "暴击几率",
+        "value": 141,
+        "unit": "%",
+        "display_value": "+141%"
+      },
+      {
+        "name": "伤害",
+        "value": 167.6,
+        "unit": "%",
+        "display_value": "+167.6%"
+      },
+      {
+        "name": "火焰伤害",
+        "value": 84.1,
+        "unit": "%",
+        "display_value": "+84.1%"
+      },
+      {
+        "name": "变焦",
+        "value": -51.5,
+        "unit": "%",
+        "display_value": "-51.5%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/VvuXsrbqDffuudi.webp!a-3-854x.webp",
+    "sha256": "ec623150279c41fec37a2299c3fd66d2ac8b0b1d4bb6c9b511468855c022e5dd"
+  },
+  {
+    "file_name": "riven_005.webp",
+    "relative_path": "images/riven_005.webp",
+    "weapon_name": "奥堤克光子枪",
+    "riven_name": "Crita-satitis",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "暴击伤害",
+        "value": 122.1,
+        "unit": "%",
+        "display_value": "+122.1%"
+      },
+      {
+        "name": "暴击率",
+        "value": 168.2,
+        "unit": "%",
+        "display_value": "+168.2%"
+      },
+      {
+        "name": "多重射击",
+        "value": 92.2,
+        "unit": "%",
+        "display_value": "+92.2%"
+      },
+      {
+        "name": "对 Infested 伤害",
+        "value": -37.1,
+        "unit": "%",
+        "display_value": "-37.1%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/JMgckPbqDffuyle.webp!a-3-854x.webp",
+    "sha256": "14271aff16c3a426012432d8d77cc2ea7d9f4408d92454e1eb83f9ba29d1cab7"
+  },
+  {
+    "file_name": "riven_006.webp",
+    "relative_path": "images/riven_006.webp",
+    "weapon_name": "守望者",
+    "riven_name": "Critaata",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "伤害",
+        "value": 153.9,
+        "unit": "%",
+        "display_value": "+153.9%"
+      },
+      {
+        "name": "暴击率",
+        "value": 150.2,
+        "unit": "%",
+        "display_value": "+150.2%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/KMKMctbqDffvjxw.webp!a-3-854x.webp",
+    "sha256": "25c6af9ffe09e7b9fbd986c4f112bc8952b7e952ea7b3d6c4c770b731b7cff9f"
+  },
+  {
+    "file_name": "riven_007.webp",
+    "relative_path": "images/riven_007.webp",
+    "weapon_name": "月神",
+    "riven_name": "Sati-ignicron",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "暴击几率",
+        "value": 73.1,
+        "unit": "%",
+        "display_value": "+73.1%"
+      },
+      {
+        "name": "火焰伤害",
+        "value": 46.8,
+        "unit": "%",
+        "display_value": "+46.8%"
+      },
+      {
+        "name": "多重射击",
+        "value": 49.7,
+        "unit": "%",
+        "display_value": "+49.7%"
+      },
+      {
+        "name": "对 Infested 伤害",
+        "value": -19.7,
+        "unit": "%",
+        "display_value": "-19.7%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/04042023/114550513.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/CCznmebqDffwdul.webp!a-3-854x.webp",
+    "sha256": "d2d6203cc69d59e24e63c3fdbe1ab2dc5b6403c0c459956675e8d015a1290fee"
+  },
+  {
+    "file_name": "riven_008.jpg",
+    "relative_path": "images/riven_008.jpg",
+    "weapon_name": "压制者",
+    "riven_name": "Sati-critatis",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "多重射击",
+        "value": 94.4,
+        "unit": "%",
+        "display_value": "+94.4%"
+      },
+      {
+        "name": "暴击伤害",
+        "value": 123.9,
+        "unit": "%",
+        "display_value": "+123.9%"
+      },
+      {
+        "name": "暴击几率",
+        "value": 157.1,
+        "unit": "%",
+        "display_value": "+157.1%"
+      },
+      {
+        "name": "穿刺伤害",
+        "value": -104.1,
+        "unit": "%",
+        "display_value": "-104.1%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/10122022/173558344.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/oyVYEXbqpfyzFre.jpg",
+    "sha256": "5850d5bd65590ca8f200885d193ac52293b13baeb2dccd9ce73b8df946e901d1"
+  },
+  {
+    "file_name": "riven_009.jpg",
+    "relative_path": "images/riven_009.jpg",
+    "weapon_name": "海克",
+    "riven_name": "Acri-saticron",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "暴击伤害",
+        "value": 106.2,
+        "unit": "%",
+        "display_value": "+106.2%"
+      },
+      {
+        "name": "多重射击",
+        "value": 140.7,
+        "unit": "%",
+        "display_value": "+140.7%"
+      },
+      {
+        "name": "暴击几率",
+        "value": 98.1,
+        "unit": "%",
+        "display_value": "+98.1%"
+      },
+      {
+        "name": "弹药最大值",
+        "value": -78.5,
+        "unit": "%",
+        "display_value": "-78.5%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/10122022/173558344.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/WqdiYNbqpfyzFpA.jpg",
+    "sha256": "33734d79f340a981abf05ffd679a25d5e1bcd9dfa3c49a05945f3faa39788c63"
+  },
+  {
+    "file_name": "riven_010.jpg",
+    "relative_path": "images/riven_010.jpg",
+    "weapon_name": "战刃",
+    "riven_name": "Crita-acrium",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "初始连击",
+        "value": 17,
+        "unit": "",
+        "display_value": "+17"
+      },
+      {
+        "name": "暴击伤害",
+        "value": 65.4,
+        "unit": "%",
+        "display_value": "+65.4%"
+      },
+      {
+        "name": "暴击几率",
+        "value": 142,
+        "unit": "%",
+        "display_value": "+142%",
+        "condition": "重击时 x2"
+      },
+      {
+        "name": "处决伤害",
+        "value": -77.4,
+        "unit": "%",
+        "display_value": "-77.4%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/10122022/173558344.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/fdFWyKbqpfyzFqm.jpg",
+    "sha256": "123fb787392df6e3986c951aaced5976fc6a49df1f4fa46eb1aced5fe4da6ac2"
+  },
+  {
+    "file_name": "riven_011.jpg",
+    "relative_path": "images/riven_011.jpg",
+    "weapon_name": "钢刃步枪",
+    "riven_name": "Acri-saticron",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "暴击几率",
+        "value": 119.1,
+        "unit": "%",
+        "display_value": "+119.1%"
+      },
+      {
+        "name": "暴击伤害",
+        "value": 105,
+        "unit": "%",
+        "display_value": "+105%"
+      },
+      {
+        "name": "多重射击",
+        "value": 77.2,
+        "unit": "%",
+        "display_value": "+77.2%"
+      },
+      {
+        "name": "武器后坐力",
+        "value": 66.7,
+        "unit": "%",
+        "display_value": "+66.7%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/10122022/173558344.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/ojCFoBbqpfyzFqb.jpg",
+    "sha256": "fe4d39105e8d8c3d625f8b0092a63439afbbbf6bf93b45d7273147419e337de4"
+  },
+  {
+    "file_name": "riven_012.png",
+    "relative_path": "images/riven_012.png",
+    "weapon_name": "伊格尼斯",
+    "riven_name": "Visi-saticron",
+    "language": "zh-CN",
+    "attributes": [
+      {
+        "name": "伤害",
+        "value": 99.3,
+        "unit": "%",
+        "display_value": "+99.3%"
+      },
+      {
+        "name": "暴击几率",
+        "value": 85.2,
+        "unit": "%",
+        "display_value": "+85.2%"
+      },
+      {
+        "name": "多重射击",
+        "value": 53,
+        "unit": "%",
+        "display_value": "+53%"
+      },
+      {
+        "name": "变焦",
+        "value": -24.9,
+        "unit": "%",
+        "display_value": "-24.9%"
+      }
+    ],
+    "source_page": "https://news.17173.com/z/xjzj/content/07272022/171317736.shtml",
+    "source_image_url": "https://i.17173cdn.com/2fhnvk/YWxqaGBf/cms3/OdGGFObqiFoDfca.png",
+    "sha256": "e829298b5ba629474fd56c2e8537e305f100e601b01c01d9e59334719d2164e3"
+  }
+]

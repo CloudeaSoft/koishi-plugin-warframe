@@ -1,0 +1,1399 @@
+[
+  {
+    "image": "riven_001.webp",
+    "sha256": "23fc2f699ea7759893d1c8f5a9514d593f9610534acac444eaeee4c9f1677426",
+    "blocks": [
+      {
+        "text": "10",
+        "confidence": 100,
+        "box": {
+          "x": 189,
+          "y": 7,
+          "width": 38,
+          "height": 15
+        }
+      },
+      {
+        "text": "奥堤克光子枪",
+        "confidence": 99,
+        "box": {
+          "x": 41,
+          "y": 160,
+          "width": 143,
+          "height": 27
+        }
+      },
+      {
+        "text": "Sati-toxicak",
+        "confidence": 99,
+        "box": {
+          "x": 40,
+          "y": 186,
+          "width": 150,
+          "height": 23
+        }
+      },
+      {
+        "text": "+11.1%穿刺伤害",
+        "confidence": 99,
+        "box": {
+          "x": 42,
+          "y": 208,
+          "width": 148,
+          "height": 22
+        }
+      },
+      {
+        "text": "+9.5%多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 55,
+          "y": 227,
+          "width": 122,
+          "height": 20
+        }
+      },
+      {
+        "text": "+9%毒素伤害",
+        "confidence": 99,
+        "box": {
+          "x": 54,
+          "y": 244,
+          "width": 125,
+          "height": 21
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 98,
+        "box": {
+          "x": 91,
+          "y": 270,
+          "width": 53,
+          "height": 18
+        }
+      }
+    ],
+    "parsed": {
+      "name": "奥堤克光子枪",
+      "attributes": [
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "name": "穿刺",
+          "value": 11.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "name": "多重射击",
+          "value": 9.5,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "name": "毒素",
+          "value": 9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_002.webp",
+    "sha256": "d8997e06ebb76d37eddca597152c4ac13ce541f94aeabcc2963a587079b334f0",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 223,
+          "y": 32,
+          "width": 21,
+          "height": 16
+        }
+      },
+      {
+        "text": "巴兹火枪",
+        "confidence": 99,
+        "box": {
+          "x": 97,
+          "y": 189,
+          "width": 102,
+          "height": 29
+        }
+      },
+      {
+        "text": "Toxi-acriata",
+        "confidence": 99,
+        "box": {
+          "x": 69,
+          "y": 217,
+          "width": 154,
+          "height": 22
+        }
+      },
+      {
+        "text": "+102.4%毒素伤害",
+        "confidence": 99,
+        "box": {
+          "x": 66,
+          "y": 240,
+          "width": 161,
+          "height": 21
+        }
+      },
+      {
+        "text": "+129.9%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 74,
+          "y": 257,
+          "width": 145,
+          "height": 22
+        }
+      },
+      {
+        "text": "+177.9%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 93,
+          "y": 278,
+          "width": 108,
+          "height": 20
+        }
+      },
+      {
+        "text": "段位16",
+        "confidence": 99,
+        "box": {
+          "x": 56,
+          "y": 307,
+          "width": 54,
+          "height": 17
+        }
+      }
+    ],
+    "parsed": {
+      "name": "巴兹火枪",
+      "attributes": [
+        {
+          "gameRef": "WeaponToxinDamageMod",
+          "name": "毒素",
+          "value": 102.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "name": "暴击伤害",
+          "value": 129.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "name": "基础伤害",
+          "value": 177.9,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_003.webp",
+    "sha256": "06ef6ef9ff1f586b34cfcf09f71827ab25712743f7ccc1ecdfc2751ff87edc1d",
+    "blocks": [
+      {
+        "text": "容",
+        "confidence": 79,
+        "box": {
+          "x": 118,
+          "y": 30,
+          "width": 29,
+          "height": 28
+        }
+      },
+      {
+        "text": "17",
+        "confidence": 99,
+        "box": {
+          "x": 206,
+          "y": 39,
+          "width": 21,
+          "height": 16
+        }
+      },
+      {
+        "text": "狂鲨 Visipha",
+        "confidence": 99,
+        "box": {
+          "x": 54,
+          "y": 227,
+          "width": 153,
+          "height": 26
+        }
+      },
+      {
+        "text": "+251.6%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 76,
+          "y": 253,
+          "width": 110,
+          "height": 18
+        }
+      },
+      {
+        "text": "+126.8%火焰伤害",
+        "confidence": 99,
+        "box": {
+          "x": 50,
+          "y": 273,
+          "width": 161,
+          "height": 19
+        }
+      },
+      {
+        "text": "-27.4%弹药最大值",
+        "confidence": 100,
+        "box": {
+          "x": 57,
+          "y": 290,
+          "width": 149,
+          "height": 21
+        }
+      },
+      {
+        "text": "段位11",
+        "confidence": 97,
+        "box": {
+          "x": 39,
+          "y": 320,
+          "width": 55,
+          "height": 18
+        }
+      },
+      {
+        "text": "08",
+        "confidence": 83,
+        "box": {
+          "x": 194,
+          "y": 320,
+          "width": 27,
+          "height": 15
+        }
+      }
+    ],
+    "parsed": {
+      "name": "狂鲨",
+      "attributes": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "name": "基础伤害",
+          "value": 251.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "name": "火焰",
+          "value": 126.8,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "name": "弹药上限",
+          "value": -27.4,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_004.webp",
+    "sha256": "ec623150279c41fec37a2299c3fd66d2ac8b0b1d4bb6c9b511468855c022e5dd",
+    "blocks": [
+      {
+        "text": "容",
+        "confidence": 96,
+        "box": {
+          "x": 115,
+          "y": 31,
+          "width": 24,
+          "height": 22
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 197,
+          "y": 36,
+          "width": 35,
+          "height": 18
+        }
+      },
+      {
+        "text": "铁晶磁轨炮",
+        "confidence": 100,
+        "box": {
+          "x": 69,
+          "y": 183,
+          "width": 121,
+          "height": 32
+        }
+      },
+      {
+        "text": "Visi-critapha",
+        "confidence": 99,
+        "box": {
+          "x": 52,
+          "y": 211,
+          "width": 154,
+          "height": 27
+        }
+      },
+      {
+        "text": "+141%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 67,
+          "y": 233,
+          "width": 124,
+          "height": 28
+        }
+      },
+      {
+        "text": "+167.6%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 76,
+          "y": 255,
+          "width": 104,
+          "height": 23
+        }
+      },
+      {
+        "text": "+84.1%火焰伤害",
+        "confidence": 100,
+        "box": {
+          "x": 57,
+          "y": 273,
+          "width": 142,
+          "height": 26
+        }
+      },
+      {
+        "text": "-51.5%变焦",
+        "confidence": 100,
+        "box": {
+          "x": 82,
+          "y": 295,
+          "width": 93,
+          "height": 23
+        }
+      },
+      {
+        "text": "01",
+        "confidence": 99,
+        "box": {
+          "x": 184,
+          "y": 320,
+          "width": 26,
+          "height": 16
+        }
+      },
+      {
+        "text": "段位14",
+        "confidence": 92,
+        "box": {
+          "x": 40,
+          "y": 325,
+          "width": 52,
+          "height": 21
+        }
+      }
+    ],
+    "parsed": {
+      "name": "铁晶磁轨炮",
+      "attributes": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "name": "暴击几率",
+          "value": 141,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "name": "基础伤害",
+          "value": 167.6,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireDamageMod",
+          "name": "火焰",
+          "value": 84.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "name": "变焦",
+          "value": -51.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_005.webp",
+    "sha256": "14271aff16c3a426012432d8d77cc2ea7d9f4408d92454e1eb83f9ba29d1cab7",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 98,
+        "box": {
+          "x": 279,
+          "y": 44,
+          "width": 42,
+          "height": 20
+        }
+      },
+      {
+        "text": "奥堤克光枪",
+        "confidence": 96,
+        "box": {
+          "x": 90,
+          "y": 222,
+          "width": 190,
+          "height": 34
+        }
+      },
+      {
+        "text": "Crita-satitis",
+        "confidence": 99,
+        "box": {
+          "x": 82,
+          "y": 257,
+          "width": 204,
+          "height": 28
+        }
+      },
+      {
+        "text": "+122.1%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 96,
+          "y": 289,
+          "width": 179,
+          "height": 23
+        }
+      },
+      {
+        "text": "+168.2%暴击率",
+        "confidence": 100,
+        "box": {
+          "x": 106,
+          "y": 314,
+          "width": 158,
+          "height": 20
+        }
+      },
+      {
+        "text": "+92.2%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 102,
+          "y": 336,
+          "width": 167,
+          "height": 23
+        }
+      },
+      {
+        "text": "-37.1%对 Infested伤害",
+        "confidence": 97,
+        "box": {
+          "x": 68,
+          "y": 356,
+          "width": 234,
+          "height": 30
+        }
+      },
+      {
+        "text": "段位16",
+        "confidence": 88,
+        "box": {
+          "x": 71,
+          "y": 393,
+          "width": 69,
+          "height": 24
+        }
+      },
+      {
+        "text": "03",
+        "confidence": 92,
+        "box": {
+          "x": 264,
+          "y": 396,
+          "width": 33,
+          "height": 18
+        }
+      }
+    ],
+    "parsed": null
+  },
+  {
+    "image": "riven_006.webp",
+    "sha256": "25c6af9ffe09e7b9fbd986c4f112bc8952b7e952ea7b3d6c4c770b731b7cff9f",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 280,
+          "y": 38,
+          "width": 26,
+          "height": 21
+        }
+      },
+      {
+        "text": "守望者 Critaata",
+        "confidence": 99,
+        "box": {
+          "x": 69,
+          "y": 295,
+          "width": 234,
+          "height": 32
+        }
+      },
+      {
+        "text": "+153.9%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 118,
+          "y": 330,
+          "width": 136,
+          "height": 22
+        }
+      },
+      {
+        "text": "+150.2%暴击率",
+        "confidence": 100,
+        "box": {
+          "x": 107,
+          "y": 354,
+          "width": 157,
+          "height": 23
+        }
+      },
+      {
+        "text": "段位11",
+        "confidence": 98,
+        "box": {
+          "x": 72,
+          "y": 389,
+          "width": 67,
+          "height": 21
+        }
+      },
+      {
+        "text": "032",
+        "confidence": 89,
+        "box": {
+          "x": 254,
+          "y": 391,
+          "width": 42,
+          "height": 18
+        }
+      }
+    ],
+    "parsed": {
+      "name": "守望者",
+      "attributes": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "name": "基础伤害",
+          "value": 153.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "name": "暴击几率",
+          "value": 150.2,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_007.webp",
+    "sha256": "d2d6203cc69d59e24e63c3fdbe1ab2dc5b6403c0c459956675e8d015a1290fee",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 223,
+          "y": 35,
+          "width": 37,
+          "height": 18
+        }
+      },
+      {
+        "text": "月神",
+        "confidence": 100,
+        "box": {
+          "x": 128,
+          "y": 170,
+          "width": 50,
+          "height": 26
+        }
+      },
+      {
+        "text": "Sati-ignicron",
+        "confidence": 99,
+        "box": {
+          "x": 70,
+          "y": 193,
+          "width": 164,
+          "height": 30
+        }
+      },
+      {
+        "text": "+73.1%暴击几率",
+        "confidence": 99,
+        "box": {
+          "x": 84,
+          "y": 219,
+          "width": 136,
+          "height": 22
+        }
+      },
+      {
+        "text": "+46.8%火焰伤害",
+        "confidence": 98,
+        "box": {
+          "x": 77,
+          "y": 238,
+          "width": 150,
+          "height": 22
+        }
+      },
+      {
+        "text": "+49.7%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 85,
+          "y": 258,
+          "width": 134,
+          "height": 22
+        }
+      },
+      {
+        "text": "-19.7%对 Infested",
+        "confidence": 95,
+        "box": {
+          "x": 58,
+          "y": 274,
+          "width": 155,
+          "height": 24
+        }
+      },
+      {
+        "text": "害",
+        "confidence": 94,
+        "box": {
+          "x": 232,
+          "y": 281,
+          "width": 14,
+          "height": 17
+        }
+      },
+      {
+        "text": "段位16",
+        "confidence": 92,
+        "box": {
+          "x": 123,
+          "y": 306,
+          "width": 56,
+          "height": 19
+        }
+      },
+      {
+        "text": "+",
+        "confidence": 60,
+        "box": {
+          "x": 167,
+          "y": 393,
+          "width": 17,
+          "height": 10
+        }
+      }
+    ],
+    "parsed": null
+  },
+  {
+    "image": "riven_008.jpg",
+    "sha256": "5850d5bd65590ca8f200885d193ac52293b13baeb2dccd9ce73b8df946e901d1",
+    "blocks": [
+      {
+        "text": "18-",
+        "confidence": 94,
+        "box": {
+          "x": 195,
+          "y": 27,
+          "width": 38,
+          "height": 18
+        }
+      },
+      {
+        "text": "压制者 Sati-",
+        "confidence": 99,
+        "box": {
+          "x": 58,
+          "y": 161,
+          "width": 141,
+          "height": 23
+        }
+      },
+      {
+        "text": "critatis",
+        "confidence": 91,
+        "box": {
+          "x": 81,
+          "y": 187,
+          "width": 94,
+          "height": 18
+        }
+      },
+      {
+        "text": "+94.4%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 63,
+          "y": 206,
+          "width": 130,
+          "height": 16
+        }
+      },
+      {
+        "text": "+123.9%暴击伤害",
+        "confidence": 99,
+        "box": {
+          "x": 59,
+          "y": 224,
+          "width": 139,
+          "height": 18
+        }
+      },
+      {
+        "text": "+157.1%暴击几率",
+        "confidence": 99,
+        "box": {
+          "x": 58,
+          "y": 242,
+          "width": 141,
+          "height": 15
+        }
+      },
+      {
+        "text": "-104.1%穿刺伤害",
+        "confidence": 99,
+        "box": {
+          "x": 53,
+          "y": 259,
+          "width": 152,
+          "height": 20
+        }
+      },
+      {
+        "text": "段位 14",
+        "confidence": 96,
+        "box": {
+          "x": 44,
+          "y": 287,
+          "width": 54,
+          "height": 17
+        }
+      },
+      {
+        "text": "049",
+        "confidence": 85,
+        "box": {
+          "x": 176,
+          "y": 288,
+          "width": 34,
+          "height": 15
+        }
+      }
+    ],
+    "parsed": {
+      "name": "压制者",
+      "attributes": [
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "name": "多重射击",
+          "value": 94.4,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "name": "暴击伤害",
+          "value": 123.9,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "name": "暴击几率",
+          "value": 157.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponArmorPiercingDamageMod",
+          "name": "穿刺",
+          "value": -104.1,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_009.jpg",
+    "sha256": "33734d79f340a981abf05ffd679a25d5e1bcd9dfa3c49a05945f3faa39788c63",
+    "blocks": [
+      {
+        "text": "容",
+        "confidence": 82,
+        "box": {
+          "x": 106,
+          "y": 19,
+          "width": 21,
+          "height": 20
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 174,
+          "y": 27,
+          "width": 19,
+          "height": 13
+        }
+      },
+      {
+        "text": "(",
+        "confidence": 70,
+        "box": {
+          "x": 218,
+          "y": 52,
+          "width": 4,
+          "height": 12
+        }
+      },
+      {
+        "text": "品",
+        "confidence": 57,
+        "box": {
+          "x": 113,
+          "y": 122,
+          "width": 25,
+          "height": 17
+        }
+      },
+      {
+        "text": "品",
+        "confidence": 86,
+        "box": {
+          "x": 110,
+          "y": 135,
+          "width": 27,
+          "height": 18
+        }
+      },
+      {
+        "text": "海克 Acri-saticron",
+        "confidence": 95,
+        "box": {
+          "x": 23,
+          "y": 164,
+          "width": 167,
+          "height": 25
+        }
+      },
+      {
+        "text": "+106.2%暴击伤害",
+        "confidence": 99,
+        "box": {
+          "x": 45,
+          "y": 186,
+          "width": 124,
+          "height": 18
+        }
+      },
+      {
+        "text": "+140.7%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 45,
+          "y": 204,
+          "width": 123,
+          "height": 16
+        }
+      },
+      {
+        "text": "+98.1%暴击几率",
+        "confidence": 99,
+        "box": {
+          "x": 48,
+          "y": 222,
+          "width": 116,
+          "height": 12
+        }
+      },
+      {
+        "text": "-78.5%弹药最大值",
+        "confidence": 100,
+        "box": {
+          "x": 41,
+          "y": 236,
+          "width": 127,
+          "height": 18
+        }
+      },
+      {
+        "text": "段位15",
+        "confidence": 96,
+        "box": {
+          "x": 32,
+          "y": 261,
+          "width": 46,
+          "height": 15
+        }
+      }
+    ],
+    "parsed": {
+      "name": "海克",
+      "attributes": [
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "name": "暴击伤害",
+          "value": 106.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "name": "多重射击",
+          "value": 140.7,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "name": "暴击几率",
+          "value": 98.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponAmmoMaxMod",
+          "name": "弹药上限",
+          "value": -78.5,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_010.jpg",
+    "sha256": "123fb787392df6e3986c951aaced5976fc6a49df1f4fa46eb1aced5fe4da6ac2",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 189,
+          "y": 19,
+          "width": 34,
+          "height": 15
+        }
+      },
+      {
+        "text": "战刃 Crita-acrium",
+        "confidence": 99,
+        "box": {
+          "x": 31,
+          "y": 149,
+          "width": 180,
+          "height": 24
+        }
+      },
+      {
+        "text": "+17初始连击",
+        "confidence": 99,
+        "box": {
+          "x": 72,
+          "y": 173,
+          "width": 99,
+          "height": 17
+        }
+      },
+      {
+        "text": "+65.4%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 56,
+          "y": 192,
+          "width": 128,
+          "height": 15
+        }
+      },
+      {
+        "text": "+142%暴击几率(重击时",
+        "confidence": 99,
+        "box": {
+          "x": 27,
+          "y": 209,
+          "width": 189,
+          "height": 18
+        }
+      },
+      {
+        "text": "x2)",
+        "confidence": 99,
+        "box": {
+          "x": 102,
+          "y": 226,
+          "width": 28,
+          "height": 17
+        }
+      },
+      {
+        "text": "-77.4%处决伤害",
+        "confidence": 99,
+        "box": {
+          "x": 57,
+          "y": 243,
+          "width": 125,
+          "height": 18
+        }
+      },
+      {
+        "text": "段位8",
+        "confidence": 99,
+        "box": {
+          "x": 39,
+          "y": 270,
+          "width": 43,
+          "height": 18
+        }
+      },
+      {
+        "text": "0",
+        "confidence": 90,
+        "box": {
+          "x": 167,
+          "y": 272,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "text": "63",
+        "confidence": 100,
+        "box": {
+          "x": 181,
+          "y": 272,
+          "width": 20,
+          "height": 14
+        }
+      }
+    ],
+    "parsed": null
+  },
+  {
+    "image": "riven_011.jpg",
+    "sha256": "fe4d39105e8d8c3d625f8b0092a63439afbbbf6bf93b45d7273147419e337de4",
+    "blocks": [
+      {
+        "text": "容",
+        "confidence": 89,
+        "box": {
+          "x": 126,
+          "y": 31,
+          "width": 24,
+          "height": 23
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 204,
+          "y": 37,
+          "width": 35,
+          "height": 16
+        }
+      },
+      {
+        "text": "钢刃步枪Acri-",
+        "confidence": 98,
+        "box": {
+          "x": 63,
+          "y": 168,
+          "width": 148,
+          "height": 23
+        }
+      },
+      {
+        "text": "saticron",
+        "confidence": 99,
+        "box": {
+          "x": 92,
+          "y": 193,
+          "width": 90,
+          "height": 18
+        }
+      },
+      {
+        "text": "+119.1%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 66,
+          "y": 213,
+          "width": 141,
+          "height": 21
+        }
+      },
+      {
+        "text": "+105%暴击伤害",
+        "confidence": 99,
+        "box": {
+          "x": 73,
+          "y": 233,
+          "width": 127,
+          "height": 15
+        }
+      },
+      {
+        "text": "+77.2%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 70,
+          "y": 248,
+          "width": 132,
+          "height": 18
+        }
+      },
+      {
+        "text": "+66.7%武器后坐力",
+        "confidence": 99,
+        "box": {
+          "x": 63,
+          "y": 266,
+          "width": 148,
+          "height": 20
+        }
+      },
+      {
+        "text": "段位 14",
+        "confidence": 88,
+        "box": {
+          "x": 53,
+          "y": 295,
+          "width": 53,
+          "height": 17
+        }
+      },
+      {
+        "text": "03",
+        "confidence": 84,
+        "box": {
+          "x": 193,
+          "y": 296,
+          "width": 27,
+          "height": 15
+        }
+      }
+    ],
+    "parsed": {
+      "name": "钢刃步枪",
+      "attributes": [
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "name": "暴击几率",
+          "value": 119.1,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritDamageMod",
+          "name": "暴击伤害",
+          "value": 105,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "name": "多重射击",
+          "value": 77.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponRecoilReductionMod",
+          "name": "武器后坐力",
+          "value": 66.7,
+          "prefix": "+",
+          "unit": "percent"
+        }
+      ]
+    }
+  },
+  {
+    "image": "riven_012.png",
+    "sha256": "e829298b5ba629474fd56c2e8537e305f100e601b01c01d9e59334719d2164e3",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 256,
+          "y": 65,
+          "width": 42,
+          "height": 17
+        }
+      },
+      {
+        "text": "伊格尼斯 Visi-",
+        "confidence": 97,
+        "box": {
+          "x": 80,
+          "y": 213,
+          "width": 192,
+          "height": 30
+        }
+      },
+      {
+        "text": "saticron",
+        "confidence": 99,
+        "box": {
+          "x": 121,
+          "y": 245,
+          "width": 111,
+          "height": 22
+        }
+      },
+      {
+        "text": "+99.3%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 119,
+          "y": 268,
+          "width": 114,
+          "height": 19
+        }
+      },
+      {
+        "text": "+85.2%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 100,
+          "y": 289,
+          "width": 154,
+          "height": 19
+        }
+      },
+      {
+        "text": "+53%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 107,
+          "y": 310,
+          "width": 137,
+          "height": 20
+        }
+      },
+      {
+        "text": "-24.9%变焦",
+        "confidence": 99,
+        "box": {
+          "x": 121,
+          "y": 330,
+          "width": 110,
+          "height": 20
+        }
+      },
+      {
+        "text": "段位16",
+        "confidence": 91,
+        "box": {
+          "x": 78,
+          "y": 361,
+          "width": 62,
+          "height": 19
+        }
+      },
+      {
+        "text": "597",
+        "confidence": 91,
+        "box": {
+          "x": 233,
+          "y": 362,
+          "width": 41,
+          "height": 17
+        }
+      }
+    ],
+    "parsed": {
+      "name": "伊格尼斯",
+      "attributes": [
+        {
+          "gameRef": "WeaponDamageAmountMod",
+          "name": "基础伤害",
+          "value": 99.3,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponCritChanceMod",
+          "name": "暴击几率",
+          "value": 85.2,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponFireIterationsMod",
+          "name": "多重射击",
+          "value": 53,
+          "prefix": "+",
+          "unit": "percent"
+        },
+        {
+          "gameRef": "WeaponZoomFovMod",
+          "name": "变焦",
+          "value": -24.9,
+          "prefix": "-",
+          "unit": "percent"
+        }
+      ]
+    }
+  }
+]
