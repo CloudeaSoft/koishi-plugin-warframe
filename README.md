@@ -17,6 +17,15 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 | `pmod-history` |               | `pmodhistory`, `pmod`, `P卡`, `p卡`, `P卡历史`, `p卡历史` | Query Primed MOD price history.                                                        |
 | `riven-hot`    |               | `hotriven`                                                | Query trending riven weapons ranking.                                                  |
 
+`wm`, `wmi`, and `wmr` also support Chinese name fragments and homophones
+(ignoring tones), with at least two Chinese characters. For example, `wmr 里德`
+and `wmr 托里得` can resolve to `托里德`. Existing exact names, aliases and
+shorthand take priority, followed by literal fragments, then homophones.
+A unique match is queried directly; multiple matches show up to 10 candidate
+names and ask you to complete the name. `wm` and `wmi` retain the `满级` option.
+This does not add fuzzy English, typed pinyin, skipped-character or general typo
+matching, and does not change `relic`.
+
 ### Fissures
 
 | Command      | Arguments | Aliases                                 | Description                               |

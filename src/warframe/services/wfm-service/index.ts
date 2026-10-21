@@ -29,7 +29,7 @@ import {
   toTimeStamp,
 } from '../../utils'
 import { matchWFMItem, stringToWFMItem } from './wfm-service.item-matcher'
-import { findRivenItemByName } from './wfm-service.riven-item-matcher'
+import { matchRivenItem } from './wfm-service.riven-item-matcher'
 import { computeItemStatistics } from './wfm-service.statistics'
 
 export { matchWFMItem, stringToWFMItem }
@@ -65,6 +65,12 @@ export async function updateCache(): Promise<string> {
   return lines.join('\n')
 }
 
+function formatItemCandidates(items: (ItemShort | RivenItem)[]): string {
+  const names = [...new Set(items.map(item => item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name ?? item.slug))]
+  const displayed = names.slice(0, 10).join('、')
+  return names.length > 10 ? `${displayed}（另有 ${names.length - 10} 项，请补全名称）` : displayed
+}
+
 export async function getItemOrders(input: string): Promise<WarframeResult<{ item: ItemShort, orders: OrderWithUser[], statistics?: ItemStatisticsSummary }>> {
   if (!input || !input.trim()) {
     return failure('wfm.inputItemName')
@@ -85,9 +91,7 @@ export async function getItemOrders(input: string): Promise<WarframeResult<{ ite
   // 2. Search item
   const itemMatch = await matchWFMItem(input)
   if (itemMatch.type === 'ambiguous') {
-    const candidates = itemMatch.candidates
-      .map(item => item.i18n?.['zh-hans']?.name ?? item.i18n?.en?.name ?? item.slug)
-      .join('、')
+    const candidates = formatItemCandidates(itemMatch.candidates)
     return failure('wfm.itemAmbiguous', false, { input, candidates })
   }
   if (itemMatch.type === 'not-found') {
@@ -148,12 +152,15 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
   }
   input = input.trim()
 
-  const { globalRivenAttributeDict } = await globalRivenAttribute.get()
-
-  const targetItem = await findRivenItemByName(input)
-  if (!targetItem) {
+  const itemMatch = await matchRivenItem(input)
+  if (itemMatch.type === 'ambiguous') {
+    return failure('wfm.itemAmbiguous', false, { input, candidates: formatItemCandidates(itemMatch.candidates) })
+  }
+  if (itemMatch.type === 'not-found') {
     return failure('wfm.rivenWeaponNotFound', false, { input })
   }
+  const targetItem = itemMatch.item
+  const { globalRivenAttributeDict } = await globalRivenAttribute.get()
 
   const itemId = targetItem.slug
   const data = await wfmClient.rivens.getOrders(itemId)
