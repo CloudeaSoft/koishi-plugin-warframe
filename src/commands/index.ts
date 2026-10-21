@@ -13,11 +13,11 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
   const wfm = createWfmCommands(deps)
   const miscs = createMiscsCommands(deps)
 
-  ctx.command('wm <item-name:text>', '查询wm的物品价格（支持中文片段和同音查询）').action(wfm.wmCommand)
+  ctx.command('wm <item-name:text>', '查询wm的物品价格（物品名字禁用空格）').action(wfm.wmCommand)
   ctx
-    .command('wmr <item-name:text>', '查询wm的紫卡价格（支持中文片段和同音查询）')
+    .command('wmr <item-name:text>', '查询wm的紫卡价格')
     .action(wfm.wmrCommand)
-  ctx.command('wmi <item-name:text>', '查询wm的物品价格（含可复制消息，支持中文片段和同音查询）').action(wfm.wmiCommand)
+  ctx.command('wmi <item-name:text>', '查询wm的物品价格（含可复制消息）').action(wfm.wmiCommand)
   ctx.command('wmu', '更新wm缓存数据', { hidden: true }).action(wfm.wmuCommand)
 
   ctx
