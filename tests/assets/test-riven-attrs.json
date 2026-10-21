@@ -4,6 +4,7 @@
     {
       "id": "5c5ca81a96e8d2003834fe78",
       "slug": "punch_through",
+      "positiveOnly": true,
       "gameRef": "WeaponPunctureDepthMod",
       "group": "default",
       "prefix": "Lexi",
@@ -71,6 +72,7 @@
       "prefix": "Toxi",
       "suffix": "Tox",
       "unit": "percent",
+      "positiveOnly": true,
       "i18n": {
         "zh-hans": {
           "name": "毒素伤害",
@@ -190,6 +192,7 @@
     {
       "id": "5c5ca81a96e8d2003834fe68",
       "slug": "channeling_damage",
+      "positiveOnly": true,
       "gameRef": "WeaponMeleeComboInitialBonusMod",
       "group": "melee",
       "prefix": "Para",
@@ -307,6 +310,7 @@
       "prefix": "Igni",
       "suffix": "Pha",
       "unit": "percent",
+      "positiveOnly": true,
       "i18n": {
         "en": {
           "name": "Heat",
@@ -484,6 +488,7 @@
       "prefix": "Vexi",
       "suffix": "Tio",
       "unit": "percent",
+      "positiveOnly": true,
       "i18n": {
         "en": {
           "name": "Electricity",
@@ -614,6 +619,7 @@
       "prefix": "Geli",
       "suffix": "Do",
       "unit": "percent",
+      "positiveOnly": true,
       "i18n": {
         "zh-hans": {
           "name": "冰冻伤害",
@@ -727,6 +733,140 @@
           "icon": "riven_attribute/unknown.png",
           "thumb": "riven_attribute/unknown.thumb.png"
         }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773aa",
+      "slug": "damage_to_orokin",
+      "gameRef": "WeaponFactionDamageOrokin",
+      "group": "default",
+      "prefix": "Effi",
+      "suffix": "Tas",
+      "unit": "multiply",
+      "i18n": {
+        "en": {
+          "name": "Damage to Orokin",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "对奥罗金的伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773b5",
+      "slug": "status_damage",
+      "gameRef": "WeaponStatusDamage",
+      "group": "default",
+      "prefix": "Plaga",
+      "suffix": "Mna",
+      "exclusiveTo": [
+        "archgun",
+        "kitgun",
+        "melee",
+        "pistol",
+        "rifle",
+        "shotgun"
+      ],
+      "unit": "percent",
+      "i18n": {
+        "en": {
+          "name": "Status Damage",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        },
+        "zh-hans": {
+          "name": "异常状态伤害",
+          "icon": "riven_attribute/unknown.png",
+          "thumb": "riven_attribute/unknown.thumb.png"
+        }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773a8",
+      "slug": "blast",
+      "gameRef": "WeaponBlastDamageMod",
+      "group": "default",
+      "prefix": "Fraga",
+      "suffix": "Tus",
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "en": { "name": "Blast", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" },
+        "zh-hans": { "name": "爆炸伤害", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773a9",
+      "slug": "corrosive",
+      "gameRef": "WeaponCorrosiveDamageMod",
+      "group": "default",
+      "prefix": "Cori",
+      "suffix": "Or",
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "en": { "name": "Corrosive", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" },
+        "zh-hans": { "name": "腐蚀伤害", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773ad",
+      "slug": "gas",
+      "gameRef": "WeaponGasDamageMod",
+      "group": "default",
+      "prefix": "Cali",
+      "suffix": "Fel",
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "en": { "name": "Gas", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" },
+        "zh-hans": { "name": "毒气伤害", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773b0",
+      "slug": "magnetic",
+      "gameRef": "WeaponMagneticDamageMod",
+      "group": "default",
+      "prefix": "Magni",
+      "suffix": "Bra",
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "en": { "name": "Magnetic", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" },
+        "zh-hans": { "name": "磁力伤害", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773b3",
+      "slug": "radiation",
+      "gameRef": "WeaponRadiationDamageMod",
+      "group": "default",
+      "prefix": "Radi",
+      "suffix": "Lo",
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "en": { "name": "Radiation", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" },
+        "zh-hans": { "name": "辐射伤害", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" }
+      }
+    },
+    {
+      "id": "6ac6dec324fe2680bad773b6",
+      "slug": "viral",
+      "gameRef": "WeaponViralDamageMod",
+      "group": "default",
+      "prefix": "Cari",
+      "suffix": "Sco",
+      "unit": "percent",
+      "positiveOnly": true,
+      "i18n": {
+        "en": { "name": "Viral", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" },
+        "zh-hans": { "name": "病毒伤害", "icon": "riven_attribute/unknown.png", "thumb": "riven_attribute/unknown.thumb.png" }
       }
     }
   ],

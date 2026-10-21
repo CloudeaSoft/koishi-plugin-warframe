@@ -20,6 +20,11 @@ export interface PrimedModHistoryItem {
   plats?: number
 }
 
+export interface RivenOrderFilters {
+  positiveStats?: string[]
+  negativeStat?: string
+}
+
 export interface ItemStatisticsPoint {
   datetime: string
   median: number
