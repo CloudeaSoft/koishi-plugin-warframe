@@ -13,7 +13,7 @@ export function RivenOrderComponent(item: RivenItem, orders: RivenOrderInternal[
     <div class="wmr">
       <style>
         {`
-        .wmr { box-sizing:border-box; width:600px; padding:20px; background:var(--wf-bg-page); color:var(--wf-text-primary); font-size:20px; line-height:1.4; }
+        .wmr { box-sizing:border-box; width:720px; padding:20px; background:var(--wf-bg-page); color:var(--wf-text-primary); font-size:20px; line-height:1.4; }
         .wmr * { box-sizing:border-box; }
         .wmr .heading,.wmr .subtitle,.wmr .top,.wmr .seller { display:flex; justify-content:space-between; gap:12px; }
         .wmr .heading { align-items:baseline; }
