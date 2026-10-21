@@ -16,6 +16,8 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
   ctx.command('wm <item-name:text>', '查询wm的物品价格（物品名字禁用空格）').action(wfm.wmCommand)
   ctx
     .command('wmr <item-name:text>', '查询wm的紫卡价格')
+    .usage('wmr 武器名 [词条...] [负词条名]，词条之间用空格分隔，负词条可放在词条参数的任意位置。')
+    .example('wmr 托里德 负变焦 暴击率 暴击伤害')
     .action(wfm.wmrCommand)
   ctx.command('wmi <item-name:text>', '查询wm的物品价格（含可复制消息）').action(wfm.wmiCommand)
   ctx.command('wmu', '更新wm缓存数据', { hidden: true }).action(wfm.wmuCommand)

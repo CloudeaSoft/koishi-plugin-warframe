@@ -42,6 +42,10 @@ export const messages = {
   'wfm.orderFetchFailed': '订单获取失败，请稍后重试',
   'wfm.noOnlineSeller': '当前没有在线游戏中的卖家',
   'wfm.rivenWeaponNotFound': '未找到紫卡武器: {input}',
+  'wfm.rivenAttributeNotFound': '未识别紫卡词条: {input}，词条之间请用空格分隔，负词条写为“负词条名”（如负变焦）',
+  'wfm.rivenAttributePolarity': '词条不支持指定的正负类型: {input}',
+  'wfm.rivenFilterConflict': '同一词条不能同时指定为正词条和负词条: {input}',
+  'wfm.rivenFilterLimit': '最多指定3个不同的正词条和1个负词条',
   'wfm.rivenOrderFetchFailed': '紫卡订单获取失败，请稍后重试',
   'wfm.noOnlineRivenSeller': '当前没有在线出售的紫卡',
 

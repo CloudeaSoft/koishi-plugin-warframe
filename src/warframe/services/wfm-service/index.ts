@@ -29,7 +29,7 @@ import {
   toTimeStamp,
 } from '../../utils'
 import { matchWFMItem, stringToWFMItem } from './wfm-service.item-matcher'
-import { matchRivenItem } from './wfm-service.riven-item-matcher'
+import { matchRivenOrderInput, parseRivenOrderFilters } from './wfm-service.riven-filters'
 import { computeItemStatistics } from './wfm-service.statistics'
 
 export { matchWFMItem, stringToWFMItem }
@@ -152,18 +152,21 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
   }
   input = input.trim()
 
-  const itemMatch = await matchRivenItem(input)
+  const { itemMatch, weaponName, attributeNames } = await matchRivenOrderInput(input)
   if (itemMatch.type === 'ambiguous') {
-    return failure('wfm.itemAmbiguous', false, { input, candidates: formatItemCandidates(itemMatch.candidates) })
+    return failure('wfm.itemAmbiguous', false, { input: weaponName, candidates: formatItemCandidates(itemMatch.candidates) })
   }
   if (itemMatch.type === 'not-found') {
     return failure('wfm.rivenWeaponNotFound', false, { input })
   }
   const targetItem = itemMatch.item
-  const { globalRivenAttributeDict } = await globalRivenAttribute.get()
+  const { globalRivenAttributeDict, globalRivenAttributeList } = await globalRivenAttribute.get()
+  const filters = parseRivenOrderFilters(attributeNames, globalRivenAttributeList)
+  if (!filters.ok)
+    return filters
 
   const itemId = targetItem.slug
-  const data = await wfmClient.rivens.getOrders(itemId)
+  const data = await wfmClient.rivens.getOrders(itemId, filters.data)
   if (!data) {
     return failure('wfm.rivenOrderFetchFailed', true)
   }

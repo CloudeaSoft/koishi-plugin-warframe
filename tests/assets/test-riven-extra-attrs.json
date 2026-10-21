@@ -1,0 +1,258 @@
+[
+  {
+    "id": "6ac6dec324fe2680bad773a7",
+    "slug": "ammo_efficiency",
+    "gameRef": "WeaponAmmoEfficiency",
+    "group": "default",
+    "prefix": "Parci",
+    "suffix": "Pia",
+    "exclusiveTo": [
+      "archgun",
+      "kitgun",
+      "pistol",
+      "rifle",
+      "shotgun"
+    ],
+    "unit": "percent",
+    "i18n": {
+      "zh-hans": {
+        "name": "弹药效率",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "en": {
+        "name": "Ammo Efficiency",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773ab",
+    "slug": "damage_to_scaldra",
+    "gameRef": "WeaponFactionDamageScaldra",
+    "group": "default",
+    "prefix": "Exsi",
+    "suffix": "Llo",
+    "unit": "multiply",
+    "i18n": {
+      "zh-hans": {
+        "name": "对炽蛇军的伤害",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "en": {
+        "name": "Damage to Scaldra",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773ac",
+    "slug": "damage_to_techrot",
+    "gameRef": "WeaponFactionDamageTechrot",
+    "group": "default",
+    "prefix": "Muti",
+    "suffix": "Gia",
+    "unit": "multiply",
+    "i18n": {
+      "en": {
+        "name": "Damage to Techrot",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "zh-hans": {
+        "name": "对科腐者的伤害",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773ae",
+    "slug": "heavy_attack_wind_up_speed",
+    "gameRef": "WeaponMeleeHeavyAttackChargeMod",
+    "group": "melee",
+    "prefix": "Laci",
+    "suffix": "Nus",
+    "exclusiveTo": [
+      "melee",
+      "zaw"
+    ],
+    "unit": "percent",
+    "positiveOnly": true,
+    "i18n": {
+      "zh-hans": {
+        "name": "重击准备速度",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "en": {
+        "name": "Heavy Attack Wind Up Speed",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773af",
+    "slug": "magazine_reloaded_s_when_holstered",
+    "gameRef": "WeaponMagazineReloadHolstered",
+    "group": "default",
+    "prefix": "Parci",
+    "suffix": "Pia",
+    "exclusiveTo": [
+      "kitgun",
+      "pistol",
+      "rifle",
+      "shotgun"
+    ],
+    "unit": "percent",
+    "i18n": {
+      "en": {
+        "name": "Magazine Reloaded/s when Holstered",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "zh-hans": {
+        "name": "收起武器时弹匣每秒自动装填",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773b1",
+    "slug": "melee_damage_on_heavy_attack",
+    "gameRef": "WeaponMeleeHeavyAttackDamageMod",
+    "group": "melee",
+    "prefix": "Laci",
+    "suffix": "Nus",
+    "exclusiveTo": [
+      "melee",
+      "zaw"
+    ],
+    "unit": "percent",
+    "positiveOnly": true,
+    "i18n": {
+      "zh-hans": {
+        "name": "在重击时的近战伤害",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "en": {
+        "name": "Melee Damage on Heavy Attack",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773b2",
+    "slug": "parry_angle",
+    "gameRef": "WeaponMeleeParryAngleMod",
+    "group": "melee",
+    "prefix": "Laci",
+    "suffix": "Nus",
+    "exclusiveTo": [
+      "melee",
+      "zaw"
+    ],
+    "positiveOnly": true,
+    "i18n": {
+      "zh-hans": {
+        "name": "招架角度",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "en": {
+        "name": "Parry Angle",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773b4",
+    "slug": "slam_attack_damage",
+    "gameRef": "WeaponMeleeSlamDamageMod",
+    "group": "melee",
+    "prefix": "Laci",
+    "suffix": "Nus",
+    "exclusiveTo": [
+      "melee",
+      "zaw"
+    ],
+    "unit": "percent",
+    "positiveOnly": true,
+    "i18n": {
+      "en": {
+        "name": "Slam Attack Damage",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "zh-hans": {
+        "name": "震地攻击伤害",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773b7",
+    "slug": "weak_point_critical_chance",
+    "gameRef": "WeaponWeakpointCriticalChance",
+    "group": "default",
+    "prefix": "Exiti",
+    "suffix": "Eus",
+    "exclusiveTo": [
+      "archgun",
+      "kitgun",
+      "pistol",
+      "rifle",
+      "shotgun"
+    ],
+    "unit": "percent",
+    "i18n": {
+      "en": {
+        "name": "Weak Point Critical Chance",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "zh-hans": {
+        "name": "弱点暴击几率",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  },
+  {
+    "id": "6ac6dec324fe2680bad773b8",
+    "slug": "weak_point_damage",
+    "gameRef": "WeaponWeakpointDamage",
+    "group": "default",
+    "prefix": "Eni",
+    "suffix": "Vo",
+    "exclusiveTo": [
+      "archgun",
+      "kitgun",
+      "pistol",
+      "rifle",
+      "shotgun"
+    ],
+    "unit": "percent",
+    "i18n": {
+      "en": {
+        "name": "Weak Point Damage",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      },
+      "zh-hans": {
+        "name": "弱点伤害",
+        "icon": "riven_attribute/unknown.png",
+        "thumb": "riven_attribute/unknown.thumb.png"
+      }
+    }
+  }
+]
