@@ -23,6 +23,7 @@ export const warframeErrorCodes = [
   'riven.unverifiedStat',
   'riven.variantRequired',
   'riven.variantError',
+  'riven.variantUnmatched',
   'wfm.inputItemName',
   'wfm.itemNotFound',
   'wfm.itemAmbiguous',

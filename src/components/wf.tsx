@@ -1493,7 +1493,10 @@ export function RivenComponent(data: RivenStatAnalyzeResult): Element {
         <div
           style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--wf-divider);"
         >
-          <h2 style="margin: 0; font-size: 20px; color: var(--wf-text-primary);">{data.name}</h2>
+          <div>
+            <h2 style="margin: 0; font-size: 20px; color: var(--wf-text-primary);">{data.name}</h2>
+            {data.variant ? <div style="font-size:14px;color:var(--wf-text-secondary);margin-top:4px;">{data.variant.status === 'inferred' ? '推测版本 · 多个版本符合，取词条最接近基准者' : data.variant.status === 'manual' ? '手动指定版本' : '自动识别版本'}</div> : null}
+          </div>
           <div
             style="background-color: var(--wf-bg-subtle); padding: 4px 12px; border-radius: 12px; font-size: 14px; line-height: 1; color: var(--wf-text-body);"
           >

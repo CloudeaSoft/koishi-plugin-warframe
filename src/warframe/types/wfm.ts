@@ -1,4 +1,6 @@
 import type { RivenAttribute, RivenOrder } from 'wfm-api-client'
+import type { WarframeError } from './warframe-result'
+import type { RivenStatAnalyzeResult } from './wf/riven'
 
 export type {
   ClosedStatisticsEntry,
@@ -48,9 +50,13 @@ export interface ItemStatisticsSummary {
 export type RivenAttributeShortInternal
   = RivenOrder['item']['attributes'][number] & {
     attribute?: RivenAttribute
+    displayValue?: number
+    grade?: number
   }
 
 export type RivenOrderInternal = Omit<RivenOrder, 'item'> & {
+  analysis?: RivenStatAnalyzeResult
+  analysisError?: WarframeError
   item: Omit<RivenOrder['item'], 'attributes'> & {
     attributes: RivenAttributeShortInternal[]
   }

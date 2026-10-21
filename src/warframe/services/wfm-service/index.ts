@@ -29,6 +29,7 @@ import {
   toTimeStamp,
 } from '../../utils'
 import { matchWFMItem, stringToWFMItem } from './wfm-service.item-matcher'
+import { analyzeRivenOrder } from './wfm-service.riven-analysis'
 import { matchRivenOrderInput, parseRivenOrderFilters } from './wfm-service.riven-filters'
 import { computeItemStatistics } from './wfm-service.statistics'
 
@@ -198,8 +199,7 @@ export async function getRivenOrders(input: string): Promise<WarframeResult<{ it
       },
     )
 
-    e.item.attributes = transformed
-    return e
+    return analyzeRivenOrder(targetItem, { ...e, item: { ...e.item, attributes: transformed } })
   })
 
   return { ok: true, data: { item: targetItem, orders } }

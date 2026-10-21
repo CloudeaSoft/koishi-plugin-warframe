@@ -169,7 +169,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
   })
 
   ctx.command('riven <img:image>', '分析紫卡截图')
-    .option('variant', '-v <variant:string> 组合枪形态: primary / secondary')
+    .option('variant', '-v <variant:string> 指定武器版本（默认自动检测）；组合枪支持 primary / secondary')
     .action(wf.rivenCommand)
   ctx
     .command(

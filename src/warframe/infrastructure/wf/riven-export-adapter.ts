@@ -1,8 +1,12 @@
 import type { RivenCalculationAttribute, RivenWeaponType } from '../../types/wf/riven'
 import type { RivenExportDefinition } from '../../types/wf/riven-export'
 import type { RivenAttributeUnit } from '../../types/wfm'
-import { ExportUpgrades } from 'warframe-public-export-plus'
+import { ExportUpgrades, ExportWeapons } from 'warframe-public-export-plus'
 import { normalizeName } from '../../utils/text'
+
+export function getRivenWeaponParent(uniqueName: string): string | undefined {
+  return ExportWeapons[uniqueName]?.parentName
+}
 
 export const rivenDefinitionTypes: Record<string, RivenWeaponType> = {
   LotusRifleRandomModRare: 'Rifle',

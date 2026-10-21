@@ -2,7 +2,7 @@ import type { RivenWeaponDisposition } from '../../types'
 import type { RivenExportWeapon } from '../../types/wf/riven-export'
 import { ExportUpgrades, ExportWeapons } from 'warframe-public-export-plus'
 import { rivenPublicExport } from '../../assets/index'
-import { rivenDefinitionTypes } from '../../infrastructure/wf/riven-export-adapter'
+import { getRivenWeaponParent, rivenDefinitionTypes } from '../../infrastructure/wf/riven-export-adapter'
 import { normalizeName } from '../../utils'
 
 // The enriched export supplies compatibility metadata, never numeric values.
@@ -70,3 +70,34 @@ export const weaponRivenDispositionDict = buildWeaponRivenDispositionDict(
   rivenPublicExport.weaponNamesZh,
   weaponTypes,
 )
+
+const weaponsByPath = new Map(rivenPublicExport.weapons.map(weapon => [weapon.uniqueName, weapon]))
+
+function familyRoot(path: string): string {
+  const visited = new Set<string>()
+  let parent = getRivenWeaponParent(path)
+  // Follow actual exported weapons only, never a shared generic weapon class.
+  while (parent && weaponsByPath.has(parent) && !visited.has(parent)) {
+    visited.add(path)
+    path = parent
+    parent = getRivenWeaponParent(path)
+  }
+  return path
+}
+
+const familyByPath = new Map([...weaponsByPath.keys()].map(path => [path, familyRoot(path)]))
+const weaponVariants = [...new Set(Object.values(weaponRivenDispositionDict))]
+
+export function getRivenWeaponCandidates(name: string): RivenWeaponDisposition[] {
+  const normalized = normalizeName(name)
+  const weapon = weaponRivenDispositionDict[normalized]
+    ?? weaponRivenDispositionDict[normalizeName(`${name} (Primary)`)]
+    ?? weaponRivenDispositionDict[normalizeName(`${name}（主武器）`)]
+    ?? weaponRivenDispositionDict[normalizeName(`${name} (Secondary)`)]
+    ?? weaponRivenDispositionDict[normalizeName(`${name}（副武器）`)]
+  if (!weapon)
+    return []
+  const family = familyByPath.get(weapon.weapon.uniqueName)
+  return weaponVariants.filter(candidate => candidate.calc.riventype === weapon.calc.riventype
+    && familyByPath.get(candidate.weapon.uniqueName) === family)
+}

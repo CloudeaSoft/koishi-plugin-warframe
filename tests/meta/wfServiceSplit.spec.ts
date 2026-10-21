@@ -80,9 +80,7 @@ describe('wf-service split contract', () => {
       'filterWeeklyRivens',
       'getWeeklyRivens',
       'getStaticRivenStats',
-      'getWeaponRivenDisposition',
       'parseOCRResult',
-      'analyzeRivenStat',
     ]
 
     expect(existsSync(rivenPath)).to.equal(true)
