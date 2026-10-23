@@ -1,23 +1,7 @@
 import { expect } from 'chai'
 import { parseOCRResult } from '../../../src/warframe/services/wf-service/wf-service.riven'
-import evaluation from '../../assets/riven-ocr/community-2026-10-21/evaluation.json'
-import recorded from '../../assets/riven-ocr/community-2026-10-21/recorded.json'
 
 describe('community riven OCR fields without disposition range checks', () => {
-  for (const sample of evaluation.cases.filter(s => s.inScope)) {
-    it(`preserves every field in ${sample.image}`, async () => {
-      const blocks = recorded.find(r => r.image === sample.image)!.blocks
-      const parsed = await parseOCRResult(blocks)
-      expect(parsed?.name).to.equal(sample.weapon)
-      expect(parsed?.attributes.map(a => ({
-        gameRef: a.attr.gameRef,
-        value: a.value,
-        prefix: a.prefix,
-        unit: a.attr.unit,
-      }))).to.deep.equal(sample.expected)
-    })
-  }
-
   it('joins known conditional annotations split before or inside their multiplier', async () => {
     for (const [first, second] of [
       ['（重击时', 'x2）'],

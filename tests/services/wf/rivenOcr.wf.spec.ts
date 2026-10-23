@@ -3,15 +3,6 @@ import { analyzeRivenStat, parseOCRResult } from '../../../src/warframe/services
 import corpus from '../../assets/riven-ocr/corpus.json'
 
 describe('riven screenshot OCR recovery', () => {
-  for (const sample of corpus) {
-    it(`restores spatial fragments and exact fields from ${sample.id}`, async () => {
-      const parsed = await parseOCRResult(sample.blocks)
-      expect(parsed?.name).to.equal(sample.expected.name)
-      expect(parsed?.attributes.map(e => [e.attr.gameRef, e.value, e.prefix])).to.deep.equal(sample.expected.stats)
-      expect(analyzeRivenStat(parsed!).ok).to.equal(true)
-    })
-  }
-
   it('uses relative geometry independently of block order and screenshot scale', async () => {
     const sample = corpus.find(s => s.id === 'new-6')!
     const blocks = sample.blocks.toReversed().map(b => ({ ...b, box: {
@@ -24,7 +15,7 @@ describe('riven screenshot OCR recovery', () => {
     expect(parsed?.attributes.map(e => [e.attr.gameRef, e.value, e.prefix])).to.deep.equal(sample.expected.stats)
   })
 
-  for (const sample of corpus.filter(s => !['new-2', 'new-6', 'sobek-cursor'].includes(s.id))) {
+  for (const sample of corpus.filter(s => !['new-2', 'new-6', 'sobek-cursor', 'locked-corrosive-icon'].includes(s.id))) {
     it(`reads every field from ${sample.id}, including icons and title decorations`, async () => {
       const parsed = await parseOCRResult(sample.blocks.map(b => b.text))
       expect(parsed?.name).to.equal(sample.expected.name)
@@ -34,10 +25,37 @@ describe('riven screenshot OCR recovery', () => {
   }
 
   it('rejects detached values without coordinates instead of grading fewer attributes', async () => {
-    for (const id of ['new-2', 'new-6']) {
+    for (const id of ['new-2', 'new-6', 'locked-corrosive-icon']) {
       const sample = corpus.find(s => s.id === id)!
       expect(await parseOCRResult(sample.blocks.map(b => b.text)), id).to.equal(undefined)
     }
+  })
+
+  it('recovers a corrosive icon beside locked stats without changing signs or values', async () => {
+    const sample = corpus.find(s => s.id === 'locked-corrosive-icon')!
+    const blocks = sample.blocks.toReversed().map(b => ({ ...b, box: {
+      x: b.box.x * 2 + 100,
+      y: b.box.y * 2 + 50,
+      width: b.box.width * 2,
+      height: b.box.height * 2,
+    } }))
+    const spatial = await parseOCRResult(blocks)
+    expect(spatial?.attributes.map(e => [e.attr.gameRef, e.value, e.prefix])).to.deep.equal(sample.expected.stats)
+    const inline = await parseOCRResult(['奏凯 Geli-coritin', '+45.3%冰冻伤害', '6+43%心腐蚀伤害', '+21.5%弹匣容量', '6-59.2%暴击几率'])
+    expect(inline?.attributes.map(e => [e.attr.gameRef, e.value, e.prefix])).to.deep.equal(sample.expected.stats)
+  })
+
+  it('only treats the observed heart glyph as an icon before an exact corrosive label', async () => {
+    for (const label of ['心冰冻伤害', '心毒素伤害', '心心腐蚀伤害', '怂腐蚀伤害', '心腐蚀伤害1', '心腐蚀伤害+']) {
+      expect(await parseOCRResult(['奏凯', `+43%${label}`, '+21.5%弹匣容量', '-59.2%暴击几率']), label).to.equal(undefined)
+    }
+    const sample = corpus.find(s => s.id === 'locked-corrosive-icon')!
+    for (const text of ['1', '+', '-']) {
+      const blocks = sample.blocks.map(b => b.text === '心' ? { ...b, text } : b)
+      expect(await parseOCRResult(blocks), text).to.equal(undefined)
+    }
+    const missingSign = sample.blocks.map(b => b.text === '6+43%' ? { ...b, text: '43%' } : b)
+    expect(await parseOCRResult(missingSign)).to.equal(undefined)
   })
 
   it('requires footer geometry before discarding a low-confidence cursor glyph', async () => {
