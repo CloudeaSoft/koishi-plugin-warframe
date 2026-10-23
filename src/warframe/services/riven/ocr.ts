@@ -8,6 +8,7 @@ import { fullWidthToHalfWidth, normalizeName, normalSimilarity } from '../../uti
 interface OcrRow {
   text: string
   fragmented: boolean
+  box?: OcrTextBlock['box']
 }
 
 export interface ParsedRiven {
@@ -90,7 +91,13 @@ function restoreRows(input: readonly (string | OcrTextBlock)[]): OcrRow[] | unde
       if (!isMetadata(first.text) && right.x - left.x - left.width > Math.max(left.height, right.height) * 4)
         return undefined
     }
-    result.push({ text: kept.map(b => b.text).join(' '), fragmented })
+    const top = Math.min(...kept.map(b => b.box!.y))
+    result.push({ text: kept.map(b => b.text).join(' '), fragmented, box: {
+      x: first.box!.x,
+      y: top,
+      width: Math.max(...kept.map(b => b.box!.x + b.box!.width)) - first.box!.x,
+      height: Math.max(...kept.map(b => b.box!.y + b.box!.height)) - top,
+    } })
   }
   return result
 }
@@ -179,6 +186,17 @@ function isMetadata(text: string): boolean {
 
 const conditionalAnnotation = /\((?:弓类武器效果加倍|重击时x2|x2forBows|x2forHeavyAttacks)\)$/i
 
+function canWrapLabel(row: OcrRow, next: OcrRow): boolean {
+  if (!/^\p{L}+$/u.test(next.text.replace(/\s/g, '')))
+    return false
+  if (!row.box || !next.box)
+    return true
+  const gap = next.box.y - row.box.y - row.box.height
+  const height = Math.min(row.box.height, next.box.height)
+  return gap >= -height * 0.25 && gap <= height * 0.75
+    && next.box.x >= row.box.x && next.box.x + next.box.width <= row.box.x + row.box.width
+}
+
 export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): ParsedRiven | undefined {
   const rows = restoreRows(input)
   if (!rows?.length)
@@ -210,7 +228,7 @@ export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): Parsed
       continue
 
     // Locked attributes display a padlock; Tencent sometimes reads it as a leading 6.
-    text = text.replace(/^[6🔒]([+\-])/u, '$1')
+    text = text.replace(/^[6🔒]([+\-x])/iu, '$1')
     if (text.includes('(') && !text.includes(')') && rows[i + 1]) {
       const joined = text + rows[i + 1].text.replace(/\s/g, '')
       // A wrapped x2 is explanatory text only when it completes a known annotation.
@@ -223,6 +241,17 @@ export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): Parsed
     const match = text.match(/^([+\-x]?)(\d+(?:\.\d+)?)(%|s)?([\p{L}/]+)$/iu)
     if (!match)
       return undefined
+    const next = rows[i + 1]
+    if (next && canWrapLabel(row, next)) {
+      const label = normalizeStat(match[4])
+      const joined = match[4] + next.text.replace(/\s/g, '')
+      // Complete only a known label; never guess missing numbers or extend an already complete stat.
+      if (!stats.some(s => aliases(s).includes(label))
+        && stats.filter(s => aliases(s).includes(normalizeStat(joined))).length === 1) {
+        match[4] = joined
+        i++
+      }
+    }
     const [, symbol, number, unit, label] = match
     if (!symbol && input.some(b => typeof b !== 'string'))
       return undefined
