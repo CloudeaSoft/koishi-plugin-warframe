@@ -28,14 +28,20 @@ yarn test
 
 数值来源：官方 `upgradeEntries[].upgradeValues[].value`；倾向来源：官方
 `omegaAttenuation`。组合枪主武器使用 `primeOmegaAttenuation`，副武器使用
-`omegaAttenuation`。截图分析与 `wmr` 都会按全部词条的数值自动检测武器版本，
+`omegaAttenuation`。这些历史倾向保留用于兼容旧卡数据。
+
+根据[官方倾向调整公告](https://forums.warframe.com/topic/1529475-dev-workshop-ammo-efficiency-changes-riven-disposition-retirement/)，
+所有紫卡的数值范围统一为原系统的 1.2 倾向。截图分析与 `wmr` 优先用 1.2
+尝试所有武器版本；只有全部版本都不匹配时，才回退到原有倾向及版本评分。
+两者都会按全部词条的数值自动检测武器版本，
 包括组合枪主副武器。仍可用 `riven -v primary`、`riven -v secondary` 或
 `riven -v "Boltor Prime"` 显式指定版本；指定后不会自动切换到其他版本。
 
 版本候选使用 `warframe-public-export-plus` 的 `parentName` 关联，只沿快照中实际存在
 的武器追溯，不把共用的泛型武器父类当成同系列。候选仍须属于同一紫卡类别。
 所有词条均落在参考范围内（包含显示舍入容差）才算匹配。唯一匹配显示“自动识别”；
-多个匹配按各词条相对基准的绝对偏差均值排序，选择最小者并显示“推测”。相同分数
+优先使用 1.2 下的匹配，即使历史倾向的偏差更小也不会取代它。
+同一轮多个匹配按各词条相对基准的绝对偏差均值排序，选择最小者并显示“推测”。相同分数
 按英文版本名稳定排序，因此相同倾向的版本不能解释为确定识别。
 
 无匹配或不支持的词条不会强行评分：`wmr` 保留报价及词条，浮动显示 `—`；
