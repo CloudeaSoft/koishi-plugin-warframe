@@ -1,5 +1,5 @@
 import type { RivenCalculationStat } from '../../infrastructure/wf/riven-export-adapter'
-import type { RivenAnalysisInput, RivenStatAnalyzeResult, RivenStatAnalyzsis, RivenStatCountType, WarframeResult } from '../../types'
+import type { RivenAnalysisInput, RivenStatAnalyzeResult, RivenStatAnalyzsis, RivenStatCountType, RivenWeaponDisposition, WarframeResult } from '../../types'
 import { rivenStatsByType } from '../../data/wf/rivenBaseValues'
 import { getRivenWeaponCandidates, weaponRivenDispositionDict } from '../../data/wf/rivenDisposition'
 import { rivenStatFixFactor } from '../../data/wf/rivenStatData'
@@ -19,20 +19,26 @@ export function analyzeRiven(input: RivenAnalysisInput, variant?: string): Warfr
   }
 
   const matches: { data: RivenStatAnalyzeResult, score: number, key: string }[] = []
-  for (const candidate of candidates) {
-    const result = analyzeRivenStat({ ...input, name: candidate.name.en })
-    if (!result.ok)
-      return result
-    const stats = [...result.data.buffs, ...result.data.curses]
-    // Card values are displayed to one decimal (multipliers to two).
-    // Accept display rounding at a boundary without broadening the roll model.
-    if (!stats.every((stat) => {
-      const tolerance = stat.unit === 'multiply' ? 0.005 : 0.05
-      return stat.value >= stat.min - tolerance - 1e-8 && stat.value <= stat.max + tolerance + 1e-8
-    })) {
-      continue
+  // Hotfix 44.1.3 unifies every version at 1.2. Only try historical
+  // dispositions when no version matches, so old screenshots still work.
+  for (const disposition of [1.2, undefined]) {
+    for (const candidate of candidates) {
+      const result = analyzeWeaponRivenStat(input, candidate, disposition)
+      if (!result.ok)
+        return result
+      const stats = [...result.data.buffs, ...result.data.curses]
+      // Card values are displayed to one decimal (multipliers to two).
+      // Accept display rounding at a boundary without broadening the roll model.
+      if (!stats.every((stat) => {
+        const tolerance = stat.unit === 'multiply' ? 0.005 : 0.05
+        return stat.value >= stat.min - tolerance - 1e-8 && stat.value <= stat.max + tolerance + 1e-8
+      })) {
+        continue
+      }
+      matches.push({ data: result.data, score: stats.reduce((sum, stat) => sum + Math.abs(stat.percent), 0) / stats.length, key: candidate.name.en })
     }
-    matches.push({ data: result.data, score: stats.reduce((sum, stat) => sum + Math.abs(stat.percent), 0) / stats.length, key: candidate.name.en })
+    if (matches.length)
+      break
   }
   if (!matches.length)
     return failure('riven.variantUnmatched')
@@ -78,10 +84,17 @@ export function analyzeRivenStat(parseResult: RivenAnalysisInput, variant?: stri
     })
   }
 
+  return analyzeWeaponRivenStat(parseResult, weaponRiven)
+}
+
+function analyzeWeaponRivenStat(
+  parseResult: RivenAnalysisInput,
+  weaponRiven: RivenWeaponDisposition,
+  disposition = weaponRiven.calc.disposition,
+): WarframeResult<RivenStatAnalyzeResult> {
   const rank = parseResult.rank ?? 8
   if (!Number.isInteger(rank) || rank < 0 || rank > 8)
     return failure('riven.statTypeError')
-  const disposition = weaponRiven.calc.disposition
   const stats = rivenStatsByType[weaponRiven.calc.riventype]
   if (!stats || parseResult.attributes.length < 2 || parseResult.attributes.length > 4) {
     return failure('riven.statTypeError')

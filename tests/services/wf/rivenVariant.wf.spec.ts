@@ -1,6 +1,6 @@
 import type { RivenAnalysisInput } from '../../../src/warframe/types'
 import { expect } from 'chai'
-import { analyzeRiven } from '../../../src/warframe/services/riven/analysis'
+import { analyzeRiven, getWeaponRivenDisposition } from '../../../src/warframe/services/riven/analysis'
 
 function card(name: string, chance: number, damage: number, rank = 8): RivenAnalysisInput {
   return { name, rank, attributes: [
@@ -10,6 +10,54 @@ function card(name: string, chance: number, damage: number, rank = 8): RivenAnal
 }
 
 describe('automatic riven weapon version analysis', () => {
+  it('accepts the unified disposition for every selected rifle version', () => {
+    for (const name of ['Boltor', 'Boltor Prime', 'Telos Boltor', 'Torid', 'Kuva Bramma']) {
+      const result = analyzeRiven(card(name, 178.2, 142.6), name)
+      expect(result.ok, name).to.equal(true)
+      if (!result.ok) {
+        throw new Error(result.error.code)
+      }
+      expect(result.data.disposition).to.equal(1.2)
+      expect(result.data.name).to.equal(getWeaponRivenDisposition(name)!.name.zh)
+      expect(result.data.variant?.status).to.equal('manual')
+      expect(result.data.buffs[0].percent).to.be.closeTo(0, 0.0001)
+    }
+  })
+
+  it('prefers 1.2 even when a legacy disposition has a closer roll', () => {
+    // These are the exact two-positive means at the legacy Boltor disposition 1.3.
+    const result = analyzeRiven(card('Boltor', 193.05, 154.44))
+    if (!result.ok) {
+      throw new Error(result.error.code)
+    }
+    expect(result.data.disposition).to.equal(1.2)
+    expect(result.data.buffs[0].percent).to.be.closeTo(1 / 12, 0.0001)
+    // New calculations must not overwrite the historical data used by the fallback.
+    expect(getWeaponRivenDisposition('Boltor')?.calc.disposition).to.equal(1.3)
+  })
+
+  it('accepts 1.2 for both Kitgun slots without substituting the requested slot', () => {
+    for (const variant of ['primary', 'secondary']) {
+      const result = analyzeRiven(card('Catchmoon', 178.2, 106.9), variant)
+      if (!result.ok) {
+        throw new Error(result.error.code)
+      }
+      expect(result.data.disposition).to.equal(1.2)
+      expect(result.data.variant?.status).to.equal('manual')
+      expect(result.data.name).to.equal(variant === 'primary' ? '捕月（主武器）' : '捕月（副武器）')
+    }
+  })
+
+  it('does not infer a unique Kitgun slot from shared 1.2 values', () => {
+    const result = analyzeRiven(card('Catchmoon', 178.2, 106.9))
+    if (!result.ok) {
+      throw new Error(result.error.code)
+    }
+    expect(result.data.disposition).to.equal(1.2)
+    expect(result.data.variant?.status).to.equal('inferred')
+    expect(result.data.variant?.candidates).to.have.length(2)
+  })
+
   it('selects the only family member that explains all stats', () => {
     const result = analyzeRiven(card('Boltor', 210, 168))
     expect(result.ok).to.equal(true)
@@ -36,7 +84,7 @@ describe('automatic riven weapon version analysis', () => {
   })
 
   it('detects Kitgun primary and secondary without a manual option', () => {
-    for (const [chance, damage, disposition] of [[163.3, 98, 1.1], [111.4, 66.8, 0.75]]) {
+    for (const [chance, damage, disposition] of [[150, 90, 1.1], [111.4, 66.8, 0.75]]) {
       const result = analyzeRiven(card('Catchmoon', chance, damage))
       expect(result.ok).to.equal(true)
       if (!result.ok) {
@@ -48,12 +96,12 @@ describe('automatic riven weapon version analysis', () => {
   })
 
   it('honors an explicit version instead of silently substituting another', () => {
-    const result = analyzeRiven(card('Catchmoon', 163.3, 98), 'secondary')
+    const result = analyzeRiven(card('Catchmoon', 150, 90), 'secondary')
     expect(result.ok).to.equal(false)
     if (!result.ok) {
       expect(result.error.code).to.equal('riven.variantUnmatched')
     }
-    const selected = analyzeRiven(card('Catchmoon', 163.3, 98), 'primary')
+    const selected = analyzeRiven(card('Catchmoon', 150, 90), 'primary')
     expect(selected.ok).to.equal(true)
     if (selected.ok) {
       expect(selected.data.variant?.status).to.equal('manual')

@@ -173,9 +173,10 @@ describe('riven order attribute filters', () => {
     if (!result.ok) {
       throw new Error(result.error.code)
     }
-    expect(result.data.orders[0].analysis).to.not.equal(undefined)
-    expect(result.data.orders[0].item.attributes[0].grade).to.be.closeTo(0, 0.001)
-    expect(result.data.orders[0].item.attributes[1].grade).to.be.closeTo(0, 0.001)
+    expect(result.data.orders[0].analysis?.disposition).to.equal(1.2)
+    // Former 1.3 means are +8.33% rolls under the preferred 1.2 model.
+    expect(result.data.orders[0].item.attributes[0].grade).to.be.closeTo(0.08333, 0.001)
+    expect(result.data.orders[0].item.attributes[1].grade).to.be.closeTo(0.08333, 0.001)
   })
 
   it('converts beneficial negative recoil and detrimental positive recoil correctly', async () => {
@@ -206,8 +207,9 @@ describe('riven order attribute filters', () => {
     if (!result.ok) {
       throw new Error(result.error.code)
     }
-    expect(result.data.orders[0].analysis).to.not.equal(undefined)
-    expect(result.data.orders[0].item.attributes[0].grade).to.be.closeTo(0.00147, 0.0001)
+    expect(result.data.orders[0].analysis?.disposition).to.equal(1.2)
+    // (1.58 - 1) / (0.45 * 0.99 * 1.2) - 1; do not scale the neutral 1.
+    expect(result.data.orders[0].item.attributes[0].grade).to.be.closeTo(0.08492, 0.0001)
     expect(result.data.orders[0].item.attributes[0].displayValue).to.equal(1.58)
   })
 
