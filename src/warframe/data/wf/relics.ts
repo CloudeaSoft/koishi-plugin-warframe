@@ -1,34 +1,37 @@
+import type { IRelic, TMissionDeck } from 'warframe-public-export-plus'
 import type { Relic, RelicRewardRarity } from '../../types'
 import { ExportRelics, ExportRewards } from 'warframe-public-export-plus'
-import { fixRelicRewardKey } from '../../infrastructure/wf/wf-export-adapter'
+import { fixRelicRewardKey, relicEraToTransKey } from '../../infrastructure/wf/wf-export-adapter'
 import { normalizeName } from '../../utils'
 
-export const relics: Record<string, Relic> = (() => {
+export function buildRelicDict(
+  exportRelics: Record<string, IRelic>,
+  exportRewards: Record<string, TMissionDeck>,
+): Record<string, Relic> {
   const result: Record<string, Relic> = {}
-  for (const key in ExportRelics) {
-    const exportRelic = ExportRelics[key]
-    const exportRewards = ExportRewards[exportRelic.rewardManifest]
+  for (const key in exportRelics) {
+    const exportRelic = exportRelics[key]
+    const exportRewardTiers = exportRewards[exportRelic.rewardManifest]
 
-    const era = `/Lotus/Language/Relics/Era_${exportRelic.era.toUpperCase()}`
     const relicKey = normalizeName(exportRelic.era + exportRelic.category)
 
-    const rewards = (exportRewards[0] ?? []).map((r) => {
-      const item = fixRelicRewardKey(r.type)
+    const rewards = (exportRewardTiers?.[0] ?? []).map((r) => {
       return {
-        name: item,
+        name: fixRelicRewardKey(r.type),
         rarity: r.rarity as RelicRewardRarity,
         quantity: r.itemCount,
       }
     })
 
-    const relic: Relic = {
+    result[relicKey] = {
       tier: exportRelic.era,
-      tierKey: era,
+      tierKey: relicEraToTransKey(exportRelic.era),
       num: exportRelic.category,
       items: rewards,
     }
-    result[relicKey] = relic
   }
 
   return result
-})()
+}
+
+export const relics: Record<string, Relic> = buildRelicDict(ExportRelics, ExportRewards)
