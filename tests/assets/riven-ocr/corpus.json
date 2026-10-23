@@ -2944,5 +2944,409 @@
         "percent"
       ]
     }
+  },
+  {
+    "id": "torid-wrapped-faction",
+    "image": "torid-wrapped-faction.png",
+    "sha256": "112a27c8aa712505c6ad47dba6f21a0f282799f999e900a079fb54c2163b5300",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 97,
+        "box": {
+          "x": 502,
+          "y": 62,
+          "width": 90,
+          "height": 40
+        }
+      },
+      {
+        "text": "托里德 Croni-",
+        "confidence": 94,
+        "box": {
+          "x": 126,
+          "y": 318,
+          "width": 386,
+          "height": 63
+        }
+      },
+      {
+        "text": "critatox",
+        "confidence": 99,
+        "box": {
+          "x": 207,
+          "y": 387,
+          "width": 228,
+          "height": 52
+        }
+      },
+      {
+        "text": "+176.4%暴击几率",
+        "confidence": 99,
+        "box": {
+          "x": 130,
+          "y": 444,
+          "width": 379,
+          "height": 52
+        }
+      },
+      {
+        "text": "+73.7%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 75,
+          "y": 489,
+          "width": 488,
+          "height": 55
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 99,
+        "box": {
+          "x": 205,
+          "y": 541,
+          "width": 202,
+          "height": 47
+        }
+      },
+      {
+        "text": "+99.7%毒素伤害",
+        "confidence": 99,
+        "box": {
+          "x": 121,
+          "y": 589,
+          "width": 394,
+          "height": 44
+        }
+      },
+      {
+        "text": "6x0.63对 Infested的伤",
+        "confidence": 90,
+        "box": {
+          "x": 77,
+          "y": 637,
+          "width": 493,
+          "height": 45
+        }
+      },
+      {
+        "text": "害",
+        "confidence": 100,
+        "box": {
+          "x": 298,
+          "y": 685,
+          "width": 44,
+          "height": 45
+        }
+      },
+      {
+        "text": "段位 13",
+        "confidence": 99,
+        "box": {
+          "x": 93,
+          "y": 759,
+          "width": 139,
+          "height": 42
+        }
+      },
+      {
+        "text": "5126",
+        "confidence": 78,
+        "box": {
+          "x": 422,
+          "y": 762,
+          "width": 118,
+          "height": 38
+        }
+      }
+    ],
+    "expected": {
+      "name": "托里德",
+      "stats": [
+        [
+          "WeaponCritChanceMod",
+          176.4,
+          "+"
+        ],
+        [
+          "WeaponFireRateMod",
+          73.7,
+          "+"
+        ],
+        [
+          "WeaponToxinDamageMod",
+          99.7,
+          "+"
+        ],
+        [
+          "WeaponFactionDamageInfested",
+          0.63,
+          "x"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "multiply"
+      ]
+    }
+  },
+  {
+    "id": "harmony-wrapped-stats",
+    "image": "harmony-wrapped-stats.png",
+    "sha256": "ab600dae5076259042a30dca80daf3d802a54461a9c1c586fce57311e6f9df66",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 198,
+          "y": 27,
+          "width": 37,
+          "height": 15
+        }
+      },
+      {
+        "text": "和谐 Pleci-critaata",
+        "confidence": 99,
+        "box": {
+          "x": 28,
+          "y": 147,
+          "width": 201,
+          "height": 24
+        }
+      },
+      {
+        "text": "+137.6%滑行攻击暴击几",
+        "confidence": 100,
+        "box": {
+          "x": 30,
+          "y": 172,
+          "width": 197,
+          "height": 19
+        }
+      },
+      {
+        "text": "率",
+        "confidence": 100,
+        "box": {
+          "x": 119,
+          "y": 191,
+          "width": 20,
+          "height": 18
+        }
+      },
+      {
+        "text": "+195.5%暴击几率(重击",
+        "confidence": 99,
+        "box": {
+          "x": 30,
+          "y": 208,
+          "width": 196,
+          "height": 21
+        }
+      },
+      {
+        "text": "时x2)",
+        "confidence": 99,
+        "box": {
+          "x": 99,
+          "y": 228,
+          "width": 49,
+          "height": 18
+        }
+      },
+      {
+        "text": "+170.9%近战伤害",
+        "confidence": 99,
+        "box": {
+          "x": 56,
+          "y": 243,
+          "width": 144,
+          "height": 21
+        }
+      },
+      {
+        "text": "-94.3%触发时间",
+        "confidence": 100,
+        "box": {
+          "x": 63,
+          "y": 265,
+          "width": 131,
+          "height": 18
+        }
+      },
+      {
+        "text": "段位16",
+        "confidence": 94,
+        "box": {
+          "x": 41,
+          "y": 292,
+          "width": 55,
+          "height": 18
+        }
+      },
+      {
+        "text": "529",
+        "confidence": 71,
+        "box": {
+          "x": 177,
+          "y": 293,
+          "width": 36,
+          "height": 16
+        }
+      }
+    ],
+    "expected": {
+      "name": "和谐",
+      "stats": [
+        [
+          "SlideAttackCritChanceMod",
+          137.6,
+          "+"
+        ],
+        [
+          "WeaponCritChanceMod",
+          195.5,
+          "+"
+        ],
+        [
+          "WeaponMeleeDamageMod",
+          170.9,
+          "+"
+        ],
+        [
+          "WeaponProcTimeMod",
+          -94.3,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "harmony-cropped-annotation",
+    "image": "harmony-cropped-annotation.png",
+    "sha256": "bddec24d83ba9f39901efeb03607ba02a2fa5c9be868635249f84cdad740a270",
+    "blocks": [
+      {
+        "text": "和谐 Plaga-",
+        "confidence": 98,
+        "box": {
+          "x": 44,
+          "y": 0,
+          "width": 131,
+          "height": 27
+        }
+      },
+      {
+        "text": "critator",
+        "confidence": 99,
+        "box": {
+          "x": 66,
+          "y": 29,
+          "width": 87,
+          "height": 18
+        }
+      },
+      {
+        "text": "+2攻击范围",
+        "confidence": 99,
+        "box": {
+          "x": 60,
+          "y": 49,
+          "width": 99,
+          "height": 17
+        }
+      },
+      {
+        "text": "+111.3%异常状态伤害",
+        "confidence": 99,
+        "box": {
+          "x": 14,
+          "y": 67,
+          "width": 189,
+          "height": 19
+        }
+      },
+      {
+        "text": "+208.5%暴击几率(重击",
+        "confidence": 99,
+        "box": {
+          "x": 5,
+          "y": 87,
+          "width": 206,
+          "height": 21
+        }
+      },
+      {
+        "text": "时x2)",
+        "confidence": 99,
+        "box": {
+          "x": 79,
+          "y": 106,
+          "width": 50,
+          "height": 18
+        }
+      },
+      {
+        "text": "-111.2%滑行攻击暴击几",
+        "confidence": 100,
+        "box": {
+          "x": 6,
+          "y": 120,
+          "width": 205,
+          "height": 25
+        }
+      },
+      {
+        "text": "率",
+        "confidence": 100,
+        "box": {
+          "x": 100,
+          "y": 142,
+          "width": 20,
+          "height": 19
+        }
+      }
+    ],
+    "expected": {
+      "name": "和谐",
+      "stats": [
+        [
+          "WeaponMeleeRangeIncMod",
+          2,
+          "+"
+        ],
+        [
+          "WeaponStatusDamage",
+          111.3,
+          "+"
+        ],
+        [
+          "WeaponCritChanceMod",
+          208.5,
+          "+"
+        ],
+        [
+          "SlideAttackCritChanceMod",
+          -111.2,
+          "-"
+        ]
+      ],
+      "units": [
+        "",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
   }
 ]

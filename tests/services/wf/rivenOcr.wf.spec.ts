@@ -3,6 +3,46 @@ import { analyzeRivenStat, parseOCRResult } from '../../../src/warframe/services
 import corpus from '../../assets/riven-ocr/corpus.json'
 
 describe('riven screenshot OCR recovery', () => {
+  it('reads locked faction multipliers without changing their value', async () => {
+    for (const prefix of ['6x', '6X', '6×', '🔒x']) {
+      const parsed = await parseOCRResult(['托里德', '+176.4%暴击几率', '+99.7%毒素伤害', `${prefix}0.63对Infested的伤害`])
+      expect(parsed?.attributes.map(a => [a.attr.gameRef, a.value, a.prefix]), prefix).to.deep.equal([
+        ['WeaponCritChanceMod', 176.4, '+'],
+        ['WeaponToxinDamageMod', 99.7, '+'],
+        ['WeaponFactionDamageInfested', 0.63, 'x'],
+      ])
+    }
+  })
+
+  it('joins an exact wrapped stat label independently of block order and scale', async () => {
+    const sample = corpus.find(s => s.id === 'torid-wrapped-faction')!
+    const blocks = sample.blocks.toReversed().map(b => ({ ...b, box: {
+      x: b.box.x * 2 + 100,
+      y: b.box.y * 2 + 50,
+      width: b.box.width * 2,
+      height: b.box.height * 2,
+    } }))
+    const parsed = await parseOCRResult(blocks)
+    expect(parsed?.attributes.map(a => [a.attr.gameRef, a.value, a.prefix])).to.deep.equal(sample.expected.stats)
+  })
+
+  it('does not absorb numeric, unknown, or spatially unrelated label continuations', async () => {
+    const sample = corpus.find(s => s.id === 'torid-wrapped-faction')!
+    const tail = sample.blocks.find(b => b.text === '害')!
+    for (const replacement of [
+      { ...tail, text: '害1' },
+      { ...tail, text: '+25%伤害' },
+      { ...tail, text: '未知' },
+      { ...tail, box: { ...tail.box, x: 800 } },
+      { ...tail, box: { ...tail.box, y: 730 } },
+    ]) {
+      const blocks = sample.blocks.map(b => b === tail ? replacement : b)
+      expect(await parseOCRResult(blocks), JSON.stringify(replacement)).to.equal(undefined)
+    }
+    expect(await parseOCRResult(['托里德', '+176.4%暴击几率', '+99.7%毒素伤害', '66x0.63对Infested伤害'])).to.equal(undefined)
+    expect(await parseOCRResult(['托里德', '+176.4%暴击几率', '+99.7%毒素伤害', 'x0.63对Infested伤害', '害'])).to.equal(undefined)
+  })
+
   it('uses relative geometry independently of block order and screenshot scale', async () => {
     const sample = corpus.find(s => s.id === 'new-6')!
     const blocks = sample.blocks.toReversed().map(b => ({ ...b, box: {
