@@ -100,6 +100,16 @@
           "WeaponAmmoMaxMod",
           -61.1
         ]
+      ],
+      "prefixes": [
+        "+",
+        "+",
+        "-"
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent"
       ]
     }
   },
@@ -194,6 +204,16 @@
           "WeaponAmmoMaxMod",
           -61.1
         ]
+      ],
+      "prefixes": [
+        "+",
+        "+",
+        "-"
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent"
       ]
     }
   },

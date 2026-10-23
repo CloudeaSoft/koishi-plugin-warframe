@@ -147,8 +147,10 @@ function matchStat(label: string, stats: RivenCalculationStat[], fragmented: boo
   if (exact.length)
     return exact.length === 1 ? exact[0].stat : undefined
 
-  // The impact glyph resembles 入/人. Strip it only before an exact physical-damage label.
-  const icon = candidates.filter(c => elemental.test(c.stat.gameRef) && /^[入人]/.test(input) && c.names.includes(input.slice(1)))
+  // OCR reads impact as 入/人 and corrosive as 心; require an exact remaining label.
+  const icon = candidates.filter(c => elemental.test(c.stat.gameRef)
+    && (/^[入人]/.test(input) || (c.stat.gameRef === 'WeaponCorrosiveDamageMod' && input.startsWith('心')))
+    && c.names.includes(input.slice(1)))
   if (icon.length === 1)
     return icon[0].stat
 

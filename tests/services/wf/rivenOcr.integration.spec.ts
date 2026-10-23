@@ -40,6 +40,7 @@ describe('riven image analysis pipeline', () => {
         'new-9': '野猪 Prime',
         'test-riven10': '守望者 Prime',
         'ogris-projectile-speed': '赤毒·食人女魔',
+        'nukor-locked-factions': '赤毒·努寇微波枪',
       }
       expect(result.data.name).to.equal(detectedNames[sample.id] ?? sample.expected.name)
       expect(result.data.variant?.status).to.be.oneOf(['matched', 'inferred'])

@@ -28,6 +28,7 @@
   "scripts": {
     "riven:update": "node scripts/update-riven-data.mjs",
     "riven:test-sync": "vitest run tests/scripts/updateRivenData.spec.ts",
+    "test:riven-ocr": "vitest run tests/services/wf/rivenOcr tests/infrastructure/ocr.infra.spec.ts",
     "build": "node scripts/download-zh-dict.mjs && yakumo build && node scripts/copy-assets.mjs",
     "clean": "yakumo clean",
     "dep": "yakumo upgrade",

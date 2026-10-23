@@ -6,7 +6,7 @@
 
 - 依据相对坐标恢复同行碎片，不依赖供应商数组顺序或固定分辨率。部分块有坐标、部分缺失时拒绝解析，避免退回错误顺序后漏读属性。
 - 武器名从现有武器词库中匹配；拉丁紫卡名称只接受官方导出的前后缀词段，忽略标题前无关的卡框装饰。
-- 锁定图标被误读成前置 `6`、冲击图标被误读成“入/人”时，按受限规则处理。属性文字优先完整匹配，再考虑有唯一候选的纠错。
+- 锁定图标被误读成前置 `6`、冲击图标被误读成“入/人”时，按受限规则处理。腐蚀图标被误读成“心”时，只在剩余文字完整匹配腐蚀词条时移除，不泛化到其他属性。属性文字优先完整匹配，再考虑有唯一候选的纠错。
 - 对“弓类武器效果加倍”“重击时 x2”等说明合并换行，包括下一行以 `x2)` 或 `2)` 开头的情况。只在拼接后构成完整的已知括号说明时合并，数值始终取属性本身。
 - 同行数值和名称分离时，可以根据坐标重新组合。只有夹在两者之间、字号明显较小的无符号百分比才视为浮层；存在竞争数值则拒绝，不把数字拼成新值。
 - 遮挡后留下至少三个汉字的词条后缀，只在坐标证明属于同一行且词库候选唯一时恢复。不推测被遮住的数字或正负号。
@@ -106,24 +106,42 @@ OCR 密钥在调用前去除首尾空白，避免粘贴配置中的换行导致�
 
 录制数据回放结果为 **10/10 张通过，35/35 条词条身份、数值、正负号与单位正确**。战刃原图另行重新调用腾讯 OCR，正确解析 `+17` 初始连击、`+65.4%` 暴击伤害、`+142%` 暴击几率和 `-77.4%` 处决伤害。全程不调用评分或倾向范围校验；结果与新 OCR 返回保存为 `verification-after-fix.json`。
 
-`tests/services/wf/rivenOcr.community.spec.ts` 回放这 10 张图，并覆盖中英文说明断行、真实词条不能被吞掉以及旧百分比格式仍拒绝的反例。修复前先运行并确认战刃及断行说明用例失败，修复后通过。
+这 10 张图现由统一的 `tests/services/wf/rivenOcr.fixtures.spec.ts` 回放。`tests/services/wf/rivenOcr.community.spec.ts` 覆盖中英文说明断行、真实词条不能被吞掉以及旧百分比格式仍拒绝的反例。修复前先运行并确认战刃及断行说明用例失败，修复后通过。
+
+## 2026-10-23 锁定属性与腐蚀图标样本
+
+新增两张用户原图，实际调用腾讯 OCR 后，努寇微波枪在当前代码下已能正确解析，本次未复现其失败；奏凯的腐蚀行被拆成 `6+43%`、`心`、`腐蚀伤害`，其中“心”来自腐蚀图标，导致原解析器拒绝整卡。
+
+修复仅允许在完整匹配腐蚀属性时移除这个前置图标字符，继续使用已有坐标重组和锁图标处理。两张图片均经过本地图片下载、真实腾讯 OCR、解析与评分完整链路，逐字段正确：
+
+| 样本 | 匹配武器 | 全部属性（按图中顺序） |
+| --- | --- | --- |
+| `nukor-locked-factions.jpg` | 赤毒·努寇微波枪 | ×1.2 对 Corpus 伤害、+96% 伤害、+74.6% 暴击几率、×0.83 对 Infested 伤害 |
+| `locked-corrosive-icon.jpg` | 奏凯 | +45.3% 冰冻伤害、+43% 腐蚀伤害、+21.5% 弹匣容量、-59.2% 暴击几率 |
+
+新增回归覆盖坐标缩放及乱序、同行内联图标、锁定负属性，以及错误图标、数字残留、缺失符号和无坐标碎片的拒绝。未修改属性数值、倾向范围或旧百分比格式策略。
 
 ## 回归素材与验证
 
-- `tests/assets/riven-ocr/corpus.json`：22 份文本、置信度、坐标、图片 SHA-256 及人工核对字段；不含密钥或请求标识。
-- 同目录 `image-1.png` 至 `image-9.png`、`ogris-projectile-speed.jpg` 和 `sobek-cursor.jpg`：用户提供的原图；其余图片引用已有 `tests/assets/test-riven*.png`。
+一条命令运行全部离线 OCR 回归（无需密钥，不请求腾讯接口）：
+
+```sh
+yarn test:riven-ocr
+```
+
+目前共有 **39 张图片**：主样本集 24 张、社区样本 12 张、合成指针样本 3 张。统一回放断言 **36 张完整解析、2 张旧百分比格式拒绝、1 张数字遮挡拒绝**，这些样本都参与测试，没有静默跳过。完整解析逐字段核对武器名、词条身份、数值、正负号与单位，不检查倾向范围。既有集成测试另外验证 OCR 适配及评分链路。
+
+`tests/services/wf/rivenOcr.fixtures.spec.ts` 还核对图片 SHA-256 和全部图片的登记情况：图片被替换、缺失，或新增图片却没有加入标注与 OCR 回放记录，测试都会失败。失败名称包含具体样本 ID，断言输出实际字段与正确标注的差异；需要逐项显示时运行 `yarn test:riven-ocr --reporter=verbose`。全量 `yarn test` 也会自动运行这套测试。
+
+- `tests/assets/riven-ocr/corpus.json`：24 份文本、置信度、坐标、图片 SHA-256 及人工核对字段；不含密钥或请求标识。
+- 同目录 `image-1.png` 至 `image-9.png`、`ogris-projectile-speed.jpg`、`sobek-cursor.jpg`、`nukor-locked-factions.jpg` 和 `locked-corrosive-icon.jpg`：用户提供的原图；其余图片引用已有 `tests/assets/test-riven*.png`。
 - `tests/assets/riven-ocr/synthetic-cursors/`：3 张合成图片、生成提示词及独立的 OCR 回放记录；不混入上述真实截图样本统计。
 - `tests/services/wf/rivenOcr.wf.spec.ts`：逐字段断言及歧义、残缺、多卡、混合坐标等反例。
 - `tests/services/wf/rivenOcr.integration.spec.ts`：仅替换外部图片下载和 SDK 响应，运行真实适配、解析与评分。
 - `tests/infrastructure/ocr.infra.spec.ts`：坐标保留、密钥空白、空响应和网络失败。
 
-离线回归不消耗 OCR 额度：
+后续添加图片时，保存原图、图片哈希、实际 OCR 文本/置信度/坐标，以及人工核对的完整期望结果。主样本使用 `expected.name`、`expected.stats`（属性身份、数值、符号）和对应顺序的 `expected.units`；社区样本保留原始标注与独立的字段映射。不可用待测解析器生成或覆盖正确标注。遮挡、明确不支持的格式需说明拒绝原因，不作为成功样本统计。
 
-```sh
-yarn build
-yarn vitest run tests/services/wf/rivenOcr.wf.spec.ts tests/services/wf/rivenOcr.integration.spec.ts tests/infrastructure/ocr.infra.spec.ts
-```
-
-完整检查顺序为 `yarn build`、`yarn dtsc`、`yarn lint`、`yarn test`。
+完整检查顺序仍为 `yarn build`、`yarn dtsc`、`yarn lint`、`yarn test`。
 
 这些图片也是规则开发使用的样本，结果不能视为未见图片上的准确率。当前没有第二 OCR 引擎、图像增强或模型微调；完全遮挡的数字，以及 OCR 错读后仍呈现为合法数值的情况，无法仅靠本解析器可靠恢复。
