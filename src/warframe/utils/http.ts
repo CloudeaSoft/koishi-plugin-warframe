@@ -18,6 +18,30 @@ const defaultHeaders = {
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD'
 
+/**
+ * Raw response for API clients that own envelope parsing and rate limiting.
+ * No automatic retries: each attempt must pass through the client's limiter.
+ */
+export async function fetchAsyncResponse(
+  url: string,
+  init: RequestInit = {},
+  onError?: (error: unknown) => void,
+): Promise<Response | undefined> {
+  try {
+    const headers = new Headers(defaultHeaders)
+    new Headers(init.headers).forEach((value, key) => headers.set(key, value))
+    return await fetch(url, {
+      ...init,
+      headers,
+      signal: init.signal ?? AbortSignal.timeout(10_000),
+    })
+  }
+  catch (error) {
+    onError?.(error)
+    return undefined
+  }
+}
+
 async function request<T, R extends ResponseType>(
   url: string,
   method: HttpMethod,

@@ -6,6 +6,7 @@ import { setupCommands } from './commands'
 import { generateImageOutput } from './components/render'
 import { setupHooks } from './hooks'
 import { setupSchedules } from './schedules'
+import { onWfmRequestError } from './warframe'
 import 'reflect-metadata' // Solves 'TypeError: Reflect.getMetadata is not a function' caused by warframe-worldstate-parser
 
 export const name = 'warframe'
@@ -29,6 +30,10 @@ export function apply(ctx: Context): void {
     logger: ctx.logger('koishi-plugin-warframe'),
     render: async e => generateImageOutput(ctx.puppeteer, e),
   }
+
+  ctx.on('dispose', onWfmRequestError((url, error) => {
+    deps.logger.warn('Warframe Market request failed: %s %o', new URL(url).pathname, error)
+  }))
 
   setupHooks(ctx, deps)
   setupCommands(ctx, deps)
