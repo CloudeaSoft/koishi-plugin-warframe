@@ -25,19 +25,14 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD'
 export async function fetchAsyncResponse(
   url: string,
   init: RequestInit = {},
-  onError?: (error: unknown) => void,
 ): Promise<Response | undefined> {
   try {
-    const headers = new Headers(defaultHeaders)
-    new Headers(init.headers).forEach((value, key) => headers.set(key, value))
     return await fetch(url, {
       ...init,
-      headers,
       signal: init.signal ?? AbortSignal.timeout(10_000),
     })
   }
-  catch (error) {
-    onError?.(error)
+  catch {
     return undefined
   }
 }

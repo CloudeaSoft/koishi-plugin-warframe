@@ -35,7 +35,6 @@ import { computeItemStatistics } from './wfm-service.statistics'
 
 export { matchWFMItem, stringToWFMItem }
 export type { WFMItemMatchResult }
-export { onWfmRequestError } from '../../infrastructure/wfm-client'
 
 // ================ features ===================
 export async function updateCache(): Promise<string> {

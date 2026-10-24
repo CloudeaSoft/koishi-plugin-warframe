@@ -1,7 +1,7 @@
 import type { WfmFetcher, WfmFetchInput, WfmFetchResult } from 'wfm-api-client'
 import { expect } from 'chai'
 import { ItemOrderComponent } from '../../src/components/wfm'
-import { createPluginWfmClient, onWfmRequestError } from '../../src/warframe/infrastructure/wfm-client'
+import { createPluginWfmClient } from '../../src/warframe/infrastructure/wfm-client'
 
 function jsonResult(data: unknown, status = 200): WfmFetchResult {
   return {
@@ -96,12 +96,9 @@ describe('createPluginWfmClient', () => {
 
 describe('market HTTP transport', () => {
   const originalFetch = globalThis.fetch
-  let dispose: (() => void) | undefined
 
   afterEach(() => {
     globalThis.fetch = originalFetch
-    dispose?.()
-    dispose = undefined
   })
 
   it('identifies the application and preserves v1/v2 parsing and request context', async () => {
@@ -132,42 +129,23 @@ describe('market HTTP transport', () => {
     expect(new URL(requests[1].url).searchParams.get('positive_stats')).to.equal('critical_chance')
   })
 
-  it('reports Cloudflare challenges and allows a later request to recover', async () => {
-    const errors: unknown[] = []
+  it('does not cache HTTP failures and allows a later request to recover', async () => {
     let calls = 0
     globalThis.fetch = async () => ++calls === 1
       ? new Response('<html>Just a moment...</html>', { status: 403, headers: { 'cf-mitigated': 'challenge' } })
       : Response.json({ data: [{ slug: 'akarius' }] })
-    dispose = onWfmRequestError((_url, error) => errors.push(error))
 
     const client = createPluginWfmClient()
     expect(await client.rivens.listWeapons()).to.equal(undefined)
     expect((await client.rivens.listWeapons())?.[0].slug).to.equal('akarius')
-    expect(errors).to.have.length(1)
-    const error = errors[0] as Error & { cause: Error & { status: number } }
-    expect(error.cause.message).to.include('Cloudflare')
-    expect(error.cause.status).to.equal(403)
     expect(calls).to.equal(2)
   })
 
-  it('retains network error causes for logging and supports unsubscribing', async () => {
-    const networkError = new TypeError('fetch failed', { cause: Object.assign(new Error('DNS lookup failed'), { code: 'EAI_AGAIN' }) })
+  it('preserves soft failures when the default transport cannot connect', async () => {
     globalThis.fetch = async () => {
-      throw networkError
+      throw new TypeError('fetch failed')
     }
-    const errors: unknown[] = []
-    const urls: string[] = []
-    dispose = onWfmRequestError((url, error) => {
-      urls.push(url)
-      errors.push(error)
-    })
-
     const client = createPluginWfmClient()
     expect(await client.rivens.listWeapons()).to.equal(undefined)
-    expect((errors[0] as Error).cause).to.equal(networkError)
-    expect(urls).to.deep.equal(['https://api.warframe.market/v2/riven/weapons'])
-    dispose()
-    expect(await client.rivens.listWeapons()).to.equal(undefined)
-    expect(errors).to.have.length(1)
   })
 })
