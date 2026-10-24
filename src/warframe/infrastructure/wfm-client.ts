@@ -74,6 +74,7 @@ export function createPluginWfmClient(fetcher?: WfmFetcher): PluginWfmClient {
 
   const client = createWfmApiClient({
     fetcher,
+    userAgent: 'koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)',
     language: 'zh-hans',
     timeoutMs: 10_000,
     plugins,

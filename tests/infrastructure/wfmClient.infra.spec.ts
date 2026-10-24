@@ -18,6 +18,7 @@ describe('createPluginWfmClient', () => {
     const fetcher: WfmFetcher = async (input: WfmFetchInput) => {
       calls++
       expect(input.url).to.include('/v2/items')
+      expect(input.headers?.['User-Agent']).to.equal('koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)')
       return jsonResult({
         data: [{
           id: '1',
