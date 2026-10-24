@@ -12,18 +12,6 @@ import {
   memoryCachePlugin,
   rateLimitPlugin,
 } from 'wfm-api-client'
-import { fetchAsyncResponse } from '../utils/http'
-
-const userAgent = 'koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)'
-const marketFetcher: WfmFetcher = async ({ url, ...init }) => {
-  const response = await fetchAsyncResponse(url, {
-    ...init,
-    headers: { ...init.headers, 'User-Agent': userAgent },
-  })
-  if (!response)
-    throw new Error('Warframe Market request failed')
-  return response
-}
 
 type RivenOrderOptions = CallOptions & RivenOrderFilters
 type PluginWfmClient = Omit<WfmApiClient, 'rivens'> & {
@@ -70,7 +58,7 @@ export function softFailPlugin(): WfmPlugin {
   }
 }
 
-/** `fetcher` is a test injection seam; production identifies this application. */
+/** `fetcher` is a test injection seam only; production uses the client default. */
 export function createPluginWfmClient(fetcher?: WfmFetcher): PluginWfmClient {
   // Plugin array order is outer -> inner (client uses reduceRight).
   // softFail must stay outermost so failures are not stored by memoryCache.
@@ -85,7 +73,8 @@ export function createPluginWfmClient(fetcher?: WfmFetcher): PluginWfmClient {
     plugins.push(rateLimitPlugin({ minTime: 400 }))
 
   const client = createWfmApiClient({
-    fetcher: fetcher ?? marketFetcher,
+    fetcher,
+    userAgent: 'koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)',
     language: 'zh-hans',
     timeoutMs: 10_000,
     plugins,

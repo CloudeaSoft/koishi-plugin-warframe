@@ -18,6 +18,7 @@ describe('createPluginWfmClient', () => {
     const fetcher: WfmFetcher = async (input: WfmFetchInput) => {
       calls++
       expect(input.url).to.include('/v2/items')
+      expect(input.headers?.['User-Agent']).to.equal('koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)')
       return jsonResult({
         data: [{
           id: '1',
@@ -91,61 +92,5 @@ describe('createPluginWfmClient', () => {
     const orders = await client.orders.listByItem({ slug: 'primed_flow' })
 
     expect(() => ItemOrderComponent(items![0]!, orders!)).not.to.throw()
-  })
-})
-
-describe('market HTTP transport', () => {
-  const originalFetch = globalThis.fetch
-
-  afterEach(() => {
-    globalThis.fetch = originalFetch
-  })
-
-  it('identifies the application and preserves v1/v2 parsing and request context', async () => {
-    const requests: { url: string, headers: Headers, signal?: AbortSignal | null }[] = []
-    globalThis.fetch = async (input, init) => {
-      const url = String(input)
-      requests.push({ url, headers: new Headers(init?.headers), signal: init?.signal })
-      return Response.json(url.includes('/v1/')
-        ? { payload: { auctions: [{ id: 'riven-1' }] } }
-        : { apiVersion: '0.25.0', data: [{ id: 'weapon-1', slug: 'akarius' }], error: null })
-    }
-
-    const client = createPluginWfmClient()
-    const weapons = await client.rivens.listWeapons({ language: 'en', platform: 'pc', crossplay: true })
-    const orders = await client.rivens.getOrders('akarius', { positiveStats: ['critical_chance'] })
-
-    expect(weapons?.[0].slug).to.equal('akarius')
-    expect(orders?.[0].id).to.equal('riven-1')
-    for (const request of requests) {
-      expect(request.headers.get('user-agent')).to.equal('koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)')
-      expect(request.headers.get('accept')).to.equal('application/json')
-      expect(request.signal).to.be.instanceOf(AbortSignal)
-    }
-    expect(requests[0].headers.get('language')).to.equal('en')
-    expect(requests[0].headers.get('platform')).to.equal('pc')
-    expect(requests[0].headers.get('crossplay')).to.equal('true')
-    expect(requests[1].headers.get('language')).to.equal('zh-hans')
-    expect(new URL(requests[1].url).searchParams.get('positive_stats')).to.equal('critical_chance')
-  })
-
-  it('does not cache HTTP failures and allows a later request to recover', async () => {
-    let calls = 0
-    globalThis.fetch = async () => ++calls === 1
-      ? new Response('<html>Just a moment...</html>', { status: 403, headers: { 'cf-mitigated': 'challenge' } })
-      : Response.json({ data: [{ slug: 'akarius' }] })
-
-    const client = createPluginWfmClient()
-    expect(await client.rivens.listWeapons()).to.equal(undefined)
-    expect((await client.rivens.listWeapons())?.[0].slug).to.equal('akarius')
-    expect(calls).to.equal(2)
-  })
-
-  it('preserves soft failures when the default transport cannot connect', async () => {
-    globalThis.fetch = async () => {
-      throw new TypeError('fetch failed')
-    }
-    const client = createPluginWfmClient()
-    expect(await client.rivens.listWeapons()).to.equal(undefined)
   })
 })

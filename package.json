@@ -76,7 +76,7 @@
     "warframe-weekly-rivens": "^0.0.3",
     "warframe-worldstate-data": "^3.18.1",
     "warframe-worldstate-parser": "^5.5.7",
-    "wfm-api-client": "^0.0.3"
+    "wfm-api-client": "^0.0.4"
   },
   "devDependencies": {
     "@antfu/eslint-config": "9.1.0",
