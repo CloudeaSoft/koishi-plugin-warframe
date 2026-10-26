@@ -7,12 +7,27 @@ import evaluation from '../../assets/riven-ocr/community-2026-10-21/evaluation.j
 import community from '../../assets/riven-ocr/community-2026-10-21/recorded.json'
 import labels from '../../assets/riven-ocr/community-2026-10-21/rivens.json'
 import corpus from '../../assets/riven-ocr/corpus.json'
+import feishu from '../../assets/riven-ocr/feishu-2026-10-26/recorded.json'
 import synthetic from '../../assets/riven-ocr/synthetic-cursors/recorded.json'
 import { packageRoot } from '../../helpers/packageRoot'
 
 const assets = resolve(packageRoot(), 'tests/assets')
 const root = join(assets, 'riven-ocr')
 const samples = [
+  ...feishu.map(s => ({
+    id: s.id,
+    image: resolve(root, 'feishu-2026-10-26', s.image),
+    sha256: s.sha256,
+    blocks: s.blocks,
+    fallbackBlocks: s.fallbackBlocks,
+    rejection: undefined as string | undefined,
+    expected: { name: s.expected.name, attributes: s.expected.stats.map(([gameRef, value, prefix], i) => ({
+      gameRef,
+      value,
+      prefix,
+      unit: s.expected.units[i],
+    })) },
+  })),
   ...corpus.map(s => ({
     id: s.id,
     image: resolve(root, s.image),
@@ -73,7 +88,7 @@ describe('all saved riven screenshots: image + recorded OCR + correct fields', (
     it(`${sample.id}: ${sample.rejection ? `reject (${sample.rejection})` : 'preserve all fields'}`, async () => {
       expect(createHash('sha256').update(readFileSync(sample.image)).digest('hex'), 'image differs from recorded OCR source').to.equal(sample.sha256)
       expect(sample.blocks, 'recorded OCR blocks').to.be.an('array').with.length.greaterThan(0)
-      const parsed = await parseOCRResult(sample.blocks)
+      const parsed = await parseOCRResult(sample.blocks, 'fallbackBlocks' in sample ? sample.fallbackBlocks : undefined)
       if (sample.rejection) {
         expect(parsed).to.equal(undefined)
         return

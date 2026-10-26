@@ -24,6 +24,35 @@ function validBox(box: OcrTextBlock['box']): box is NonNullable<OcrTextBlock['bo
   return !!box && Object.values(box).every(Number.isFinite) && box.width > 0 && box.height > 0
 }
 
+/** Only remove recognizable card-frame marks outside a uniquely located card's text. */
+function withoutCardDecorations(blocks: OcrTextBlock[]): OcrTextBlock[] {
+  const titles = blocks.filter(b => findWeapon(b.text))
+  if (titles.length !== 1)
+    return blocks
+  const title = titles[0].box!
+  const ranks = blocks.filter(b => isRank(b.text) && b.box!.y > title.y)
+  const footer = ranks.length === 1 ? ranks[0].box : undefined
+  return blocks.filter((block) => {
+    const box = block.box!
+    // A neighbouring card's capacity/polarity can share the title's baseline.
+    const capacity = /^(?:[1-9]|1[0-8])[-Kr]?$/.test(block.text)
+    const besideTitle = Math.abs(box.y + box.height / 2 - title.y - title.height / 2) < title.height / 2
+      && (box.x + box.width < title.x - title.height || box.x > title.x + title.width + title.height)
+    if (capacity && besideTitle)
+      return false
+    if (!footer)
+      return true
+    const gap = box.y - footer.y - footer.height
+    if (block.text === '。' && gap >= 0 && gap <= footer.height * 2
+      && box.height <= footer.height * 0.5 && box.width <= footer.height * 0.6
+      && box.x >= title.x && box.x + box.width <= title.x + title.width) {
+      return false
+    }
+    // The next card below the footer may expose just its capacity and polarity.
+    return !(capacity && gap >= footer.height * 2 && gap <= footer.height * 6)
+  })
+}
+
 /** A cursor above the reroll counter can be read as a stray, low-confidence Han glyph. */
 function isFooterCursor(row: OcrTextBlock[], nextRow?: OcrTextBlock[]): boolean {
   const glyph = row[0]
@@ -58,7 +87,7 @@ function restoreRows(input: readonly (string | OcrTextBlock)[]): OcrRow[] | unde
     return blocks.map(b => ({ text: b.text, fragmented: false }))
 
   const rows: OcrTextBlock[][] = []
-  for (const block of [...blocks].sort((a, b) => a.box!.y + a.box!.height / 2 - b.box!.y - b.box!.height / 2)) {
+  for (const block of withoutCardDecorations(blocks).sort((a, b) => a.box!.y + a.box!.height / 2 - b.box!.y - b.box!.height / 2)) {
     const box = block.box!
     const row = rows.find((r) => {
       const anchor = r[0].box!
@@ -197,7 +226,72 @@ function canWrapLabel(row: OcrRow, next: OcrRow): boolean {
     && next.box.x >= row.box.x && next.box.x + next.box.width <= row.box.x + row.box.width
 }
 
-export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): ParsedRiven | undefined {
+function sameTextRegion(a: OcrTextBlock, b: OcrTextBlock): boolean {
+  if (!validBox(a.box) || !validBox(b.box))
+    return false
+  const width = Math.max(0, Math.min(a.box.x + a.box.width, b.box.x + b.box.width) - Math.max(a.box.x, b.box.x))
+  const height = Math.max(0, Math.min(a.box.y + a.box.height, b.box.y + b.box.height) - Math.max(a.box.y, b.box.y))
+  return width * height >= Math.max(a.box.width * a.box.height, b.box.width * b.box.height) * 0.6
+}
+
+function withoutLock(text: string): string {
+  return cleanText(text).replace(/\s/g, '').replace(/^[6θ🔒]([+\-x])/iu, '$1')
+}
+
+/** A second reading may supply missing letters, never new numbers or signs. */
+function recoverOcrLabels(input: readonly (string | OcrTextBlock)[], fallback: readonly OcrTextBlock[]): readonly (string | OcrTextBlock)[] {
+  if (input.some(b => typeof b === 'string' || !validBox(b.box)))
+    return input
+  const blocks = input as readonly OcrTextBlock[]
+  const fallbackTitles = fallback.filter(b => findWeapon(b.text))
+  if (fallbackTitles.length !== 1)
+    return input
+  const fallbackTitle = fallbackTitles[0]
+  const weapon = findWeapon(fallbackTitle.text)!
+  const key = normalizeName(weapon.name)
+  const originalTitles = blocks.filter(b => sameTextRegion(b, fallbackTitle))
+  if (originalTitles.length !== 1)
+    return input
+  const originalTitle = originalTitles[0]
+  const originalWeapon = findWeapon(originalTitle.text)
+  const originalName = normalizeName(originalTitle.text)
+  // Establish card identity before borrowing any label, including when the title is already valid.
+  if (originalWeapon
+    ? originalWeapon.name !== weapon.name
+    : !originalName.startsWith(key) || !/^[a-z]+$/.test(originalName.slice(key.length))
+      || normalSimilarity(originalName.slice(key.length), normalizeName(fallbackTitle.text).slice(key.length)) < 0.8) {
+    return input
+  }
+  const stats = rivenStatsByType[weapon.type]
+  return blocks.map((block) => {
+    const candidates = fallback.filter(b => sameTextRegion(block, b))
+    if (candidates.length !== 1)
+      return block
+    const candidate = candidates[0]
+    // Keep the exact weapon name. Correct only an invalid Latin suffix to an official one.
+    if (block === originalTitle && candidate === fallbackTitle && !originalWeapon) {
+      return { ...block, text: candidate.text }
+    }
+    const number = withoutLock(block.text)
+    if (!/^[+\-x]\d+(?:\.\d+)?(?:%|s)?$/i.test(number))
+      return block
+    const candidateText = withoutLock(candidate.text)
+    const label = candidateText.slice(number.length)
+    if (!candidateText.startsWith(number) || !/^[\p{L}/]+$/u.test(label)
+      || stats.filter(s => aliases(s).includes(normalizeStat(label))).length !== 1) {
+      return block
+    }
+    return { ...block, text: number + label }
+  })
+}
+
+export function parseRivenOcr(input: readonly (string | OcrTextBlock)[], fallback?: readonly OcrTextBlock[]): ParsedRiven | undefined {
+  if (fallback) {
+    const original = parseRivenOcr(input)
+    if (original)
+      return original
+    input = recoverOcrLabels(input, fallback)
+  }
   const rows = restoreRows(input)
   if (!rows?.length)
     return undefined
@@ -228,7 +322,7 @@ export function parseRivenOcr(input: readonly (string | OcrTextBlock)[]): Parsed
       continue
 
     // Locked attributes display a padlock; Tencent sometimes reads it as a leading 6.
-    text = text.replace(/^[6🔒]([+\-x])/iu, '$1')
+    text = withoutLock(text)
     if (text.includes('(') && !text.includes(')') && rows[i + 1]) {
       const joined = text + rows[i + 1].text.replace(/\s/g, '')
       // A wrapped x2 is explanatory text only when it completes a known annotation.

@@ -2,15 +2,32 @@ import { expect } from 'chai'
 import { vi } from 'vitest'
 import { extractTextFromImage } from '../../src/warframe/infrastructure/ocr-api'
 
-const sdk = vi.hoisted(() => ({ request: vi.fn(), credentials: undefined as unknown }))
+const sdk = vi.hoisted(() => ({ request: vi.fn(), basic: vi.fn(), credentials: undefined as unknown }))
 vi.mock('tencentcloud-sdk-nodejs-ocr', () => ({
   ocr: { v20181119: { Client: class {
     constructor(options: { credential: unknown }) { sdk.credentials = options.credential }
     GeneralAccurateOCR = sdk.request
+    GeneralBasicOCR = sdk.basic
   } } },
 }))
 
 describe('oCR infrastructure', () => {
+  it('caches accurate and fallback readings separately for the same image', async () => {
+    sdk.request.mockResolvedValueOnce({ TextDetections: [{ DetectedText: '+127.1%', Confidence: 95 }] })
+    sdk.basic.mockResolvedValueOnce({ TextDetections: [{ DetectedText: '+127.1%多重射击', Confidence: 100 }] })
+    const image = 'b2NyLWZhbGxiYWNr'
+    const secret = { id: 'id', key: 'key' }
+    expect((await extractTextFromImage(image, secret))?.map(b => b.text)).to.deep.equal(['+127.1%'])
+    expect((await extractTextFromImage(image, secret, 'basic'))?.map(b => b.text)).to.deep.equal(['+127.1%多重射击'])
+    expect((await extractTextFromImage(image, secret))?.map(b => b.text)).to.deep.equal(['+127.1%'])
+    expect((await extractTextFromImage(image, secret, 'basic'))?.map(b => b.text)).to.deep.equal(['+127.1%多重射击'])
+  })
+
+  it('returns undefined when the fallback request fails', async () => {
+    sdk.basic.mockRejectedValueOnce(new Error('fallback unavailable'))
+    expect(await extractTextFromImage('b2NyLWJhc2ljLWZhaWx1cmU=', { id: 'id', key: 'key' }, 'basic')).to.equal(undefined)
+  })
+
   it('preserves text, confidence and geometry and trims pasted credentials', async () => {
     sdk.request.mockResolvedValueOnce({ TextDetections: [
       { DetectedText: '+120%暴击伤害', Confidence: 97, ItemPolygon: { X: 20, Y: 100, Width: 180, Height: 24 } },
