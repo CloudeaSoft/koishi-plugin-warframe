@@ -1,0 +1,1168 @@
+[
+  {
+    "id": "web-dokrahm",
+    "image": "jarriaga.png",
+    "sha256": "29d3af7dc3f2026f722db35410e75f73fff0acad9d8629d031d6a558b03bf609",
+    "sourcePage": "https://forums.warframe.com/topic/1530001-lets-post-our-favourite-new-rivens/",
+    "sourceImage": "https://i.ibb.co/SXD0RwwW/IMG-0187.png",
+    "author": "Jarriaga",
+    "quality": "pixelated screenshot",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 401,
+          "y": 103,
+          "width": 36,
+          "height": 25
+        }
+      },
+      {
+        "text": "Dokrahm Cali-ignitor",
+        "confidence": 98,
+        "box": {
+          "x": 130,
+          "y": 320,
+          "width": 326,
+          "height": 42
+        }
+      },
+      {
+        "text": "+99.7%",
+        "confidence": 99,
+        "box": {
+          "x": 184,
+          "y": 364,
+          "width": 112,
+          "height": 29
+        }
+      },
+      {
+        "text": "^",
+        "confidence": 65,
+        "box": {
+          "x": 297,
+          "y": 364,
+          "width": 26,
+          "height": 27
+        }
+      },
+      {
+        "text": "Heat",
+        "confidence": 99,
+        "box": {
+          "x": 321,
+          "y": 361,
+          "width": 74,
+          "height": 32
+        }
+      },
+      {
+        "text": "+107.4% Gas",
+        "confidence": 99,
+        "box": {
+          "x": 183,
+          "y": 396,
+          "width": 215,
+          "height": 30
+        }
+      },
+      {
+        "text": "+2 Range",
+        "confidence": 100,
+        "box": {
+          "x": 223,
+          "y": 427,
+          "width": 135,
+          "height": 36
+        }
+      },
+      {
+        "text": "-63.4% Heavy Attack",
+        "confidence": 99,
+        "box": {
+          "x": 145,
+          "y": 457,
+          "width": 293,
+          "height": 41
+        }
+      },
+      {
+        "text": "Efficiency",
+        "confidence": 100,
+        "box": {
+          "x": 221,
+          "y": 495,
+          "width": 138,
+          "height": 36
+        }
+      },
+      {
+        "text": "MR 8",
+        "confidence": 89,
+        "box": {
+          "x": 147,
+          "y": 547,
+          "width": 74,
+          "height": 28
+        }
+      },
+      {
+        "text": "75",
+        "confidence": 76,
+        "box": {
+          "x": 359,
+          "y": 547,
+          "width": 71,
+          "height": 27
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 402,
+          "y": 101,
+          "width": 39,
+          "height": 26
+        }
+      },
+      {
+        "text": "Dokrahm Cali-ignitor",
+        "confidence": 100,
+        "box": {
+          "x": 127,
+          "y": 320,
+          "width": 327,
+          "height": 41
+        }
+      },
+      {
+        "text": "+99.7% WHeat",
+        "confidence": 100,
+        "box": {
+          "x": 185,
+          "y": 361,
+          "width": 209,
+          "height": 30
+        }
+      },
+      {
+        "text": "+107.4%8Gas",
+        "confidence": 100,
+        "box": {
+          "x": 182,
+          "y": 395,
+          "width": 215,
+          "height": 27
+        }
+      },
+      {
+        "text": "+2 Range",
+        "confidence": 100,
+        "box": {
+          "x": 225,
+          "y": 426,
+          "width": 132,
+          "height": 30
+        }
+      },
+      {
+        "text": "-63.4%HeavyAttack",
+        "confidence": 100,
+        "box": {
+          "x": 145,
+          "y": 462,
+          "width": 292,
+          "height": 32
+        }
+      },
+      {
+        "text": "Efficiency",
+        "confidence": 100,
+        "box": {
+          "x": 222,
+          "y": 490,
+          "width": 137,
+          "height": 31
+        }
+      },
+      {
+        "text": "MR8",
+        "confidence": 100,
+        "box": {
+          "x": 145,
+          "y": 545,
+          "width": 73,
+          "height": 28
+        }
+      },
+      {
+        "text": "O75",
+        "confidence": 100,
+        "box": {
+          "x": 358,
+          "y": 544,
+          "width": 71,
+          "height": 29
+        }
+      }
+    ],
+    "expected": {
+      "name": "Dokrahm",
+      "stats": [
+        [
+          "WeaponFireDamageMod",
+          99.7,
+          "+"
+        ],
+        [
+          "WeaponGasDamageMod",
+          107.4,
+          "+"
+        ],
+        [
+          "WeaponMeleeRangeIncMod",
+          2,
+          "+"
+        ],
+        [
+          "WeaponMeleeComboEfficiencyMod",
+          -63.4,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "web-bramma",
+    "image": "reddy-1.jpg",
+    "sha256": "bbb82cb6651f506223c1e411cf616fa6c55e0395e7744031327878159222ae5e",
+    "sourcePage": "https://forums.warframe.com/topic/1530001-lets-post-our-favourite-new-rivens/",
+    "sourceImage": "https://i.ibb.co/7NC7W8Q9/IMG-20261023-093559.jpg",
+    "author": "ReddyDisco",
+    "quality": "phone photograph with purple cast, moire, perspective and surrounding UI",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 1527,
+          "y": 483,
+          "width": 271,
+          "height": 130
+        }
+      },
+      {
+        "text": "Kuva Bramma Parci-",
+        "confidence": 99,
+        "box": {
+          "x": 402,
+          "y": 1169,
+          "width": 1280,
+          "height": 163
+        }
+      },
+      {
+        "text": "acrican",
+        "confidence": 94,
+        "box": {
+          "x": 822,
+          "y": 1334,
+          "width": 448,
+          "height": 138
+        }
+      },
+      {
+        "text": "+145.8% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 402,
+          "y": 1480,
+          "width": 1274,
+          "height": 149
+        }
+      },
+      {
+        "text": "+94.1% Multishot",
+        "confidence": 99,
+        "box": {
+          "x": 603,
+          "y": 1617,
+          "width": 877,
+          "height": 101
+        }
+      },
+      {
+        "text": "6+55.5% Ammo",
+        "confidence": 97,
+        "box": {
+          "x": 642,
+          "y": 1730,
+          "width": 809,
+          "height": 98
+        }
+      },
+      {
+        "text": "Efficiency",
+        "confidence": 100,
+        "box": {
+          "x": 801,
+          "y": 1832,
+          "width": 478,
+          "height": 128
+        }
+      },
+      {
+        "text": "-44.6% Magazine",
+        "confidence": 100,
+        "box": {
+          "x": 620,
+          "y": 1938,
+          "width": 840,
+          "height": 127
+        }
+      },
+      {
+        "text": "Capacity",
+        "confidence": 100,
+        "box": {
+          "x": 826,
+          "y": 2060,
+          "width": 422,
+          "height": 113
+        }
+      },
+      {
+        "text": "MR 9",
+        "confidence": 93,
+        "box": {
+          "x": 502,
+          "y": 2227,
+          "width": 226,
+          "height": 74
+        }
+      },
+      {
+        "text": "539",
+        "confidence": 87,
+        "box": {
+          "x": 1332,
+          "y": 2230,
+          "width": 214,
+          "height": 77
+        }
+      },
+      {
+        "text": "CYCLE FOR 3,500T",
+        "confidence": 96,
+        "box": {
+          "x": 540,
+          "y": 2688,
+          "width": 1071,
+          "height": 169
+        }
+      },
+      {
+        "text": "Remaining Kuva:17,300",
+        "confidence": 98,
+        "box": {
+          "x": 395,
+          "y": 2894,
+          "width": 1214,
+          "height": 118
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18-",
+        "confidence": 100,
+        "box": {
+          "x": 1536,
+          "y": 477,
+          "width": 263,
+          "height": 119
+        }
+      },
+      {
+        "text": "Kuva Bramma Parci-",
+        "confidence": 100,
+        "box": {
+          "x": 392,
+          "y": 1176,
+          "width": 1280,
+          "height": 140
+        }
+      },
+      {
+        "text": "acrcan",
+        "confidence": 100,
+        "box": {
+          "x": 818,
+          "y": 1362,
+          "width": 446,
+          "height": 113
+        }
+      },
+      {
+        "text": "+145.8% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 400,
+          "y": 1474,
+          "width": 1273,
+          "height": 113
+        }
+      },
+      {
+        "text": "+94.1% Multishot",
+        "confidence": 100,
+        "box": {
+          "x": 596,
+          "y": 1600,
+          "width": 876,
+          "height": 108
+        }
+      },
+      {
+        "text": "0+55.5%Ammo",
+        "confidence": 100,
+        "box": {
+          "x": 638,
+          "y": 1721,
+          "width": 808,
+          "height": 97
+        }
+      },
+      {
+        "text": "Efficiency",
+        "confidence": 100,
+        "box": {
+          "x": 800,
+          "y": 1833,
+          "width": 476,
+          "height": 98
+        }
+      },
+      {
+        "text": "-44.6% MagazIne",
+        "confidence": 100,
+        "box": {
+          "x": 620,
+          "y": 1935,
+          "width": 844,
+          "height": 100
+        }
+      },
+      {
+        "text": "Capacty",
+        "confidence": 100,
+        "box": {
+          "x": 822,
+          "y": 2062,
+          "width": 427,
+          "height": 94
+        }
+      },
+      {
+        "text": "MR9",
+        "confidence": 100,
+        "box": {
+          "x": 490,
+          "y": 2226,
+          "width": 234,
+          "height": 76
+        }
+      },
+      {
+        "text": "D39",
+        "confidence": 100,
+        "box": {
+          "x": 1328,
+          "y": 2226,
+          "width": 219,
+          "height": 79
+        }
+      },
+      {
+        "text": "CYCLE FOR",
+        "confidence": 100,
+        "box": {
+          "x": 535,
+          "y": 2724,
+          "width": 536,
+          "height": 91
+        }
+      },
+      {
+        "text": "3,500",
+        "confidence": 87,
+        "box": {
+          "x": 1208,
+          "y": 2717,
+          "width": 298,
+          "height": 97
+        }
+      },
+      {
+        "text": "+",
+        "confidence": 100,
+        "box": {
+          "x": 1502,
+          "y": 2739,
+          "width": 90,
+          "height": 68
+        }
+      },
+      {
+        "text": "Remaining Kuva:I7.3o0",
+        "confidence": 100,
+        "box": {
+          "x": 388,
+          "y": 2896,
+          "width": 1220,
+          "height": 110
+        }
+      }
+    ],
+    "expected": {
+      "name": "Kuva Bramma",
+      "stats": [
+        [
+          "WeaponCritDamageMod",
+          145.8,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          94.1,
+          "+"
+        ],
+        [
+          "WeaponAmmoEfficiency",
+          55.5,
+          "+"
+        ],
+        [
+          "WeaponClipMaxMod",
+          -44.6,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "web-dual-toxocyst",
+    "image": "reddy-2.jpg",
+    "sha256": "5162ad5c1f713273f31f6cde4cc8d9c302df9f23d13f70854fa0225db70f865c",
+    "sourcePage": "https://forums.warframe.com/topic/1530001-lets-post-our-favourite-new-rivens/",
+    "sourceImage": "https://i.ibb.co/WW6N82vX/IMG-20261024-104734.jpg",
+    "author": "ReddyDisco",
+    "quality": "phone photograph with purple cast, moire, perspective and surrounding UI",
+    "blocks": [
+      {
+        "text": "18K",
+        "confidence": 78,
+        "box": {
+          "x": 1650,
+          "y": 743,
+          "width": 266,
+          "height": 129
+        }
+      },
+      {
+        "text": "Dual Toxocyst Sati-",
+        "confidence": 99,
+        "box": {
+          "x": 437,
+          "y": 1473,
+          "width": 1354,
+          "height": 222
+        }
+      },
+      {
+        "text": "entitis",
+        "confidence": 60,
+        "box": {
+          "x": 931,
+          "y": 1670,
+          "width": 383,
+          "height": 150
+        }
+      },
+      {
+        "text": "+139.1% Multishot",
+        "confidence": 99,
+        "box": {
+          "x": 579,
+          "y": 1840,
+          "width": 1071,
+          "height": 134
+        }
+      },
+      {
+        "text": "+253.6% Weak Point",
+        "confidence": 100,
+        "box": {
+          "x": 584,
+          "y": 1981,
+          "width": 1174,
+          "height": 122
+        }
+      },
+      {
+        "text": "Damage",
+        "confidence": 100,
+        "box": {
+          "x": 878,
+          "y": 2111,
+          "width": 481,
+          "height": 139
+        }
+      },
+      {
+        "text": "+99.3% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 429,
+          "y": 2207,
+          "width": 1360,
+          "height": 195
+        }
+      },
+      {
+        "text": "-45.6% Magazine",
+        "confidence": 99,
+        "box": {
+          "x": 623,
+          "y": 2372,
+          "width": 987,
+          "height": 148
+        }
+      },
+      {
+        "text": "Capacity",
+        "confidence": 100,
+        "box": {
+          "x": 866,
+          "y": 2507,
+          "width": 492,
+          "height": 139
+        }
+      },
+      {
+        "text": "MR 10",
+        "confidence": 95,
+        "box": {
+          "x": 484,
+          "y": 2718,
+          "width": 332,
+          "height": 92
+        }
+      },
+      {
+        "text": "0",
+        "confidence": 55,
+        "box": {
+          "x": 1457,
+          "y": 2718,
+          "width": 113,
+          "height": 92
+        }
+      },
+      {
+        "text": "35",
+        "confidence": 100,
+        "box": {
+          "x": 1566,
+          "y": 2718,
+          "width": 140,
+          "height": 92
+        }
+      },
+      {
+        "text": "CYCLE FOR 3,500T",
+        "confidence": 96,
+        "box": {
+          "x": 516,
+          "y": 3318,
+          "width": 1295,
+          "height": 193
+        }
+      },
+      {
+        "text": "Remaining Kuva:13,300",
+        "confidence": 99,
+        "box": {
+          "x": 334,
+          "y": 3566,
+          "width": 1474,
+          "height": 159
+        }
+      },
+      {
+        "text": "DELL",
+        "confidence": 99,
+        "box": {
+          "x": 807,
+          "y": 4162,
+          "width": 550,
+          "height": 179
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "181",
+        "confidence": 100,
+        "box": {
+          "x": 1647,
+          "y": 736,
+          "width": 272,
+          "height": 122
+        }
+      },
+      {
+        "text": "Dual Toxocyst Sati",
+        "confidence": 100,
+        "box": {
+          "x": 429,
+          "y": 1470,
+          "width": 1336,
+          "height": 184
+        }
+      },
+      {
+        "text": "enitis",
+        "confidence": 100,
+        "box": {
+          "x": 922,
+          "y": 1683,
+          "width": 382,
+          "height": 128
+        }
+      },
+      {
+        "text": "+139.1% Mu tishot",
+        "confidence": 100,
+        "box": {
+          "x": 578,
+          "y": 1844,
+          "width": 1069,
+          "height": 111
+        }
+      },
+      {
+        "text": "0 +253.6%Weak Point",
+        "confidence": 100,
+        "box": {
+          "x": 485,
+          "y": 1970,
+          "width": 1269,
+          "height": 114
+        }
+      },
+      {
+        "text": "Damage",
+        "confidence": 100,
+        "box": {
+          "x": 883,
+          "y": 2118,
+          "width": 469,
+          "height": 105
+        }
+      },
+      {
+        "text": "+99.3% Critical Damage",
+        "confidence": 97,
+        "box": {
+          "x": 430,
+          "y": 2231,
+          "width": 1352,
+          "height": 117
+        }
+      },
+      {
+        "text": "-45.6% MagaZIne",
+        "confidence": 100,
+        "box": {
+          "x": 625,
+          "y": 2364,
+          "width": 975,
+          "height": 113
+        }
+      },
+      {
+        "text": "Capacity",
+        "confidence": 100,
+        "box": {
+          "x": 862,
+          "y": 2511,
+          "width": 492,
+          "height": 116
+        }
+      },
+      {
+        "text": "MRT0",
+        "confidence": 84,
+        "box": {
+          "x": 468,
+          "y": 2713,
+          "width": 337,
+          "height": 95
+        }
+      },
+      {
+        "text": "035",
+        "confidence": 100,
+        "box": {
+          "x": 1459,
+          "y": 2713,
+          "width": 244,
+          "height": 95
+        }
+      },
+      {
+        "text": "CYCLE FOR",
+        "confidence": 100,
+        "box": {
+          "x": 510,
+          "y": 3353,
+          "width": 666,
+          "height": 119
+        }
+      },
+      {
+        "text": "3,500T",
+        "confidence": 100,
+        "box": {
+          "x": 1183,
+          "y": 3323,
+          "width": 609,
+          "height": 133
+        }
+      },
+      {
+        "text": "Remaining Kuva13,3o0",
+        "confidence": 100,
+        "box": {
+          "x": 323,
+          "y": 3589,
+          "width": 1479,
+          "height": 127
+        }
+      }
+    ],
+    "expected": {
+      "name": "Dual Toxocyst",
+      "stats": [
+        [
+          "WeaponFireIterationsMod",
+          139.1,
+          "+"
+        ],
+        [
+          "WeaponWeakpointDamage",
+          253.6,
+          "+"
+        ],
+        [
+          "WeaponCritDamageMod",
+          99.3,
+          "+"
+        ],
+        [
+          "WeaponClipMaxMod",
+          -45.6,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "web-furis",
+    "image": "reddy-3.jpg",
+    "sha256": "3d8c86a460f493a2c6016c4dd8835f96096fcbce5b8bbbbe035cc8527e7b78bc",
+    "sourcePage": "https://forums.warframe.com/topic/1530001-lets-post-our-favourite-new-rivens/",
+    "sourceImage": "https://i.ibb.co/sp771Jsc/IMG-20261024-104753.jpg",
+    "author": "ReddyDisco",
+    "quality": "phone photograph with purple cast, moire, perspective and surrounding UI",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 1728,
+          "y": 741,
+          "width": 292,
+          "height": 127
+        }
+      },
+      {
+        "text": "Furis Sati-plagapha",
+        "confidence": 100,
+        "box": {
+          "x": 361,
+          "y": 2022,
+          "width": 1490,
+          "height": 243
+        }
+      },
+      {
+        "text": "+97.4% Heat",
+        "confidence": 97,
+        "box": {
+          "x": 629,
+          "y": 2227,
+          "width": 937,
+          "height": 167
+        }
+      },
+      {
+        "text": "+98.7% Status Damage",
+        "confidence": 99,
+        "box": {
+          "x": 419,
+          "y": 2359,
+          "width": 1461,
+          "height": 200
+        }
+      },
+      {
+        "text": "+142.2% Multishot",
+        "confidence": 99,
+        "box": {
+          "x": 507,
+          "y": 2509,
+          "width": 1163,
+          "height": 173
+        }
+      },
+      {
+        "text": "+82.9% Weapon Recoil",
+        "confidence": 99,
+        "box": {
+          "x": 384,
+          "y": 2670,
+          "width": 1400,
+          "height": 153
+        }
+      },
+      {
+        "text": "MR 12",
+        "confidence": 99,
+        "box": {
+          "x": 401,
+          "y": 2891,
+          "width": 363,
+          "height": 107
+        }
+      },
+      {
+        "text": "532",
+        "confidence": 93,
+        "box": {
+          "x": 1461,
+          "y": 2901,
+          "width": 275,
+          "height": 105
+        }
+      },
+      {
+        "text": "CYCLE FOR 3,500T",
+        "confidence": 94,
+        "box": {
+          "x": 427,
+          "y": 3514,
+          "width": 1399,
+          "height": 226
+        }
+      },
+      {
+        "text": "Remaining Kuva:13,300",
+        "confidence": 99,
+        "box": {
+          "x": 235,
+          "y": 3805,
+          "width": 1584,
+          "height": 144
+        }
+      },
+      {
+        "text": "DELL",
+        "confidence": 99,
+        "box": {
+          "x": 736,
+          "y": 4407,
+          "width": 584,
+          "height": 200
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 1719,
+          "y": 731,
+          "width": 183,
+          "height": 127
+        }
+      },
+      {
+        "text": "Furis Sati-plagapha",
+        "confidence": 100,
+        "box": {
+          "x": 346,
+          "y": 2034,
+          "width": 1487,
+          "height": 194
+        }
+      },
+      {
+        "text": "+97.4% MHeat",
+        "confidence": 100,
+        "box": {
+          "x": 640,
+          "y": 2228,
+          "width": 919,
+          "height": 133
+        }
+      },
+      {
+        "text": "0 +98.7% Status Damage",
+        "confidence": 100,
+        "box": {
+          "x": 319,
+          "y": 2367,
+          "width": 1558,
+          "height": 129
+        }
+      },
+      {
+        "text": "+142.2% Multishot",
+        "confidence": 100,
+        "box": {
+          "x": 507,
+          "y": 2523,
+          "width": 1157,
+          "height": 120
+        }
+      },
+      {
+        "text": "+82.9% Weapon Recoil",
+        "confidence": 100,
+        "box": {
+          "x": 379,
+          "y": 2666,
+          "width": 1390,
+          "height": 134
+        }
+      },
+      {
+        "text": "MR 12",
+        "confidence": 100,
+        "box": {
+          "x": 390,
+          "y": 2891,
+          "width": 371,
+          "height": 105
+        }
+      },
+      {
+        "text": "032",
+        "confidence": 100,
+        "box": {
+          "x": 1454,
+          "y": 2891,
+          "width": 279,
+          "height": 109
+        }
+      },
+      {
+        "text": "CYCLE FOR",
+        "confidence": 100,
+        "box": {
+          "x": 429,
+          "y": 3561,
+          "width": 703,
+          "height": 127
+        }
+      },
+      {
+        "text": "3,500T",
+        "confidence": 100,
+        "box": {
+          "x": 1205,
+          "y": 3553,
+          "width": 581,
+          "height": 137
+        }
+      },
+      {
+        "text": "Remaining Kuva:a13,300",
+        "confidence": 100,
+        "box": {
+          "x": 223,
+          "y": 3805,
+          "width": 1585,
+          "height": 142
+        }
+      }
+    ],
+    "expected": {
+      "name": "Furis",
+      "stats": [
+        [
+          "WeaponFireDamageMod",
+          97.4,
+          "+"
+        ],
+        [
+          "WeaponStatusDamage",
+          98.7,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          142.2,
+          "+"
+        ],
+        [
+          "WeaponRecoilReductionMod",
+          82.9,
+          "+"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  }
+]
