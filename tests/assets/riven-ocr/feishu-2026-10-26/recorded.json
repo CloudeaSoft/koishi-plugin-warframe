@@ -1,0 +1,1742 @@
+[
+  {
+    "id": "feishu-1",
+    "image": "20261026-142059.211-1.png",
+    "sha256": "2b61c2579954a84ed2f031bf8a4f17e5f75bc9752e7227249580105045e4d3a3",
+    "blocks": [
+      {
+        "text": "努寇微波枪Acri-",
+        "confidence": 97,
+        "box": {
+          "x": 62,
+          "y": 32,
+          "width": 288,
+          "height": 41
+        }
+      },
+      {
+        "text": "toxican",
+        "confidence": 99,
+        "box": {
+          "x": 137,
+          "y": 73,
+          "width": 136,
+          "height": 35
+        }
+      },
+      {
+        "text": "+98.2%",
+        "confidence": 99,
+        "box": {
+          "x": 81,
+          "y": 112,
+          "width": 105,
+          "height": 30
+        }
+      },
+      {
+        "text": "毒素伤害",
+        "confidence": 99,
+        "box": {
+          "x": 211,
+          "y": 111,
+          "width": 118,
+          "height": 29
+        }
+      },
+      {
+        "text": "+128%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 98,
+          "y": 142,
+          "width": 214,
+          "height": 27
+        }
+      },
+      {
+        "text": "+110.9%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 87,
+          "y": 171,
+          "width": 235,
+          "height": 29
+        }
+      },
+      {
+        "text": "+81.5%武器后坐力",
+        "confidence": 100,
+        "box": {
+          "x": 80,
+          "y": 199,
+          "width": 248,
+          "height": 32
+        }
+      },
+      {
+        "text": "段位 14",
+        "confidence": 91,
+        "box": {
+          "x": 62,
+          "y": 249,
+          "width": 89,
+          "height": 27
+        }
+      },
+      {
+        "text": "57",
+        "confidence": 99,
+        "box": {
+          "x": 300,
+          "y": 251,
+          "width": 43,
+          "height": 22
+        }
+      },
+      {
+        "text": "。",
+        "confidence": 95,
+        "box": {
+          "x": 197,
+          "y": 299,
+          "width": 14,
+          "height": 12
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "努寇微波枪Acri-",
+        "confidence": 100,
+        "box": {
+          "x": 62,
+          "y": 32,
+          "width": 286,
+          "height": 39
+        }
+      },
+      {
+        "text": "toxican",
+        "confidence": 100,
+        "box": {
+          "x": 139,
+          "y": 76,
+          "width": 132,
+          "height": 29
+        }
+      },
+      {
+        "text": "+98.2%一毒素伤害",
+        "confidence": 94,
+        "box": {
+          "x": 81,
+          "y": 109,
+          "width": 247,
+          "height": 31
+        }
+      },
+      {
+        "text": "+128% 多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 98,
+          "y": 140,
+          "width": 214,
+          "height": 29
+        }
+      },
+      {
+        "text": "+110.9%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 86,
+          "y": 169,
+          "width": 234,
+          "height": 30
+        }
+      },
+      {
+        "text": "+81.5%武器后坐力",
+        "confidence": 100,
+        "box": {
+          "x": 80,
+          "y": 200,
+          "width": 246,
+          "height": 31
+        }
+      },
+      {
+        "text": "段位 14",
+        "confidence": 100,
+        "box": {
+          "x": 60,
+          "y": 248,
+          "width": 89,
+          "height": 27
+        }
+      },
+      {
+        "text": "7",
+        "confidence": 100,
+        "box": {
+          "x": 301,
+          "y": 250,
+          "width": 42,
+          "height": 23
+        }
+      }
+    ],
+    "expected": {
+      "name": "努寇微波枪",
+      "stats": [
+        [
+          "WeaponToxinDamageMod",
+          98.2,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          128,
+          "+"
+        ],
+        [
+          "WeaponCritDamageMod",
+          110.9,
+          "+"
+        ],
+        [
+          "WeaponRecoilReductionMod",
+          81.5,
+          "+"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-2",
+    "image": "20261026-142059.211-2.jpg",
+    "sha256": "ef96895a99f551cebc93f2a056ae88c243a9a52215ea8f2fa791bb8af165590c",
+    "blocks": [
+      {
+        "text": "9-",
+        "confidence": 73,
+        "box": {
+          "x": 852,
+          "y": 102,
+          "width": 115,
+          "height": 81
+        }
+      },
+      {
+        "text": "7K",
+        "confidence": 68,
+        "box": {
+          "x": 21,
+          "y": 553,
+          "width": 94,
+          "height": 63
+        }
+      },
+      {
+        "text": "伯斯顿Acri-",
+        "confidence": 95,
+        "box": {
+          "x": 323,
+          "y": 554,
+          "width": 487,
+          "height": 104
+        }
+      },
+      {
+        "text": "cronicron",
+        "confidence": 98,
+        "box": {
+          "x": 366,
+          "y": 651,
+          "width": 403,
+          "height": 89
+        }
+      },
+      {
+        "text": "+141.4%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 295,
+          "y": 739,
+          "width": 538,
+          "height": 75
+        }
+      },
+      {
+        "text": "+70.3%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 218,
+          "y": 808,
+          "width": 693,
+          "height": 81
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 405,
+          "y": 879,
+          "width": 289,
+          "height": 64
+        }
+      },
+      {
+        "text": "+162.5%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 302,
+          "y": 941,
+          "width": 534,
+          "height": 81
+        }
+      },
+      {
+        "text": "-49.6%变焦",
+        "confidence": 99,
+        "box": {
+          "x": 395,
+          "y": 1015,
+          "width": 351,
+          "height": 70
+        }
+      },
+      {
+        "text": "段位8",
+        "confidence": 99,
+        "box": {
+          "x": 252,
+          "y": 1118,
+          "width": 163,
+          "height": 71
+        }
+      },
+      {
+        "text": "092",
+        "confidence": 79,
+        "box": {
+          "x": 742,
+          "y": 1123,
+          "width": 133,
+          "height": 64
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "1",
+        "confidence": 46,
+        "box": {
+          "x": 894,
+          "y": 108,
+          "width": 60,
+          "height": 40
+        }
+      },
+      {
+        "text": "伯斯顿Acri-",
+        "confidence": 100,
+        "box": {
+          "x": 326,
+          "y": 554,
+          "width": 476,
+          "height": 94
+        }
+      },
+      {
+        "text": "cronicron",
+        "confidence": 100,
+        "box": {
+          "x": 365,
+          "y": 660,
+          "width": 399,
+          "height": 71
+        }
+      },
+      {
+        "text": "+141.4%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 296,
+          "y": 736,
+          "width": 533,
+          "height": 70
+        }
+      },
+      {
+        "text": "+70.3%射速(弓类武器",
+        "confidence": 100,
+        "box": {
+          "x": 217,
+          "y": 810,
+          "width": 690,
+          "height": 78
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 403,
+          "y": 878,
+          "width": 284,
+          "height": 69
+        }
+      },
+      {
+        "text": "+162.5%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 302,
+          "y": 934,
+          "width": 532,
+          "height": 76
+        }
+      },
+      {
+        "text": "-49.6%变焦",
+        "confidence": 100,
+        "box": {
+          "x": 397,
+          "y": 1014,
+          "width": 344,
+          "height": 67
+        }
+      },
+      {
+        "text": "段位8",
+        "confidence": 100,
+        "box": {
+          "x": 248,
+          "y": 1117,
+          "width": 165,
+          "height": 68
+        }
+      },
+      {
+        "text": "92",
+        "confidence": 100,
+        "box": {
+          "x": 739,
+          "y": 1119,
+          "width": 132,
+          "height": 66
+        }
+      }
+    ],
+    "expected": {
+      "name": "伯斯顿",
+      "stats": [
+        [
+          "WeaponCritDamageMod",
+          141.4,
+          "+"
+        ],
+        [
+          "WeaponFireRateMod",
+          70.3,
+          "+"
+        ],
+        [
+          "WeaponCritChanceMod",
+          162.5,
+          "+"
+        ],
+        [
+          "WeaponZoomFovMod",
+          -49.6,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-3",
+    "image": "20261026-142059.211-3.png",
+    "sha256": "4a47061ce77df85710de079b5b831eea9b0b7a1852a8c8cf1819df6ed340a9a0",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 464,
+          "y": 80,
+          "width": 81,
+          "height": 33
+        }
+      },
+      {
+        "text": "葬铭 Visi-fevacan",
+        "confidence": 99,
+        "box": {
+          "x": 108,
+          "y": 423,
+          "width": 407,
+          "height": 53
+        }
+      },
+      {
+        "text": "+54.7%装填速度",
+        "confidence": 99,
+        "box": {
+          "x": 167,
+          "y": 478,
+          "width": 291,
+          "height": 40
+        }
+      },
+      {
+        "text": "6+127.1%",
+        "confidence": 95,
+        "box": {
+          "x": 144,
+          "y": 515,
+          "width": 343,
+          "height": 48
+        }
+      },
+      {
+        "text": "+257.5%伤害",
+        "confidence": 99,
+        "box": {
+          "x": 193,
+          "y": 558,
+          "width": 237,
+          "height": 37
+        }
+      },
+      {
+        "text": "-79.9%触发几率",
+        "confidence": 100,
+        "box": {
+          "x": 170,
+          "y": 597,
+          "width": 284,
+          "height": 40
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 97,
+        "box": {
+          "x": 124,
+          "y": 660,
+          "width": 116,
+          "height": 35
+        }
+      },
+      {
+        "text": "520",
+        "confidence": 88,
+        "box": {
+          "x": 418,
+          "y": 661,
+          "width": 77,
+          "height": 34
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 464,
+          "y": 78,
+          "width": 48,
+          "height": 34
+        }
+      },
+      {
+        "text": "葬铭 Visi-fevacan",
+        "confidence": 100,
+        "box": {
+          "x": 107,
+          "y": 422,
+          "width": 406,
+          "height": 52
+        }
+      },
+      {
+        "text": "+54.7%装填速度",
+        "confidence": 100,
+        "box": {
+          "x": 167,
+          "y": 477,
+          "width": 289,
+          "height": 38
+        }
+      },
+      {
+        "text": "+127.1% 多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 171,
+          "y": 518,
+          "width": 314,
+          "height": 39
+        }
+      },
+      {
+        "text": "+257.5%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 193,
+          "y": 557,
+          "width": 236,
+          "height": 39
+        }
+      },
+      {
+        "text": "79.9% 触发几率",
+        "confidence": 100,
+        "box": {
+          "x": 180,
+          "y": 596,
+          "width": 273,
+          "height": 40
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 100,
+        "box": {
+          "x": 121,
+          "y": 659,
+          "width": 116,
+          "height": 36
+        }
+      },
+      {
+        "text": "日20",
+        "confidence": 100,
+        "box": {
+          "x": 417,
+          "y": 661,
+          "width": 78,
+          "height": 32
+        }
+      }
+    ],
+    "expected": {
+      "name": "葬铭",
+      "stats": [
+        [
+          "WeaponReloadSpeedMod",
+          54.7,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          127.1,
+          "+"
+        ],
+        [
+          "WeaponDamageAmountMod",
+          257.5,
+          "+"
+        ],
+        [
+          "WeaponStunChanceMod",
+          -79.9,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-4",
+    "image": "20261026-142059.211-4.png",
+    "sha256": "666afe482b3b94e1c62e28c006d8bab1d0bad16f60e296958627ea4f8b199395",
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 464,
+          "y": 80,
+          "width": 81,
+          "height": 33
+        }
+      },
+      {
+        "text": "葬铭 Visi-fevacan",
+        "confidence": 99,
+        "box": {
+          "x": 108,
+          "y": 423,
+          "width": 407,
+          "height": 53
+        }
+      },
+      {
+        "text": "+54.7%装填速度",
+        "confidence": 99,
+        "box": {
+          "x": 167,
+          "y": 478,
+          "width": 291,
+          "height": 40
+        }
+      },
+      {
+        "text": "6+127.1%",
+        "confidence": 95,
+        "box": {
+          "x": 144,
+          "y": 515,
+          "width": 343,
+          "height": 48
+        }
+      },
+      {
+        "text": "+257.5%伤害",
+        "confidence": 99,
+        "box": {
+          "x": 193,
+          "y": 558,
+          "width": 237,
+          "height": 37
+        }
+      },
+      {
+        "text": "-79.9%触发几率",
+        "confidence": 100,
+        "box": {
+          "x": 170,
+          "y": 597,
+          "width": 284,
+          "height": 40
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 97,
+        "box": {
+          "x": 124,
+          "y": 659,
+          "width": 116,
+          "height": 35
+        }
+      },
+      {
+        "text": "520",
+        "confidence": 88,
+        "box": {
+          "x": 418,
+          "y": 661,
+          "width": 77,
+          "height": 34
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 464,
+          "y": 78,
+          "width": 48,
+          "height": 34
+        }
+      },
+      {
+        "text": "葬铭 Visi-fevacan",
+        "confidence": 100,
+        "box": {
+          "x": 107,
+          "y": 422,
+          "width": 406,
+          "height": 52
+        }
+      },
+      {
+        "text": "+54.7%装填速度",
+        "confidence": 100,
+        "box": {
+          "x": 167,
+          "y": 477,
+          "width": 289,
+          "height": 38
+        }
+      },
+      {
+        "text": "+127.1% 多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 171,
+          "y": 518,
+          "width": 314,
+          "height": 39
+        }
+      },
+      {
+        "text": "+257.5%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 193,
+          "y": 557,
+          "width": 236,
+          "height": 39
+        }
+      },
+      {
+        "text": "79.9% 触发几率",
+        "confidence": 100,
+        "box": {
+          "x": 180,
+          "y": 596,
+          "width": 273,
+          "height": 40
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 100,
+        "box": {
+          "x": 121,
+          "y": 659,
+          "width": 116,
+          "height": 36
+        }
+      },
+      {
+        "text": "日20",
+        "confidence": 100,
+        "box": {
+          "x": 417,
+          "y": 661,
+          "width": 78,
+          "height": 32
+        }
+      }
+    ],
+    "expected": {
+      "name": "葬铭",
+      "stats": [
+        [
+          "WeaponReloadSpeedMod",
+          54.7,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          127.1,
+          "+"
+        ],
+        [
+          "WeaponDamageAmountMod",
+          257.5,
+          "+"
+        ],
+        [
+          "WeaponStunChanceMod",
+          -79.9,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-5",
+    "image": "20261026-142059.211-5.jpg",
+    "sha256": "9cfc9d0a4e997f0202988cdf30d3551b7e088fca2921b0b42608175f36836f4a",
+    "blocks": [
+      {
+        "text": "9",
+        "confidence": 89,
+        "box": {
+          "x": 1021,
+          "y": 337,
+          "width": 56,
+          "height": 115
+        }
+      },
+      {
+        "text": "伯斯顿Acri-",
+        "confidence": 97,
+        "box": {
+          "x": 182,
+          "y": 1017,
+          "width": 759,
+          "height": 194
+        }
+      },
+      {
+        "text": "cronicron",
+        "confidence": 98,
+        "box": {
+          "x": 247,
+          "y": 1181,
+          "width": 628,
+          "height": 145
+        }
+      },
+      {
+        "text": "+141.4%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 141,
+          "y": 1300,
+          "width": 827,
+          "height": 141
+        }
+      },
+      {
+        "text": "+70.3%射速(弓类武器",
+        "confidence": 99,
+        "box": {
+          "x": 23,
+          "y": 1416,
+          "width": 1056,
+          "height": 128
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 306,
+          "y": 1533,
+          "width": 443,
+          "height": 107
+        }
+      },
+      {
+        "text": "+162.5%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 149,
+          "y": 1608,
+          "width": 811,
+          "height": 147
+        }
+      },
+      {
+        "text": "-49.6%变焦",
+        "confidence": 99,
+        "box": {
+          "x": 291,
+          "y": 1733,
+          "width": 530,
+          "height": 109
+        }
+      },
+      {
+        "text": "段位8",
+        "confidence": 99,
+        "box": {
+          "x": 68,
+          "y": 1881,
+          "width": 252,
+          "height": 105
+        }
+      },
+      {
+        "text": "092",
+        "confidence": 59,
+        "box": {
+          "x": 810,
+          "y": 1901,
+          "width": 193,
+          "height": 88
+        }
+      },
+      {
+        "text": "10",
+        "confidence": 98,
+        "box": {
+          "x": 101,
+          "y": 2285,
+          "width": 166,
+          "height": 75
+        }
+      },
+      {
+        "text": "6-",
+        "confidence": 78,
+        "box": {
+          "x": 902,
+          "y": 2306,
+          "width": 117,
+          "height": 54
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "r",
+        "confidence": 54,
+        "box": {
+          "x": 1096,
+          "y": 343,
+          "width": 99,
+          "height": 66
+        }
+      },
+      {
+        "text": "伯斯顿Acri-",
+        "confidence": 100,
+        "box": {
+          "x": 227,
+          "y": 1048,
+          "width": 738,
+          "height": 153
+        }
+      },
+      {
+        "text": "cronicron",
+        "confidence": 100,
+        "box": {
+          "x": 285,
+          "y": 1213,
+          "width": 621,
+          "height": 119
+        }
+      },
+      {
+        "text": "+141.4%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 190,
+          "y": 1333,
+          "width": 816,
+          "height": 113
+        }
+      },
+      {
+        "text": "+70.3% 射速 (弓类武器",
+        "confidence": 100,
+        "box": {
+          "x": 70,
+          "y": 1452,
+          "width": 1057,
+          "height": 122
+        }
+      },
+      {
+        "text": "效果加倍)",
+        "confidence": 100,
+        "box": {
+          "x": 355,
+          "y": 1551,
+          "width": 436,
+          "height": 106
+        }
+      },
+      {
+        "text": "+162.5%暴击几率",
+        "confidence": 100,
+        "box": {
+          "x": 206,
+          "y": 1637,
+          "width": 801,
+          "height": 111
+        }
+      },
+      {
+        "text": "-49.6%变焦",
+        "confidence": 100,
+        "box": {
+          "x": 348,
+          "y": 1762,
+          "width": 525,
+          "height": 100
+        }
+      },
+      {
+        "text": "段位8",
+        "confidence": 100,
+        "box": {
+          "x": 129,
+          "y": 1913,
+          "width": 249,
+          "height": 96
+        }
+      },
+      {
+        "text": "92",
+        "confidence": 100,
+        "box": {
+          "x": 870,
+          "y": 1910,
+          "width": 191,
+          "height": 85
+        }
+      },
+      {
+        "text": "10",
+        "confidence": 100,
+        "box": {
+          "x": 207,
+          "y": 2324,
+          "width": 127,
+          "height": 63
+        }
+      }
+    ],
+    "expected": {
+      "name": "伯斯顿",
+      "stats": [
+        [
+          "WeaponCritDamageMod",
+          141.4,
+          "+"
+        ],
+        [
+          "WeaponFireRateMod",
+          70.3,
+          "+"
+        ],
+        [
+          "WeaponCritChanceMod",
+          162.5,
+          "+"
+        ],
+        [
+          "WeaponZoomFovMod",
+          -49.6,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-6",
+    "image": "20261026-142059.211-6.png",
+    "sha256": "e4fdbe37b2660beb3dfe5273b10ed6c3765be8ae7e5fd587052132f55e228bae",
+    "blocks": [
+      {
+        "text": "9r",
+        "confidence": 76,
+        "box": {
+          "x": 314,
+          "y": 21,
+          "width": 45,
+          "height": 29
+        }
+      },
+      {
+        "text": "葬铭 Sati-toxicis",
+        "confidence": 91,
+        "box": {
+          "x": 48,
+          "y": 272,
+          "width": 283,
+          "height": 38
+        }
+      },
+      {
+        "text": "+99.9%暴击伤害",
+        "confidence": 99,
+        "box": {
+          "x": 80,
+          "y": 313,
+          "width": 219,
+          "height": 30
+        }
+      },
+      {
+        "text": "+104.6%毒素伤害",
+        "confidence": 99,
+        "box": {
+          "x": 57,
+          "y": 338,
+          "width": 264,
+          "height": 37
+        }
+      },
+      {
+        "text": "+146.6%",
+        "confidence": 100,
+        "box": {
+          "x": 72,
+          "y": 372,
+          "width": 237,
+          "height": 30
+        }
+      },
+      {
+        "text": "-97.3%穿刺伤害",
+        "confidence": 99,
+        "box": {
+          "x": 68,
+          "y": 401,
+          "width": 243,
+          "height": 30
+        }
+      },
+      {
+        "text": "段位 16",
+        "confidence": 96,
+        "box": {
+          "x": 48,
+          "y": 450,
+          "width": 88,
+          "height": 27
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "9",
+        "confidence": 100,
+        "box": {
+          "x": 314,
+          "y": 21,
+          "width": 45,
+          "height": 26
+        }
+      },
+      {
+        "text": "葬铭 Sati-toxitis",
+        "confidence": 100,
+        "box": {
+          "x": 46,
+          "y": 270,
+          "width": 285,
+          "height": 40
+        }
+      },
+      {
+        "text": "+99.9%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 80,
+          "y": 313,
+          "width": 219,
+          "height": 29
+        }
+      },
+      {
+        "text": "+104.6%杰毒素伤害",
+        "confidence": 100,
+        "box": {
+          "x": 58,
+          "y": 340,
+          "width": 262,
+          "height": 32
+        }
+      },
+      {
+        "text": "+146.6% 多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 72,
+          "y": 372,
+          "width": 234,
+          "height": 29
+        }
+      },
+      {
+        "text": "97.3% 穿刺伤害",
+        "confidence": 100,
+        "box": {
+          "x": 72,
+          "y": 401,
+          "width": 238,
+          "height": 29
+        }
+      },
+      {
+        "text": "段位 16",
+        "confidence": 100,
+        "box": {
+          "x": 46,
+          "y": 450,
+          "width": 89,
+          "height": 27
+        }
+      },
+      {
+        "text": "61",
+        "confidence": 100,
+        "box": {
+          "x": 270,
+          "y": 452,
+          "width": 57,
+          "height": 23
+        }
+      }
+    ],
+    "expected": {
+      "name": "葬铭",
+      "stats": [
+        [
+          "WeaponCritDamageMod",
+          99.9,
+          "+"
+        ],
+        [
+          "WeaponToxinDamageMod",
+          104.6,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          146.6,
+          "+"
+        ],
+        [
+          "WeaponArmorPiercingDamageMod",
+          -97.3,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-7",
+    "image": "20261026-142059.211-7.png",
+    "sha256": "076a76b1be9491b36cbed0e6dc0f46b584ea8a8f55eb47c3360c8fbd472569ef",
+    "blocks": [
+      {
+        "text": "9r",
+        "confidence": 80,
+        "box": {
+          "x": 334,
+          "y": 20,
+          "width": 46,
+          "height": 29
+        }
+      },
+      {
+        "text": "葬铭 Sati-toxicitis",
+        "confidence": 92,
+        "box": {
+          "x": 65,
+          "y": 276,
+          "width": 284,
+          "height": 37
+        }
+      },
+      {
+        "text": "+99.9%暴击伤害",
+        "confidence": 99,
+        "box": {
+          "x": 96,
+          "y": 316,
+          "width": 221,
+          "height": 30
+        }
+      },
+      {
+        "text": "+104.6%毒素伤害",
+        "confidence": 99,
+        "box": {
+          "x": 74,
+          "y": 341,
+          "width": 265,
+          "height": 36
+        }
+      },
+      {
+        "text": "+146.6%多重射击",
+        "confidence": 99,
+        "box": {
+          "x": 89,
+          "y": 375,
+          "width": 235,
+          "height": 28
+        }
+      },
+      {
+        "text": "-97.3%穿刺伤害",
+        "confidence": 98,
+        "box": {
+          "x": 86,
+          "y": 405,
+          "width": 242,
+          "height": 29
+        }
+      },
+      {
+        "text": "段位 16",
+        "confidence": 95,
+        "box": {
+          "x": 65,
+          "y": 453,
+          "width": 88,
+          "height": 27
+        }
+      },
+      {
+        "text": "61",
+        "confidence": 89,
+        "box": {
+          "x": 287,
+          "y": 455,
+          "width": 58,
+          "height": 23
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "9r",
+        "confidence": 100,
+        "box": {
+          "x": 336,
+          "y": 20,
+          "width": 43,
+          "height": 26
+        }
+      },
+      {
+        "text": "葬铭 Sati-toxitis",
+        "confidence": 100,
+        "box": {
+          "x": 65,
+          "y": 273,
+          "width": 284,
+          "height": 40
+        }
+      },
+      {
+        "text": "+99.9%暴击伤害",
+        "confidence": 100,
+        "box": {
+          "x": 97,
+          "y": 315,
+          "width": 219,
+          "height": 30
+        }
+      },
+      {
+        "text": "+104.6%毒素伤害",
+        "confidence": 100,
+        "box": {
+          "x": 75,
+          "y": 344,
+          "width": 262,
+          "height": 31
+        }
+      },
+      {
+        "text": "+146.6% 多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 88,
+          "y": 374,
+          "width": 236,
+          "height": 30
+        }
+      },
+      {
+        "text": "97.3%>穿刺伤害",
+        "confidence": 93,
+        "box": {
+          "x": 89,
+          "y": 403,
+          "width": 238,
+          "height": 30
+        }
+      },
+      {
+        "text": "段位 16",
+        "confidence": 100,
+        "box": {
+          "x": 64,
+          "y": 453,
+          "width": 88,
+          "height": 27
+        }
+      },
+      {
+        "text": "061",
+        "confidence": 100,
+        "box": {
+          "x": 289,
+          "y": 455,
+          "width": 55,
+          "height": 24
+        }
+      },
+      {
+        "text": "合",
+        "confidence": 100,
+        "box": {
+          "x": 227,
+          "y": 524,
+          "width": 14,
+          "height": 8
+        }
+      }
+    ],
+    "expected": {
+      "name": "葬铭",
+      "stats": [
+        [
+          "WeaponCritDamageMod",
+          99.9,
+          "+"
+        ],
+        [
+          "WeaponToxinDamageMod",
+          104.6,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          146.6,
+          "+"
+        ],
+        [
+          "WeaponArmorPiercingDamageMod",
+          -97.3,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  },
+  {
+    "id": "feishu-8",
+    "image": "20261026-142059.211-8.png",
+    "sha256": "423e49cafa558bac3a633e7c77c288439ffe3a0fcffac0416cdcbd0f7c74c4cf",
+    "blocks": [
+      {
+        "text": "18-",
+        "confidence": 92,
+        "box": {
+          "x": 437,
+          "y": 89,
+          "width": 81,
+          "height": 31
+        }
+      },
+      {
+        "text": "葬铭 Visi-fevacan",
+        "confidence": 99,
+        "box": {
+          "x": 82,
+          "y": 433,
+          "width": 405,
+          "height": 51
+        }
+      },
+      {
+        "text": "+54.7%装填速度",
+        "confidence": 99,
+        "box": {
+          "x": 139,
+          "y": 486,
+          "width": 291,
+          "height": 40
+        }
+      },
+      {
+        "text": "θ+127.1%多重射击",
+        "confidence": 91,
+        "box": {
+          "x": 115,
+          "y": 522,
+          "width": 344,
+          "height": 51
+        }
+      },
+      {
+        "text": "+257.5%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 165,
+          "y": 565,
+          "width": 237,
+          "height": 39
+        }
+      },
+      {
+        "text": "-79.9%触发几率",
+        "confidence": 100,
+        "box": {
+          "x": 143,
+          "y": 604,
+          "width": 283,
+          "height": 40
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 95,
+        "box": {
+          "x": 96,
+          "y": 668,
+          "width": 116,
+          "height": 35
+        }
+      },
+      {
+        "text": "020",
+        "confidence": 56,
+        "box": {
+          "x": 390,
+          "y": 670,
+          "width": 77,
+          "height": 32
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18-",
+        "confidence": 100,
+        "box": {
+          "x": 436,
+          "y": 86,
+          "width": 66,
+          "height": 33
+        }
+      },
+      {
+        "text": "葬铭Visi-fevacan",
+        "confidence": 100,
+        "box": {
+          "x": 80,
+          "y": 430,
+          "width": 405,
+          "height": 54
+        }
+      },
+      {
+        "text": "+54.7% 装填速度",
+        "confidence": 100,
+        "box": {
+          "x": 138,
+          "y": 482,
+          "width": 291,
+          "height": 40
+        }
+      },
+      {
+        "text": "0+127.1% 多重射击",
+        "confidence": 100,
+        "box": {
+          "x": 114,
+          "y": 524,
+          "width": 342,
+          "height": 39
+        }
+      },
+      {
+        "text": "+257.5%伤害",
+        "confidence": 100,
+        "box": {
+          "x": 165,
+          "y": 565,
+          "width": 237,
+          "height": 40
+        }
+      },
+      {
+        "text": "79.9% 触发几率",
+        "confidence": 100,
+        "box": {
+          "x": 154,
+          "y": 605,
+          "width": 272,
+          "height": 39
+        }
+      },
+      {
+        "text": "段位10",
+        "confidence": 100,
+        "box": {
+          "x": 94,
+          "y": 667,
+          "width": 115,
+          "height": 35
+        }
+      },
+      {
+        "text": "日20",
+        "confidence": 100,
+        "box": {
+          "x": 390,
+          "y": 672,
+          "width": 76,
+          "height": 32
+        }
+      }
+    ],
+    "expected": {
+      "name": "葬铭",
+      "stats": [
+        [
+          "WeaponReloadSpeedMod",
+          54.7,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          127.1,
+          "+"
+        ],
+        [
+          "WeaponDamageAmountMod",
+          257.5,
+          "+"
+        ],
+        [
+          "WeaponStunChanceMod",
+          -79.9,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    }
+  }
+]

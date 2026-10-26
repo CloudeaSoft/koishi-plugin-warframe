@@ -8,15 +8,16 @@ interface OcrCacheParams {
   hash: string
   image: string
   secret: OcrAPISecret
+  mode: 'accurate' | 'basic'
 }
 
 const ocrCache = createCache({
   storage: { type: 'memory', options: { size: 100 } },
 }).define(
   'extract',
-  { ttl: 86_400, serialize: (params: OcrCacheParams) => params.hash },
+  { ttl: 86_400, serialize: (params: OcrCacheParams) => `${params.mode}:${params.hash}` },
   async (params: OcrCacheParams) => {
-    return getTextFromTencentOCR(params.image, params.secret)
+    return getTextFromTencentOCR(params.image, params.secret, params.mode)
   },
 )
 
@@ -33,6 +34,7 @@ function getImageBase64Hash(base64: string): string {
 async function getTextFromTencentOCR(
   image: string,
   secret: OcrAPISecret,
+  mode: OcrCacheParams['mode'],
 ): Promise<OcrTextBlock[]> {
   const tencentcloud = await import('tencentcloud-sdk-nodejs-ocr')
   const OcrClient = tencentcloud.ocr.v20181119.Client
@@ -51,9 +53,9 @@ async function getTextFromTencentOCR(
 
   const client = new OcrClient(clientConfig)
 
-  const { TextDetections } = await client.GeneralAccurateOCR({
-    ImageBase64: image,
-  })
+  const { TextDetections } = await (mode === 'basic'
+    ? client.GeneralBasicOCR({ ImageBase64: image })
+    : client.GeneralAccurateOCR({ ImageBase64: image }))
 
   return (TextDetections ?? []).flatMap((t) => {
     const text = t.DetectedText
@@ -68,7 +70,7 @@ async function getTextFromTencentOCR(
   })
 }
 
-export async function extractTextFromImage(image: string | Blob, secret: OcrAPISecret): Promise<OcrTextBlock[] | undefined> {
+export async function extractTextFromImage(image: string | Blob, secret: OcrAPISecret, mode: OcrCacheParams['mode'] = 'accurate'): Promise<OcrTextBlock[] | undefined> {
   if (image instanceof Blob) {
     const buffer = await image.arrayBuffer()
     image = Buffer.from(buffer).toString('base64')
@@ -77,7 +79,7 @@ export async function extractTextFromImage(image: string | Blob, secret: OcrAPIS
   const hash = getImageBase64Hash(image)
 
   try {
-    return await ocrCache.extract({ hash, image, secret })
+    return await ocrCache.extract({ hash, image, secret, mode })
   }
   catch {
     return undefined

@@ -3,15 +3,52 @@ import { expect } from 'chai'
 import { vi } from 'vitest'
 import { getAnalyzedRiven } from '../../../src/warframe/services/wf-service/wf-service.riven'
 import corpus from '../../assets/riven-ocr/corpus.json'
+import feishu from '../../assets/riven-ocr/feishu-2026-10-26/recorded.json'
 import syntheticCursors from '../../assets/riven-ocr/synthetic-cursors/recorded.json'
 
-const external = vi.hoisted(() => ({ image: vi.fn(), ocr: vi.fn() }))
+const external = vi.hoisted(() => ({ image: vi.fn(), ocr: vi.fn(), basic: vi.fn() }))
 vi.mock('../../../src/warframe/utils/http', () => ({ fetchAsyncImage: external.image }))
 vi.mock('tencentcloud-sdk-nodejs-ocr', () => ({
-  ocr: { v20181119: { Client: class { GeneralAccurateOCR = external.ocr } } },
+  ocr: { v20181119: { Client: class {
+    GeneralAccurateOCR = external.ocr
+    GeneralBasicOCR = external.basic
+  } } },
 }))
 
 describe('riven image analysis pipeline', () => {
+  for (const sample of feishu) {
+    it(`analyzes all fields of ${sample.id} with fallback only when needed`, async () => {
+      external.image.mockResolvedValueOnce(new Blob([sample.id]))
+      const response = (blocks: typeof sample.blocks) => ({ TextDetections: blocks.map(b => ({
+        DetectedText: b.text,
+        Confidence: b.confidence,
+        ItemPolygon: { X: b.box.x, Y: b.box.y, Width: b.box.width, Height: b.box.height },
+      })) })
+      external.ocr.mockResolvedValueOnce(response(sample.blocks))
+      external.basic.mockReset().mockResolvedValue(response(sample.fallbackBlocks))
+      const result = await getAnalyzedRiven({ id: 'test', key: 'test' }, `https://fixtures.invalid/${sample.id}.png`)
+      expect(result.ok).to.equal(true)
+      if (!result.ok) {
+        throw new Error(result.error.code)
+      }
+      expect(result.data.name).to.equal(sample.id === 'feishu-1' ? '赤毒·努寇微波枪' : sample.expected.name)
+      expect([...result.data.buffs, ...result.data.curses].map(a => [a.gameRef, a.value])).to.deep.equal(sample.expected.stats.map(s => s.slice(0, 2)))
+      expect(external.basic.mock.calls.length).to.equal(['feishu-3', 'feishu-4', 'feishu-6', 'feishu-7'].includes(sample.id) ? 1 : 0)
+    })
+  }
+
+  it('rejects the image when a necessary fallback is unavailable', async () => {
+    external.image.mockResolvedValueOnce(new Blob(['unavailable-fallback']))
+    external.ocr.mockResolvedValueOnce({ TextDetections: feishu[2].blocks.map(b => ({
+      DetectedText: b.text,
+      Confidence: b.confidence,
+      ItemPolygon: { X: b.box.x, Y: b.box.y, Width: b.box.width, Height: b.box.height },
+    })) })
+    external.basic.mockReset().mockRejectedValue(new Error('unavailable'))
+    const result = await getAnalyzedRiven({ id: 'test', key: 'test' }, 'https://fixtures.invalid/unavailable-fallback.png')
+    expect(result).to.deep.equal({ ok: false, error: { code: 'riven.imageParseFailed', retryable: false } })
+  })
+
   for (const sample of corpus) {
     it(`carries ${sample.id} through download, OCR adaptation, parsing and grading`, async () => {
       external.image.mockResolvedValueOnce(new Blob([sample.id]))

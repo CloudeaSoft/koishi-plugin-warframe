@@ -35,7 +35,12 @@ export async function getAnalyzedRiven(secret: OcrAPISecret, url: string, varian
     return failure('riven.imageParseFailed')
   }
 
-  const parseResult = await parseOCRResult(extractResult)
+  let parseResult = await parseOCRResult(extractResult)
+  if (!parseResult && extractResult.length) {
+    const fallback = await extractTextFromImage(img, secret, 'basic')
+    if (fallback?.length)
+      parseResult = await parseOCRResult(extractResult, fallback)
+  }
   if (
     !parseResult
     || parseResult.attributes.length < 2
@@ -171,6 +176,6 @@ export async function getStaticRivenStats(weaponType: string, statType: string, 
 
 // ================ privates ===================
 
-export async function parseOCRResult(ocrResult: readonly (string | OcrTextBlock)[]): Promise<ParsedRiven | undefined> {
-  return parseRivenOcr(ocrResult)
+export async function parseOCRResult(ocrResult: readonly (string | OcrTextBlock)[], fallback?: readonly OcrTextBlock[]): Promise<ParsedRiven | undefined> {
+  return parseRivenOcr(ocrResult, fallback)
 }
