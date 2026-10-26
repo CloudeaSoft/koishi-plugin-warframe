@@ -5,6 +5,7 @@ import { getAnalyzedRiven } from '../../../src/warframe/services/wf-service/wf-s
 import corpus from '../../assets/riven-ocr/corpus.json'
 import feishu from '../../assets/riven-ocr/feishu-2026-10-26/recorded.json'
 import syntheticCursors from '../../assets/riven-ocr/synthetic-cursors/recorded.json'
+import web from '../../assets/riven-ocr/web-2026-10-26/recorded.json'
 
 const external = vi.hoisted(() => ({ image: vi.fn(), ocr: vi.fn(), basic: vi.fn() }))
 vi.mock('../../../src/warframe/utils/http', () => ({ fetchAsyncImage: external.image }))
@@ -16,7 +17,7 @@ vi.mock('tencentcloud-sdk-nodejs-ocr', () => ({
 }))
 
 describe('riven image analysis pipeline', () => {
-  for (const sample of feishu) {
+  for (const sample of [...feishu, ...web]) {
     it(`analyzes all fields of ${sample.id} with fallback only when needed`, async () => {
       external.image.mockResolvedValueOnce(new Blob([sample.id]))
       const response = (blocks: typeof sample.blocks) => ({ TextDetections: blocks.map(b => ({
@@ -31,9 +32,16 @@ describe('riven image analysis pipeline', () => {
       if (!result.ok) {
         throw new Error(result.error.code)
       }
-      expect(result.data.name).to.equal(sample.id === 'feishu-1' ? '赤毒·努寇微波枪' : sample.expected.name)
+      const detectedNames: Record<string, string> = {
+        'feishu-1': '赤毒·努寇微波枪',
+        'web-dokrahm': '多克拉姆',
+        'web-bramma': '赤毒·布拉玛',
+        'web-dual-toxocyst': '毒囊双枪',
+        'web-furis': '盗贼',
+      }
+      expect(result.data.name).to.equal(detectedNames[sample.id] ?? sample.expected.name)
       expect([...result.data.buffs, ...result.data.curses].map(a => [a.gameRef, a.value])).to.deep.equal(sample.expected.stats.map(s => s.slice(0, 2)))
-      expect(external.basic.mock.calls.length).to.equal(['feishu-3', 'feishu-4', 'feishu-6', 'feishu-7'].includes(sample.id) ? 1 : 0)
+      expect(external.basic.mock.calls.length).to.equal(['feishu-3', 'feishu-4', 'feishu-6', 'feishu-7', 'web-dual-toxocyst'].includes(sample.id) ? 1 : 0)
     })
   }
 

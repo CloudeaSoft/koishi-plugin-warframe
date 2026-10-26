@@ -32,8 +32,11 @@ function withoutCardDecorations(blocks: OcrTextBlock[]): OcrTextBlock[] {
   const title = titles[0].box!
   const ranks = blocks.filter(b => isRank(b.text) && b.box!.y > title.y)
   const footer = ranks.length === 1 ? ranks[0].box : undefined
+  const toolbar = footer ? rerollToolbar(blocks, titles[0], footer) : undefined
   return blocks.filter((block) => {
     const box = block.box!
+    if (toolbar !== undefined && box.y >= toolbar)
+      return false
     // A neighbouring card's capacity/polarity can share the title's baseline.
     const capacity = /^(?:[1-9]|1[0-8])[-Kr]?$/.test(block.text)
     const besideTitle = Math.abs(box.y + box.height / 2 - title.y - title.height / 2) < title.height / 2
@@ -51,6 +54,33 @@ function withoutCardDecorations(blocks: OcrTextBlock[]): OcrTextBlock[] {
     // The next card below the footer may expose just its capacity and polarity.
     return !(capacity && gap >= footer.height * 2 && gap <= footer.height * 6)
   })
+}
+
+/** Recognize the reroll screen below the card; never hide a second card or stat fragment. */
+function rerollToolbar(blocks: OcrTextBlock[], title: OcrTextBlock, footer: NonNullable<OcrTextBlock['box']>): number | undefined {
+  const controls = blocks.filter(b => /^CYCLE\s+FOR\b/i.test(b.text)
+    && b.box!.y >= footer.y + footer.height * 3)
+  if (controls.length !== 1)
+    return undefined
+  const control = controls[0].box!
+  const balances = blocks.filter(b => /^Remaining\s+Kuva\s*:/i.test(b.text) && b.box!.y > control.y + control.height)
+  if (balances.length !== 1)
+    return undefined
+  const titleBox = title.box!
+  if ([control, balances[0].box!].some(box => Math.min(box.x + box.width, titleBox.x + titleBox.width)
+    - Math.max(box.x, titleBox.x) < Math.min(box.width, titleBox.width) * 0.5)) {
+    return undefined
+  }
+  const stats = rivenStatsByType[findWeapon(title.text)!.type]
+  const outside = blocks.filter(b => b.box!.y >= control.y)
+  if (outside.some((b) => {
+    const label = normalizeStat(b.text)
+    return /^(?:[6θ🔒]?[+\-x]?\s*\d|[+\-x%]$)/iu.test(b.text)
+      || (label.length >= 2 && stats.some(stat => aliases(stat).some(name => name.startsWith(label) || name.endsWith(label))))
+  })) {
+    return undefined
+  }
+  return control.y
 }
 
 /** A cursor above the reroll counter can be read as a stray, low-confidence Han glyph. */
@@ -111,6 +141,9 @@ function restoreRows(input: readonly (string | OcrTextBlock)[]): OcrRow[] | unde
     const fragmented = parts.length > 1 && /^[+\-x]?\d+(?:\.\d+)?%?$/i.test(first.text) && /\p{L}/u.test(last.text)
     const kept = parts.filter((b, i) => !(fragmented && i > 0 && i < parts.length - 1
       && /^\d+%$/.test(b.text) && b.box!.height < Math.min(first.box!.height, last.box!.height) * 0.65))
+      .filter(b => !(parts.length === 3 && b.text === '^' && b === parts[1]
+        && /^[+\-]\d+(?:\.\d+)?%$/.test(first.text) && /^Heat$/i.test(last.text)
+        && b.box!.width <= b.box!.height * 1.2 && b.box!.height <= first.box!.height * 1.2))
     if (fragmented && kept.slice(1).some(b => /^[+\-x]?\d/i.test(b.text)))
       return undefined
     for (let i = 1; i < kept.length; i++) {
@@ -206,7 +239,7 @@ function matchStat(label: string, stats: RivenCalculationStat[], fragmented: boo
 }
 
 function isRank(text: string): boolean {
-  return /^(?:段位|等级|循环)\s*\d|^\d+\s*(?:段位|等级|次|循环)/.test(text)
+  return /^(?:段位|等级|循环|MR)\s*\d|^\d+\s*(?:段位|等级|次|循环)/i.test(text)
 }
 
 function isMetadata(text: string): boolean {
@@ -263,6 +296,7 @@ function recoverOcrLabels(input: readonly (string | OcrTextBlock)[], fallback: r
     return input
   }
   const stats = rivenStatsByType[weapon.type]
+  const firstAttributeY = Math.min(...blocks.filter(b => /^[+\-x]\d/i.test(withoutLock(b.text))).map(b => b.box!.y))
   return blocks.map((block) => {
     const candidates = fallback.filter(b => sameTextRegion(block, b))
     if (candidates.length !== 1)
@@ -270,6 +304,13 @@ function recoverOcrLabels(input: readonly (string | OcrTextBlock)[], fallback: r
     const candidate = candidates[0]
     // Keep the exact weapon name. Correct only an invalid Latin suffix to an official one.
     if (block === originalTitle && candidate === fallbackTitle && !originalWeapon) {
+      return { ...block, text: candidate.text }
+    }
+    // A hyphenated title can wrap its Latin suffix; keep corrections before all attributes.
+    if (originalTitle.text.trim().endsWith('-') && block.box!.y < firstAttributeY
+      && /^[a-z]+$/i.test(block.text) && !isRivenName(block.text) && isRivenName(candidate.text)
+      && normalSimilarity(normalizeName(block.text), normalizeName(candidate.text)) >= 0.8
+      && canWrapLabel({ ...originalTitle, fragmented: false }, { ...block, fragmented: false })) {
       return { ...block, text: candidate.text }
     }
     const number = withoutLock(block.text)
