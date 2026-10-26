@@ -251,6 +251,10 @@ const conditionalAnnotation = /\((?:弓类武器效果加倍|重击时x2|x2forBo
 function canWrapLabel(row: OcrRow, next: OcrRow): boolean {
   if (!/^\p{L}+$/u.test(next.text.replace(/\s/g, '')))
     return false
+  return followsRow(row, next)
+}
+
+function followsRow(row: OcrRow, next: OcrRow): boolean {
   if (!row.box || !next.box)
     return true
   const gap = next.box.y - row.box.y - row.box.height
@@ -399,6 +403,14 @@ export function parseRivenOcr(input: readonly (string | OcrTextBlock)[], fallbac
     const value = Number(number) * (prefix === '-' ? -1 : 1)
     if (!Number.isFinite(value) || value === 0)
       return undefined
+    // Small cards can place the entire heavy-attack explanation on its own line.
+    // Consume only that exact annotation next to its critical-chance attribute.
+    const annotation = rows[i + 1]
+    if (weapon.type === 'Melee' && attr.gameRef === 'WeaponCritChanceMod' && annotation
+      && /^\((?:重击时x2|x2forHeavyAttacks)\)$/i.test(annotation.text.replace(/\s/g, ''))
+      && followsRow(row, annotation)) {
+      i++
+    }
     attributes.push({ attr, value, prefix })
   }
   return attributes.length >= 2 && attributes.length <= 4 ? { name: weapon.name, attributes } : undefined

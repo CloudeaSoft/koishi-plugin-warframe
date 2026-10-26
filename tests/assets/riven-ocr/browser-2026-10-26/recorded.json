@@ -1,0 +1,1636 @@
+[
+  {
+    "id": "browser-arca-titron",
+    "image": "arca-titron.png",
+    "sha256": "ae1e522fd4362db549618ed386564b6e4a9769bdde97f5976bb306dd84740644",
+    "sourcePage": "https://www.reddit.com/r/wartrade/comments/1lam5s6/wtspcrivenhow_much_would_be_a_reasonable_price_to/",
+    "sourceImage": "https://preview.redd.it/wts-pc-riven-how-much-would-be-a-reasonable-price-to-list-v0-8a0cxvgudq6f1.png?auto=webp&s=873f5437440ee28070448d1338526115c6039a87",
+    "quality": "300x417 low-resolution card, standalone heavy-attack annotation and wrapped efficiency label",
+    "rejection": null,
+    "expected": {
+      "name": "Arca Titron",
+      "stats": [
+        [
+          "WeaponCritChanceMod",
+          227,
+          "+"
+        ],
+        [
+          "WeaponCritDamageMod",
+          101.7,
+          "+"
+        ],
+        [
+          "WeaponMeleeComboEfficiencyMod",
+          87.1,
+          "+"
+        ],
+        [
+          "WeaponStunChanceMod",
+          -80,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    },
+    "blocks": [
+      {
+        "text": "容",
+        "confidence": 96,
+        "box": {
+          "x": 125,
+          "y": 110,
+          "width": 20,
+          "height": 18
+        }
+      },
+      {
+        "text": "18K",
+        "confidence": 71,
+        "box": {
+          "x": 189,
+          "y": 116,
+          "width": 27,
+          "height": 12
+        }
+      },
+      {
+        "text": "Arca Titron Crita-",
+        "confidence": 100,
+        "box": {
+          "x": 72,
+          "y": 192,
+          "width": 125,
+          "height": 18
+        }
+      },
+      {
+        "text": "fortitis",
+        "confidence": 99,
+        "box": {
+          "x": 111,
+          "y": 210,
+          "width": 49,
+          "height": 16
+        }
+      },
+      {
+        "text": "+227% Critical Chance",
+        "confidence": 99,
+        "box": {
+          "x": 68,
+          "y": 229,
+          "width": 134,
+          "height": 13
+        }
+      },
+      {
+        "text": "(x2 for Heavy Attacks)",
+        "confidence": 99,
+        "box": {
+          "x": 69,
+          "y": 242,
+          "width": 133,
+          "height": 13
+        }
+      },
+      {
+        "text": "+101.7% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 59,
+          "y": 257,
+          "width": 151,
+          "height": 15
+        }
+      },
+      {
+        "text": "+87.1% Heavy Attack",
+        "confidence": 99,
+        "box": {
+          "x": 71,
+          "y": 271,
+          "width": 127,
+          "height": 13
+        }
+      },
+      {
+        "text": "Efficiency",
+        "confidence": 100,
+        "box": {
+          "x": 106,
+          "y": 284,
+          "width": 58,
+          "height": 14
+        }
+      },
+      {
+        "text": "-80% Status Chance",
+        "confidence": 100,
+        "box": {
+          "x": 74,
+          "y": 298,
+          "width": 122,
+          "height": 13
+        }
+      },
+      {
+        "text": "MR 14",
+        "confidence": 99,
+        "box": {
+          "x": 69,
+          "y": 320,
+          "width": 35,
+          "height": 12
+        }
+      },
+      {
+        "text": "09",
+        "confidence": 99,
+        "box": {
+          "x": 179,
+          "y": 321,
+          "width": 21,
+          "height": 10
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 188,
+          "y": 116,
+          "width": 26,
+          "height": 11
+        }
+      },
+      {
+        "text": "Arca Titron Crita",
+        "confidence": 100,
+        "box": {
+          "x": 73,
+          "y": 193,
+          "width": 123,
+          "height": 17
+        }
+      },
+      {
+        "text": "fortitis",
+        "confidence": 100,
+        "box": {
+          "x": 112,
+          "y": 211,
+          "width": 48,
+          "height": 15
+        }
+      },
+      {
+        "text": "+227% Critical Chance",
+        "confidence": 100,
+        "box": {
+          "x": 69,
+          "y": 228,
+          "width": 134,
+          "height": 14
+        }
+      },
+      {
+        "text": "(x2 for Heavy Attacks)",
+        "confidence": 100,
+        "box": {
+          "x": 69,
+          "y": 243,
+          "width": 132,
+          "height": 14
+        }
+      },
+      {
+        "text": "+i01.7% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 62,
+          "y": 256,
+          "width": 148,
+          "height": 13
+        }
+      },
+      {
+        "text": "+87.1% Heavy Attack",
+        "confidence": 100,
+        "box": {
+          "x": 73,
+          "y": 271,
+          "width": 127,
+          "height": 13
+        }
+      },
+      {
+        "text": "Efficiency",
+        "confidence": 100,
+        "box": {
+          "x": 108,
+          "y": 284,
+          "width": 57,
+          "height": 12
+        }
+      },
+      {
+        "text": "-80% Status Chance",
+        "confidence": 100,
+        "box": {
+          "x": 75,
+          "y": 299,
+          "width": 121,
+          "height": 12
+        }
+      },
+      {
+        "text": "MR 14",
+        "confidence": 100,
+        "box": {
+          "x": 69,
+          "y": 321,
+          "width": 36,
+          "height": 11
+        }
+      }
+    ]
+  },
+  {
+    "id": "browser-burston",
+    "image": "burston.jpg",
+    "sha256": "66eb2db1909c268ae84ee0b3933e0c261efae9030d77d954c23a446790deb48c",
+    "sourcePage": "https://www.reddit.com/r/wartrade/comments/1sp6s68/prcwtsriven_how_much_can_these_go_for/",
+    "sourceImage": "https://preview.redd.it/prc-wts-riven-how-much-can-these-go-for-v0-bswfx2fs10wg1.jpg?width=640&crop=smart&auto=webp&s=016981bb61069d53fa8fd0b9b8a59002372afbbd",
+    "quality": "640x853 tilted phone photo with moire, UI badge and wrapped labels",
+    "rejection": null,
+    "expected": {
+      "name": "Burston",
+      "stats": [
+        [
+          "WeaponFireRateMod",
+          86.2,
+          "+"
+        ],
+        [
+          "WeaponFireIterationsMod",
+          134.5,
+          "+"
+        ],
+        [
+          "WeaponCritChanceMod",
+          221.9,
+          "+"
+        ],
+        [
+          "WeaponClipMaxMod",
+          -59.6,
+          "-"
+        ]
+      ],
+      "units": [
+        "percent",
+        "percent",
+        "percent",
+        "percent"
+      ]
+    },
+    "blocks": [
+      {
+        "text": "18K",
+        "confidence": 80,
+        "box": {
+          "x": 529,
+          "y": 45,
+          "width": 110,
+          "height": 50
+        }
+      },
+      {
+        "text": "1",
+        "confidence": 96,
+        "box": {
+          "x": 270,
+          "y": 272,
+          "width": 26,
+          "height": 69
+        }
+      },
+      {
+        "text": "Burston Sati-critadra",
+        "confidence": 99,
+        "box": {
+          "x": 1,
+          "y": 399,
+          "width": 590,
+          "height": 77
+        }
+      },
+      {
+        "text": "+86.2% Fire Rate(x2 for",
+        "confidence": 99,
+        "box": {
+          "x": 18,
+          "y": 471,
+          "width": 555,
+          "height": 65
+        }
+      },
+      {
+        "text": "Bows)",
+        "confidence": 100,
+        "box": {
+          "x": 219,
+          "y": 525,
+          "width": 147,
+          "height": 54
+        }
+      },
+      {
+        "text": "+134.5% Multishot",
+        "confidence": 99,
+        "box": {
+          "x": 75,
+          "y": 573,
+          "width": 431,
+          "height": 53
+        }
+      },
+      {
+        "text": "+221.9% Critical Chance",
+        "confidence": 99,
+        "box": {
+          "x": 12,
+          "y": 625,
+          "width": 555,
+          "height": 54
+        }
+      },
+      {
+        "text": "-59.6% Magazine",
+        "confidence": 100,
+        "box": {
+          "x": 92,
+          "y": 674,
+          "width": 394,
+          "height": 63
+        }
+      },
+      {
+        "text": "Capacity",
+        "confidence": 100,
+        "box": {
+          "x": 185,
+          "y": 727,
+          "width": 202,
+          "height": 56
+        }
+      },
+      {
+        "text": "MR 10",
+        "confidence": 98,
+        "box": {
+          "x": 38,
+          "y": 801,
+          "width": 133,
+          "height": 42
+        }
+      },
+      {
+        "text": "023",
+        "confidence": 73,
+        "box": {
+          "x": 425,
+          "y": 809,
+          "width": 104,
+          "height": 42
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "发",
+        "confidence": 100,
+        "box": {
+          "x": 272,
+          "y": 34,
+          "width": 68,
+          "height": 71
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 531,
+          "y": 47,
+          "width": 108,
+          "height": 51
+        }
+      },
+      {
+        "text": "Burston Sati-critadra",
+        "confidence": 100,
+        "box": {
+          "x": 13,
+          "y": 421,
+          "width": 587,
+          "height": 62
+        }
+      },
+      {
+        "text": "+86.2% Fire Rate (x2 for",
+        "confidence": 100,
+        "box": {
+          "x": 31,
+          "y": 490,
+          "width": 555,
+          "height": 52
+        }
+      },
+      {
+        "text": "Bows",
+        "confidence": 100,
+        "box": {
+          "x": 236,
+          "y": 541,
+          "width": 137,
+          "height": 43
+        }
+      },
+      {
+        "text": "+134.5% Multishot",
+        "confidence": 100,
+        "box": {
+          "x": 94,
+          "y": 591,
+          "width": 427,
+          "height": 47
+        }
+      },
+      {
+        "text": "+221.9% Critical Chance",
+        "confidence": 100,
+        "box": {
+          "x": 31,
+          "y": 640,
+          "width": 553,
+          "height": 47
+        }
+      },
+      {
+        "text": "59.6% Magazine",
+        "confidence": 100,
+        "box": {
+          "x": 132,
+          "y": 689,
+          "width": 373,
+          "height": 47
+        }
+      },
+      {
+        "text": "Capacity",
+        "confidence": 100,
+        "box": {
+          "x": 210,
+          "y": 741,
+          "width": 196,
+          "height": 47
+        }
+      },
+      {
+        "text": "MR10",
+        "confidence": 100,
+        "box": {
+          "x": 60,
+          "y": 819,
+          "width": 131,
+          "height": 37
+        }
+      },
+      {
+        "text": "日23",
+        "confidence": 100,
+        "box": {
+          "x": 449,
+          "y": 818,
+          "width": 101,
+          "height": 37
+        }
+      }
+    ]
+  },
+  {
+    "id": "browser-sobek",
+    "image": "sobek.png",
+    "sha256": "f253ecb4f8fab96013251be132b9a81c05920a1dc68f8ad7307f9b54860cca2b",
+    "sourcePage": "https://www.reddit.com/r/wartrade/comments/1s7et27/qpcriven_price_check_riven/",
+    "sourceImage": "https://preview.redd.it/q-pc-riven-price-check-riven-v0-9uvfcz1cj3sg1.png?auto=webp&s=9d2b3a1a6f34c2f34eef53a7726ab0c55dfedf36",
+    "quality": "139x216 image with mouse cursor covering weapon name; both OCR readings lose name letters",
+    "rejection": "139x216 image with mouse cursor covering weapon name; both OCR readings lose name letters",
+    "expected": null,
+    "blocks": [
+      {
+        "text": "容",
+        "confidence": 77,
+        "box": {
+          "x": 58,
+          "y": 4,
+          "width": 13,
+          "height": 15
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 108,
+          "y": 9,
+          "width": 12,
+          "height": 10
+        }
+      },
+      {
+        "text": "SoberAcri-ignican",
+        "confidence": 86,
+        "box": {
+          "x": 8,
+          "y": 121,
+          "width": 109,
+          "height": 16
+        }
+      },
+      {
+        "text": "+109.9% Multishot",
+        "confidence": 98,
+        "box": {
+          "x": 19,
+          "y": 137,
+          "width": 89,
+          "height": 12
+        }
+      },
+      {
+        "text": "+97.6% Critical Damage",
+        "confidence": 99,
+        "box": {
+          "x": 7,
+          "y": 147,
+          "width": 114,
+          "height": 16
+        }
+      },
+      {
+        "text": "+87.6% Heat",
+        "confidence": 94,
+        "box": {
+          "x": 28,
+          "y": 162,
+          "width": 71,
+          "height": 13
+        }
+      },
+      {
+        "text": "MR 14",
+        "confidence": 97,
+        "box": {
+          "x": 11,
+          "y": 180,
+          "width": 29,
+          "height": 10
+        }
+      },
+      {
+        "text": "02",
+        "confidence": 97,
+        "box": {
+          "x": 100,
+          "y": 182,
+          "width": 18,
+          "height": 10
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 109,
+          "y": 10,
+          "width": 15,
+          "height": 9
+        }
+      },
+      {
+        "text": "Sobe cri-ignican",
+        "confidence": 100,
+        "box": {
+          "x": 12,
+          "y": 127,
+          "width": 109,
+          "height": 14
+        }
+      },
+      {
+        "text": "4109.9% Multishot",
+        "confidence": 100,
+        "box": {
+          "x": 24,
+          "y": 139,
+          "width": 89,
+          "height": 12
+        }
+      },
+      {
+        "text": "+97.6% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 13,
+          "y": 153,
+          "width": 113,
+          "height": 11
+        }
+      },
+      {
+        "text": "+87.6% Heat",
+        "confidence": 100,
+        "box": {
+          "x": 32,
+          "y": 164,
+          "width": 72,
+          "height": 11
+        }
+      },
+      {
+        "text": "MR14",
+        "confidence": 100,
+        "box": {
+          "x": 17,
+          "y": 184,
+          "width": 27,
+          "height": 8
+        }
+      }
+    ]
+  },
+  {
+    "id": "browser-dual-toxocyst",
+    "image": "dual-toxocyst.png",
+    "sha256": "3b0be0bfaee085309f8ec487508391aa386f947ade08b5047609c613e313fc45",
+    "sourcePage": "https://www.reddit.com/r/wartrade/comments/1jjaim7/price_check_riven_ps4_how_much_does_this_riven/",
+    "sourceImage": "https://preview.redd.it/price-check-riven-ps4-how-much-does-this-riven-cost-sorry-v0-3iuvxe3sbrqe1.png?width=640&crop=smart&auto=webp&s=48d87cbe545f52ccafef4ae22a9e1fa4f715d7bb",
+    "quality": "640x1138 compressed tilted photo containing another card title below the main card",
+    "rejection": "640x1138 compressed tilted photo containing another card title below the main card",
+    "expected": null,
+    "blocks": [
+      {
+        "text": "18",
+        "confidence": 72,
+        "box": {
+          "x": 495,
+          "y": 88,
+          "width": 97,
+          "height": 42
+        }
+      },
+      {
+        "text": "Dual Toxocyst Acri-",
+        "confidence": 99,
+        "box": {
+          "x": 74,
+          "y": 409,
+          "width": 482,
+          "height": 90
+        }
+      },
+      {
+        "text": "hexacan",
+        "confidence": 100,
+        "box": {
+          "x": 211,
+          "y": 479,
+          "width": 213,
+          "height": 64
+        }
+      },
+      {
+        "text": "+154.7% Multishot",
+        "confidence": 91,
+        "box": {
+          "x": 118,
+          "y": 527,
+          "width": 391,
+          "height": 73
+        }
+      },
+      {
+        "text": "+122.3% Critical Damage",
+        "confidence": 99,
+        "box": {
+          "x": 55,
+          "y": 576,
+          "width": 517,
+          "height": 68
+        }
+      },
+      {
+        "text": "+117.6% Status Chance",
+        "confidence": 98,
+        "box": {
+          "x": 67,
+          "y": 622,
+          "width": 498,
+          "height": 68
+        }
+      },
+      {
+        "text": "-47.8% Reload Speed",
+        "confidence": 99,
+        "box": {
+          "x": 96,
+          "y": 668,
+          "width": 443,
+          "height": 73
+        }
+      },
+      {
+        "text": "0.73",
+        "confidence": 80,
+        "box": {
+          "x": 438,
+          "y": 741,
+          "width": 102,
+          "height": 47
+        }
+      },
+      {
+        "text": "MR13",
+        "confidence": 80,
+        "box": {
+          "x": 85,
+          "y": 759,
+          "width": 128,
+          "height": 46
+        }
+      },
+      {
+        "text": "TOP",
+        "confidence": 76,
+        "box": {
+          "x": 489,
+          "y": 990,
+          "width": 100,
+          "height": 51
+        }
+      },
+      {
+        "text": "Corgon Zelu-puracan",
+        "confidence": 92,
+        "box": {
+          "x": 56,
+          "y": 1070,
+          "width": 515,
+          "height": 66
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "Dual Toxocyst Acr",
+        "confidence": 100,
+        "box": {
+          "x": 94,
+          "y": 435,
+          "width": 471,
+          "height": 65
+        }
+      },
+      {
+        "text": "hexacan",
+        "confidence": 100,
+        "box": {
+          "x": 230,
+          "y": 497,
+          "width": 210,
+          "height": 52
+        }
+      },
+      {
+        "text": "+154.7% Multlshct",
+        "confidence": 100,
+        "box": {
+          "x": 134,
+          "y": 542,
+          "width": 391,
+          "height": 55
+        }
+      },
+      {
+        "text": "+122.3CiicalDamage",
+        "confidence": 100,
+        "box": {
+          "x": 73,
+          "y": 591,
+          "width": 514,
+          "height": 54
+        }
+      },
+      {
+        "text": "4117.6%SLatus Chance",
+        "confidence": 100,
+        "box": {
+          "x": 85,
+          "y": 643,
+          "width": 492,
+          "height": 50
+        }
+      },
+      {
+        "text": "47.B Reload Speed",
+        "confidence": 100,
+        "box": {
+          "x": 109,
+          "y": 686,
+          "width": 439,
+          "height": 51
+        }
+      },
+      {
+        "text": "H13",
+        "confidence": 100,
+        "box": {
+          "x": 89,
+          "y": 763,
+          "width": 133,
+          "height": 45
+        }
+      },
+      {
+        "text": "73",
+        "confidence": 100,
+        "box": {
+          "x": 453,
+          "y": 754,
+          "width": 96,
+          "height": 47
+        }
+      },
+      {
+        "text": "IOL",
+        "confidence": 78,
+        "box": {
+          "x": 507,
+          "y": 1012,
+          "width": 70,
+          "height": 41
+        }
+      },
+      {
+        "text": "corgon Zel puracanh",
+        "confidence": 100,
+        "box": {
+          "x": 20,
+          "y": 1075,
+          "width": 605,
+          "height": 61
+        }
+      }
+    ]
+  },
+  {
+    "id": "browser-zarr",
+    "image": "zarr.jpg",
+    "sha256": "1095f8c3ee6fa79937e2b1514141376d6178d0759a140a73f6c9dd2e8472327b",
+    "sourcePage": "https://www.reddit.com/r/wartrade/comments/1vc0gn6/wts_ps4_riven_how_much_can_i_get_out_of_this/",
+    "sourceImage": "https://i.redd.it/wts-ps4-riven-how-much-can-i-get-out-of-this-rivens-v0-df21adr47mgh1.jpg?width=1944&format=pjpg&auto=webp&s=12883cb69f35a9791f97bc3e54cab8563a5d4aee",
+    "quality": "1944x2592 oversaturated phone photo with neighbouring card text interleaved into stat rows",
+    "rejection": "1944x2592 oversaturated phone photo with neighbouring card text interleaved into stat rows",
+    "expected": null,
+    "blocks": [
+      {
+        "text": "L3",
+        "confidence": 98,
+        "box": {
+          "x": 348,
+          "y": 227,
+          "width": 75,
+          "height": 60
+        }
+      },
+      {
+        "text": "LT",
+        "confidence": 83,
+        "box": {
+          "x": 1617,
+          "y": 213,
+          "width": 86,
+          "height": 66
+        }
+      },
+      {
+        "text": "CO",
+        "confidence": 90,
+        "box": {
+          "x": 1787,
+          "y": 212,
+          "width": 149,
+          "height": 93
+        }
+      },
+      {
+        "text": "10",
+        "confidence": 100,
+        "box": {
+          "x": 208,
+          "y": 552,
+          "width": 93,
+          "height": 69
+        }
+      },
+      {
+        "text": "~",
+        "confidence": 63,
+        "box": {
+          "x": 294,
+          "y": 559,
+          "width": 74,
+          "height": 59
+        }
+      },
+      {
+        "text": "18K",
+        "confidence": 83,
+        "box": {
+          "x": 1462,
+          "y": 520,
+          "width": 212,
+          "height": 93
+        }
+      },
+      {
+        "text": "lexaus",
+        "confidence": 99,
+        "box": {
+          "x": 0,
+          "y": 675,
+          "width": 265,
+          "height": 104
+        }
+      },
+      {
+        "text": "???",
+        "confidence": 99,
+        "box": {
+          "x": 212,
+          "y": 1155,
+          "width": 127,
+          "height": 75
+        }
+      },
+      {
+        "text": "1",
+        "confidence": 79,
+        "box": {
+          "x": 0,
+          "y": 1281,
+          "width": 7,
+          "height": 81
+        }
+      },
+      {
+        "text": "1",
+        "confidence": 70,
+        "box": {
+          "x": 1,
+          "y": 1278,
+          "width": 38,
+          "height": 88
+        }
+      },
+      {
+        "text": "Mod",
+        "confidence": 100,
+        "box": {
+          "x": 23,
+          "y": 1274,
+          "width": 191,
+          "height": 99
+        }
+      },
+      {
+        "text": "Zarr Igni-satides",
+        "confidence": 98,
+        "box": {
+          "x": 555,
+          "y": 1525,
+          "width": 879,
+          "height": 166
+        }
+      },
+      {
+        "text": "+79.7% Heat",
+        "confidence": 94,
+        "box": {
+          "x": 657,
+          "y": 1660,
+          "width": 654,
+          "height": 117
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 161,
+          "y": 1743,
+          "width": 163,
+          "height": 82
+        }
+      },
+      {
+        "text": "+77.2% Multishot",
+        "confidence": 99,
+        "box": {
+          "x": 595,
+          "y": 1757,
+          "width": 764,
+          "height": 129
+        }
+      },
+      {
+        "text": "exi-",
+        "confidence": 86,
+        "box": {
+          "x": 0,
+          "y": 1808,
+          "width": 173,
+          "height": 110
+        }
+      },
+      {
+        "text": "+78% Status Duration",
+        "confidence": 100,
+        "box": {
+          "x": 497,
+          "y": 1857,
+          "width": 954,
+          "height": 135
+        }
+      },
+      {
+        "text": "MR 11",
+        "confidence": 98,
+        "box": {
+          "x": 470,
+          "y": 2018,
+          "width": 251,
+          "height": 89
+        }
+      },
+      {
+        "text": "512",
+        "confidence": 63,
+        "box": {
+          "x": 1224,
+          "y": 2052,
+          "width": 207,
+          "height": 90
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "LT",
+        "confidence": 68,
+        "box": {
+          "x": 1629,
+          "y": 227,
+          "width": 76,
+          "height": 66
+        }
+      },
+      {
+        "text": "O",
+        "confidence": 100,
+        "box": {
+          "x": 1797,
+          "y": 219,
+          "width": 151,
+          "height": 90
+        }
+      },
+      {
+        "text": "效",
+        "confidence": 100,
+        "box": {
+          "x": 994,
+          "y": 511,
+          "width": 154,
+          "height": 127
+        }
+      },
+      {
+        "text": "713",
+        "confidence": 63,
+        "box": {
+          "x": 1478,
+          "y": 538,
+          "width": 212,
+          "height": 95
+        }
+      },
+      {
+        "text": "10",
+        "confidence": 100,
+        "box": {
+          "x": 236,
+          "y": 634,
+          "width": 105,
+          "height": 64
+        }
+      },
+      {
+        "text": "Iexaus",
+        "confidence": 100,
+        "box": {
+          "x": 34,
+          "y": 774,
+          "width": 260,
+          "height": 87
+        }
+      },
+      {
+        "text": "???",
+        "confidence": 100,
+        "box": {
+          "x": 270,
+          "y": 1236,
+          "width": 122,
+          "height": 71
+        }
+      },
+      {
+        "text": "Mod",
+        "confidence": 100,
+        "box": {
+          "x": 64,
+          "y": 1367,
+          "width": 214,
+          "height": 99
+        }
+      },
+      {
+        "text": "Zarr lgni-satides",
+        "confidence": 100,
+        "box": {
+          "x": 633,
+          "y": 1590,
+          "width": 874,
+          "height": 128
+        }
+      },
+      {
+        "text": "+79.7% Heat",
+        "confidence": 100,
+        "box": {
+          "x": 738,
+          "y": 1709,
+          "width": 653,
+          "height": 98
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 252,
+          "y": 1831,
+          "width": 151,
+          "height": 72
+        }
+      },
+      {
+        "text": "+77.2% Multishot",
+        "confidence": 100,
+        "box": {
+          "x": 683,
+          "y": 1820,
+          "width": 761,
+          "height": 94
+        }
+      },
+      {
+        "text": "eXl",
+        "confidence": 78,
+        "box": {
+          "x": 91,
+          "y": 1910,
+          "width": 143,
+          "height": 75
+        }
+      },
+      {
+        "text": "+78% Status Duration",
+        "confidence": 100,
+        "box": {
+          "x": 589,
+          "y": 1927,
+          "width": 953,
+          "height": 90
+        }
+      },
+      {
+        "text": "MR11",
+        "confidence": 100,
+        "box": {
+          "x": 565,
+          "y": 2089,
+          "width": 251,
+          "height": 78
+        }
+      },
+      {
+        "text": "012",
+        "confidence": 100,
+        "box": {
+          "x": 1325,
+          "y": 2084,
+          "width": 204,
+          "height": 83
+        }
+      }
+    ]
+  },
+  {
+    "id": "browser-ocucor-pair",
+    "image": "ocucor-pair.jpg",
+    "sha256": "6ca02d532b033142ae89ae3ab25350022713d994ad9f879e0706285f994f6e50",
+    "sourcePage": "https://www.reddit.com/r/wartrade/comments/1qp63gy/q_pc_riven_cant_decide_which_is_better/",
+    "sourceImage": "https://preview.redd.it/q-pc-riven-cant-decide-which-is-better-v0-zuld12hoz1gg1.jpeg?auto=webp&s=1598841ec27bdef4c8d7a243cba51c1c12c5f45d",
+    "quality": "3024x4032 tilted phone photo containing two complete Ocucor cards",
+    "rejection": "3024x4032 tilted phone photo containing two complete Ocucor cards",
+    "expected": null,
+    "blocks": [
+      {
+        "text": "18-",
+        "confidence": 78,
+        "box": {
+          "x": 2535,
+          "y": 1588,
+          "width": 214,
+          "height": 91
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 99,
+        "box": {
+          "x": 969,
+          "y": 1702,
+          "width": 92,
+          "height": 65
+        }
+      },
+      {
+        "text": "LB",
+        "confidence": 100,
+        "box": {
+          "x": 1298,
+          "y": 2271,
+          "width": 118,
+          "height": 84
+        }
+      },
+      {
+        "text": "Ocucor Acri-saticon",
+        "confidence": 99,
+        "box": {
+          "x": 244,
+          "y": 2434,
+          "width": 788,
+          "height": 130
+        }
+      },
+      {
+        "text": "Ocucor Argi-visitox",
+        "confidence": 99,
+        "box": {
+          "x": 1624,
+          "y": 2418,
+          "width": 1008,
+          "height": 199
+        }
+      },
+      {
+        "text": "+110.2% Multishot",
+        "confidence": 99,
+        "box": {
+          "x": 321,
+          "y": 2538,
+          "width": 623,
+          "height": 110
+        }
+      },
+      {
+        "text": "x1.4 Damage to Grineer",
+        "confidence": 99,
+        "box": {
+          "x": 238,
+          "y": 2616,
+          "width": 787,
+          "height": 119
+        }
+      },
+      {
+        "text": "+257.6% Damage",
+        "confidence": 99,
+        "box": {
+          "x": 1729,
+          "y": 2562,
+          "width": 774,
+          "height": 141
+        }
+      },
+      {
+        "text": "+88.9% Critical Damage",
+        "confidence": 99,
+        "box": {
+          "x": 230,
+          "y": 2694,
+          "width": 792,
+          "height": 126
+        }
+      },
+      {
+        "text": "x1.54 Damage to Grineer",
+        "confidence": 99,
+        "box": {
+          "x": 1571,
+          "y": 2648,
+          "width": 1091,
+          "height": 177
+        }
+      },
+      {
+        "text": "MR 9",
+        "confidence": 93,
+        "box": {
+          "x": 252,
+          "y": 2819,
+          "width": 166,
+          "height": 78
+        }
+      },
+      {
+        "text": "+93.3% Toxin",
+        "confidence": 95,
+        "box": {
+          "x": 1759,
+          "y": 2759,
+          "width": 697,
+          "height": 141
+        }
+      },
+      {
+        "text": "041",
+        "confidence": 98,
+        "box": {
+          "x": 825,
+          "y": 2842,
+          "width": 154,
+          "height": 80
+        }
+      },
+      {
+        "text": "-46.7% Reload Speed",
+        "confidence": 99,
+        "box": {
+          "x": 1644,
+          "y": 2856,
+          "width": 938,
+          "height": 163
+        }
+      },
+      {
+        "text": "MR 9",
+        "confidence": 96,
+        "box": {
+          "x": 1615,
+          "y": 3015,
+          "width": 220,
+          "height": 105
+        }
+      },
+      {
+        "text": "041",
+        "confidence": 99,
+        "box": {
+          "x": 2367,
+          "y": 3057,
+          "width": 206,
+          "height": 100
+        }
+      },
+      {
+        "text": "ONFIRM",
+        "confidence": 88,
+        "box": {
+          "x": 1919,
+          "y": 3545,
+          "width": 373,
+          "height": 123
+        }
+      }
+    ],
+    "fallbackBlocks": [
+      {
+        "text": "18-",
+        "confidence": 100,
+        "box": {
+          "x": 2629,
+          "y": 1610,
+          "width": 207,
+          "height": 83
+        }
+      },
+      {
+        "text": "18",
+        "confidence": 100,
+        "box": {
+          "x": 1073,
+          "y": 1819,
+          "width": 82,
+          "height": 53
+        }
+      },
+      {
+        "text": "L6",
+        "confidence": 100,
+        "box": {
+          "x": 1456,
+          "y": 2374,
+          "width": 82,
+          "height": 63
+        }
+      },
+      {
+        "text": "Ocucor Argi-visitox",
+        "confidence": 100,
+        "box": {
+          "x": 1769,
+          "y": 2508,
+          "width": 1006,
+          "height": 124
+        }
+      },
+      {
+        "text": "Ocucor Acri-saticon",
+        "confidence": 100,
+        "box": {
+          "x": 387,
+          "y": 2595,
+          "width": 783,
+          "height": 90
+        }
+      },
+      {
+        "text": "+257.6% Damage",
+        "confidence": 100,
+        "box": {
+          "x": 1892,
+          "y": 2622,
+          "width": 757,
+          "height": 103
+        }
+      },
+      {
+        "text": "+110.2%Multishot",
+        "confidence": 100,
+        "box": {
+          "x": 475,
+          "y": 2695,
+          "width": 617,
+          "height": 75
+        }
+      },
+      {
+        "text": "x1.54 Damage to Grineer",
+        "confidence": 100,
+        "box": {
+          "x": 1727,
+          "y": 2736,
+          "width": 1085,
+          "height": 100
+        }
+      },
+      {
+        "text": "x1.4 Damage to Grineer",
+        "confidence": 100,
+        "box": {
+          "x": 392,
+          "y": 2772,
+          "width": 782,
+          "height": 81
+        }
+      },
+      {
+        "text": "+88.9% Critical Damage",
+        "confidence": 100,
+        "box": {
+          "x": 393,
+          "y": 2844,
+          "width": 787,
+          "height": 79
+        }
+      },
+      {
+        "text": "+93.3%Toxin",
+        "confidence": 100,
+        "box": {
+          "x": 1930,
+          "y": 2830,
+          "width": 682,
+          "height": 94
+        }
+      },
+      {
+        "text": "MRg",
+        "confidence": 100,
+        "box": {
+          "x": 423,
+          "y": 2984,
+          "width": 145,
+          "height": 57
+        }
+      },
+      {
+        "text": "041",
+        "confidence": 100,
+        "box": {
+          "x": 995,
+          "y": 2974,
+          "width": 140,
+          "height": 62
+        }
+      },
+      {
+        "text": "-46.7% Reload Speed",
+        "confidence": 100,
+        "box": {
+          "x": 1825,
+          "y": 2935,
+          "width": 919,
+          "height": 107
+        }
+      },
+      {
+        "text": "MR9",
+        "confidence": 100,
+        "box": {
+          "x": 1785,
+          "y": 3094,
+          "width": 217,
+          "height": 85
+        }
+      },
+      {
+        "text": "47",
+        "confidence": 100,
+        "box": {
+          "x": 2551,
+          "y": 3095,
+          "width": 194,
+          "height": 87
+        }
+      },
+      {
+        "text": "C",
+        "confidence": 100,
+        "box": {
+          "x": 2062,
+          "y": 3619,
+          "width": 62,
+          "height": 72
+        }
+      },
+      {
+        "text": "ONFIRM",
+        "confidence": 100,
+        "box": {
+          "x": 2125,
+          "y": 3604,
+          "width": 370,
+          "height": 98
+        }
+      }
+    ]
+  }
+]

@@ -2,6 +2,7 @@ import { Buffer } from 'node:buffer'
 import { expect } from 'chai'
 import { vi } from 'vitest'
 import { getAnalyzedRiven } from '../../../src/warframe/services/wf-service/wf-service.riven'
+import browser from '../../assets/riven-ocr/browser-2026-10-26/recorded.json'
 import corpus from '../../assets/riven-ocr/corpus.json'
 import feishu from '../../assets/riven-ocr/feishu-2026-10-26/recorded.json'
 import syntheticCursors from '../../assets/riven-ocr/synthetic-cursors/recorded.json'
@@ -17,7 +18,7 @@ vi.mock('tencentcloud-sdk-nodejs-ocr', () => ({
 }))
 
 describe('riven image analysis pipeline', () => {
-  for (const sample of [...feishu, ...web]) {
+  for (const sample of [...feishu, ...web, ...browser.flatMap(s => s.expected ? [{ ...s, expected: s.expected }] : [])]) {
     it(`analyzes all fields of ${sample.id} with fallback only when needed`, async () => {
       external.image.mockResolvedValueOnce(new Blob([sample.id]))
       const response = (blocks: typeof sample.blocks) => ({ TextDetections: blocks.map(b => ({
@@ -38,10 +39,28 @@ describe('riven image analysis pipeline', () => {
         'web-bramma': '赤毒·布拉玛',
         'web-dual-toxocyst': '毒囊双枪',
         'web-furis': '盗贼',
+        'browser-arca-titron': '弧电振子锤',
+        'browser-burston': '伯斯顿',
       }
       expect(result.data.name).to.equal(detectedNames[sample.id] ?? sample.expected.name)
       expect([...result.data.buffs, ...result.data.curses].map(a => [a.gameRef, a.value])).to.deep.equal(sample.expected.stats.map(s => s.slice(0, 2)))
       expect(external.basic.mock.calls.length).to.equal(['feishu-3', 'feishu-4', 'feishu-6', 'feishu-7', 'web-dual-toxocyst'].includes(sample.id) ? 1 : 0)
+    })
+  }
+
+  for (const sample of browser.filter(s => s.rejection)) {
+    it(`refuses to score ${sample.id} even with both OCR readings`, async () => {
+      external.image.mockResolvedValueOnce(new Blob([sample.id]))
+      const response = (blocks: typeof sample.blocks) => ({ TextDetections: blocks.map(b => ({
+        DetectedText: b.text,
+        Confidence: b.confidence,
+        ItemPolygon: { X: b.box.x, Y: b.box.y, Width: b.box.width, Height: b.box.height },
+      })) })
+      external.ocr.mockResolvedValueOnce(response(sample.blocks))
+      external.basic.mockReset().mockResolvedValue(response(sample.fallbackBlocks))
+      const result = await getAnalyzedRiven({ id: 'test', key: 'test' }, `https://fixtures.invalid/${sample.id}.png`)
+      expect(result).to.deep.equal({ ok: false, error: { code: 'riven.imageParseFailed', retryable: false } })
+      expect(external.basic.mock.calls.length).to.equal(1)
     })
   }
 

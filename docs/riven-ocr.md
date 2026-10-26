@@ -171,6 +171,23 @@ OCR 密钥在调用前去除首尾空白，避免粘贴配置中的换行导致�
 
 `rivenOcr.web.spec.ts` 同时验证缩放乱序、缺失页脚/控件、控件落入卡片内部、第二张卡、残留数字/乘数/属性名称片段、错误图标和越界后缀等拒绝条件。此次样本来自同一论坛帖子、两位作者，且参与了规则开发，不能据此推算任意模糊图片的成功率。搜索到的 Reddit 拍屏帖子因原图访问受限未计入样本或成功率。
 
+## 2026-10-26 侧边浏览器补充样本（6 张）
+
+通过侧边浏览器的图片搜索再取得 6 张公开图片，保存搜索结果指向的 Reddit CDN 文件，未再次裁剪、增强或重绘。部分文件本身是 Reddit 的缩放预览版；原帖正文被站点拦截，来源页 URL 和实际下载 URL 均记录在 `browser-2026-10-26/recorded.json`，不将其称为帖子上传的全分辨率原图。
+
+| 样本 | 特征与实测结果 |
+| --- | --- |
+| [Arca Titron](https://www.reddit.com/r/wartrade/comments/1lam5s6/wtspcrivenhow_much_would_be_a_reasonable_price_to/) | 300×417 低清图；完整重击说明单独成行，修复前拒绝、修复后保留 +227% 暴击几率、+101.7% 暴击伤害、+87.1% 重击效率、-80% 触发几率 |
+| [Burston](https://www.reddit.com/r/wartrade/comments/1sp6s68/prcwtsriven_how_much_can_these_go_for/) | 640×853 倾斜拍屏、摩尔纹和换行；既有解析器已通过，保留 +86.2% 射速、+134.5% 多重、+221.9% 暴击几率、-59.6% 弹匣 |
+| [Sobek](https://www.reddit.com/r/wartrade/comments/1s7et27/qpcriven_price_check_riven/) | 139×216 小图，鼠标遮住武器名，两种 OCR 都漏字；继续拒绝 |
+| [Dual Toxocyst](https://www.reddit.com/r/wartrade/comments/1jjaim7/price_check_riven_ps4_how_much_does_this_riven/) | 压缩失真、倾斜，下面露出另一张卡的标题及异常页脚文字；继续拒绝 |
+| [Zarr](https://www.reddit.com/r/wartrade/comments/1vc0gn6/wts_ps4_riven_how_much_can_i_get_out_of_this/) | 强烈偏色、摩尔纹，相邻卡片文字混入主卡属性行；继续拒绝 |
+| [Ocucor 双卡](https://www.reddit.com/r/wartrade/comments/1qp63gy/q_pc_riven_cant_decide_which_is_better/) | 大幅倾斜、两张完整卡片；继续拒绝，不能擅自选择其中一张 |
+
+新增规则仅消费近战暴击几率词条后紧邻的完整重击说明，英文和中文均支持；未知倍数、尾随数字、错误属性、非近战卡片和远处说明仍拒绝。修复前先复现录制样本及坐标变换测试失败，再完成修复。
+
+6 张均重新通过真实腾讯 OCR 和已构建插件的 Koishi 命令链路验证：**2 张生成评分图片，8/8 条词条身份、数值、符号和单位正确；4 张返回“解析图片失败”**。两张成功样本只调用高精度 OCR，拒识样本各调用一次通用 OCR。回复与核对记录保存在 `lib/captures/browser-2026-10-26/`；测试实例退出时 mock adapter 报清理错误，发生在全部回复及字段核对完成之后。这 4 张是当前仍未支持的复杂输入，不计作识别成功。
+
 ## 回归素材与验证
 
 一条命令运行全部离线 OCR 回归（无需密钥，不请求腾讯接口）：
@@ -179,7 +196,7 @@ OCR 密钥在调用前去除首尾空白，避免粘贴配置中的换行导致�
 yarn test:riven-ocr
 ```
 
-目前共有 **54 张图片**：主样本集 27 张、社区样本 12 张、飞书样本 8 张、公开拍屏/低清样本 4 张、合成指针样本 3 张。统一回放断言 **51 张完整解析、2 张旧百分比格式拒绝、1 张数字遮挡拒绝**，这些样本都参与测试，没有静默跳过。完整解析逐字段核对武器名、词条身份、数值、正负号与单位，不检查倾向范围。既有集成测试另外验证 OCR 适配及评分链路。
+目前共有 **60 张图片**：主样本集 27 张、社区样本 12 张、飞书样本 8 张、公开拍屏/低清样本 10 张、合成指针样本 3 张。统一回放断言 **53 张完整解析、2 张旧百分比格式拒绝、1 张数字遮挡拒绝、4 张新增复杂图片拒绝**，这些样本都参与测试，没有静默跳过。完整解析逐字段核对武器名、词条身份、数值、正负号与单位，不检查倾向范围。既有集成测试另外验证 OCR 适配及评分链路。
 
 `tests/services/wf/rivenOcr.fixtures.spec.ts` 还核对图片 SHA-256 和全部图片的登记情况：图片被替换、缺失，或新增图片却没有加入标注与 OCR 回放记录，测试都会失败。失败名称包含具体样本 ID，断言输出实际字段与正确标注的差异；需要逐项显示时运行 `yarn test:riven-ocr --reporter=verbose`。全量 `yarn test` 也会自动运行这套测试。
 

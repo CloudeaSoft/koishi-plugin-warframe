@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { expect } from 'chai'
 import { parseOCRResult } from '../../../src/warframe/services/wf-service/wf-service.riven'
+import browser from '../../assets/riven-ocr/browser-2026-10-26/recorded.json'
 import evaluation from '../../assets/riven-ocr/community-2026-10-21/evaluation.json'
 import community from '../../assets/riven-ocr/community-2026-10-21/recorded.json'
 import labels from '../../assets/riven-ocr/community-2026-10-21/rivens.json'
@@ -15,6 +16,20 @@ import { packageRoot } from '../../helpers/packageRoot'
 const assets = resolve(packageRoot(), 'tests/assets')
 const root = join(assets, 'riven-ocr')
 const samples = [
+  ...browser.map(s => ({
+    id: s.id,
+    image: resolve(root, 'browser-2026-10-26', s.image),
+    sha256: s.sha256,
+    blocks: s.blocks,
+    fallbackBlocks: s.fallbackBlocks,
+    rejection: s.rejection ?? undefined,
+    expected: s.expected && { name: s.expected.name, attributes: s.expected.stats.map(([gameRef, value, prefix], i) => ({
+      gameRef,
+      value,
+      prefix,
+      unit: s.expected!.units[i],
+    })) },
+  })),
   ...web.map(s => ({
     id: s.id,
     image: resolve(root, 'web-2026-10-26', s.image),
