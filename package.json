@@ -75,7 +75,7 @@
     "warframe-public-export-plus": "^0.6.12",
     "warframe-weekly-rivens": "^0.0.3",
     "warframe-worldstate-data": "^3.18.1",
-    "warframe-worldstate-parser": "^5.5.7",
+    "warframe-worldstate-parser": "^5.5.8",
     "wfm-api-client": "^0.0.4"
   },
   "devDependencies": {
