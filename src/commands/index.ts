@@ -173,12 +173,13 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .action(wf.rivenCommand)
   ctx
     .command(
-      'riven-stat <weaponType:string> <statType:string> <disposition:number>',
+      'riven-stat <weaponType:string> [statType:string] [disposition:number]',
       '获取紫卡数值范围',
     )
     .usage(
-      '武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械, Kitgun（组合枪）, Zaw（组合近战）\n词条类型: 2, 3, 21, 31\n数值为满级参考范围，包含融合词条。',
+      '武器类型: 步枪, 手枪, 霰弹枪, 近战, Archwing枪械, Kitgun（组合枪）, Zaw（组合近战）\n词条类型: 2, 3, 21, 31（默认31）\n倾向性: 默认1.2\n数值为满级参考范围，包含融合词条。',
     )
+    .example('rivenstat 步枪')
     .example('riven-stat 步枪 31 0.7')
     .alias('rivenstat')
     .alias('紫卡数值')
