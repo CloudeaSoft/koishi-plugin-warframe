@@ -61,8 +61,8 @@ export function createWfCommands(deps: PluginDependencies): {
   rivenStatCommand: (
     _action: Argv,
     weaponType: string,
-    statType: string,
-    disposition: number,
+    statType?: string,
+    disposition?: number,
   ) => Promise<string>
   weeklyCommand: (_action: Argv) => Promise<string>
   nightwaveCommand: (_action: Argv) => Promise<string>
@@ -230,8 +230,8 @@ export function createWfCommands(deps: PluginDependencies): {
     rivenStatCommand: async (
       _action: Argv,
       weaponType: string,
-      statType: string,
-      disposition: number,
+      statType: string = '31',
+      disposition: number = 1.2,
     ) => {
       if (!weaponType || !statType || !disposition) {
         return t('riven.invalidParams')
