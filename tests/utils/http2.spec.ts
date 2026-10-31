@@ -2,7 +2,7 @@ import type { Http2Session } from 'node:http2'
 import type { AddressInfo } from 'node:net'
 import { Buffer } from 'node:buffer'
 import { once } from 'node:events'
-import { constants, createServer } from 'node:http2'
+import { createServer } from 'node:http2'
 import { gzipSync } from 'node:zlib'
 import { expect } from 'chai'
 import { afterAll as after, beforeAll as before } from 'vitest'
@@ -29,8 +29,9 @@ describe('http/2 transport', () => {
       }
       if (headers[':path'] === '/reset') {
         stream.respond({ ':status': 200 })
-        stream.write('{"data":')
-        stream.close(constants.NGHTTP2_INTERNAL_ERROR)
+        // Flush a partial body, then force an error reset. close(code) also
+        // ends the writable side and can deliver normal EOF before the reset.
+        stream.write('{"data":', () => stream.destroy(new Error('Response interrupted')))
         return
       }
       if (headers[':path'] === '/denied') {
