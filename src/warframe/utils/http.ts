@@ -91,6 +91,7 @@ export async function fetchHttp2Text(
             ':path': target.pathname + target.search,
           })
           let status = 0
+          let ended = false
           let encoding: string | undefined
           const chunks: Buffer[] = []
           stream.on('response', (response) => {
@@ -100,9 +101,13 @@ export async function fetchHttp2Text(
           stream.on('data', (chunk: Buffer) => chunks.push(chunk))
           stream.on('error', abort)
           stream.on('aborted', abort)
-          stream.on('close', abort)
           stream.on('end', () => {
-            if (stream!.rstCode || !status) {
+            ended = true
+          })
+          // Readable EOF can precede a reset. Only accept the response after
+          // close, when the stream's final reset code is available.
+          stream.on('close', () => {
+            if (!ended || stream!.rstCode || !status) {
               finish()
               return
             }
