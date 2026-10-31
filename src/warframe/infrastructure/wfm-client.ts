@@ -12,6 +12,7 @@ import {
   memoryCachePlugin,
   rateLimitPlugin,
 } from 'wfm-api-client'
+import { fetchHttp2Text } from '../utils/http'
 
 type RivenOrderOptions = CallOptions & RivenOrderFilters
 type PluginWfmClient = Omit<WfmApiClient, 'rivens'> & {
@@ -58,7 +59,19 @@ export function softFailPlugin(): WfmPlugin {
   }
 }
 
-/** `fetcher` is a test injection seam only; production uses the client default. */
+const http2Fetcher: WfmFetcher = async ({ url, ...options }) => {
+  const response = await fetchHttp2Text(url, { ...options, timeoutMs: 20_000 })
+  if (!response)
+    throw new Error('WFM HTTP/2 request failed')
+  return {
+    status: response.status,
+    ok: response.status >= 200 && response.status < 300,
+    json: async () => JSON.parse(response.body) as unknown,
+    text: async () => response.body,
+  }
+}
+
+/** `fetcher` is a test injection seam; production buffers HTTP/2 responses. */
 export function createPluginWfmClient(fetcher?: WfmFetcher): PluginWfmClient {
   // Plugin array order is outer -> inner (client uses reduceRight).
   // softFail must stay outermost so failures are not stored by memoryCache.
@@ -70,13 +83,12 @@ export function createPluginWfmClient(fetcher?: WfmFetcher): PluginWfmClient {
 
   // Skip rate limiting when a mock fetcher is injected so unit tests stay fast.
   if (!fetcher)
-    plugins.push(rateLimitPlugin({ minTime: 400 }))
+    plugins.push(rateLimitPlugin({ minTime: 1000 }))
 
   const client = createWfmApiClient({
-    fetcher,
+    fetcher: fetcher ?? http2Fetcher,
     userAgent: 'koishi-plugin-warframe (+https://github.com/CloudeaSoft/koishi-plugin-warframe)',
     language: 'zh-hans',
-    timeoutMs: 10_000,
     plugins,
   })
   const getOrders = client.rivens.getOrders
