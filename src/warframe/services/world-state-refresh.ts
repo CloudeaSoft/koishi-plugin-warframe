@@ -23,29 +23,30 @@ const steelDisruptionSolNodes: readonly string[] = [
   'SolNode177', // 赛德娜 · Kappa
 ]
 
-/** 防御：普通与钢铁之路都推。 */
+/** 防御：普通与钢铁之路都推。黑暗地带不会刷裂缝。 */
 const defenseSolNodes: readonly string[] = [
   'SolNode122', // 天王星 · Stephano
   'SolNode402', // 虚空 · 雷争塔 Taranis
   'SolNode408', // 虚空 · 光神塔 Belenus
   'SolNode149', // 谷神星 · Casta
-  'ClanNode22', // 谷神星 · Seimeni（黑暗地带）
 ]
 
-/** 歼灭：普通与钢铁之路都推。不含赤毒要塞 Dakata（SolNode746）。 */
+/**
+ * 歼灭：普通与钢铁之路都推。
+ * 不列入不会刷裂缝的节点：Archwing、Sharkwing、霍瓦尼亚，
+ * 以及月球、扎里曼号、恩特拉蒂实验室里没有裂缝的任务。
+ * 赤毒要塞 Dakata（SolNode746）会刷裂缝，但按规则不推。
+ */
 const exterminationSolNodes: readonly string[] = [
   'SolNode103', // 水星 · M Prime
   'SolNode226', // 水星 · Pantheon
   'SolNode128', // 金星 · E Gate
-  'SolNode902', // 金星 · Montes（Archwing）
   'SolNode27', // 地球 · E Prime
   'SolNode89', // 地球 · Mariana
   'SolNode58', // 火星 · Hellas
-  'SolNode904', // 火星 · Syrtis（Archwing）
   'SolNode14', // 火星 · Ultor
   'SolNode121', // 木星 · Carpo
   'SolNode20', // 土星 · Telesto
-  'SolNode114', // 天王星 · Puck
   'SolNode34', // 天王星 · Sycorax
   'SolNode62', // 海王星 · Neso
   'SolNode4', // 冥王星 · Acheron
@@ -58,12 +59,7 @@ const exterminationSolNodes: readonly string[] = [
   'SolNode407', // 虚空 · 母神塔 Oxomoco
   'SolNode400', // 虚空 · 神王塔 Teshub
   'SettlementNode1', // 火卫一 · Roche
-  'SolNode716', // 火卫二 · 孽杀 Nex
   'SolNode708', // 火卫二 · Phlegyas
-  'SolNode300', // 月球 · Plato
-  'SolNode231', // 扎里曼号 · 哈拉科防线 Halako Perimeter
-  'SolNode853', // 霍瓦尼亚 · 歼灭：炽蛇军
-  'SolNode854', // 霍瓦尼亚 · 歼灭：科腐者
 ]
 
 export type WorldStateNotification
