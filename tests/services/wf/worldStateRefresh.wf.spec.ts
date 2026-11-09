@@ -281,6 +281,65 @@ describe('world-state change detection', () => {
     })
   })
 
+  it('notifies fissures only for the configured SolNodes', async () => {
+    const fissure = (
+      id: string,
+      nodeKey: string,
+      missionType: string,
+      flags: { isHard?: boolean, isStorm?: boolean } = {},
+    ) => ({
+      id,
+      tier: 'Lith',
+      tierNum: 1,
+      node: nodeKey,
+      nodeKey,
+      missionType,
+      isHard: flags.isHard ?? false,
+      isStorm: flags.isStorm ?? false,
+      activation: new Date('2026-07-16T00:01:00Z'),
+      expiry: new Date('2026-07-16T01:01:00Z'),
+    })
+    const previous = snapshot({
+      timestamp: new Date('2026-07-16T00:00:00Z'),
+    })
+    const current = snapshot({
+      fissures: [
+        fissure('sp-olympus', 'Olympus (Mars)', 'Disruption', { isHard: true }),
+        fissure('normal-olympus', 'Olympus (Mars)', 'Disruption'),
+        fissure('sp-kappa', 'Kappa (Sedna)', 'Disruption', { isHard: true }),
+        fissure('storm-kappa', 'Kappa (Sedna)', 'Disruption', { isHard: true, isStorm: true }),
+        fissure('sp-ganymede', 'Ganymede (Jupiter)', 'Disruption', { isHard: true }),
+        fissure('stephano', 'Stephano (Uranus)', 'Defense'),
+        fissure('sp-stephano', 'Stephano (Uranus)', 'Defense', { isHard: true }),
+        fissure('taranis', 'Taranis (Void)', 'Defense'),
+        fissure('belenus', 'Belenus (Void)', 'Defense'),
+        fissure('casta', 'Casta (Ceres)', 'Defense'),
+        fissure('seimeni', 'Seimeni (Ceres)', 'Defense'),
+        fissure('hydron', 'Hydron (Sedna)', 'Defense'),
+        fissure('helene', 'Helene (Saturn)', 'Defense'),
+        fissure('e-prime', 'E Prime (Earth)', 'Exterminate'),
+        fissure('sp-e-prime', 'E Prime (Earth)', 'Exterminate', { isHard: true }),
+        fissure('dakata', 'Dakata (Kuva Fortress)', 'Exterminate'),
+        fissure('sp-dakata', 'Dakata (Kuva Fortress)', 'Exterminate', { isHard: true }),
+        fissure('survival', 'Apollodorus (Mercury)', 'Survival'),
+      ],
+    } as unknown as Partial<WorldState>)
+
+    const notifications = await diffWorldStates(previous, current)
+    expect(notifications.map(item => item.id)).to.deep.equal([
+      'sp-olympus',
+      'sp-kappa',
+      'stephano',
+      'sp-stephano',
+      'taranis',
+      'belenus',
+      'casta',
+      'seimeni',
+      'e-prime',
+      'sp-e-prime',
+    ])
+  })
+
   it('does not re-broadcast a disallowed fissure that persists between refreshes', async () => {
     const fissure = {
       id: 'f-filtered',
