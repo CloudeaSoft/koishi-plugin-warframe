@@ -1,9 +1,7 @@
-import type { TMissionType } from 'warframe-public-export-plus'
 import type WorldState from 'warframe-worldstate-parser'
 
 import type { GlobalWorldStateData } from '../data/wf/globalWorldState'
 import type { VoidTraderItem, WFRegionShort } from '../types'
-import { ExportRegions } from 'warframe-public-export-plus'
 import {
   adaptFissure,
   globalWorldState,
@@ -19,7 +17,50 @@ type ParsedVoidTrader = WorldState['voidTraders'][number]
 type ParsedDailyDeal = WorldState['dailyDeals'][number]
 type ParsedAlert = WorldState['alerts'][number]
 
-const ALLOWED_FISSURE_MISSION_TYPES = new Set<TMissionType>(['MT_EXTERMINATION', 'MT_DEFENSE', 'MT_ARTIFACT'])
+/** 中断：只推钢铁之路，不要九重天。 */
+const steelDisruptionSolNodes: readonly string[] = [
+  'SolNode30', // 火星 · Olympus
+  'SolNode177', // 赛德娜 · Kappa
+]
+
+/** 防御：普通与钢铁之路都推。黑暗地带不会刷裂缝。 */
+const defenseSolNodes: readonly string[] = [
+  'SolNode122', // 天王星 · Stephano
+  'SolNode402', // 虚空 · 雷争塔 Taranis
+  'SolNode408', // 虚空 · 光神塔 Belenus
+  'SolNode149', // 谷神星 · Casta
+]
+
+/**
+ * 歼灭：普通与钢铁之路都推。
+ * 不列入不会刷裂缝的节点：Archwing、Sharkwing、霍瓦尼亚，
+ * 以及月球、扎里曼号、恩特拉蒂实验室里没有裂缝的任务。
+ * 赤毒要塞 Dakata（SolNode746）会刷裂缝，但按规则不推。
+ */
+const exterminationSolNodes: readonly string[] = [
+  'SolNode103', // 水星 · M Prime
+  'SolNode226', // 水星 · Pantheon
+  'SolNode128', // 金星 · E Gate
+  'SolNode27', // 地球 · E Prime
+  'SolNode89', // 地球 · Mariana
+  'SolNode58', // 火星 · Hellas
+  'SolNode14', // 火星 · Ultor
+  'SolNode121', // 木星 · Carpo
+  'SolNode20', // 土星 · Telesto
+  'SolNode34', // 天王星 · Sycorax
+  'SolNode62', // 海王星 · Neso
+  'SolNode4', // 冥王星 · Acheron
+  'SolNode21', // 冥王星 · Narcissus
+  'SolNode131', // 谷神星 · Pallas
+  'SolNode171', // 阋神星 · Saxis
+  'SolNode181', // 赛德娜 · Adaro
+  'SolNode204', // 欧罗巴 · Armaros
+  'SolNode205', // 欧罗巴 · Baal
+  'SolNode407', // 虚空 · 母神塔 Oxomoco
+  'SolNode400', // 虚空 · 神王塔 Teshub
+  'SettlementNode1', // 火卫一 · Roche
+  'SolNode708', // 火卫二 · Phlegyas
+]
 
 export type WorldStateNotification
   = | {
@@ -74,9 +115,11 @@ function fissureId(value: ParsedFissure): string {
   ].join(':')
 }
 
-async function fissureMissionType(fissure: ParsedFissure): Promise<TMissionType | undefined> {
-  const nodeKey = await getSolNodeKey(fissure.nodeKey)
-  return ExportRegions[nodeKey]?.missionType
+function isScheduledFissureNode(solNode: string, fissure: ParsedFissure): boolean {
+  if (steelDisruptionSolNodes.includes(solNode)) {
+    return fissure.isHard && !fissure.isStorm
+  }
+  return defenseSolNodes.includes(solNode) || exterminationSolNodes.includes(solNode)
 }
 
 function dailyDealId(value: ParsedDailyDeal): string {
@@ -116,8 +159,8 @@ export async function diffWorldStates(
       continue
     }
 
-    const missionType = await fissureMissionType(fissure)
-    if (!missionType || !ALLOWED_FISSURE_MISSION_TYPES.has(missionType)) {
+    const solNode = await getSolNodeKey(fissure.nodeKey)
+    if (!solNode || !isScheduledFissureNode(solNode, fissure)) {
       continue
     }
 
