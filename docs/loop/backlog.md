@@ -13,7 +13,7 @@ from so future runs can judge how well-grounded it is.
 
 | ID | P | Type | Item | Source | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| L-029 | P1 | optimize | Turn remaining IIFE-style static caches (`relics`, `arbitrationSchedule`) into exported pure builders with unit tests | continuation of L-028 | todo | One module per iteration; start with `relics`. `arbitrationSchedule` is a split/map chain, not an IIFE |
+| L-030 | P1 | optimize | Export a pure builder for `arbitrationSchedule` (split/map of `arbys.txt`) with unit tests | continuation of L-029 | todo | Last remaining static cache from the L-008 series. Not an IIFE; a split/map chain |
 | L-027 | P2 | optimize | Factory + override for `globalHotRivenWeapons` in `data/miscs/lab.ts` | found while doing L-007 | todo | Last remaining inline async cache factory among data singletons |
 | L-009 | P2 | explore | `vault-trader` command: Prime Resurgence (Varzia) inventory from world-state `vaultTrader`, with WFM median prices for the offered parts | unused world-state field | todo | Reuse WFM lookup from `relic` |
 | L-010 | P2 | explore | Booster / double-resource notice from world-state `globalUpgrades`, either as a command or appended to `environment` output | unused world-state field | todo | Check how often the field is non-empty |
@@ -48,6 +48,7 @@ Items the loop must not act on because they belong to public contributors:
 
 | ID | Type | Item | PR |
 | --- | --- | --- | --- |
+| L-029 | optimize | Export `buildRelicDict` from `relics.ts` | [#122](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/122) |
 | L-028 | optimize | Export `buildWeaponRivenDispositionDict` from `rivenDisposition.ts` | [#121](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/121) |
 | L-008 | optimize | Export `buildRivenAttrValueDict` from `rivenBaseValues.ts` | [#120](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/120) |
 | L-007 | optimize | Factory + override injection for `globalDucatnator.ts` (`globalRivenItem.ts` already had the seam) | [#119](https://github.com/CloudeaSoft/koishi-plugin-warframe/pull/119) |
