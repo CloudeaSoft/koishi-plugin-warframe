@@ -60,7 +60,7 @@ export function ArbitrationComponent(arbi: Arbitration[]): Element {
       style="width:600px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);padding:16px;box-shadow:var(--wf-shadow-card);border:1px solid var(--wf-border);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:var(--wf-text-body);"
     >
       <h1 style="font-size:22px;font-weight:bold;color:var(--wf-text-primary);margin:0 0 16px 0;padding-bottom:12px;border-bottom:1px solid var(--wf-divider);text-align:center;">
-        高掉落仲裁时间表
+        仲裁时间表
       </h1>
       <div style="display:flex;flex-direction:column;gap:14px;">
         {[...groups.entries()].map(([dateKey, items]) => (
@@ -72,7 +72,7 @@ export function ArbitrationComponent(arbi: Arbitration[]): Element {
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;">
               {items.map((a) => {
-                const tier = rewardTier(a.rewards)
+                const tier = typeof a.rewards === 'number' ? rewardTier(a.rewards) : undefined
                 const timeLabel = a.time.includes(' ')
                   ? a.time.slice(a.time.indexOf(' ') + 1)
                   : a.time
@@ -93,13 +93,23 @@ export function ArbitrationComponent(arbi: Arbitration[]): Element {
                     >
                       {a.faction}
                     </span>
-                    <span
-                      style={`font-size:13px;font-weight:700;color:${tier.color};background-color:${tier.bg};padding:2px 8px;border-radius:var(--wf-radius-sm);white-space:nowrap;min-width:96px;text-align:right;`}
-                    >
-                      {a.rewards}
-                      {' '}
-                      精华/h
-                    </span>
+                    {tier
+                      ? (
+                          <span
+                            style={`font-size:13px;font-weight:700;color:${tier.color};background-color:${tier.bg};padding:2px 8px;border-radius:var(--wf-radius-sm);white-space:nowrap;min-width:96px;text-align:right;`}
+                          >
+                            {a.rewards}
+                            {' '}
+                            精华/h
+                          </span>
+                        )
+                      : (
+                          <span
+                            style="font-size:13px;color:var(--wf-text-secondary);min-width:96px;text-align:right;"
+                          >
+                            —
+                          </span>
+                        )}
                   </div>
                 )
               })}

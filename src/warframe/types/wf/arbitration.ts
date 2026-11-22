@@ -7,5 +7,5 @@ export interface ArbitrationShort {
 
 export interface Arbitration extends WFRegionShort {
   time: string
-  rewards: number
+  rewards?: number
 }

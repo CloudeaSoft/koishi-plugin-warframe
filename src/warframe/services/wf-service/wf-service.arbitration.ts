@@ -1,4 +1,4 @@
-import type { Arbitration, WarframeResult } from '../../types'
+import type { Arbitration, ArbitrationShort, WarframeResult } from '../../types'
 
 import { dict_zh, ExportRegions } from 'warframe-public-export-plus'
 
@@ -6,6 +6,34 @@ import { arbyRewards } from '../../assets/index'
 import { arbitrationSchedule } from '../../data/wf/arbitrationSchedule'
 import { regionToShort } from '../../infrastructure/wf/wf-export-adapter'
 import { failure } from '../../types/warframe-result'
+
+function formatArbitrationTime(unixSeconds: number): string {
+  return new Date(unixSeconds * 1000).toLocaleString('zh-cn', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    hour12: false,
+    timeZone: 'Asia/Shanghai',
+  })
+}
+
+export function adaptArbitrations(entries: readonly ArbitrationShort[]): Arbitration[] {
+  const adapted: Arbitration[] = []
+  for (const entry of entries) {
+    const region = ExportRegions[entry.node]
+    if (!region)
+      continue
+
+    const rewards = arbyRewards[entry.node]
+    adapted.push({
+      ...regionToShort(region, dict_zh),
+      time: formatArbitrationTime(entry.time),
+      ...(typeof rewards === 'number' ? { rewards } : {}),
+    })
+  }
+  return adapted
+}
 
 export function getArbitrations(day: number = 3): WarframeResult<Arbitration[]> {
   if (day > 14 || day <= 0) {
@@ -24,25 +52,6 @@ export function getArbitrations(day: number = 3): WarframeResult<Arbitration[]> 
   )
   return {
     ok: true,
-    data: weekArbys
-      .filter(a => arbyRewards[a.node])
-      .map((a) => {
-        const obj = regionToShort(ExportRegions[a.node], dict_zh)
-        return {
-          ...obj,
-          time: new Date(a.time * 1000).toLocaleString('zh-cn', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            // minute: 'numeric', // 保持注释或删除，以去除分钟
-            // second: 'numeric', // 保持注释或删除，以去除秒
-            hour12: false, // 统一使用 24 小时制
-            // hourCycle: 'h23' // 另一种设置 24 小时制的方法
-            timeZone: 'Asia/Shanghai',
-          }),
-          rewards: arbyRewards[a.node],
-        }
-      }),
+    data: adaptArbitrations(weekArbys),
   }
 }
