@@ -1,5 +1,5 @@
 export { adaptAlerts, getAlerts } from './wf-service.alert'
-export { getArbitrations } from './wf-service.arbitration'
+export { adaptArbitrations, getArbitrations } from './wf-service.arbitration'
 export { getBounty } from './wf-service.bounty'
 export { adaptCalendar, getCalendar, getCalendarFrom } from './wf-service.calendar'
 export { getCircuitWeek } from './wf-service.circuit'

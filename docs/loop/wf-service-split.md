@@ -90,6 +90,7 @@ same calculations. `wf-service.riven.ts` re-exports them for compatibility.
 | --- | --- |
 | `getRelic` | `wf-service.relic.ts` |
 | `getArbitrations` | `wf-service.arbitration.ts` |
+| `adaptArbitrations` | `wf-service.arbitration.ts` |
 | `adaptArchonHunt` | `wf-service.weekly.ts` |
 | `adaptSortie` | `wf-service.sortie.ts` |
 | `getSortieFrom` | `wf-service.sortie.ts` |

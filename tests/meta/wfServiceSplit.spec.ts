@@ -130,7 +130,7 @@ describe('wf-service split contract', () => {
     const indexExports = exportedFunctionNames(index)
     const remaining: Array<[string, string[]]> = [
       ['wf-service.relic.ts', ['getRelic']],
-      ['wf-service.arbitration.ts', ['getArbitrations']],
+      ['wf-service.arbitration.ts', ['adaptArbitrations', 'getArbitrations']],
       ['wf-service.sortie.ts', ['adaptSortie', 'getSortieFrom', 'getSortie']],
       ['wf-service.weekly.ts', ['adaptArchonHunt', 'getWeekly']],
       ['wf-service.bounty.ts', ['getBounty']],

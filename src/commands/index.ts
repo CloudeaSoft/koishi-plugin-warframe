@@ -23,7 +23,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
   ctx.command('wmu', '更新wm缓存数据', { hidden: true }).action(wfm.wmuCommand)
 
   ctx
-    .command('arbitration [day:number]', '近期高价值仲裁任务')
+    .command('arbitration [day:number]', '近期仲裁任务')
     .alias('arbi')
     .alias('仲裁')
     .alias('仲裁表')
