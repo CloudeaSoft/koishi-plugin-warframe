@@ -52,7 +52,6 @@ export const messages = {
 
   'miscs.hotRiven.noData': '暂无热门紫卡数据',
   'miscs.hotRiven.fetchFailed': '获取热门紫卡数据失败',
-  'miscs.inDevelopment': '功能暂未开放',
 } as const
 
 export type MessageKey = keyof typeof messages

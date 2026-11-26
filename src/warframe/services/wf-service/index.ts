@@ -11,6 +11,7 @@ export {
   getSteelPathFissures,
 } from './wf-service.fissure'
 export { adaptInvasions, getInvasions, getInvasionsFrom } from './wf-service.invasion'
+export { getLichOfferings } from './wf-service.lich-offerings'
 export { getNightwave, resolveNightwave } from './wf-service.nightwave'
 export { getRelic } from './wf-service.relic'
 export {

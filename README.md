@@ -64,14 +64,16 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 Riven calculations use a bundled official Public Export snapshot. See [data sources and refresh instructions](docs/riven-data.md).
 
-### Kuva/Tenet/Coda (In Development)
+### Tenet and Coda Vendor Weapons
 
-The following commands are reserved but not yet implemented:
+Both vendors rotate every four days. Each command shows the current weapons, their reported bonus element and percentage, and the time until the next rotation.
 
 | Command  | Arguments | Aliases | Description                                    |
 | -------- | --------- | ------- | ---------------------------------------------- |
-| `lich-c` |           | `lichc` | Kuva weapons (hidden, in development)          |
-| `lich-i` |           | `lichi` | Infested/Coda weapons (hidden, in development) |
+| `lich-c` |           | `lichc`, `信条数值` | Show Ergo Glast's Tenet weapons. |
+| `lich-i` |           | `lichi`, `终幕数值` | Show Eleanor's active Coda batch. |
+
+Bonus reports come from [WarframeTR](https://warframetr.com/zh-hans/live/), with the [WARFRAME Wiki reset tables](https://wiki.warframe.com/w/Reset) filling gaps. A roll identical to the last pre-reset Wiki revision stays pending. An asterisk marks a roll whose previous value could not be checked. If reports are unavailable, the commands still show the scheduled weapons and countdown. [TennoStats](https://www.tennostats.com/coda) documents the Coda batch schedule and tracks personal rolls.
 
 ## Install
 

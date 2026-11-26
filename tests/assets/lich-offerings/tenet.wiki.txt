@@ -1,0 +1,12 @@
+<table class="wikitable" style="text-align: center; margin: auto;">
+    <tr>
+        <th>Weapon</th>
+        <th>Element</th>
+        <th>Bonus %</th>
+    </tr>
+    <tr><td>{{Weapon|Tenet Ferrox}}</td><td>{{D|Cold}}</td><td>{{ValenceBonusPercentageColor|25.6}}</td></tr>
+    <tr><td>{{Weapon|Tenet Grigori}}</td><td>{{D|Electricity}}</td><td>{{ValenceBonusPercentageColor|46.5}}</td></tr>
+    <tr><td>{{Weapon|Tenet Livia}}</td><td>{{D|Cold}}</td><td>{{ValenceBonusPercentageColor|25.0}}</td></tr>
+    <tr><td>{{Weapon|Tenet Exec}}</td><td>{{D|Impact}}</td><td>{{ValenceBonusPercentageColor|54.1}}</td></tr>
+    <tr><td>{{Weapon|Tenet Agendus}}</td><td>{{D|Toxin}}</td><td>{{ValenceBonusPercentageColor|26.2}}</td></tr>
+</table>

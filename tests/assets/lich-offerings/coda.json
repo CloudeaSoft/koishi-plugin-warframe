@@ -1,0 +1,71 @@
+{
+  "version": 2,
+  "updatedAt": "2026-11-26T06:13:25.050Z",
+  "rotation": {
+    "anchor": "2025-03-18T00:00:00.000Z",
+    "loopDays": 8,
+    "batchDays": 4
+  },
+  "batches": {
+    "A": {
+      "Coda Catabolyst": {
+        "percent": 53.4,
+        "damage": "impact"
+      },
+      "Coda Hema": {
+        "percent": 31.4,
+        "damage": "cold"
+      },
+      "Coda Mire": {
+        "percent": 56.3,
+        "damage": "radiation"
+      },
+      "Coda Motovore": {
+        "percent": 33.3,
+        "damage": "cold"
+      },
+      "Coda Pox": {
+        "percent": 31.7,
+        "damage": "electricity"
+      },
+      "Coda Sporothrix": {
+        "percent": 27,
+        "damage": "toxin"
+      },
+      "Dual Coda Torxica": {
+        "percent": 28.8,
+        "damage": "magnetic"
+      }
+    },
+    "B": {
+      "Coda Bassocyst": {
+        "percent": 32.7,
+        "damage": "magnetic"
+      },
+      "Coda Bubonico": {
+        "percent": 36.7,
+        "damage": "radiation"
+      },
+      "Coda Caustacyst": {
+        "percent": 46.6,
+        "damage": "heat"
+      },
+      "Coda Hirudo": {
+        "percent": 25.2,
+        "damage": "toxin"
+      },
+      "Coda Pathocyst": {
+        "percent": 46.8,
+        "damage": "toxin"
+      },
+      "Coda Synapse": {
+        "percent": 31,
+        "damage": "magnetic"
+      },
+      "Coda Tysis": {
+        "percent": 31.5,
+        "damage": "magnetic"
+      }
+    }
+  }
+}

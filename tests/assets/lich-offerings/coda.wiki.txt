@@ -1,0 +1,28 @@
+<table class="wikitable" style="text-align: center; margin: auto;">
+    <tr>
+        <th>Weapon (Batch A)</th>
+        <th>Element</th>
+        <th>Bonus %</th>
+    </tr> <!-- Please remember to purge the page after updating by typing https://wiki.warframe.com/w/Coda_Weapons?action=purge in the browser (and click ok), if it doesnt update -->
+    <tr><td>Coda Catabolyst</td><td>{{D|Impact}}</td><td>{{ValenceBonusPercentageColor|53.4}}</td></tr>
+    <tr><td>Coda Hema</td><td>{{D|Cold}}</td><td>{{ValenceBonusPercentageColor|31.4}}</td></tr>
+    <tr><td>Coda Mire</td><td>{{D|Radiation}}</td><td>{{ValenceBonusPercentageColor|56.3}}</td></tr>
+    <tr><td>Coda Motovore</td><td>{{D|Cold}}</td><td>{{ValenceBonusPercentageColor|33.3}}</td></tr>
+    <tr><td>Coda Pox</td><td>{{D|Electricity}}</td><td>{{ValenceBonusPercentageColor|31.7}}</td></tr>
+    <tr><td>Coda Sporothrix</td><td>{{D|Toxin}}</td><td>{{ValenceBonusPercentageColor|27.0}}</td></tr>
+    <tr><td>Dual Coda Torxica</td><td>{{D|Magnetic}}</td><td>{{ValenceBonusPercentageColor|28.8}}</td></tr>
+</table>
+<table class="wikitable" style="text-align: center; margin: auto;">
+    <tr>
+        <th>Weapon (Batch B)</th>
+        <th>Element</th>
+        <th>Bonus %</th>
+    </tr>
+    <tr><td>Coda Bassocyst</td><td>{{D|Magnetic}}</td><td>{{ValenceBonusPercentageColor|32.7}}</td></tr>
+    <tr><td>Coda Bubonico</td><td>{{D|Radiation}}</td><td>{{ValenceBonusPercentageColor|36.7}}</td></tr>
+    <tr><td>Coda Caustacyst</td><td>{{D|Heat}}</td><td>{{ValenceBonusPercentageColor|46.6}}</td></tr>
+    <tr><td>Coda Hirudo</td><td>{{D|Toxin}}</td><td>{{ValenceBonusPercentageColor|25.2}}</td></tr>
+    <tr><td>Coda Pathocyst</td><td>{{D|Toxin}}</td><td>{{ValenceBonusPercentageColor|46.8}}</td></tr>
+    <tr><td>Coda Synapse</td><td>{{D|Magnetic}}</td><td>{{ValenceBonusPercentageColor|31}}</td></tr>
+    <tr><td>Coda Tysis</td><td>{{D|Magnetic}}</td><td>{{ValenceBonusPercentageColor|31.5}}</td></tr>
+</table>

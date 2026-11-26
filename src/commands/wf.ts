@@ -1,5 +1,6 @@
 import type { Argv, Dict } from 'koishi'
 import type { PluginDependencies } from '../types/config'
+import { LichOfferingsComponent } from '../components/lich-offerings'
 import {
   AlertComponent,
   ArbitrationComponent,
@@ -32,6 +33,7 @@ import {
   getEvents,
   getFissures,
   getInvasions,
+  getLichOfferings,
   getNightwave,
   getRailjackFissures,
   getRelic,
@@ -48,6 +50,8 @@ export function createWfCommands(deps: PluginDependencies): {
   arbitrationCommand: (_action: Argv, input?: number) => Promise<string>
   circuitCommand: (_action: Argv) => Promise<string>
   voidtraderCommand: (_action: Argv) => Promise<string>
+  tenetCommand: () => Promise<string>
+  codaCommand: () => Promise<string>
   fissureCommand: (_action: Argv) => Promise<string>
   invasionCommand: (_action: Argv) => Promise<string>
   alertCommand: (_action: Argv) => Promise<string>
@@ -89,6 +93,8 @@ export function createWfCommands(deps: PluginDependencies): {
   }
 
   return {
+    tenetCommand: async () => render(LichOfferingsComponent(await getLichOfferings('tenet'))),
+    codaCommand: async () => render(LichOfferingsComponent(await getLichOfferings('coda'))),
     arbitrationCommand: async (_action: Argv, input?: number) => {
       const result = getArbitrations(input)
       if (!result.ok) {

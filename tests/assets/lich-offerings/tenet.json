@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-26T06:13:25.054Z",
+  "rotation": {
+    "anchor": "2015-12-03T00:00:00.000Z",
+    "loopDays": 4,
+    "batchDays": 4
+  },
+  "offers": {
+    "Tenet Ferrox": {
+      "percent": 25.6,
+      "damage": "cold"
+    },
+    "Tenet Grigori": {
+      "percent": 46.5,
+      "damage": "electricity"
+    },
+    "Tenet Livia": {
+      "percent": 25,
+      "damage": "cold"
+    },
+    "Tenet Exec": {
+      "percent": 54.1,
+      "damage": "impact"
+    },
+    "Tenet Agendus": {
+      "percent": 26.2,
+      "damage": "toxin"
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { analyzeRivenStat } from '../src/warframe/services'
 
 describe('i18n', () => {
   it('resolves a message key', () => {
-    expect(t('miscs.inDevelopment')).to.equal('功能暂未开放')
+    expect(t('miscs.hotRiven.noData')).to.equal('暂无热门紫卡数据')
   })
 
   it('substitutes repeated string and numeric parameters', () => {
