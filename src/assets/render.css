@@ -60,3 +60,20 @@ body {
 ul {
   list-style: none;
 }
+
+.wf-trader-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wf-trader-icon {
+  display: inline-flex;
+  flex: 0 0 32px;
+  height: 32px;
+}
+
+.wf-trader-icon img {
+  object-fit: contain;
+  visibility: hidden;
+}

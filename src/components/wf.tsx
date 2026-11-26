@@ -1956,6 +1956,7 @@ export function RivenStatComponent(data: RivenStatResult): Element {
 export function VoidTraderComponent(data: VoidTrader): Element {
   return (
     <div
+      class="wf-void-trader"
       style="width:400px;padding:16px;font-family:'Segoe UI',sans-serif;font-size:14px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);border:1px solid var(--wf-border);box-shadow:var(--wf-shadow-card);color:var(--wf-text-body);"
     >
       <table style="width:100%;border-collapse:collapse;">
@@ -1977,7 +1978,12 @@ export function VoidTraderComponent(data: VoidTrader): Element {
           {data.items.map(item => (
             <tr>
               <td style="padding:6px;border-bottom:1px solid var(--wf-border);">
-                {item.name}
+                <div class="wf-trader-item">
+                  <span class="wf-trader-icon">
+                    {item.iconUrl ? <img data-icon-url={item.iconUrl} width="32" height="32" alt="" /> : null}
+                  </span>
+                  <span>{item.name}</span>
+                </div>
               </td>
               <td
                 style="padding:6px;border-bottom:1px solid var(--wf-border);text-align:center;line-height:1;"

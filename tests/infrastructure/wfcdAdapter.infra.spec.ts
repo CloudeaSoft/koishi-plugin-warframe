@@ -54,6 +54,7 @@ describe('getVoidTraderItem Tests', () => {
     }
     const result = getVoidTraderItem(input)
     expect(result.name).to.equal('My Fallback')
+    expect(result.iconUrl).to.equal(undefined)
   })
 
   it('should handle StoreItems prefix in uniqueName', () => {

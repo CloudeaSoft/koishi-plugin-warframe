@@ -8,6 +8,7 @@ import {
   ExportBundles,
   ExportCustoms,
   ExportFlavour,
+  ExportImages,
   ExportKeys,
   ExportRecipes,
   ExportRelics,
@@ -94,14 +95,13 @@ export function getVoidTraderItem(i: {
   ducats: number
   credits: number
 }): VoidTraderItem {
-  const itemNameKey = getVoidTraderItemName(i.uniqueName)
-  const itemName = !itemNameKey
-    ? i.item
-    : typeof itemNameKey === 'string'
-      ? (dict_zh[itemNameKey]
-        ?? (itemNameKey.includes('/') ? i.item : itemNameKey))
-      : relicToFullNameZH(itemNameKey.era, itemNameKey.category)
-  return { name: itemName, ducats: i.ducats, credits: i.credits }
+  const entry = getVoidTraderExport(i.uniqueName)
+  const key = entry?.name
+  const name = key ? (dict_zh[key] ?? (key.includes('/') ? i.item : key)) : i.item
+  const icon = entry?.icon
+  const hash = icon && ExportImages[icon]?.contentHash
+  const iconUrl = icon && (hash ? `https://content.warframe.com/PublicExport${icon}!${hash}` : `https://browse.wf${icon}`)
+  return { name, ducats: i.ducats, credits: i.credits, ...(iconUrl && { iconUrl }) }
 }
 
 export interface SteelPathCatalogOffering {
@@ -125,60 +125,20 @@ export async function getSteelPathCatalogs(): Promise<{
   }
 }
 
-function getVoidTraderItemName(
-  sourceKey: string,
-): string | { era: string, category: string } | undefined {
+function getVoidTraderExport(sourceKey: string): { name?: string, icon?: string } | undefined {
   const fixedKey = sourceKey.replace('/StoreItems', '')
-  const flavour = ExportFlavour[fixedKey]
-  if (flavour) {
-    return flavour.name
-  }
+  const item = ExportFlavour[fixedKey] ?? ExportWeapons[fixedKey] ?? ExportUpgrades[fixedKey]
+  if (item)
+    return item
+  const relic = ExportRelics[fixedKey]
+  if (relic)
+    return { name: relicToFullNameZH(relic.era, relic.category), icon: relic.icon }
 
-  const weapon = ExportWeapons[fixedKey]
-  if (weapon) {
-    return weapon.name
-  }
-
-  const mod = ExportUpgrades[fixedKey]
-  if (mod) {
-    return mod.name
-  }
-
-  const relic = ExportRelics[fixedKey] // Return name directly
-  if (relic) {
-    return { era: relic.era, category: relic.category }
-  }
-
-  const skin = ExportCustoms[fixedKey]
-  if (skin) {
-    return skin.name
-  }
-
-  const recipe = ExportRecipes[fixedKey] // 'Sands of Inaros' Only
-  if (recipe) {
-    const recipeResult = ExportKeys[recipe.resultType]
-    if (recipeResult) {
-      return recipeResult.name
-    }
-  }
-
-  const virtual = ExportVirtuals[fixedKey]
-  if (virtual) {
-    return virtual.name
-  }
-
-  const resource = ExportResources[fixedKey]
-  if (resource) {
-    return resource.name
-  }
-
-  const booster = ExportBundles[sourceKey] // Special key usage
-  if (booster) {
-    return booster.name
-  }
-
-  const boosterPack = ExportBoosterPacks[fixedKey]
-  if (boosterPack) {
-    return boosterPack.name
-  }
+  const recipe = ExportRecipes[fixedKey]
+  return ExportCustoms[fixedKey]
+    ?? (recipe && ExportKeys[recipe.resultType])
+    ?? ExportVirtuals[fixedKey]
+    ?? ExportResources[fixedKey]
+    ?? ExportBundles[sourceKey]
+    ?? ExportBoosterPacks[fixedKey]
 }

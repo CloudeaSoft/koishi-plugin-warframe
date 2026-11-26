@@ -1,6 +1,7 @@
 import type WorldState from 'warframe-worldstate-parser'
 
 import { expect } from 'chai'
+import { ExportImages } from 'warframe-public-export-plus'
 
 import {
   createWorldStateRefresher,
@@ -164,13 +165,14 @@ describe('world-state change detection', () => {
       voidTraders: [trader],
     } as unknown as Partial<WorldState>)
 
+    const icon = '/Lotus/Interface/Icons/StoreIcons/Weapons/PrimaryWeapons/Weapons/PrismaGrakata.png'
     expect(await diffWorldStates(previous, current)).to.deep.equal([{
       type: 'void-trader',
       id: 'v1',
       character: 'Baro Ki\'Teer',
       location: 'Mercury Relay',
       expiry: trader.expiry.getTime(),
-      items: [{ name: '棱晶·葛拉卡达', ducats: 150, credits: 100000 }],
+      items: [{ name: '棱晶·葛拉卡达', ducats: 150, credits: 100000, iconUrl: `https://content.warframe.com/PublicExport${icon}!${ExportImages[icon].contentHash}` }],
     }])
   })
 
