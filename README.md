@@ -66,14 +66,10 @@ Riven calculations use a bundled official Public Export snapshot. See [data sour
 
 ### Tenet and Coda Vendor Weapons
 
-Both vendors rotate every four days. Each command shows the current weapons, their reported bonus element and percentage, and the time until the next rotation.
-
 | Command  | Arguments | Aliases | Description                                    |
 | -------- | --------- | ------- | ---------------------------------------------- |
 | `lich-c` |           | `lichc`, `信条数值`, `信条`, `c玄骸`, `tenet` | Show Ergo Glast's Tenet weapons. |
 | `lich-i` |           | `lichi`, `终幕数值`, `终幕`, `i玄骸`, `coda` | Show Eleanor's active Coda batch. |
-
-A roll that matches its value before reset stays pending. An asterisk marks a roll whose previous value could not be checked.
 
 ## Install
 
