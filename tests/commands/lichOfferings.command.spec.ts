@@ -30,6 +30,22 @@ describe('vendor valence commands', () => {
     await app.stop()
   })
 
+  for (const [alias, vendor] of [
+    ['信条', 'Ergo Glast'],
+    ['c玄骸', 'Ergo Glast'],
+    ['tenet', 'Ergo Glast'],
+    ['终幕', 'Eleanor'],
+    ['i玄骸', 'Eleanor'],
+    ['coda', 'Eleanor'],
+  ]) {
+    it(`routes ${alias} to ${vendor}`, async () => {
+      vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-10-01T12:00:00Z'))
+      vi.spyOn(http, 'fetchAsyncData').mockResolvedValue(undefined)
+      await client.shouldReply(alias, 'rendered')
+      expect(card).to.include(vendor)
+    })
+  }
+
   it('renders the five Tenet offers, their source and a live countdown', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-11-26T12:00:00Z'))
     const fetch = vi.spyOn(http, 'fetchAsyncData').mockResolvedValue(tenet)

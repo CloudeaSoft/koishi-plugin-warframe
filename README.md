@@ -70,8 +70,8 @@ Both vendors rotate every four days. Each command shows the current weapons, the
 
 | Command  | Arguments | Aliases | Description                                    |
 | -------- | --------- | ------- | ---------------------------------------------- |
-| `lich-c` |           | `lichc`, `信条数值` | Show Ergo Glast's Tenet weapons. |
-| `lich-i` |           | `lichi`, `终幕数值` | Show Eleanor's active Coda batch. |
+| `lich-c` |           | `lichc`, `信条数值`, `信条`, `c玄骸`, `tenet` | Show Ergo Glast's Tenet weapons. |
+| `lich-i` |           | `lichi`, `终幕数值`, `终幕`, `i玄骸`, `coda` | Show Eleanor's active Coda batch. |
 
 Bonus reports come from [WarframeTR](https://warframetr.com/zh-hans/live/), with the [WARFRAME Wiki reset tables](https://wiki.warframe.com/w/Reset) filling gaps. A roll identical to the last pre-reset Wiki revision stays pending. An asterisk marks a roll whose previous value could not be checked. If reports are unavailable, the commands still show the scheduled weapons and countdown. [TennoStats](https://www.tennostats.com/coda) documents the Coda batch schedule and tracks personal rolls.
 
