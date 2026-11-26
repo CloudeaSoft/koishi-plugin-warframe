@@ -1,5 +1,5 @@
 import type { AsyncCache, CodaBatch, LichBonus, LichWeaponFamily } from '../../types'
-import { fetchLichBonuses, fetchWikiBaseline } from '../../infrastructure/wf/lich-offerings'
+import { fetchLichBonuses, fetchWikiBaseline } from '../../infrastructure/apis/lich-offerings'
 import { createAsyncCache } from '../../utils/cache'
 
 const tenet = ['Tenet Ferrox', 'Tenet Grigori', 'Tenet Livia', 'Tenet Exec', 'Tenet Agendus']
