@@ -1,4 +1,7 @@
 import { expect } from 'chai'
+import { vi } from 'vitest'
+import { ExportImages } from 'warframe-public-export-plus'
+import * as warframe from '../../src/warframe/infrastructure/apis/warframe'
 import {
   fissureTierName,
   fissureTierNumToNumber,
@@ -32,6 +35,20 @@ describe('fissureTierNumToNumber Tests', () => {
 })
 
 describe('getVoidTraderItem Tests', () => {
+  it('uses the official Public Export image and falls back to browse.wf without a hash', () => {
+    const icon = '/Lotus/Interface/Icons/StoreIcons/Weapons/PrimaryWeapons/Weapons/PrismaGrakata.png'
+    const item = { item: 'Prisma Grakata', uniqueName: '/Lotus/StoreItems/Weapons/VoidTrader/PrismaGrakata', ducats: 610, credits: 100000 }
+    expect(getVoidTraderItem(item).iconUrl).to.equal(`https://content.warframe.com/PublicExport${icon}!${ExportImages[icon].contentHash}`)
+    expect(warframe.getPublicExportImageUrl('/Lotus/Unknown/Icon.png')).to.equal(undefined)
+    const official = vi.spyOn(warframe, 'getPublicExportImageUrl').mockReturnValueOnce(undefined)
+    try {
+      expect(getVoidTraderItem(item).iconUrl).to.equal(`https://browse.wf${icon}`)
+    }
+    finally {
+      official.mockRestore()
+    }
+  })
+
   it('should map an item with name, ducats, and credits', () => {
     const input = {
       item: 'Fallback Name',

@@ -8,7 +8,6 @@ import {
   ExportBundles,
   ExportCustoms,
   ExportFlavour,
-  ExportImages,
   ExportKeys,
   ExportRecipes,
   ExportRelics,
@@ -18,6 +17,8 @@ import {
   ExportWeapons,
 } from 'warframe-public-export-plus'
 import { dictToKeyDict, toPascalCase } from '../../utils'
+import { getBrowseImageUrl } from '../apis/browse-wf'
+import { getPublicExportImageUrl } from '../apis/warframe'
 import { relicEraToTransKey } from './wf-export-adapter'
 
 function relicToFullNameZH(tier: string, category: string): string {
@@ -99,8 +100,7 @@ export function getVoidTraderItem(i: {
   const key = entry?.name
   const name = key ? (dict_zh[key] ?? (key.includes('/') ? i.item : key)) : i.item
   const icon = entry?.icon
-  const hash = icon && ExportImages[icon]?.contentHash
-  const iconUrl = icon && (hash ? `https://content.warframe.com/PublicExport${icon}!${hash}` : `https://browse.wf${icon}`)
+  const iconUrl = icon && (getPublicExportImageUrl(icon) ?? getBrowseImageUrl(icon))
   return { name, ducats: i.ducats, credits: i.credits, ...(iconUrl && { iconUrl }) }
 }
 

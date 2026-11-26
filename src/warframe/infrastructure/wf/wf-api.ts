@@ -1,11 +1,12 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { OracleBountyCycle, RawCalendarSeason, RawInvasion, RawSeasonInfo, RawSortie, RawSyndicateMission, RawWorldEvent } from '../../types'
+import type { RawCalendarSeason, RawInvasion, RawSeasonInfo, RawSortie, RawSyndicateMission, RawWorldEvent } from '../../types'
 
 import { Baro } from '../../assets/index'
-import { fetchAsyncData, fetchAsyncText } from '../../utils'
+import { fetchAsyncText } from '../../utils'
+import { fetchWorldStateJson } from '../apis/warframe'
 
-const apiBase = 'https://api.warframe.com/cdn/'
-const oracleBountyCycleUrl = 'https://oracle.browse.wf/bounty-cycle'
+export { fetchOracleBountyCycle } from '../apis/browse-wf'
+export { fetchWorldStateJson }
 
 export function extractSyndicateMissionsRaw(json: string): RawSyndicateMission[] {
   try {
@@ -76,15 +77,6 @@ export function extractCalendarRaw(json: string): RawCalendarSeason | undefined 
   catch {
     return undefined
   }
-}
-
-export async function fetchWorldStateJson(): Promise<string | undefined> {
-  return fetchAsyncText(`${apiBase}worldState.php`)
-}
-
-/** browse.wf Oracle bounty cycle (Zariman / Cavia / Hex). */
-export async function fetchOracleBountyCycle(): Promise<OracleBountyCycle | undefined> {
-  return fetchAsyncData<OracleBountyCycle>(oracleBountyCycleUrl)
 }
 
 export async function getWorldState(json?: string): Promise<WorldState> {
