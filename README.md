@@ -64,14 +64,12 @@ Toolkit for Warframe. Provides Warframe Market prices, fissures, arbitrations, r
 
 Riven calculations use a bundled official Public Export snapshot. See [data sources and refresh instructions](docs/riven-data.md).
 
-### Kuva/Tenet/Coda (In Development)
-
-The following commands are reserved but not yet implemented:
+### Tenet and Coda Vendor Weapons
 
 | Command  | Arguments | Aliases | Description                                    |
 | -------- | --------- | ------- | ---------------------------------------------- |
-| `lich-c` |           | `lichc` | Kuva weapons (hidden, in development)          |
-| `lich-i` |           | `lichi` | Infested/Coda weapons (hidden, in development) |
+| `lich-c` |           | `lichc`, `信条数值`, `信条`, `c玄骸`, `tenet` | Show Ergo Glast's Tenet weapons. |
+| `lich-i` |           | `lichi`, `终幕数值`, `终幕`, `i玄骸`, `coda` | Show Eleanor's active Coda batch. |
 
 ## Install
 

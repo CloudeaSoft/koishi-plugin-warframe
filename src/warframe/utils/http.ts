@@ -143,11 +143,12 @@ async function request<T, R extends ResponseType>(
   url: string,
   method: HttpMethod,
   responseType: R,
+  userAgent: string = defaultHeaders['User-Agent'],
 ): Promise<MappedResponseType<R, T> | undefined> {
   try {
     return await ofetch<T, R>(url, {
       method,
-      headers: defaultHeaders,
+      headers: { ...defaultHeaders, 'User-Agent': userAgent },
       responseType,
       timeout: 10_000,
       retry: 3,
@@ -170,8 +171,9 @@ export async function fetchAsyncText(
 export async function fetchAsyncData<T>(
   url: string,
   method: HttpMethod = 'GET',
+  userAgent?: string,
 ): Promise<T | undefined> {
-  return request<T, 'json'>(url, method, 'json')
+  return request<T, 'json'>(url, method, 'json', userAgent)
 }
 
 export async function fetchAsyncImage(

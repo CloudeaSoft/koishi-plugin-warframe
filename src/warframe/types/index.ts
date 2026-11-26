@@ -58,6 +58,7 @@ export type {
   RawInvasionMissionInfo,
   RawInvasionReward,
 } from './wf/invasion'
+export type { CodaBatch, LichBonus, LichOfferings, LichWeaponFamily } from './wf/lich-offerings'
 export type {
   NightwaveBoard,
   NightwaveChallengeInfo,

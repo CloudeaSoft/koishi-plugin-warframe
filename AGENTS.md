@@ -227,5 +227,4 @@ tracked in `docs/loop/backlog.md` and every run is recorded in
   caches are `relics` and `arbitrationSchedule` (L-029).
 - `relicQualityToName` and `relicQualityToTransKey` are exported and covered by
   adapter tests, but currently appear to have no runtime callers.
-- `lich-c` and `lich-i` are hidden placeholder commands that return an
-  in-development message.
+- `lich-c` and `lich-i` show the active Tenet and Coda vendor offerings.

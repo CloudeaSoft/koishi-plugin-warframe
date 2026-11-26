@@ -120,6 +120,7 @@ same calculations. `wf-service.riven.ts` re-exports them for compatibility.
 | `getRailjackFissures` | `wf-service.fissure.ts` |
 | `getAnalyzedRiven` | `wf-service.riven.ts` |
 | `getVoidTrader` | `wf-service.void-trader.ts` |
+| `getLichOfferings` | `wf-service.lich-offerings.ts` |
 | `filterWeeklyRivens` | `wf-service.riven.ts` |
 | `getWeeklyRivens` | `wf-service.riven.ts` |
 | `getStaticRivenStats` | `wf-service.riven.ts` |
