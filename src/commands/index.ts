@@ -198,7 +198,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('信条')
     .alias('c玄骸')
     .alias('tenet')
-    .action(wf.tenetCommand)
+    .action(async () => wf.lichOfferingsCommand('tenet'))
   ctx
     .command('lich-i', '查询本期终幕商店武器和加成')
     .alias('lichi')
@@ -206,7 +206,7 @@ export function setupCommands(ctx: Context, deps: PluginDependencies): void {
     .alias('终幕')
     .alias('i玄骸')
     .alias('coda')
-    .action(wf.codaCommand)
+    .action(async () => wf.lichOfferingsCommand('coda'))
 
   ctx
     .command('riven-weekly [minPrice:number]', '每周高价值紫卡参考 (未洗中位价)')

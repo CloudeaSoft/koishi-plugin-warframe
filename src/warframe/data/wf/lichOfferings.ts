@@ -1,48 +1,51 @@
-import type { AsyncCache, CodaBatch, LichBonus, LichWeaponFamily } from '../../types'
-import { fetchLichBonuses, fetchWikiBaseline } from '../../infrastructure/apis/lich-offerings'
+import type { WikiOfferRevision } from '../../infrastructure/apis/warframe-wiki'
+import type { AsyncCache } from '../../types/cache'
+import type { LichReport, LichRotation, LichWeaponFamily } from '../../types/wf/lich-offerings'
+import { fetchWikiBaseline, fetchWikiEditTime, fetchWikiOffers } from '../../infrastructure/apis/warframe-wiki'
+import { fetchTrackerOffers } from '../../infrastructure/apis/warframetr'
 import { createAsyncCache } from '../../utils/cache'
 
-const tenet = ['Tenet Ferrox', 'Tenet Grigori', 'Tenet Livia', 'Tenet Exec', 'Tenet Agendus']
-
-// Eleanor's published batch schedule is also available on https://www.tennostats.com/coda.
-// Personal rolls on that tracker do not describe the vendor's stock.
-const coda = {
-  A: ['Coda Hema', 'Coda Sporothrix', 'Coda Catabolyst', 'Coda Pox', 'Dual Coda Torxica', 'Coda Mire', 'Coda Motovore'],
-  B: ['Coda Bassocyst', 'Coda Bubonico', 'Coda Synapse', 'Coda Tysis', 'Coda Caustacyst', 'Coda Hirudo', 'Coda Pathocyst'],
-}
-const period = 4 * 86_400_000
-const anchors = { tenet: Date.UTC(2015, 11, 3), coda: Date.UTC(2025, 2, 18) }
-
-interface VendorRotation {
-  index: number
-  roster: string[]
-  batch?: CodaBatch
-  expiresAt: number
-  reports: AsyncCache<Map<string, LichBonus>>
+interface CurrentWikiOffers extends WikiOfferRevision {
+  getEditTime: () => Promise<string | undefined>
 }
 
-function createRotation(family: LichWeaponFamily, index: number): VendorRotation {
-  const start = anchors[family] + index * period
-  const batch: CodaBatch | undefined = family === 'coda' ? (index % 2 === 0 ? 'A' : 'B') : undefined
-  const roster = batch ? coda[batch] : tenet
-  const baseline = createAsyncCache(async () => fetchWikiBaseline(family, start, batch), -1)
-  return {
-    index,
-    roster,
-    batch,
-    expiresAt: start + period,
-    reports: createAsyncCache(async () => fetchLichBonuses(family, roster, start, batch, baseline.get), 300_000),
+interface VendorReportCaches {
+  start: number
+  tracker: AsyncCache<LichReport | undefined>
+  baseline: AsyncCache<WikiOfferRevision | undefined>
+  wiki: AsyncCache<CurrentWikiOffers | undefined>
+}
+
+const refreshInterval = 5 * 60_000
+const rotations = new Map<LichWeaponFamily, VendorReportCaches>()
+
+function getVendorReportCaches({ family, start, batch }: LichRotation): VendorReportCaches {
+  const existing = rotations.get(family)
+  if (existing?.start === start)
+    return existing
+
+  const caches = {
+    start,
+    tracker: createAsyncCache(async () => fetchTrackerOffers(family, batch), refreshInterval),
+    baseline: createAsyncCache(async () => fetchWikiBaseline(family, start, batch), -1),
+    wiki: createAsyncCache(async () => {
+      const revision = await fetchWikiOffers(family, batch)
+      if (revision) {
+        const editTime = createAsyncCache(async () => fetchWikiEditTime(revision.revid), -1)
+        return { ...revision, getEditTime: editTime.get }
+      }
+    }, refreshInterval),
   }
+  rotations.set(family, caches)
+  return caches
 }
 
-const rotations = new Map<LichWeaponFamily, VendorRotation>()
-
-export function getVendorRotation(family: LichWeaponFamily): VendorRotation {
-  const index = Math.floor((Date.now() - anchors[family]) / period)
-  let rotation = rotations.get(family)
-  if (rotation?.index !== index) {
-    rotation = createRotation(family, index)
-    rotations.set(family, rotation)
-  }
-  return rotation
+export async function getVendorReports(rotation: LichRotation): Promise<{
+  tracker?: LichReport
+  baseline?: WikiOfferRevision
+  getWiki: () => Promise<CurrentWikiOffers | undefined>
+}> {
+  const caches = getVendorReportCaches(rotation)
+  const [tracker, baseline] = await Promise.all([caches.tracker.get(), caches.baseline.get()])
+  return { tracker, baseline, getWiki: caches.wiki.get }
 }
