@@ -23,7 +23,7 @@ describe('vendor valence commands', () => {
     config: { developerMode: false, channelIds: {} },
     logger: app.logger('valence-test'),
     render: async (element: Element) => {
-      card = element.toString()
+      card = element.toString(true)
       return 'rendered'
     },
   })
@@ -47,7 +47,7 @@ describe('vendor valence commands', () => {
       vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-10-01T12:00:00Z'))
       vi.spyOn(http, 'fetchAsyncData').mockResolvedValue(undefined)
       await client.shouldReply(alias, 'rendered')
-      expect(card.replace(/<[^>]*>/g, '')).to.match(/^距离轮换 /)
+      expect(card).to.match(/^距离轮换 /)
       expect(card).to.include(`${family}·`)
     })
   }
