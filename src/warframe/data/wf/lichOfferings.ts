@@ -1,5 +1,5 @@
 import type { AsyncCache, CodaBatch, LichBonus, LichWeaponFamily } from '../../types'
-import { fetchLichBonuses } from '../../infrastructure/wf/lich-offerings'
+import { fetchLichBonuses, fetchWikiBaseline } from '../../infrastructure/wf/lich-offerings'
 import { createAsyncCache } from '../../utils/cache'
 
 const tenet = ['Tenet Ferrox', 'Tenet Grigori', 'Tenet Livia', 'Tenet Exec', 'Tenet Agendus']
@@ -25,12 +25,13 @@ function createRotation(family: LichWeaponFamily, index: number): VendorRotation
   const start = anchors[family] + index * period
   const batch: CodaBatch | undefined = family === 'coda' ? (index % 2 === 0 ? 'A' : 'B') : undefined
   const roster = batch ? coda[batch] : tenet
+  const baseline = createAsyncCache(async () => fetchWikiBaseline(family, start, batch), -1)
   return {
     index,
     roster,
     batch,
     expiresAt: start + period,
-    reports: createAsyncCache(async () => fetchLichBonuses(family, roster, start, batch), 300_000),
+    reports: createAsyncCache(async () => fetchLichBonuses(family, roster, start, batch, baseline.get), 300_000),
   }
 }
 

@@ -7,8 +7,12 @@ interface Tracker {
   offers?: Record<string, RawOffer>
   batches?: Partial<Record<CodaBatch, Record<string, RawOffer>>>
 }
-interface WikiRevision { timestamp: string, slots?: { main?: { content?: string } } }
+interface WikiRevision { revid: number, timestamp: string, slots?: { main?: { content?: string } } }
 interface WikiResponse { query?: { pages?: { revisions?: WikiRevision[] }[] } }
+interface WikiParseResponse { parse?: { revid: number, wikitext?: { '*'?: string } } }
+interface WikiBaseline { revid: number, offers: Record<string, RawOffer> }
+
+const wikiTitles = { tenet: 'Tenet Weapons', coda: 'Coda Weapons' }
 
 const elements = new Map(Object.entries({
   impact: '冲击',
@@ -34,50 +38,85 @@ function readWikiTable(content: string, batch?: CodaBatch): Record<string, RawOf
   return offers
 }
 
-async function fetchWikiRevision(family: LichWeaponFamily, before?: number): Promise<WikiRevision | undefined> {
-  const title = family === 'tenet' ? 'Tenet_Weapons' : 'Coda_Weapons'
-  const cutoff = before === undefined ? '' : `&rvstart=${new Date(before - 1000).toISOString()}`
-  const wiki = await fetchAsyncData<WikiResponse>(
-    `https://wiki.warframe.com/api.php?action=query&prop=revisions&rvprop=timestamp%7Ccontent&rvslots=main&format=json&formatversion=2&titles=${title}${cutoff}`,
+async function wikiRequest<T>(params: Record<string, string>): Promise<T | undefined> {
+  return fetchAsyncData<T>(
+    `https://wiki.warframe.com/api.php?${new URLSearchParams({ ...params, format: 'json' })}`,
     'GET',
     'koishi-plugin-warframe (https://github.com/CloudeaSoft/koishi-plugin-warframe)',
   )
+}
+
+async function wikiRevision(params: Record<string, string>): Promise<WikiRevision | undefined> {
+  const wiki = await wikiRequest<WikiResponse>({ action: 'query', prop: 'revisions', formatversion: '2', ...params })
   return wiki?.query?.pages?.[0]?.revisions?.[0]
 }
 
-export async function fetchLichBonuses(family: LichWeaponFamily, roster: string[], start: number, batch?: CodaBatch): Promise<Map<string, LichBonus>> {
-  const [tracker, previous] = await Promise.all([
-    fetchAsyncData<Tracker>(`https://warframetr.com/api/warframe/${family}`),
-    fetchWikiRevision(family, start),
-  ])
-  // The mirror dates the whole snapshot. An unchanged row can survive multiple resets.
-  const previousContent = previous?.slots?.main?.content
-  const baseline = previous && typeof previousContent === 'string' && Date.parse(previous.timestamp) < start
-    ? readWikiTable(previousContent, batch)
-    : {}
-  const bonuses = new Map<string, LichBonus>()
-  function addReports(offers: Record<string, RawOffer> | undefined, source: LichBonus['source'], timestamp?: string): void {
-    const updated = Date.parse(timestamp ?? '')
-    if (!(updated >= start && updated <= Date.now()))
+export async function fetchWikiBaseline(family: LichWeaponFamily, start: number, batch?: CodaBatch): Promise<WikiBaseline | undefined> {
+  const revision = await wikiRevision({
+    titles: wikiTitles[family],
+    rvstart: new Date(start - 1000).toISOString(),
+    rvprop: 'ids|timestamp|content',
+    rvslots: 'main',
+  })
+  const content = revision?.slots?.main?.content
+  if (revision && Number.isSafeInteger(revision.revid) && revision.revid > 0 && Date.parse(revision.timestamp) < start && typeof content === 'string')
+    return { revid: revision.revid, offers: readWikiTable(content, batch) }
+}
+
+function isCurrent(timestamp: string | undefined, start: number): boolean {
+  const updated = Date.parse(timestamp ?? '')
+  return updated >= start && updated <= Date.now()
+}
+
+async function fetchCurrentWikiOffers(family: LichWeaponFamily, start: number, batch: CodaBatch | undefined, baseline?: WikiBaseline): Promise<Record<string, RawOffer> | undefined> {
+  const { parse } = await wikiRequest<WikiParseResponse>({ action: 'parse', page: wikiTitles[family], prop: 'wikitext|revid' }) ?? {}
+  const content = parse?.wikitext?.['*']
+  if (!parse || !Number.isSafeInteger(parse.revid) || parse.revid <= 0 || typeof content !== 'string')
+    return
+
+  // The baseline is the last revision before reset. An older cached parse cannot supply current rolls.
+  if (baseline) {
+    if (parse.revid <= baseline.revid)
       return
+  }
+  else {
+    // Parse has no edit timestamp. Look up this exact revision if history was unavailable.
+    const revision = await wikiRevision({ revids: String(parse.revid), rvprop: 'ids|timestamp' })
+    if (revision?.revid !== parse.revid || !isCurrent(revision.timestamp, start))
+      return
+  }
+  return readWikiTable(content, batch)
+}
+
+export async function fetchLichBonuses(
+  family: LichWeaponFamily,
+  roster: string[],
+  start: number,
+  batch: CodaBatch | undefined,
+  loadBaseline: () => Promise<WikiBaseline | undefined>,
+): Promise<Map<string, LichBonus>> {
+  const [tracker, baseline] = await Promise.all([
+    fetchAsyncData<Tracker>(`https://warframetr.com/api/warframe/${family}`),
+    loadBaseline(),
+  ])
+  const bonuses = new Map<string, LichBonus>()
+  function addReports(offers: Record<string, RawOffer> | undefined, source: LichBonus['source']): void {
     for (const name of roster) {
       const offer = offers?.[name]
       const element = offer && elements.get(offer.damage)
       if (bonuses.has(name) || !offer || !element || !Number.isFinite(offer.percent) || offer.percent < 25 || offer.percent > 60)
         continue
-      const old = baseline[name]
+      const old = baseline?.offers[name]
       if (old?.percent === offer.percent && old.damage === offer.damage)
         continue
       bonuses.set(name, { element, percent: offer.percent, source, compared: !!old })
     }
   }
 
-  addReports(batch ? tracker?.batches?.[batch] : tracker?.offers, 'WarframeTR', tracker?.updatedAt)
+  if (tracker && isCurrent(tracker.updatedAt, start))
+    addReports(batch ? tracker.batches?.[batch] : tracker.offers, 'WarframeTR')
   if (bonuses.size < roster.length) {
-    const latest = await fetchWikiRevision(family)
-    const content = latest?.slots?.main?.content
-    if (typeof content === 'string')
-      addReports(readWikiTable(content, batch), 'WARFRAME Wiki', latest?.timestamp)
+    addReports(await fetchCurrentWikiOffers(family, start, batch, baseline), 'WARFRAME Wiki')
   }
   return bonuses
 }
