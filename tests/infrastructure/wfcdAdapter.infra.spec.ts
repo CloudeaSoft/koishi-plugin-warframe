@@ -1,4 +1,6 @@
 import { expect } from 'chai'
+import { ExportImages } from 'warframe-public-export-plus'
+import { getItemIconUrl } from '../../src/warframe/infrastructure/wf/wf-api'
 import {
   fissureTierName,
   fissureTierNumToNumber,
@@ -32,6 +34,13 @@ describe('fissureTierNumToNumber Tests', () => {
 })
 
 describe('getVoidTraderItem Tests', () => {
+  it('uses the official Public Export image and falls back to browse.wf without a hash', () => {
+    const icon = '/Lotus/Interface/Icons/StoreIcons/Weapons/PrimaryWeapons/Weapons/PrismaGrakata.png'
+    const item = { item: 'Prisma Grakata', uniqueName: '/Lotus/StoreItems/Weapons/VoidTrader/PrismaGrakata', ducats: 610, credits: 100000 }
+    expect(getVoidTraderItem(item).iconUrl).to.equal(`https://content.warframe.com/PublicExport${icon}!${ExportImages[icon].contentHash}`)
+    expect(getItemIconUrl('/Lotus/Unknown/Icon.png')).to.equal('https://browse.wf/Lotus/Unknown/Icon.png')
+  })
+
   it('should map an item with name, ducats, and credits', () => {
     const input = {
       item: 'Fallback Name',
@@ -54,6 +63,7 @@ describe('getVoidTraderItem Tests', () => {
     }
     const result = getVoidTraderItem(input)
     expect(result.name).to.equal('My Fallback')
+    expect(result.iconUrl).to.equal(undefined)
   })
 
   it('should handle StoreItems prefix in uniqueName', () => {

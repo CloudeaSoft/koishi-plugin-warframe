@@ -60,3 +60,63 @@ body {
 ul {
   list-style: none;
 }
+
+.wf-void-trader {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(144px, 1fr));
+  width: max-content;
+  gap: 8px;
+  padding: 10px;
+  background: var(--wf-bg-page);
+}
+
+.wf-trader-item {
+  padding: 7px;
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-radius);
+  background: var(--wf-bg-card);
+  text-align: center;
+}
+
+.wf-trader-icon {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--wf-radius-md);
+  background: var(--wf-bg-subtle);
+}
+
+.wf-trader-icon img {
+  position: absolute;
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  visibility: hidden;
+}
+
+.wf-trader-name {
+  margin-top: 6px;
+  color: var(--wf-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.wf-trader-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 2px;
+  color: var(--wf-text-secondary);
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.wf-trader-price svg {
+  width: 1em;
+  height: 1em;
+  fill: currentcolor;
+}

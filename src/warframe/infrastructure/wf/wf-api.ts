@@ -1,6 +1,7 @@
 import type WorldState from 'warframe-worldstate-parser'
 import type { OracleBountyCycle, RawCalendarSeason, RawInvasion, RawSeasonInfo, RawSortie, RawSyndicateMission, RawWorldEvent } from '../../types'
 
+import { ExportImages } from 'warframe-public-export-plus'
 import { Baro } from '../../assets/index'
 import { fetchAsyncData, fetchAsyncText } from '../../utils'
 
@@ -80,6 +81,11 @@ export function extractCalendarRaw(json: string): RawCalendarSeason | undefined 
 
 export async function fetchWorldStateJson(): Promise<string | undefined> {
   return fetchAsyncText(`${apiBase}worldState.php`)
+}
+
+export function getItemIconUrl(iconPath: string): string {
+  const hash = ExportImages[iconPath]?.contentHash
+  return hash ? `https://content.warframe.com/PublicExport${iconPath}!${hash}` : `https://browse.wf${iconPath}`
 }
 
 /** browse.wf Oracle bounty cycle (Zariman / Cavia / Hex). */

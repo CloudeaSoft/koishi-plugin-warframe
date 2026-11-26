@@ -5,6 +5,7 @@ export interface VoidTrader {
 
 export interface VoidTraderItem {
   name: string
+  iconUrl?: string
   ducats: number
   credits: number
 }
