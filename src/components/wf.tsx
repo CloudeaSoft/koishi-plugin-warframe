@@ -1955,59 +1955,20 @@ export function RivenStatComponent(data: RivenStatResult): Element {
 
 export function VoidTraderComponent(data: VoidTrader): Element {
   return (
-    <div
-      class="wf-void-trader"
-      style="width:400px;padding:16px;font-family:'Segoe UI',sans-serif;font-size:14px;background-color:var(--wf-bg-card);border-radius:var(--wf-radius);border:1px solid var(--wf-border);box-shadow:var(--wf-shadow-card);color:var(--wf-text-body);"
-    >
-      <table style="width:100%;border-collapse:collapse;">
-        <thead>
-          <tr>
-            <th
-              style="border-bottom:1px solid var(--wf-border-strong);text-align:left;padding:6px;color:var(--wf-text-primary);"
-            >
-              名称
-            </th>
-            <th
-              style="border-bottom:1px solid var(--wf-border-strong);text-align:left;padding:6px;color:var(--wf-text-primary);"
-            >
-              价格
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.items.map(item => (
-            <tr>
-              <td style="padding:6px;border-bottom:1px solid var(--wf-border);">
-                <div class="wf-trader-item">
-                  <span class="wf-trader-icon">
-                    {item.iconUrl ? <img data-icon-url={item.iconUrl} width="32" height="32" alt="" /> : null}
-                  </span>
-                  <span>{item.name}</span>
-                </div>
-              </td>
-              <td
-                style="padding:6px;border-bottom:1px solid var(--wf-border);text-align:center;line-height:1;"
-              >
-                <span>{item.ducats}</span>
-                <svg
-                  viewBox="0 0 18 18"
-                  style="
-                color: rgb(64 64 64 / 75%);
-                height: 1em;
-                width: 1em;
-                vertical-align: -.125em;
-                fill: currentcolor;"
-                >
-                  <use href="#icon-ducats"></use>
-                </svg>
-                <span>+</span>
-                <span>{item.credits}</span>
-                <span>现金</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div class="wf-void-trader">
+      {data.items.map(item => (
+        <div class="wf-trader-item">
+          <div class="wf-trader-icon">
+            {item.iconUrl ? <img data-icon-url={item.iconUrl} alt="" /> : null}
+          </div>
+          <div class="wf-trader-name">{item.name}</div>
+          <div class="wf-trader-price">
+            <span>{item.ducats}</span>
+            <svg viewBox="0 0 18 18"><use href="#icon-ducats"></use></svg>
+            <span>{`+ ${item.credits} 现金`}</span>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
