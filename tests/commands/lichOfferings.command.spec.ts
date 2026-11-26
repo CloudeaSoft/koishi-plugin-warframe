@@ -35,19 +35,20 @@ describe('vendor valence commands', () => {
     await app.stop()
   })
 
-  for (const [alias, vendor] of [
-    ['信条', 'Ergo Glast'],
-    ['c玄骸', 'Ergo Glast'],
-    ['tenet', 'Ergo Glast'],
-    ['终幕', 'Eleanor'],
-    ['i玄骸', 'Eleanor'],
-    ['coda', 'Eleanor'],
+  for (const [alias, family] of [
+    ['信条', '信条'],
+    ['c玄骸', '信条'],
+    ['tenet', '信条'],
+    ['终幕', '终幕'],
+    ['i玄骸', '终幕'],
+    ['coda', '终幕'],
   ]) {
-    it(`routes ${alias} to ${vendor}`, async () => {
+    it(`shows the countdown and ${family} weapons for ${alias}`, async () => {
       vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-10-01T12:00:00Z'))
       vi.spyOn(http, 'fetchAsyncData').mockResolvedValue(undefined)
       await client.shouldReply(alias, 'rendered')
-      expect(card).to.include(vendor)
+      expect(card.replace(/<[^>]*>/g, '')).to.match(/^距离轮换 /)
+      expect(card).to.include(`${family}·`)
     })
   }
 
