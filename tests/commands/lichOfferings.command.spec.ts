@@ -51,13 +51,14 @@ describe('vendor valence commands', () => {
     })
   }
 
-  it('renders the five Tenet offers, their source and a live countdown', async () => {
+  it('renders the five Tenet offers and a live countdown', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-11-26T12:00:00Z'))
     const fetch = vi.spyOn(http, 'fetchAsyncData').mockResolvedValue(tenet)
     await client.shouldReply('lichc', 'rendered')
     expect(card).to.include('信条·枢密').and.include('冲击').and.include('54.1%')
     expect(card.match(/\d+(?:\.\d+)?%/g)).to.have.length(5)
-    expect(card).to.include('WarframeTR').and.include('12小时')
+    expect(card).to.include('12小时')
+    expect(card).not.to.match(/玩家上报|WarframeTR|WARFRAME Wiki/)
     await client.shouldReply('信条数值', 'rendered')
     expect(fetch.mock.calls[0]).to.deep.equal(['https://warframetr.com/api/warframe/tenet'])
     expect(fetch.mock.calls).to.have.length(2)
@@ -78,7 +79,8 @@ describe('vendor valence commands', () => {
       .mockResolvedValueOnce({ parse: { revid: 41, wikitext: { '*': content } } })
     await client.shouldReply('终幕数值', 'rendered')
     expect(card).to.include('终幕·啐沫者').and.include('31.5%').and.include('4天')
-    expect(card).to.include('WARFRAME Wiki').and.not.include('终幕·血肢')
+    expect(card).not.to.include('终幕·血肢')
+    expect(card).not.to.match(/玩家上报|WarframeTR|WARFRAME Wiki/)
     expect(card).to.not.include('32.7%')
     const wikiUrl = new URL(fetch.mock.calls.at(-1)![0])
     expect(wikiUrl.searchParams.get('action')).to.equal('parse')
@@ -104,7 +106,9 @@ describe('vendor valence commands', () => {
       .mockResolvedValueOnce({ parse: { revid: 42, wikitext: { '*': content } } })
       .mockResolvedValueOnce(wikiRevision(42, timestamp))
     await client.shouldReply('lich-c', 'rendered')
-    expect(card).to.include('WarframeTR').and.include('WARFRAME Wiki').and.include('信条·枢密').and.include('54.1%')
+    expect(card).to.include('信条·枢密').and.include('54.1%')
+    expect(card.match(/\d+(?:\.\d+)?%/g)).to.have.length(5)
+    expect(card).not.to.match(/玩家上报|WarframeTR|WARFRAME Wiki/)
     expect(new URL(fetch.mock.calls[2][0]).searchParams.get('page')).to.equal('Tenet Weapons')
     expect(new URL(fetch.mock.calls[3][0]).searchParams.get('revids')).to.equal('42')
   })
