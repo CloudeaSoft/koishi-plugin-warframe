@@ -1,12 +1,12 @@
 import type WorldState from 'warframe-worldstate-parser'
-import type { RawCalendarSeason, RawInvasion, RawSeasonInfo, RawSortie, RawSyndicateMission, RawWorldEvent } from '../../types'
+import type { OracleBountyCycle, RawCalendarSeason, RawInvasion, RawSeasonInfo, RawSortie, RawSyndicateMission, RawWorldEvent } from '../../types'
 
+import { ExportImages } from 'warframe-public-export-plus'
 import { Baro } from '../../assets/index'
-import { fetchAsyncText } from '../../utils'
-import { fetchWorldStateJson } from '../apis/warframe'
+import { fetchAsyncData, fetchAsyncText } from '../../utils'
 
-export { fetchOracleBountyCycle } from '../apis/browse-wf'
-export { fetchWorldStateJson }
+const apiBase = 'https://api.warframe.com/cdn/'
+const oracleBountyCycleUrl = 'https://oracle.browse.wf/bounty-cycle'
 
 export function extractSyndicateMissionsRaw(json: string): RawSyndicateMission[] {
   try {
@@ -77,6 +77,20 @@ export function extractCalendarRaw(json: string): RawCalendarSeason | undefined 
   catch {
     return undefined
   }
+}
+
+export async function fetchWorldStateJson(): Promise<string | undefined> {
+  return fetchAsyncText(`${apiBase}worldState.php`)
+}
+
+export function getItemIconUrl(iconPath: string): string {
+  const hash = ExportImages[iconPath]?.contentHash
+  return hash ? `https://content.warframe.com/PublicExport${iconPath}!${hash}` : `https://browse.wf${iconPath}`
+}
+
+/** browse.wf Oracle bounty cycle (Zariman / Cavia / Hex). */
+export async function fetchOracleBountyCycle(): Promise<OracleBountyCycle | undefined> {
+  return fetchAsyncData<OracleBountyCycle>(oracleBountyCycleUrl)
 }
 
 export async function getWorldState(json?: string): Promise<WorldState> {
