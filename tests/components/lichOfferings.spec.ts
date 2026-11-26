@@ -6,8 +6,8 @@ describe('vendor bonus colors', () => {
     [48, 'inherit'],
     [48.1, '#2166ac'],
     [52.8, '#2166ac'],
-    [52.9, '#856700'],
-    [59.9, '#856700'],
+    [52.9, '#a69500'],
+    [59.9, '#a69500'],
     [60, '#c62828'],
   ] as const) {
     it(`colors only the percentage at ${percent}%`, () => {

@@ -6,7 +6,7 @@ function bonusColor(percent: number): string {
   if (percent === 60)
     return '#c62828'
   if (percent >= 52.9)
-    return '#856700'
+    return '#a69500'
   if (percent >= 48.1)
     return '#2166ac'
   return 'inherit'
