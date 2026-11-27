@@ -1959,7 +1959,7 @@ export function VoidTraderComponent(data: VoidTrader): Element {
       {data.items.map(item => (
         <div class="wf-trader-item">
           <div class="wf-trader-icon">
-            {item.iconUrl ? <img data-icon-url={item.iconUrl} alt="" /> : null}
+            <img data-icon-url={item.iconUrl} alt="" />
           </div>
           <div class="wf-trader-name">{item.name}</div>
           <div class="wf-trader-price">
