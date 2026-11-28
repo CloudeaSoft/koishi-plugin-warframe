@@ -1,0 +1,37 @@
+loop-iteration: 16
+item: L-029 Export buildRelicDict from relics.ts
+data source: in-memory ExportRelics/ExportRewards fixtures plus bundled warframe-public-export-plus tables (no live network)
+visual: none (data-layer builder extract; no command or renderer change)
+
+=== yarn build && yarn dtsc && yarn lint && yarn test ===
+zh.json already present (17991799 bytes)
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+esbuild: src/index.ts -> lib/index.js
+zh.json already present (17991799 bytes)
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.10 /workspace
+
+
+ Test Files  76 passed (76)
+      Tests  663 passed (663)
+   Start at  07:35:38
+   Duration  19.67s (transform 2.36s, setup 0ms, import 45.60s, tests 4.02s, environment 5ms)
+
+
+=== yarn dtsc ===
+dtsc exit: 0
+
+=== yarn lint ===
+lint exit: 0
+
+focused: yarn vitest run tests/data/relics.data.spec.ts tests/services/wf/relic.wf.spec.ts
+ RUN  v4.1.10 /workspace
+ Test Files  2 passed (2)
+      Tests  22 passed (22)
+   Start at  07:34:29
+   Duration  1.57s
+
+all four CI commands exited 0
